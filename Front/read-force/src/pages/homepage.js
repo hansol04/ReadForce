@@ -1,5 +1,5 @@
-import "./HomePage.css";
-import React, {useState} from "react";
+import "./homepage.css";
+import React, { useState } from "react";
 
 const HomePage = () => {
     const [showLangMenu, setShowLangMenu] = useState(false);
@@ -12,9 +12,11 @@ const HomePage = () => {
 
     return (
         <div>
-            <header className="header">
+            {/* <header className="header">
                 <h1 className="title">
-                    오늘의 <span style={{ color: "#14b8a6" }}>문해력</span>
+                    <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                        오늘의 <span style={{ color: "#14b8a6" }}>문해력</span>
+                    </a>
                 </h1>
                 <nav className="nav">
                     <a href="#">한국기사</a>
@@ -41,7 +43,7 @@ const HomePage = () => {
                     <button>로그인</button>
                     <button>회원가입</button>
                 </div>
-            </header>
+            </header> */}
 
             <section className="hero">
                 <h2>문해력, <br />세상을 읽는 힘입니다</h2>
@@ -117,11 +119,6 @@ const HomePage = () => {
                     </div>
                 </div>
             </section>
-
-            {/* Footer */}
-            <footer>
-                오늘의 문해력 | 서울 강남구 강남대로72길 8 한국빌딩 8층 | 상담시간: 09:00~18:00 (점심시간: 12:50~13:50)
-            </footer>
         </div>
     );
 };
