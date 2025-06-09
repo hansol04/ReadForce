@@ -1,0 +1,124 @@
+.hero {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.hero h2 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 16px;
+  color: #6b7280; /* gray-600 */
+  margin-bottom: 2rem;
+}
+
+.hero button {
+  background-color: #14b8a6; /* teal-500 */
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.hero button:hover {
+  background-color: #0d9488; /* teal-600 */
+}
+
+.stats-section {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  border-top: 1px solid #ddd;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.stat-box {
+  flex: 1;
+  min-width: 280px;
+}
+
+.stat-box h3 {
+  font-size: 18px;
+  margin-bottom: 1rem;
+}
+
+.top5 .tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.top5 .tabs button {
+  background: none;
+  border: none;
+  font-weight: bold;
+  color: #777;
+  padding-bottom: 4px;
+  cursor: pointer;
+}
+
+.top5 .tabs .active {
+  color: #14b8a6;
+  border-bottom: 2px solid #14b8a6;
+}
+
+.top5-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.top5-table td {
+  padding: 4px 8px;
+  font-size: 14px;
+}
+
+.grid-2x2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.grid-2x2 .number {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.grid-2x2 .label {
+  font-size: 13px;
+  color: #555;
+}
+
+.wrong-articles .article {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.wrong-articles .flag {
+  width: 24px;
+  height: 16px;
+  margin-top: 4px;
+}
+
+.wrong-articles .title {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.wrong-articles .author {
+  font-size: 12px;
+  color: #444;
+}
+
+.wrong-articles .author .sub {
+  color: #888;
+  font-size: 11px;
+}
