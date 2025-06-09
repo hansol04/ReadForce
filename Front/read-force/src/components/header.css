@@ -10,13 +10,15 @@
   font-size: 24px;
   font-weight: bold;
   color: #0369a1;
+  justify-content: center;
+
 }
 
 .nav {
-  display: flex;              /* 가로 정렬 */
-  justify-content: center;    /* 수평 중앙 정렬 */
-  align-items: center;        /* 수직 중앙 정렬 */
-  gap: 5rem;                  /* 메뉴 간 간격 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
 }
 
 .nav a {
@@ -27,7 +29,7 @@
 }
 
 .auth-buttons {
-    display: flex;
+  display: flex;
 }
 
 .auth-buttons button {
@@ -35,6 +37,8 @@
   font-size: 14px;
   border: none;
   background: none;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .lang-selector {
@@ -61,7 +65,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   z-index: 10;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   width: 100px;
 }
 

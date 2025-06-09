@@ -1,4 +1,3 @@
-import { Navigate } from 'react-router-dom';
 import './header.css';
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -45,7 +44,7 @@ const Header = () => {
                         )}
                     </div>
                     <button>로그인</button>
-                    <button onClick={() => navigate("/signup")}>회원가입</button>
+                    <button onClick={() => navigate("/signupchoice")}>회원가입</button>
                 </div>
             </header>
         </div>
