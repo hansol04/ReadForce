@@ -1,7 +1,7 @@
-import "./homepage.css";
+import "./main.css";
 import React, { useState } from "react";
 
-const HomePage = () => {
+const Main = () => {
     const [showLangMenu, setShowLangMenu] = useState(false);
     const [selectedLang, setSelectedLang] = useState('한국어');
 
@@ -12,39 +12,6 @@ const HomePage = () => {
 
     return (
         <div>
-            {/* <header className="header">
-                <h1 className="title">
-                    <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                        오늘의 <span style={{ color: "#14b8a6" }}>문해력</span>
-                    </a>
-                </h1>
-                <nav className="nav">
-                    <a href="#">한국기사</a>
-                    <a href="#">일본기사</a>
-                    <a href="#">미국기사</a>
-                    <a href="#">문해력 도전</a>
-                </nav>
-                <div className="auth-buttons">
-                    <div className="lang-selector">
-                        <button
-                            className="lang-button"
-                            onClick={() => setShowLangMenu(!showLangMenu)}
-                        >
-                            🌐 {selectedLang} ▼
-                        </button>
-                        {showLangMenu && (
-                            <div className="lang-menu">
-                                <div onClick={() => handleLangSelect('한국어')}>🇰🇷 한국어</div>
-                                <div onClick={() => handleLangSelect('日本語')}>🇯🇵 日本語</div>
-                                <div onClick={() => handleLangSelect('English')}>🇺🇸 English</div>
-                            </div>
-                        )}
-                    </div>
-                    <button>로그인</button>
-                    <button>회원가입</button>
-                </div>
-            </header> */}
-
             <section className="hero">
                 <h2>문해력, <br />세상을 읽는 힘입니다</h2>
                 <p>한국·일본·미국 뉴스로 나의 문해력을 테스트 해보세요!</p>
@@ -123,4 +90,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default Main;
