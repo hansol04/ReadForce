@@ -1,0 +1,10 @@
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* 브라우저 높이 기준으로 전체 공간 확보 */
+}
+
+main {
+  flex: 1; /* 남은 공간을 채우고, 푸터는 아래로 밀림 */
+  padding: 2rem; /* 필요 시 */
+}
