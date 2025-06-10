@@ -17,6 +17,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,7 +32,8 @@ import lombok.Setter;
 public class Member {
 	
 	@Id
-	private String id;
+	@Email
+	private String email;
 	
 	@Column(nullable = false)
 	private String password;
@@ -40,13 +42,10 @@ public class Member {
 	private String nickname;
 	
 	@Column(nullable = false)
-	private String name;
-	
-	@Column(nullable = false)
 	private LocalDate birthday;
 	
-	@Column(nullable = false, unique = true)
-	private String email;
+	@Column(nullable = true)
+	private String profile_image_url;
 	
 	@CreatedDate
 	@Column(updatable = false)
@@ -71,12 +70,12 @@ public class Member {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         Member member = (Member) object;
-        return id != null && id.equals(member.id);
+        return email != null && email.equals(member.email);
     }
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(email);
 	}
 	
 }
