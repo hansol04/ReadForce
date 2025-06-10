@@ -22,10 +22,10 @@ const Header = () => {
                     </a>
                 </h1>
                 <nav className="nav">
-                    <a href="#">한국기사</a>
-                    <a href="#">일본기사</a>
-                    <a href="#">미국기사</a>
-                    <a href="#">문해력 도전</a>
+                <button onClick={() => alert("한국기사 준비중입니다")}>한국기사</button>
+                <button onClick={() => alert("일본기사 준비중입니다")}>일본기사</button>
+                <button onClick={() => alert("미국기사 준비중입니다")}>미국기사</button>
+                <button onClick={() => alert("문해력 도전 준비중입니다")}>문해력 도전</button>
                 </nav>
                 <div className="auth-buttons">
                     <div className="lang-selector">
@@ -43,8 +43,8 @@ const Header = () => {
                             </div>
                         )}
                     </div>
-                    <button>로그인</button>
-                    <button onClick={() => navigate("/signupchoice")}>회원가입</button>
+                    <button onClick={() => navigate("/login")}>로그인</button>
+                    <button onClick={() => navigate("/signup/signupchoice")}>회원가입</button>
                 </div>
             </header>
         </div>

@@ -46,6 +46,10 @@ public class MemberController {
     @PostMapping("/sign-in")
     public ResponseEntity<Map<String, String>> signIn(@Valid @RequestBody MemberDto.SignIn sign_in){
     	
+    	System.out.println(sign_in.getEmail());
+    	System.out.println(sign_in.getPassword());
+    	
+    	
     	// 사용자 인증
     	authentication_manager.authenticate(
     			new UsernamePasswordAuthenticationToken(sign_in.getEmail(), sign_in.getPassword())

@@ -32,7 +32,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-	
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 
 	compileOnly 'org.projectlombok:lombok'
