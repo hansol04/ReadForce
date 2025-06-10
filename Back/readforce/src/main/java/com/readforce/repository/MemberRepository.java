@@ -13,7 +13,6 @@ import com.readforce.enums.Status;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, String>{
 
-	Optional<Member> findByIdAndStatus(String id, Status active);
 
 	List<Member> findAllByStatusAndWithdrawDateBefore(Status pendingDeletion, LocalDateTime thirthyDaysAgo);
 

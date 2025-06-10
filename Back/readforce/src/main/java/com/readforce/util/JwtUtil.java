@@ -27,10 +27,10 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class JwtUtil {
 	
-	@Value("${jwt.secret}")
+	@Value("${spring.jwt.secret}")
 	private String secret;
-	
-	@Value("${jwt.expiration-time}")
+
+	@Value("${spring.jwt.expiration-time}")
 	private long expiration_time;
 	
 	@PostConstruct

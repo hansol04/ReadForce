@@ -28,7 +28,7 @@ public class AuthService implements UserDetailsService{
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		return member_repository.findByIdAndStatus(username, Status.ACTIVE)
+		return member_repository.findByEmailAndStatus(username, Status.ACTIVE)
 				.map(member -> new User(
                         member.getEmail(),
                         member.getPassword(),

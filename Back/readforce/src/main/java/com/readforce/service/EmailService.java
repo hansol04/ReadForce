@@ -4,12 +4,11 @@ import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.UUID;
 
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.readforce.entity.Member;
 import com.readforce.enums.ExpireTime;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.Prefix;
@@ -26,7 +25,7 @@ public class EmailService {
 	
 	private final MemberRepository member_repository;
 	private final JavaMailSender java_mail_sender;
-	private final RedisTemplate<String, String> redis_template;
+	private final StringRedisTemplate redis_template;
 	private final String SIGN_UP_MESSAGE = "ReadForce에 가입하신 것을 환영합니다.";
 	private final String DEFAULT_MESSAGE = "ReadForce을 이용해주셔서 감사합니다.";
 	private final String PASSWORD_RESET_URL = "http://localhost:8080/reset-password?token=";
