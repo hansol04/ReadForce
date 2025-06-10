@@ -33,6 +33,7 @@ public class JwtUtil {
 	@Value("${spring.jwt.expiration-time}")
 	private long expiration_time;
 	
+	// JWT secret key 검증
 	@PostConstruct
 	public void validateKeyLength() {
 		log.info("JWT secret key를 검증중입니다...");
