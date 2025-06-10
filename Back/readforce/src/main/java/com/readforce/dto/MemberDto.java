@@ -27,35 +27,77 @@ public class MemberDto {
 	@AllArgsConstructor
 	public static class SignUp{
 		
-		@NotBlank(message = MessageCode.ID_NOT_BLANK)
-		@Size(min = 6, max = 20, message = MessageCode.ID_SiZE_INVALID)
-		@Pattern(regexp = "^(?=.*[a-z])[a-z\\d]{6,20}$", message = MessageCode.ID_PATTERN_INVALID)
-		private String id;
+		@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+		@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+		private String email;
 		
 		@NotBlank(message = MessageCode.PASSWORD_NOT_BLANK)
-		@Size(min = 12, message = MessageCode.PASSWORD_SIZE_INVALID)
+		@Size(min = 8, max = 20, message = MessageCode.PASSWORD_SIZE_INVALID)
 		@Pattern(
-				regexp = "^(?=.*[a-zA-Z])(?=.*[\\d])(?=.*[!@#$%^&*()-_=+])[a-zA-Z\\d!@#$%^&*()-_=+]{12,}$"
-				, message = MessageCode.PASSWORD_PATTERN_INVALID
+		        regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()-_=+]).*$"
+		        , message = MessageCode.PASSWORD_PATTERN_INVALID
 		)
 		private String password;
 		
 		@NotBlank(message = MessageCode.NICKNAME_NOT_BLANK)
-		@Size(min = 2, max = 20, message = MessageCode.NICKNAME_SIZE_INVALID)
+		@Size(min = 2, max = 12, message = MessageCode.NICKNAME_SIZE_INVALID)
 		@Pattern(regexp = "^[a-zA-Z가-힣\\d]{2,20}$", message = MessageCode.NICKNAME_PATTERN_INVALID)
 		private String nickname;
-		
-		@NotBlank(message = MessageCode.NAME_NOT_BLANK)
-		@Size(min = 2, max = 20, message = MessageCode.NAME_SIZE_INVALID)
-		@Pattern(regexp = "^[가-힣a-zA-Z]{2,20}$", message = MessageCode.NAME_PATTERN_INVALID)
-		private String name;
 		
 		@NotNull(message = MessageCode.BIRTHDAY_NOT_NULL)
 		private LocalDate birthday;
 		
+		@JsonIgnore
+		@AssertTrue(message = MessageCode.BIRTHDAY_RANGE_INVALID)
+		public boolean birthdayValid() {
+			
+			if(birthday == null) {
+				return true;
+			}
+			
+			final LocalDate min_date = LocalDate.of(1900, 1, 1); // 1900-1-1 부터
+			final LocalDate max_date = LocalDate.now().minusYears(3); // 오늘날짜의 3년전 까지
+			
+			return !birthday.isBefore(min_date) && !birthday.isAfter(max_date);
+			
+		}
+		
+	}
+	
+	// 로그인
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class SignIn{
+		
 		@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
 		@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
 		private String email;
+		
+		@NotBlank(message = MessageCode.PASSWORD_NOT_BLANK)
+		@Size(min = 8, max = 20, message = MessageCode.PASSWORD_SIZE_INVALID)
+		@Pattern(
+		        regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()-_=+]).*$"
+		        , message = MessageCode.PASSWORD_PATTERN_INVALID
+		)
+		private String password;
+		
+	}
+	
+	// 회원 정보 수정
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class Modify{
+		
+		@NotBlank(message = MessageCode.NICKNAME_NOT_BLANK)
+		@Size(min = 2, max = 12, message = MessageCode.NICKNAME_SIZE_INVALID)
+		@Pattern(regexp = "^[a-zA-Z가-힣\\d]{2,20}$", message = MessageCode.NICKNAME_PATTERN_INVALID)
+		private String nickname;
+		
+		private LocalDate birthday;
 		
 		@JsonIgnore
 		@AssertTrue(message = MessageCode.BIRTHDAY_RANGE_INVALID)
@@ -73,28 +115,25 @@ public class MemberDto {
 		}
 	}
 	
-	// 로그인
+	// 비밀번호 재설정
 	@Getter
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class SignIn{
+	public static class PasswordReset{
 		
-		@NotBlank(message = MessageCode.ID_NOT_BLANK)
-		@Size(min = 6, max = 20, message = MessageCode.ID_SiZE_INVALID)
-		@Pattern(regexp = "^(?=.*[a-z])[a-z\\d]{6,20}$", message = MessageCode.ID_PATTERN_INVALID)
-		private String id;
+		@NotBlank(message = MessageCode.TOKEN_NOT_BLANK)
+		private String token;
 		
 		@NotBlank(message = MessageCode.PASSWORD_NOT_BLANK)
-		@Size(min = 12, message = MessageCode.PASSWORD_SIZE_INVALID)
+		@Size(min = 8, max = 20, message = MessageCode.PASSWORD_SIZE_INVALID)
 		@Pattern(
-				regexp = "^(?=.*[a-zA-Z])(?=.*[\\d])(?=.*[!@#$%^&*()-_=+])[a-zA-Z\\d!@#$%^&*()-_=+]{12,}$"
-				, message = MessageCode.PASSWORD_PATTERN_INVALID
+		        regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()-_=+]).*$"
+		        , message = MessageCode.PASSWORD_PATTERN_INVALID
 		)
-		private String password;
+		private String new_password;
 		
 	}
-	
 	
 	
 }

@@ -1,12 +1,22 @@
 package com.readforce.service;
 
+import java.security.SecureRandom;
 import java.time.Duration;
-import java.util.Random;
+import java.util.UUID;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+
+import com.readforce.entity.Member;
+import com.readforce.enums.ExpireTime;
+import com.readforce.enums.MessageCode;
+import com.readforce.enums.Prefix;
+import com.readforce.enums.Status;
+import com.readforce.exception.AuthenticationException;
+import com.readforce.exception.ResourceNotFoundException;
+import com.readforce.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,34 +24,139 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EmailService {
 	
+	private final MemberRepository member_repository;
 	private final JavaMailSender java_mail_sender;
 	private final RedisTemplate<String, String> redis_template;
-	private static final String AUTH_CODE_PREFIX = "AuthCode_";
-	private static final long AUTH_CODE_EXPIRATION = 5; // 5분
+	private final String SIGN_UP_MESSAGE = "ReadForce에 가입하신 것을 환영합니다.";
+	private final String DEFAULT_MESSAGE = "ReadForce을 이용해주셔서 감사합니다.";
+	private final String PASSWORD_RESET_URL = "http://localhost:8080/reset-password?token=";
 	
-	// 인증코드 생성
-	public String createAuthCode() {
+	
+	// 인증 번호 생성
+	private String createAuthCode() {
 		
-		return String.valueOf(100000 + new Random().nextInt(900000));
+		return String.valueOf(100000 + new SecureRandom().nextInt(900000));
 	
 	}
 	
-	// 인증코드 보내기
-	public void sendVerificationCode(String email) {
+	// 인증 코드 보내기
+	private void sendVerificationCode(
+			String email, 
+			String message, 
+			String auth_code, 
+			long expired_time,
+			String prefix
+	) {
 		
 		// 내용 작성
-		String auth_code = createAuthCode();
-		String subject = "[ReadForce] 이메일 인증 코드 안내";
+		String subject = "[ReadForce] 이메일 인증 안내";
 		String text = 
-				"ReadForce에 가입해 주셔서 감사합니다.\n"
-				+ "인증 코드 : " + auth_code + "\n"
-				+ "이 코드는 5분간 유효합니다.";
+				message + "\n"
+				+ "인증 번호 : " + auth_code + "\n"
+				+ "이 코드는 " + expired_time +"분간 유효합니다.";
 		
-		// Redis에 인증 코드 저장
+		// Redis에 인증 번호 저장
 		redis_template.opsForValue().set(
-				AUTH_CODE_PREFIX + email,
+				prefix + email,
 				auth_code,
-				Duration.ofMinutes(AUTH_CODE_EXPIRATION) // 유효기간 설정
+				Duration.ofMinutes(expired_time) // 유효기간 설정
+		);
+		
+		// 이메일 전송
+		SimpleMailMessage simple_mail_message = new SimpleMailMessage();
+		simple_mail_message.setTo(email);
+		simple_mail_message.setSubject(subject);
+		simple_mail_message.setText(text);
+		
+		java_mail_sender.send(simple_mail_message);
+	}
+	
+	// 인증 코드 확인
+	private void VerifyVerificationCode(
+			String email, 
+			String code, 
+			String prefix
+	) {
+		
+		// Redis에서 인증 코드 가져오기
+		String stored_code = redis_template.opsForValue().get(prefix + email);
+		if(stored_code == null || !stored_code.equals(code)) {
+			throw new AuthenticationException(MessageCode.VERIFICATION_CODE_VERIFY_FAIL);
+		}
+		// 인증 코드 삭제
+		redis_template.delete(prefix + email);
+	
+	}
+	
+	
+	// 회원 가입 인증 번호 전송
+	public void sendVerificationCodeSignUp(String email) {
+		
+		sendVerificationCode(
+				email, 
+				SIGN_UP_MESSAGE,
+				createAuthCode(),
+				ExpireTime.DEFAULT.getTime(),
+				Prefix.SIGN_UP.getName()
+		);
+		
+	}
+	
+	// 회원 가입 인증 번호 확인
+	public void verifyVerificationCodeSignUp(String email, String code) {
+
+		VerifyVerificationCode(
+				email,
+				code,
+				Prefix.SIGN_UP.getName()
+		);
+		
+	}
+	
+	// 회원 정보 수정 인증 번호 전송
+	public void sendVerificationCodeModifyInfo(String email) {
+
+		sendVerificationCode(
+				email, 
+				DEFAULT_MESSAGE,
+				createAuthCode(),
+				ExpireTime.DEFAULT.getTime(),
+				Prefix.MODIFY_INFO.getName()
+		);
+		
+	}
+
+	// 회원 정보 수정 인증 번호 확인
+	public void verifyVerificationCodeModifyInfo(String email, String code) {
+
+		VerifyVerificationCode(
+				email,
+				code,
+				Prefix.MODIFY_INFO.getName()
+		);
+		
+	};
+	
+	// 비밀번호 재설정 링크 전송
+	public void sendPasswordResetLink(String email) {
+		
+		// 가입된 이메일인지 확인
+		member_repository.findByEmailAndStatus(email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
+		
+		// 토큰 생성
+		String token = UUID.randomUUID().toString();
+		
+		// 내용 작성
+		String subject = "[ReadForce] 비밀번호 재설정 안내";
+		String text = 
+				DEFAULT_MESSAGE + "\n"
+				+ "비밀번호를 재설정 하시려면 아래의 링크를 눌러주세요.\n"
+				+ PASSWORD_RESET_URL + token;
+		
+		redis_template.opsForValue().set(
+				Prefix.PASSWORD_RESET_BY_LINK.getName() + token,
+				email,
+				Duration.ofMinutes(ExpireTime.DEFAULT.getTime())
 		);
 		
 		// 이메일 전송
@@ -52,20 +167,39 @@ public class EmailService {
 		
 		java_mail_sender.send(simple_mail_message);
 		
-	}
+	};
 	
-	// 인증코드 확인
-	public boolean verifyVerificationCode(String email, String code) {
+	
+	// 비밀번호 재설정 완료 알림
+	public void sendPasswordChangeNotification(String email) {
 		
-		// Redis에서 인증 코드 가져오기
-		String stored_code = redis_template.opsForValue().get(AUTH_CODE_PREFIX + email);
-		if(stored_code != null && stored_code.equals(code)) {
-			redis_template.delete(AUTH_CODE_PREFIX + email);
-			return true;
-		}
-		return false;
-	
+		String subject = "[ReadForce] 비밀번호 재설정 안내";
+		String text = 
+				DEFAULT_MESSAGE + "\n"
+				+ "비밀번호 변경이 완료되었습니다.";
+		
+		// 이메일 전송
+		SimpleMailMessage simple_mail_message = new SimpleMailMessage();
+		simple_mail_message.setTo(email);
+		simple_mail_message.setSubject(subject);
+		simple_mail_message.setText(text);
+		
+		java_mail_sender.send(simple_mail_message);
+		
 	}
+
+	// 이메일 인증 완료 상태 저장
+	public void markEmailAsVerified(String email) {
+		
+		redis_template.opsForValue().set(
+				Prefix.COMPLETE_EMAIL_VERIFY + email, 
+				MessageCode.VERIFICATION_CODE_VERIFY_SUCCESS,
+				Duration.ofMinutes(ExpireTime.VIERIFIED_TIME.getTime())
+		);
+		
+	}
+
+	
 	
 	
 }
