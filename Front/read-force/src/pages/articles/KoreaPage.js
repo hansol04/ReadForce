@@ -8,11 +8,12 @@ const KoreaPage = () => {
   const [quizData, setQuizData] = useState(null);
 
   const handleSolve = async (article) => {
-    const res = await fetch('http://localhost:8080/api/generate-quiz', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ article: article.content || article.description }),
-    });
+   const res = await fetch('http://localhost:8080/api/quiz/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ article: article.content || article.description }),
+            });
+
     const quiz = await res.json();
     setQuizData(quiz);
   };

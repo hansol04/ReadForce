@@ -1,7 +1,14 @@
 import React from 'react';
 
 const QuizModal = ({ quiz, onClose }) => {
-  if (!quiz) return null;
+  if (!quiz || !quiz.options || !Array.isArray(quiz.options)) {
+    return (
+      <div style={{ padding: '20px', backgroundColor: '#fff' }}>
+        <h3>퀴즈 정보를 불러올 수 없습니다.</h3>
+        <button onClick={onClose}>닫기</button>
+      </div>
+    );
+  }
 
   return (
     <div style={{
