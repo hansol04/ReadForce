@@ -45,9 +45,7 @@ public class MemberController {
 	
 	// 로그인
     @PostMapping("/sign-in")
-    public ResponseEntity<Map<String, String>> signIn(@Valid @RequestBody MemberDto.SignIn sign_in){
-    	
-    	System.out.println(sign_in.getEmail());
+    public ResponseEntity<Map<String, String>> signIn(@Valid @RequestBody MemberDto.SignIn sign_in){	
     	
     	// 사용자 인증
     	authentication_manager.authenticate(
