@@ -50,16 +50,10 @@ public class MemberDto {
 		@JsonIgnore
 		@AssertTrue(message = MessageCode.BIRTHDAY_RANGE_INVALID)
 		public boolean birthdayValid() {
-			
-			if(birthday == null) {
-				return true;
-			}
-			
-			final LocalDate min_date = LocalDate.of(1900, 1, 1); // 1900-1-1 부터
-			final LocalDate max_date = LocalDate.now().minusYears(3); // 오늘날짜의 3년전 까지
-			
+			if(birthday == null) return true;
+			final LocalDate min_date = LocalDate.of(1900, 1, 1);
+			final LocalDate max_date = LocalDate.now().minusYears(3);
 			return !birthday.isBefore(min_date) && !birthday.isAfter(max_date);
-			
 		}
 		
 	}
@@ -92,7 +86,6 @@ public class MemberDto {
 	@AllArgsConstructor
 	public static class Modify{
 		
-		@NotBlank(message = MessageCode.NICKNAME_NOT_BLANK)
 		@Size(min = 2, max = 12, message = MessageCode.NICKNAME_SIZE_INVALID)
 		@Pattern(regexp = "^[a-zA-Z가-힣\\d]{2,20}$", message = MessageCode.NICKNAME_PATTERN_INVALID)
 		private String nickname;
@@ -132,6 +125,35 @@ public class MemberDto {
 		        , message = MessageCode.PASSWORD_PATTERN_INVALID
 		)
 		private String new_password;
+		
+	}
+	
+	// 소셜 회원가입
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class SocialSignUp {
+		
+		@NotBlank(message = MessageCode.TOKEN_NOT_BLANK)
+		private String token;
+		
+		@NotBlank(message = MessageCode.NICKNAME_NOT_BLANK)
+		@Size(min = 2, max = 12, message = MessageCode.NICKNAME_SIZE_INVALID)
+		@Pattern(regexp = "^[a-zA-Z가-힣\\d]{2,20}$", message = MessageCode.NICKNAME_PATTERN_INVALID)
+		private String nickname;
+		
+		@NotNull(message = MessageCode.BIRTHDAY_NOT_NULL)
+		private LocalDate birthday;
+		
+		@JsonIgnore
+		@AssertTrue(message = MessageCode.BIRTHDAY_RANGE_INVALID)
+		public boolean birthdayValid() {
+			if(birthday == null) return true;
+			final LocalDate min_date = LocalDate.of(1900, 1, 1);
+			final LocalDate max_date = LocalDate.now().minusYears(3);
+			return !birthday.isBefore(min_date) && !birthday.isAfter(max_date);
+		}
 		
 	}
 	
