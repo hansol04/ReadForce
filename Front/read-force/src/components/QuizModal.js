@@ -1,4 +1,3 @@
-// src/components/QuizModal.js
 import React from 'react';
 
 const QuizModal = ({ quiz, onClose }) => {

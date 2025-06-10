@@ -1,4 +1,3 @@
-// src/components/NewsList.js
 import React, { useEffect, useState } from 'react';
 import FilterBar from './FilterBar';
 import NewsCard from './NewsCard';

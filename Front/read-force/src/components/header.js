@@ -12,12 +12,12 @@ const Header = () => {
         setShowLangMenu(false);
     };
 
-    // ✅ 로그인 상태 확인 (토큰 존재 여부로 판단)
+    
     const isLoggedIn = !!localStorage.getItem("token");
 
     const handleLogout = () => {
         localStorage.removeItem("token");
-        navigate("/"); // 로그아웃 후 메인 페이지로
+        navigate("/"); 
     };
 
     return (

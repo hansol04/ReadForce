@@ -1,4 +1,3 @@
-// src/App.js
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Main from "./pages/main";
 import LayOut from "./components/layout";
@@ -19,8 +18,6 @@ function App() {
           <Route path="/signup" element={<SignupWithEmail />} />
           <Route path="/signupchoice" element={<SignupChoice />} />
           <Route path="/mypage" element={<MyPage />} />
-
-          {/* ✅ 추가된 뉴스 페이지 라우트 */}
           <Route path="/korea" element={<KoreaPage />} />
           <Route path="/japan" element={<JapanPage />} />
           <Route path="/usa" element={<UsaPage />} />

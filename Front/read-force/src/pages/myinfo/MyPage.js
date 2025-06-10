@@ -3,28 +3,9 @@ import './MyPage.css';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { Bar, Line } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js';
+import {Chart as ChartJS,CategoryScale,LinearScale,BarElement,LineElement,PointElement,Title,Tooltip,Legend} from 'chart.js';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale,LinearScale,BarElement,LineElement,PointElement,Title,Tooltip,Legend);
 
 const MyPage = () => {
   const user = {
@@ -35,7 +16,7 @@ const MyPage = () => {
     avgAccuracy: 78,
   };
 
-  // 📊 Bar Chart (정답률 요약)
+ 
   const barData = {
     labels: ['초급', '중급', '고급'],
     datasets: [{
@@ -56,16 +37,16 @@ const MyPage = () => {
     }
   };
 
-  // 📈 Line Chart (레벨 변화 – ⬆️ Y축 위로 초급 → 고급)
+
   const levelMap = { '초급': 0, '중급': 1, '고급': 2 };
-  const reverseLevelMap = ['고급', '중급', '초급']; // ⬅️ 역순으로 바꿔야 차트 방향이 맞음
+  const reverseLevelMap = ['고급', '중급', '초급']; 
 
   const levelData = {
     labels: ['1월', '2월', '3월'],
     datasets: [
       {
         label: '문해력 레벨 변화',
-        data: [0, 1, 2], // 초급 → 중급 → 고급
+        data: [0, 1, 2], 
         borderColor: '#4ABDAC',
         backgroundColor: '#4ABDAC',
         tension: 0.3,
@@ -82,7 +63,7 @@ const MyPage = () => {
     scales: {
       y: {
         type: 'category',
-        labels: reverseLevelMap, // ⬅️ 고급이 위로 가도록 정렬
+        labels: reverseLevelMap,
         ticks: { stepSize: 1 },
         title: { display: false },
       },

@@ -1,4 +1,3 @@
-// src/pages/articles/KoreaPage.js
 import React, { useState } from 'react';
 import NewsList from '../../components/NewsList';
 import QuizModal from '../../components/QuizModal';

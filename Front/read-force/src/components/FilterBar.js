@@ -1,4 +1,3 @@
-// src/components/FilterBar.js
 import React from 'react';
 
 const FilterBar = ({ category, setCategory, level, setLevel, sort, setSort }) => {
