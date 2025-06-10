@@ -5,7 +5,9 @@ public enum Prefix {
 	SIGN_UP("SignUp_"),
 	MODIFY_INFO("ModifyInfo_"),
 	PASSWORD_RESET_BY_LINK("PasswordResetByLink_"),
-	COMPLETE_EMAIL_VERIFY("CompleteEmailVerify_");
+	COMPLETE_EMAIL_VERIFY("CompleteEmailVerify_"),
+	SOCIAL_SIGN_UP("SocialSignUp_"),
+	ROLE("Role_");
 
 	private final String prefix;
 	

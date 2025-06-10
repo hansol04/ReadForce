@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.readforce.dto.MemberDto;
+import com.readforce.dto.OAuthAttributesDto;
 import com.readforce.entity.Member;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.Prefix;
@@ -23,6 +24,7 @@ import com.readforce.exception.DuplicateException;
 import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.repository.MemberRepository;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -199,6 +201,34 @@ public class MemberService{
 		);
 		
 		return token;
+		
+	}
+
+	// 소셜 회원가입
+	@Transactional
+	public String socialSignUp(@Valid MemberDto.SocialSignUp social_sign_up) {
+		
+		// 토큰 검증
+		String email = redis_template.opsForValue().get(Prefix.SOCIAL_SIGN_UP.getName() + social_sign_up.getToken());
+		if(email == null) {
+			throw new AuthenticationException(MessageCode.TOKEN_ERROR);
+		}
+		
+		// 닉네임 중복 확인
+		if(member_repository.findByNickname(social_sign_up.getNickname()).isPresent()) {
+			throw new DuplicateException(MessageCode.DUPLICATE_NICKNAME);
+		}
+		
+		OAuthAttributesDto o_auth_attributes = OAuthAttributesDto.builder().email(email).build();
+		Member new_member = o_auth_attributes.toEntity(social_sign_up.getNickname(), social_sign_up.getBirthday());
+		
+		// 새로운 회원 추가
+		member_repository.save(new_member);
+		
+		// 토큰 삭제
+		redis_template.delete(Prefix.SOCIAL_SIGN_UP.getName() + social_sign_up.getToken());
+		
+		return email;
 		
 	}
 

@@ -13,15 +13,34 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.readforce.enums.MessageCode;
 import com.readforce.exception.AuthenticationException;
 import com.readforce.exception.DuplicateException;
+import com.readforce.exception.InvalidJwtSecretKeyException;
 import com.readforce.exception.NotMatchException;
 import com.readforce.exception.ResourceNotFoundException;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+	
+	// JWT 관련 에러
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<Map<String, String>> handleJwtException(JwtException exception) {
+        
+    	log.error("JwtException occurred : {}", exception.getMessage(), exception);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.TOKEN_ERROR));
+    
+    }
+    
+    // JWT secret key 관련 에러
+    @ExceptionHandler(InvalidJwtSecretKeyException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidJwtSecretKeyException(InvalidJwtSecretKeyException exception){
+    	
+    	log.error("InvalidJwtSecretKeyException occured : {}", exception.getMessage(), exception);
+    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.CHECK_JWT_SECERET_KEY));
+    }
 	
 	// 유효성 검사 에러
 	@ExceptionHandler(MethodArgumentNotValidException.class)
