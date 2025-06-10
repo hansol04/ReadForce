@@ -28,7 +28,7 @@ public class EmailService {
 	private final StringRedisTemplate redis_template;
 	private final String SIGN_UP_MESSAGE = "ReadForce에 가입하신 것을 환영합니다.";
 	private final String DEFAULT_MESSAGE = "ReadForce을 이용해주셔서 감사합니다.";
-	private final String PASSWORD_RESET_URL = "http://localhost:8080/reset-password?token=";
+	private final String PASSWORD_RESET_URL = "http://localhost:3000/resetpassword?token=";
 	
 	
 	// 인증 번호 생성

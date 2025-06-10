@@ -30,10 +30,12 @@ const Header = () => {
                 </h1>
 
                 <nav className="nav">
+
                 <Link to="/korea">한국기사</Link>
                 <Link to="/japan">일본기사</Link>
                 <Link to="/usa">미국기사</Link>
                 <Link to="/challenge">문해력 도전</Link>
+
                 </nav>
 
                 <div className="auth-buttons">
@@ -53,6 +55,7 @@ const Header = () => {
                         )}
                     </div>
 
+
                    
                     {isLoggedIn ? (
                         <>
@@ -65,6 +68,7 @@ const Header = () => {
                             <button onClick={() => navigate("/signupchoice")}>회원가입</button>
                         </>
                     )}
+
                 </div>
             </header>
         </div>
