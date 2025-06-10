@@ -1,8 +1,8 @@
 package com.readforce.handler;
 
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.readforce.enums.MessageCode;
-import com.readforce.exception.PasswordNotMatchException;
+import com.readforce.exception.AuthenticationException;
+import com.readforce.exception.DuplicateException;
+import com.readforce.exception.NotMatchException;
 import com.readforce.exception.ResourceNotFoundException;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -22,16 +25,48 @@ public class GlobalExceptionHandler {
 	
 	// 유효성 검사 에러
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException exception){
+	public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException exception){
 		
 		log.error("MethodArgumentNotValidException occured : {}", exception.getMessage(), exception);
-		Map<String, String> error_map = new HashMap<>();
-		exception.getBindingResult().getFieldErrors().forEach(error->{
-			String message_code = error.getDefaultMessage();
-			error_map.put(MessageCode.MESSAGE_CODE, message_code);
-		});
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error_map);
+		String message_code = exception.getBindingResult()
+										.getFieldErrors()
+										.stream()
+										.map(field_error -> field_error.getDefaultMessage())
+										.collect(Collectors.joining("/"));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MessageCode.MESSAGE_CODE, message_code));
 		
+	}
+	
+	// 인증 실패 에러
+	@ExceptionHandler(AuthenticationException.class)
+	public ResponseEntity<Map<String, String>> handleAuthenticationException(AuthenticationException exception){
+		
+		log.error("AuthenticationException occured : {}", exception.getMessage(), exception);
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
+		
+	}
+	
+	// 값이 불일치 에러
+	@ExceptionHandler(NotMatchException.class)
+	public ResponseEntity<Map<String, String>> handleNotMatchException(NotMatchException exception){
+		
+		log.error("NotMatchException occured : {}", exception.getMessage(), exception);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
+		
+	}
+	
+	
+	// 메소드 파라미터 또는 경로 변수 유효성 검사 에러
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<Map<String, String>> handleConstraintViolationException(ConstraintViolationException exception){
+		
+		log.error("ConstraintViolationException occured : {}", exception.getMessage(), exception);
+		String message_code = exception.getConstraintViolations()
+										.stream()
+										.map(constraint_violation -> constraint_violation.getMessage())
+										.collect(Collectors.joining("/"));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MessageCode.MESSAGE_CODE, message_code));
+				
 	}
 	
 	// 데이터 없음 에러
@@ -43,15 +78,14 @@ public class GlobalExceptionHandler {
 	
 	}
 	
-	// 아이디, 비밀번호 불일치
-	@ExceptionHandler(PasswordNotMatchException.class)
-	public ResponseEntity<Map<String, String>> handlePasswordNotMatchException(PasswordNotMatchException exception){
+	// 데이터 중복 에러
+	@ExceptionHandler(DuplicateException.class)
+	public ResponseEntity<Map<String, String>> handleDuplicateException(DuplicateException exception){
 		
-		log.error("PasswordNotMatchException occured : {}", exception.getMessage(), exception);
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
+		log.error("DuplicateException occured : {}", exception.getMessage(), exception);
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
 		
-	}
-	
+	}	
 	
 	// 서버 에러
 	@ExceptionHandler(Exception.class)
