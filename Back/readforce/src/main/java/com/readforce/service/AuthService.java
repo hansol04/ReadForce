@@ -36,7 +36,7 @@ public class AuthService implements UserDetailsService{
                         Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + member.getRole().name()))
                 ))
 				.orElseThrow(
-						() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_ID)
+						() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL)
 				);
 	
 	}
