@@ -55,7 +55,7 @@ public class Member {
 	private LocalDateTime last_modified_date;
 	
 	@Column(nullable = true)
-	private LocalDateTime withdraw_date;
+	private LocalDateTime withdrawDate;
 	
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)

@@ -4,17 +4,11 @@ package com.readforce.service;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,11 +20,9 @@ import com.readforce.enums.Prefix;
 import com.readforce.enums.Status;
 import com.readforce.exception.AuthenticationException;
 import com.readforce.exception.DuplicateException;
-import com.readforce.exception.NotMatchException;
 import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.repository.MemberRepository;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,12 +34,12 @@ public class MemberService{
 	private final MemberRepository member_repository;
 	private final PasswordEncoder password_encoder;
 	private final EmailService email_service;
-	private final RedisTemplate<String, String> redis_template;
+	private final StringRedisTemplate redis_template;
 
 	// 회원 찾기
 	@Transactional(readOnly = true)
 	public Member getMemberObjectById(String email) {
-		return member_repository.findByIdAndStatus(email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
+		return member_repository.findByEmailAndStatus(email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
 	}
 
 	
@@ -57,11 +49,11 @@ public class MemberService{
 		
 		// 회원 존재 유무 확인
 		Member member = 
-				member_repository.findByIdAndStatus(email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
+				member_repository.findByEmailAndStatus(email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
 		
 		// 회원 상태 변경
 		member.setStatus(Status.PENDING_DELETION);
-		member.setWithdraw_date(LocalDateTime.now());
+		member.setWithdrawDate(LocalDateTime.now());
 
 	}
 	
@@ -145,7 +137,7 @@ public class MemberService{
 		
 		// 회원 정보 조회
 		Member member = 
-				member_repository.findByIdAndStatus(current_member_email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
+				member_repository.findByEmailAndStatus(current_member_email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
 		
 		// 닉네임
 		if(modify.getNickname() != null) {
@@ -180,7 +172,7 @@ public class MemberService{
 		
 		// 회원 정보 불러오기
 		Member member = 
-				member_repository.findByIdAndStatus(member_email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
+				member_repository.findByEmailAndStatus(member_email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
 		
 		// 비밀번호 재설정
 		member.setPassword(password_encoder.encode(new_password));
