@@ -76,10 +76,10 @@ file:
   upload-dir: ./upload/image/profile/
     
 newsapi:
-  key: ${NEWS_API_KEY}
+  key: 52047c836f2d4b659280136c95e8132c
 
 gemini:
-  key: ${GEMINI_API_KEY}
+  key: AIzaSyCM4bos91g7zvIEbXvmwjsjYRN3ma2tMD4
     
     
     
