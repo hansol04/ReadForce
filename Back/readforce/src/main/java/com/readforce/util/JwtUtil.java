@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.readforce.enums.MessageCode;
+import com.readforce.exception.InvalidJwtSecretKeyException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -45,11 +46,11 @@ public class JwtUtil {
 
 		if (keyBytes.length < minKeyLengthBytes) {
 			log.error("FATAL: JWT secret key가 너무 짧습니다. key는 반드시 최소 {} bytes (256 bits) 길이어야 합니다.", minKeyLengthBytes);
-			// 예외를 발생시켜 안전하지 않은 설정으로 애플리케이션이 시작되는 것을 방지합니다.
-			throw new RuntimeException(MessageCode.CHECK_JWT_SECERET_KEY);
+			// 예외를 발생시켜 안전하지 않은 설정으로 애플리케이션이 시작되는 것을 방지
+			throw new InvalidJwtSecretKeyException(MessageCode.CHECK_JWT_SECERET_KEY);
 		}
 		
-		log.info("JWT secret key validation successful.");
+		log.info("JWT secret key 검증에 완료했습니다.");
 	}
 	
 	// 시크릿 키를 HMAC-SHA 알고리즘에 맞는 Key 객체로 변환

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.readforce.enums.MessageCode;
+import com.readforce.enums.Prefix;
 import com.readforce.enums.Status;
 import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.repository.MemberRepository;
@@ -33,7 +34,7 @@ public class AuthService implements UserDetailsService{
                         member.getEmail(),
                         member.getPassword(),
                         // Role enum을 GrantedAuthority 객체로 변환하여 리스트에 담습니다.
-                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + member.getRole().name()))
+                        Collections.singletonList(new SimpleGrantedAuthority(Prefix.ROLE.getName() + member.getRole().name()))
                 ))
 				.orElseThrow(
 						() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL)

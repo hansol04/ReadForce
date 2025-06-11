@@ -1,6 +1,5 @@
 package com.readforce.service;
 
-
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.readforce.dto.MemberDto;
+import com.readforce.dto.OAuthAttributesDto;
 import com.readforce.entity.Member;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.Prefix;
@@ -23,6 +23,7 @@ import com.readforce.exception.DuplicateException;
 import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.repository.MemberRepository;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,6 +36,7 @@ public class MemberService{
 	private final PasswordEncoder password_encoder;
 	private final EmailService email_service;
 	private final StringRedisTemplate redis_template;
+	private final FileService file_service;
 
 	// 회원 찾기
 	@Transactional(readOnly = true)
@@ -65,11 +67,24 @@ public class MemberService{
 		log.info("탈퇴 회원 정보 삭제 스케쥴러를 실행합니다.");
 		LocalDateTime thirthyDaysAgo = LocalDateTime.now().minusDays(30);
 		
+		// 회원 탈퇴 후 30일이 지난 회원 조회
 		List<Member> pending_deletion_member_list = member_repository.findAllByStatusAndWithdrawDateBefore(Status.PENDING_DELETION, thirthyDaysAgo);
 		
 		if(pending_deletion_member_list.isEmpty()) {
+			
 			log.info("삭제할 탈퇴 회원이 없습니다.");
+		
 		}else {
+			
+			// 회원과 연관된 정보 삭제
+			for(Member member : pending_deletion_member_list) {
+				
+				// 프로필 이미지 삭제
+				file_service.deleteFile(member.getProfile_image_url());;
+				
+				
+			}
+			
 			log.info("{}명의 탈퇴 회원 정보를 삭제합니다.", pending_deletion_member_list.size());
 			member_repository.deleteAll(pending_deletion_member_list);
 			log.info("탈퇴 회원 정보 삭제를 완료했습니다.");
@@ -202,6 +217,36 @@ public class MemberService{
 		
 	}
 
+	// 소셜 회원가입
+	@Transactional
+	public String socialSignUp(@Valid MemberDto.SocialSignUp social_sign_up) {
+		
+		// 토큰 검증
+		String email = redis_template.opsForValue().get(Prefix.SOCIAL_SIGN_UP.getName() + social_sign_up.getToken());
+		if(email == null) {
+			throw new AuthenticationException(MessageCode.TOKEN_ERROR);
+		}
+		
+		// 닉네임 중복 확인
+		if(member_repository.findByNickname(social_sign_up.getNickname()).isPresent()) {
+			throw new DuplicateException(MessageCode.DUPLICATE_NICKNAME);
+		}
+		
+		OAuthAttributesDto o_auth_attributes = OAuthAttributesDto.builder().email(email).build();
+		Member new_member = o_auth_attributes.toEntity(social_sign_up.getNickname(), social_sign_up.getBirthday());
+		
+		new_member.setPassword(password_encoder.encode(new_member.getPassword()));
+		
+		// 새로운 회원 추가
+		member_repository.save(new_member);
+		
+		// 토큰 삭제
+		redis_template.delete(Prefix.SOCIAL_SIGN_UP.getName() + social_sign_up.getToken());
+		
+		return email;
+		
+	}
+	
 	
 
 	

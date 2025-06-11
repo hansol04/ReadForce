@@ -34,14 +34,21 @@ public final class MessageCode {
 	public static final String MEMBER_INFO_MODIFY_SUCCESS = "SU0006";
 	public static final String PASSWORD_RESET_SUCCESS = "SU0007";
 	public static final String SEND_PASSWORD_RESET_LINK_SUCCESS = "SU0008";
+	public static final String PROFILE_IMAGE_UPLOAD_SUCCESS = "SU0009";
+	public static final String PROFILE_IMAGE_DELETE_SUCCESS = "SU0010";
 	
 	// 실패
 	public static final String VERIFICATION_CODE_SEND_FAIL = "FA0001";
 	public static final String VERIFICATION_CODE_VERIFY_FAIL = "FA0002";
 	public static final String AUTHENTICATION_FAIL = "FA0003";
+	public static final String DIRECTORY_CREATION_FAIL = "FA0004";
+	public static final String FILE_STORE_FAIL = "FA0005";
+	public static final String FILE_DELETE_FAIL = "FA0006";
 	
 	// 데이터 없음
 	public static final String MEMBER_NOT_FOUND_WITH_EMAIL = "NF0001";
+	public static final String FILE_NOT_FOUND = "NF0002";
+	public static final String PROFILE_IMAGE_URL_NOT_FOUND = "NF0003";
 	
 	
 	// 특정 상황
@@ -53,5 +60,6 @@ public final class MessageCode {
 	public static final String TOKEN_ERROR = "SP0006";
 	public static final String CHECK_JWT_SECERET_KEY = "SP0007";
 	public static final String EMAIL_VERIFICATION_REQUIRED = "SP0008";
+	
 	
 }
