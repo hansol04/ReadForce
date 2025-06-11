@@ -3,9 +3,9 @@ spring:
     name: readforce
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: jdbc:postgresql://124.5.240.195:5432/readforce
+    username: readforce_admin
+    password: 1234
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
@@ -21,8 +21,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${GMAIL_USERNAME}
-    password: ${GMAIL_PASSWORD}
+    username: readforce2002@gmail.com
+    password: tudyftdrnttukroj
     protocol: smtp
     properties:
       mail:
@@ -32,7 +32,7 @@ spring:
             enable: true
             required: true
   jwt:
-    secret: ${JWT_SECRET_KEY}
+    secret: Dekndke3!@$ndkWkf@42Sk*dn!$DNkDj3a@ane#ganD
     expiration-time: 3600000
   security:
     oauth2:
@@ -72,6 +72,7 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+
 file:
   image:
     profile:
@@ -84,9 +85,7 @@ custom:
     social-login-success:
       exist-member-url: http://localhost:3000/auth/callback
       new-member-url: http://localhost:3000/social-sign-up
-    
-    
-    
-    
-    
-  
+newsapi:
+  key: 52047c836f2d4b659280136c95e8132c
+gemini:
+  key: AIzaSyCM4bos91g7zvIEbXvmwjsjYRN3ma2tMD4
