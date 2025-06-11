@@ -31,6 +31,25 @@ const SignupCompletePage = () => {
       return;
     }
 
+    // 닉네임 형식 확인
+    const isValidNickname = (name) => {
+      const onlyKorean = /^[가-힣]+$/.test(name);
+      const onlyEnglish = /^[a-zA-Z]+$/.test(name);
+      const mixed = /^[가-힣a-zA-Z0-9]+$/.test(name);
+
+      if (!mixed) return false;
+
+      if (onlyKorean && name.length <= 8) return true;
+      if (onlyEnglish && name.length <= 20) return true;
+      if (mixed && name.length <= 12) return true; // 혼합일 경우 중간값 정도 허용
+
+      return false;
+    };
+    if (!isValidNickname(nickname)) {
+      setError('닉네임은 한글 8자, 영문 20자 이하로 입력해주세요.');
+      return;
+    }
+
     // 생년월일 형식 확인 (간단한 정규표현식)
     const birthdayRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!birthdayRegex.test(birthday)) {
@@ -69,6 +88,7 @@ const SignupCompletePage = () => {
           <label>닉네임</label>
           <input
             type="text"
+            placeholder='한글 8글자, 영문 20글자 이내로 작성해주세요'
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
             required
