@@ -25,6 +25,7 @@ const SignupWithEmail = () => {
         throw new Error(errorData.message || '인증 이메일 전송 실패');
       }
 
+      alert("입력한 E-Mail 주소로 인증번호가 전송되었습니다.");
       navigate(`/signup/emailverifypage?email=${encodeURIComponent(email)}`);
     } catch (error) {
       setMessage(`❌ 오류: ${error.message}`);
