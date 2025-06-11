@@ -34,30 +34,29 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http_security) throws Exception {
         http_security
-                .cors() 
-                .and()
-                .csrf(csrf -> csrf.disable())
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(custom_authentication_entry_point))
-                .authorizeHttpRequests(
-                        auth -> auth
-                                .requestMatchers(
-                                        "/member/sign-in",
-                                        "/member/sign-up",
-                                        "/member/email-check",
-                                        "/member/nickname-check",
-                                        "/member/password-reset-by-link",
-                                        "/email/send-verification-code-sign-up",
-                                        "/email/verify-verification-code-sign-up",
-                                        "/email/send-password-reset-link",
-                                        "/api/news"
-                                ).permitAll()
-                                .anyRequest().authenticated()
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    "/member/sign-in",
+                    "/member/sign-up",
+                    "/member/email-check",
+                    "/member/nickname-check",
+                    "/member/password-reset-by-link",
+                    "/email/send-verification-code-sign-up",
+                    "/email/verify-verification-code-sign-up",
+                    "/email/send-password-reset-link",
+                    "/api/news"
+                ).permitAll()
+                .anyRequest().authenticated()
+            )
+            .csrf(csrf -> csrf.disable())
+            .exceptionHandling(exception -> exception.authenticationEntryPoint(custom_authentication_entry_point))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
         http_security.addFilterBefore(jwt_request_filter, UsernamePasswordAuthenticationFilter.class);
         return http_security.build();
     }
+
 
     // ✅ 실제 CORS 정책 설정 (Security용)
     @Bean
