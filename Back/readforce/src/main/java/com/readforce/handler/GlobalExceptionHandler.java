@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.readforce.enums.MessageCode;
 import com.readforce.exception.AuthenticationException;
 import com.readforce.exception.DuplicateException;
+import com.readforce.exception.FileException;
 import com.readforce.exception.InvalidJwtSecretKeyException;
 import com.readforce.exception.NotMatchException;
 import com.readforce.exception.ResourceNotFoundException;
@@ -32,6 +33,15 @@ public class GlobalExceptionHandler {
     	log.error("JwtException occurred : {}", exception.getMessage(), exception);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.TOKEN_ERROR));
     
+    }
+    
+    // 파일 관련 에러
+    @ExceptionHandler(FileException.class)
+    public ResponseEntity<Map<String, String>> handleFileException(FileException exception){
+    	
+    	log.error("FileException occured : {}", exception.getMessage(), exception);
+    	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
+    	
     }
     
     // JWT secret key 관련 에러

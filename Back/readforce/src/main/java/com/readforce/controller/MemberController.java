@@ -1,7 +1,10 @@
 package com.readforce.controller;
 
+import java.io.IOException;
 import java.util.Map;
 
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,13 +20,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.readforce.dto.MemberDto;
 import com.readforce.enums.MessageCode;
 import com.readforce.service.AuthService;
+import com.readforce.service.FileService;
 import com.readforce.service.MemberService;
 import com.readforce.util.JwtUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -41,6 +47,7 @@ public class MemberController {
 	private final AuthService auth_service;
 	private final AuthenticationManager authentication_manager;
 	private final JwtUtil jwt_util;
+	private final FileService file_service;
 
 	
 	// 로그인
@@ -150,5 +157,61 @@ public class MemberController {
 		return ResponseEntity.status(HttpStatus.OK).body(Map.of("TOKEN", jwt, MessageCode.MESSAGE_CODE, MessageCode.SIGN_UP_SUCCESS));
 		
 	}
+	
+	// 프로필 이미지 업로드
+	@PostMapping("/upload-profile-image")
+	public ResponseEntity<Map<String, String>> uploadProfileImage(
+			@Valid @RequestParam("profile-image-file") MultipartFile profile_image_file,
+			@AuthenticationPrincipal UserDetails user_details
+	){
+		
+		file_service.uploadProfileImage(user_details.getUsername(), profile_image_file);
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.PROFILE_IMAGE_UPLOAD_SUCCESS));
+		
+	}
+	
+	// 프로필 이미지 삭제
+	@DeleteMapping("/delete-profile-image")
+	public ResponseEntity<Map<String, String>> deleteProfileImage(@AuthenticationPrincipal UserDetails user_details){
+		
+		file_service.deleteProfileImage(user_details.getUsername());
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.PROFILE_IMAGE_DELETE_SUCCESS));
+		
+	}
+	
+	// 프로필 이미지 불러오기
+	@GetMapping("/get-profile-image")
+	public ResponseEntity<Resource> getProfileImage(
+			@AuthenticationPrincipal UserDetails user_details,
+			HttpServletRequest http_servlet_request
+	){
+		
+		// 이미지 파일 불러오기
+		Resource resource = file_service.getProfileImage(user_details.getUsername());
+		String content_type = null;
+		
+		try {
+			
+			content_type = http_servlet_request.getServletContext()
+					.getMimeType(resource.getFile().getAbsolutePath());
+		
+		} catch (IOException ex) {
+			
+			content_type = "application/octet-stream";
+			
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+				.body(resource);
+		
+	}
+	
+	
+	
 
 }
