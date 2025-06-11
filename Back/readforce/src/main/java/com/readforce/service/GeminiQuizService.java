@@ -3,11 +3,9 @@ package com.readforce.service;
 import java.util.List;
 import java.util.Map;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,19 +19,27 @@ public class GeminiQuizService {
 
     private final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
 
+    @PostConstruct
+    public void logKey() {
+        if (geminiApiKey == null || geminiApiKey.isBlank()) {
+            throw new IllegalStateException("âŒ Gemini API í‚¤ê°€ ì„¤ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
+        }
+        System.out.println("âœ… Gemini API Key Loaded");
+    }
+
     public Map<String, Object> generateQuiz(String articleContent) {
         RestTemplate restTemplate = new RestTemplate();
 
         String prompt = String.format("""
-            ´ÙÀ½ ´º½º ±â»ç¸¦ ¹ÙÅÁÀ¸·Î ÃÊµîÇĞ»ıµµ Ç® ¼ö ÀÖ´Â °´°ü½Ä ¹®ÇØ·Â ÄûÁî ¹®Á¦ 1°³¸¦ JSON Çü½ÄÀ¸·Î ¸¸µé¾îÁà.
-            JSON Çü½ÄÀº ´ÙÀ½°ú °°¾Æ¾ß ÇØ:
+            ë‹¤ìŒ ë‰´ìŠ¤ ê¸°ì‚¬ë¥¼ ë°”íƒ•ìœ¼ë¡œ ì´ˆë“±í•™ìƒë„ í’€ ìˆ˜ ìˆëŠ” ê°ê´€ì‹ ë¬¸í•´ë ¥ í€´ì¦ˆ ë¬¸ì œ 1ê°œë¥¼ JSON í˜•ì‹ìœ¼ë¡œ ë§Œë“¤ì–´ì¤˜.
+            JSON í˜•ì‹ì€ ë‹¤ìŒê³¼ ê°™ì•„ì•¼ í•´:
             {
-              "question": "¹®Á¦ ³»¿ë",
-              "options": ["º¸±â1", "º¸±â2", "º¸±â3", "º¸±â4"],
-              "answer": "Á¤´ä º¸±â"
+              "question": "ë¬¸ì œ ë‚´ìš©",
+              "options": ["ë³´ê¸°1", "ë³´ê¸°2", "ë³´ê¸°3", "ë³´ê¸°4"],
+              "answer": "ì •ë‹µ ë³´ê¸°"
             }
 
-            ´º½º ±â»ç ³»¿ë:
+            ë‰´ìŠ¤ ê¸°ì‚¬ ë‚´ìš©:
             %s
         """, articleContent);
 
@@ -56,11 +62,10 @@ public class GeminiQuizService {
             List<Map<String, String>> parts = (List<Map<String, String>>) content.get("parts");
             String text = parts.get(0).get("text");
 
-            // JSON ¹®ÀÚ¿­ ÆÄ½Ì
             return new ObjectMapper().readValue(text, Map.class);
-
         } catch (Exception e) {
-            throw new RuntimeException("Gemini API ¿À·ù: " + e.getMessage(), e);
+            e.printStackTrace(); // ì½˜ì†”ì—ì„œ ë””ë²„ê¹… ê°€ëŠ¥
+            throw new RuntimeException("Gemini API ì˜¤ë¥˜: " + e.getMessage(), e);
         }
     }
 }
