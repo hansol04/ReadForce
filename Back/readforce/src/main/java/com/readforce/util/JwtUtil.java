@@ -50,7 +50,7 @@ public class JwtUtil {
 			throw new InvalidJwtSecretKeyException(MessageCode.CHECK_JWT_SECERET_KEY);
 		}
 		
-		log.info("JWT secret key validation successful.");
+		log.info("JWT secret key 검증에 완료했습니다.");
 	}
 	
 	// 시크릿 키를 HMAC-SHA 알고리즘에 맞는 Key 객체로 변환

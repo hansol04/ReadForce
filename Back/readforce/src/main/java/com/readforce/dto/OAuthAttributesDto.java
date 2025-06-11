@@ -17,7 +17,6 @@ public class OAuthAttributesDto {
 	private Map<String, Object> attributes;
 	private String nameAttributeKey;
 	private String email;
-	private PasswordEncoder password_encoder;
 	
 	@Builder
 	public OAuthAttributesDto(Map<String, Object> attributes, String nameAttributeKey, String email) {
@@ -85,7 +84,7 @@ public class OAuthAttributesDto {
 		member.setNickname(nickname);
 		member.setBirthday(birthday);
 		member.setEmail(this.email);
-		member.setPassword(password_encoder.encode(UUID.randomUUID().toString()));
+		member.setPassword(UUID.randomUUID().toString());
 		return member;
 		
 	}

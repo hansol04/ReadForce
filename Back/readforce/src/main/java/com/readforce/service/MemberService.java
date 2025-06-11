@@ -1,6 +1,5 @@
 package com.readforce.service;
 
-
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -37,6 +36,7 @@ public class MemberService{
 	private final PasswordEncoder password_encoder;
 	private final EmailService email_service;
 	private final StringRedisTemplate redis_template;
+	private final FileService file_service;
 
 	// 회원 찾기
 	@Transactional(readOnly = true)
@@ -67,11 +67,24 @@ public class MemberService{
 		log.info("탈퇴 회원 정보 삭제 스케쥴러를 실행합니다.");
 		LocalDateTime thirthyDaysAgo = LocalDateTime.now().minusDays(30);
 		
+		// 회원 탈퇴 후 30일이 지난 회원 조회
 		List<Member> pending_deletion_member_list = member_repository.findAllByStatusAndWithdrawDateBefore(Status.PENDING_DELETION, thirthyDaysAgo);
 		
 		if(pending_deletion_member_list.isEmpty()) {
+			
 			log.info("삭제할 탈퇴 회원이 없습니다.");
+		
 		}else {
+			
+			// 회원과 연관된 정보 삭제
+			for(Member member : pending_deletion_member_list) {
+				
+				// 프로필 이미지 삭제
+				file_service.deleteFile(member.getProfile_image_url());;
+				
+				
+			}
+			
 			log.info("{}명의 탈퇴 회원 정보를 삭제합니다.", pending_deletion_member_list.size());
 			member_repository.deleteAll(pending_deletion_member_list);
 			log.info("탈퇴 회원 정보 삭제를 완료했습니다.");
@@ -222,6 +235,8 @@ public class MemberService{
 		OAuthAttributesDto o_auth_attributes = OAuthAttributesDto.builder().email(email).build();
 		Member new_member = o_auth_attributes.toEntity(social_sign_up.getNickname(), social_sign_up.getBirthday());
 		
+		new_member.setPassword(password_encoder.encode(new_member.getPassword()));
+		
 		// 새로운 회원 추가
 		member_repository.save(new_member);
 		
@@ -231,7 +246,7 @@ public class MemberService{
 		return email;
 		
 	}
-
+	
 	
 
 	
