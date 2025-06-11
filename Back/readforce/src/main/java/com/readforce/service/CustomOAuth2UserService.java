@@ -2,7 +2,6 @@ package com.readforce.service;
 
 import java.util.Collections;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,10 +9,10 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import com.readforce.dto.OAuth2UserDto;
 import com.readforce.dto.OAuthAttributesDto;
 import com.readforce.entity.Member;
 import com.readforce.enums.Prefix;
@@ -46,23 +45,34 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 		// DB에서 사용자 조회
         Optional<Member> member_optional = member_repository.findByEmailAndStatus(o_auth_attributes_dto.getEmail(), Status.ACTIVE);
 		
-        Set<GrantedAuthority> authorities;
+        boolean is_new_user;
+        Role role;
 
         if (member_optional.isPresent()) {
-            // 기존 회원일 경우, 실제 권한 부여
-            Member member = member_optional.get();
-            authorities = Collections
-                    .singleton(new SimpleGrantedAuthority(Prefix.ROLE.getName() + member.getRole().name()));
+            
+        	// 기존 회원일 경우
+        	is_new_user = false;
+        	role = member_optional.get().getRole();
+
         } else {
-            // 신규 회원일 경우, 임시 GUEST 권한 부여
-            authorities = Collections.singleton(new SimpleGrantedAuthority(Prefix.ROLE.getName() + Role.GUEST.toString()));
+            
+        	// 신규 회원일 경우
+        	is_new_user = true;
+        	role = Role.USER;
+
         }
         
-		// DB 저장 없이 속성과 임시 권한만 담아서 반환
-		return new DefaultOAuth2User(
-				authorities,
+        GrantedAuthority granted_authority = 
+        		new SimpleGrantedAuthority(Prefix.ROLE.getName() + role.name());
+        
+        
+		// OAuth2UserDto 반환
+		return new OAuth2UserDto(
+				Collections.singleton(granted_authority),
 				o_auth_attributes_dto.getAttributes(),
-				o_auth_attributes_dto.getNameAttributeKey()
+				o_auth_attributes_dto.getNameAttributeKey(),
+				o_auth_attributes_dto.getEmail(),
+				is_new_user
 		);
 		
 	}

@@ -1302,7 +1302,6 @@ java.lang.InterruptedException
 
 !ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-10 11:28:38.965
 !MESSAGE Classpath changed for project: readforce
-
 !ENTRY org.eclipse.lsp4e 2 0 2025-06-10 12:40:43.061
 !MESSAGE Javadoc unavailable. Failed to obtain it.
 !STACK 0
@@ -1446,7 +1445,6 @@ java.lang.reflect.InvocationTargetException
 	at org.eclipse.swt.internal.win32.OS.DispatchMessage(Native Method)
 	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3658)
 	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
-
 !SESSION 2025-06-10 14:22:47.545 -----------------------------------------------
 eclipse.buildId=4.20.0.202309081654
 java.version=17.0.8.1
@@ -2037,9 +2035,7 @@ Binding(CTRL+SHIFT+C,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.textEditorScope,,,system)
-
 !SESSION 2025-06-10 17:37:52.688 -----------------------------------------------
-
 eclipse.buildId=4.20.0.202309081654
 java.version=17.0.8.1
 java.vendor=Eclipse Adoptium
@@ -2047,14 +2043,12 @@ BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
 Framework arguments:  -product org.springframework.boot.ide.branding.sts4
 Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.springframework.boot.ide.branding.sts4
 
-
 !ENTRY org.eclipse.emf.ecore 2 0 2025-06-10 17:37:55.137
 !MESSAGE Both 'org.eclipse.jst.j2ee.core' and 'org.eclipse.jst.j2ee.core' register a package for 'application.xmi'
 
 !ENTRY org.eclipse.jface 2 0 2025-06-10 17:38:30.506
 !MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
 !SUBENTRY 1 org.eclipse.jface 2 0 2025-06-10 17:38:30.506
-
 !MESSAGE A conflict occurred for CTRL+SHIFT+T:
 Binding(CTRL+SHIFT+T,
 	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
@@ -2073,7 +2067,6 @@ Binding(CTRL+SHIFT+T,
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.contexts.window,,,system)
 
-
 !ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-10 17:38:39.829
 !MESSAGE Command list starting LS: org.springframework.tooling.boot.ls
 START:
@@ -2086,13 +2079,11 @@ C:\Development\spring-tool-suite-4-4.20.0.RELEASE-e4.29.0-win32.win32.x86_64\sts
 -XX:+HeapDumpOnOutOfMemoryError
 -XX:TieredStopAtLevel=1
 -Xlog:jni+resolve=off
-
 -Dspring.config.location=file:C:\Development\spring-tool-suite-4-4.20.0.RELEASE-e4.29.0-win32.win32.x86_64\sts-4.20.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.49.0.202309081616\servers\spring-boot-language-server\BOOT-INF\classes\application.properties
 -XX:ErrorFile=D:/ReadForce/Back/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1749544719828
 org.springframework.ide.vscode.boot.app.BootLanguageServerBootApp
 --languageserver.hover-timeout=225
 END
-
 
 !ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-10 17:38:39.830
 !MESSAGE DelegatingStreamConnectionProvider - Starting Boot LS
@@ -2107,16 +2098,271 @@ not correct please set the HOME environment variable and restart Eclipse. Otherw
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-11 12:25:47.569
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-10 17:38:43.011
 !MESSAGE Boot project ADDED: readforce
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-11 12:25:47.574
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-10 17:38:43.012
 !MESSAGE Starting Boot LS...
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-11 12:25:47.587
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-10 17:38:43.015
 !MESSAGE Started Boot LS process
 
-!ENTRY org.eclipse.lsp4e 2 0 2025-06-11 12:26:50.492
+!ENTRY org.eclipse.jface 2 0 2025-06-10 17:44:48.207
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2025-06-10 17:44:48.207
+!MESSAGE A conflict occurred for CTRL+SHIFT+C:
+Binding(CTRL+SHIFT+C,
+	ParameterizedCommand(Command(org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand,Toggle Line Comment,
+		,
+		Category(org.eclipse.tm4e.languageconfiguration.category,TM4E Language Configuration,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.textEditorScope,,,system)
+Binding(CTRL+SHIFT+C,
+	ParameterizedCommand(Command(org.springframework.tooling.boot.ls.ToggleComment,Toggle Comment,
+		,
+		Category(org.springframework.ide.eclipse.commands,Spring Generic Text Editor,Spring Language Server Commands,true),
+		WorkbenchHandlerServiceHandler("org.springframework.tooling.boot.ls.ToggleComment"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.textEditorScope,,,system)
+
+!ENTRY org.eclipse.jdt.core 4 0 2025-06-10 17:48:01.024
+!MESSAGE Lombok annotation handler class lombok.eclipse.handlers.HandleValue failed
+!STACK 0
+java.lang.ClassCastException: class org.eclipse.jdt.internal.compiler.ast.FieldDeclaration cannot be cast to class org.eclipse.jdt.internal.compiler.ast.TypeDeclaration (org.eclipse.jdt.internal.compiler.ast.FieldDeclaration and org.eclipse.jdt.internal.compiler.ast.TypeDeclaration are in unnamed module of loader org.eclipse.osgi.internal.loader.EquinoxClassLoader @22025464)
+	at lombok.eclipse.handlers.HandleValue.handle(HandleValue.java:66)
+	at lombok.eclipse.HandlerLibrary$AnnotationHandlerContainer.handle(HandlerLibrary.java:106)
+	at lombok.eclipse.HandlerLibrary.handleAnnotation(HandlerLibrary.java:237)
+	at lombok.eclipse.TransformEclipseAST$AnnotationVisitor.visitAnnotationOnField(TransformEclipseAST.java:249)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:110)
+	at lombok.eclipse.EclipseAST.traverseChildren(EclipseAST.java:231)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:79)
+	at lombok.eclipse.EclipseAST.traverseChildren(EclipseAST.java:231)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:74)
+	at lombok.eclipse.EclipseAST.traverseChildren(EclipseAST.java:231)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:69)
+	at lombok.eclipse.EclipseAST.traverse(EclipseAST.java:224)
+	at lombok.eclipse.TransformEclipseAST.go(TransformEclipseAST.java:226)
+	at lombok.eclipse.TransformEclipseAST.transform(TransformEclipseAST.java:187)
+	at lombok.eclipse.TransformEclipseAST.transform_swapped(TransformEclipseAST.java:104)
+	at jdk.internal.reflect.GeneratedMethodAccessor46.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at lombok.launch.PatchFixesHider$Util.invokeMethod(PatchFixesHider.java:150)
+	at lombok.launch.PatchFixesHider$Transform.transform_swapped(PatchFixesHider.java:276)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.endParse(Parser.java:11972)
+	at org.eclipse.jdt.internal.core.util.CommentRecorderParser.endParse(CommentRecorderParser.java:135)
+	at org.eclipse.jdt.internal.compiler.SourceElementParser.endParse(SourceElementParser.java:830)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.parse(Parser.java:13173)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.parse(Parser.java:13400)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.parse(Parser.java:13357)
+	at org.eclipse.jdt.internal.compiler.SourceElementParser.parseCompilationUnit(SourceElementParser.java:1122)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:273)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:193)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:573)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1148)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1325)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:132)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:94)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:91)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:158)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:78)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:207)
+
+!ENTRY org.eclipse.jdt.core 4 0 2025-06-10 17:48:43.220
+!MESSAGE Lombok annotation handler class lombok.eclipse.handlers.HandleValue failed
+!STACK 0
+java.lang.ClassCastException: class org.eclipse.jdt.internal.compiler.ast.FieldDeclaration cannot be cast to class org.eclipse.jdt.internal.compiler.ast.TypeDeclaration (org.eclipse.jdt.internal.compiler.ast.FieldDeclaration and org.eclipse.jdt.internal.compiler.ast.TypeDeclaration are in unnamed module of loader org.eclipse.osgi.internal.loader.EquinoxClassLoader @22025464)
+	at lombok.eclipse.handlers.HandleValue.handle(HandleValue.java:66)
+	at lombok.eclipse.HandlerLibrary$AnnotationHandlerContainer.handle(HandlerLibrary.java:106)
+	at lombok.eclipse.HandlerLibrary.handleAnnotation(HandlerLibrary.java:237)
+	at lombok.eclipse.TransformEclipseAST$AnnotationVisitor.visitAnnotationOnField(TransformEclipseAST.java:249)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:110)
+	at lombok.eclipse.EclipseAST.traverseChildren(EclipseAST.java:231)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:79)
+	at lombok.eclipse.EclipseAST.traverseChildren(EclipseAST.java:231)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:74)
+	at lombok.eclipse.EclipseAST.traverseChildren(EclipseAST.java:231)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:69)
+	at lombok.eclipse.EclipseAST.traverse(EclipseAST.java:224)
+	at lombok.eclipse.TransformEclipseAST.go(TransformEclipseAST.java:226)
+	at lombok.eclipse.TransformEclipseAST.transform(TransformEclipseAST.java:187)
+	at lombok.eclipse.TransformEclipseAST.transform_swapped(TransformEclipseAST.java:104)
+	at jdk.internal.reflect.GeneratedMethodAccessor46.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at lombok.launch.PatchFixesHider$Util.invokeMethod(PatchFixesHider.java:150)
+	at lombok.launch.PatchFixesHider$Transform.transform_swapped(PatchFixesHider.java:276)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.endParse(Parser.java:11972)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.parse(Parser.java:13173)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.parse(Parser.java:13400)
+	at org.eclipse.jdt.internal.codeassist.select.SelectionParser.parse(SelectionParser.java:1665)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.parse(Parser.java:13357)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.dietParse(Parser.java:11743)
+	at org.eclipse.jdt.internal.codeassist.select.SelectionParser.dietParse(SelectionParser.java:1489)
+	at org.eclipse.jdt.internal.codeassist.SelectionEngine.select(SelectionEngine.java:994)
+	at org.eclipse.jdt.internal.core.Openable.codeSelect(Openable.java:167)
+	at org.eclipse.jdt.internal.core.CompilationUnit.codeSelect(CompilationUnit.java:389)
+	at org.eclipse.jdt.internal.core.CompilationUnit.codeSelect(CompilationUnit.java:382)
+	at org.eclipse.jdt.internal.ui.text.java.hover.AbstractJavaEditorTextHover.getJavaElementsAt(AbstractJavaEditorTextHover.java:121)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavadocHover.internalGetHoverInfo(JavadocHover.java:667)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavadocHover.getHoverInfo2(JavadocHover.java:663)
+	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.lambda$0(LSJavaHoverProvider.java:63)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165)
+
+!ENTRY org.eclipse.jdt.core 4 0 2025-06-10 17:48:44.947
+!MESSAGE Lombok annotation handler class lombok.eclipse.handlers.HandleValue failed
+!STACK 0
+java.lang.ClassCastException: class org.eclipse.jdt.internal.compiler.ast.FieldDeclaration cannot be cast to class org.eclipse.jdt.internal.compiler.ast.TypeDeclaration (org.eclipse.jdt.internal.compiler.ast.FieldDeclaration and org.eclipse.jdt.internal.compiler.ast.TypeDeclaration are in unnamed module of loader org.eclipse.osgi.internal.loader.EquinoxClassLoader @22025464)
+	at lombok.eclipse.handlers.HandleValue.handle(HandleValue.java:66)
+	at lombok.eclipse.HandlerLibrary$AnnotationHandlerContainer.handle(HandlerLibrary.java:106)
+	at lombok.eclipse.HandlerLibrary.handleAnnotation(HandlerLibrary.java:237)
+	at lombok.eclipse.TransformEclipseAST$AnnotationVisitor.visitAnnotationOnField(TransformEclipseAST.java:249)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:110)
+	at lombok.eclipse.EclipseAST.traverseChildren(EclipseAST.java:231)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:79)
+	at lombok.eclipse.EclipseAST.traverseChildren(EclipseAST.java:231)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:74)
+	at lombok.eclipse.EclipseAST.traverseChildren(EclipseAST.java:231)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:69)
+	at lombok.eclipse.EclipseAST.traverse(EclipseAST.java:224)
+	at lombok.eclipse.TransformEclipseAST.go(TransformEclipseAST.java:226)
+	at lombok.eclipse.TransformEclipseAST.transform(TransformEclipseAST.java:187)
+	at lombok.eclipse.TransformEclipseAST.transform_swapped(TransformEclipseAST.java:104)
+	at jdk.internal.reflect.GeneratedMethodAccessor46.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at lombok.launch.PatchFixesHider$Util.invokeMethod(PatchFixesHider.java:150)
+	at lombok.launch.PatchFixesHider$Transform.transform_swapped(PatchFixesHider.java:276)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.endParse(Parser.java:11972)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.parse(Parser.java:13173)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.parse(Parser.java:13400)
+	at org.eclipse.jdt.internal.codeassist.select.SelectionParser.parse(SelectionParser.java:1665)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.parse(Parser.java:13357)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.dietParse(Parser.java:11743)
+	at org.eclipse.jdt.internal.codeassist.select.SelectionParser.dietParse(SelectionParser.java:1489)
+	at org.eclipse.jdt.internal.codeassist.SelectionEngine.select(SelectionEngine.java:994)
+	at org.eclipse.jdt.internal.core.Openable.codeSelect(Openable.java:167)
+	at org.eclipse.jdt.internal.core.CompilationUnit.codeSelect(CompilationUnit.java:389)
+	at org.eclipse.jdt.internal.core.CompilationUnit.codeSelect(CompilationUnit.java:382)
+	at org.eclipse.jdt.internal.ui.javaeditor.JavaElementHyperlinkDetector.detectHyperlinks(JavaElementHyperlinkDetector.java:124)
+	at org.eclipse.ui.texteditor.HyperlinkDetectorRegistry$HyperlinkDetectorDelegate.detectHyperlinks(HyperlinkDetectorRegistry.java:81)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.findHyperlinks(HyperlinkManager.java:289)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.findHyperlinks(HyperlinkManager.java:262)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.mouseMove(HyperlinkManager.java:457)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:216)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4274)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1066)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4072)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3660)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:645)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:552)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:651)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:588)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1459)
+
+!ENTRY org.eclipse.jdt.core 4 0 2025-06-10 17:48:44.969
+!MESSAGE Lombok annotation handler class lombok.eclipse.handlers.HandleValue failed
+!STACK 0
+java.lang.ClassCastException: class org.eclipse.jdt.internal.compiler.ast.FieldDeclaration cannot be cast to class org.eclipse.jdt.internal.compiler.ast.TypeDeclaration (org.eclipse.jdt.internal.compiler.ast.FieldDeclaration and org.eclipse.jdt.internal.compiler.ast.TypeDeclaration are in unnamed module of loader org.eclipse.osgi.internal.loader.EquinoxClassLoader @22025464)
+	at lombok.eclipse.handlers.HandleValue.handle(HandleValue.java:66)
+	at lombok.eclipse.HandlerLibrary$AnnotationHandlerContainer.handle(HandlerLibrary.java:106)
+	at lombok.eclipse.HandlerLibrary.handleAnnotation(HandlerLibrary.java:237)
+	at lombok.eclipse.TransformEclipseAST$AnnotationVisitor.visitAnnotationOnField(TransformEclipseAST.java:249)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:110)
+	at lombok.eclipse.EclipseAST.traverseChildren(EclipseAST.java:231)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:79)
+	at lombok.eclipse.EclipseAST.traverseChildren(EclipseAST.java:231)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:74)
+	at lombok.eclipse.EclipseAST.traverseChildren(EclipseAST.java:231)
+	at lombok.eclipse.EclipseNode.traverse(EclipseNode.java:69)
+	at lombok.eclipse.EclipseAST.traverse(EclipseAST.java:224)
+	at lombok.eclipse.TransformEclipseAST.go(TransformEclipseAST.java:226)
+	at lombok.eclipse.TransformEclipseAST.transform(TransformEclipseAST.java:187)
+	at lombok.eclipse.TransformEclipseAST.transform_swapped(TransformEclipseAST.java:104)
+	at jdk.internal.reflect.GeneratedMethodAccessor46.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at lombok.launch.PatchFixesHider$Util.invokeMethod(PatchFixesHider.java:150)
+	at lombok.launch.PatchFixesHider$Transform.transform_swapped(PatchFixesHider.java:276)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.endParse(Parser.java:11972)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.parse(Parser.java:13173)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.parse(Parser.java:13400)
+	at org.eclipse.jdt.internal.codeassist.select.SelectionParser.parse(SelectionParser.java:1665)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.parse(Parser.java:13357)
+	at org.eclipse.jdt.internal.compiler.parser.Parser.dietParse(Parser.java:11743)
+	at org.eclipse.jdt.internal.codeassist.select.SelectionParser.dietParse(SelectionParser.java:1489)
+	at org.eclipse.jdt.internal.codeassist.SelectionEngine.select(SelectionEngine.java:994)
+	at org.eclipse.jdt.internal.core.Openable.codeSelect(Openable.java:167)
+	at org.eclipse.jdt.internal.core.CompilationUnit.codeSelect(CompilationUnit.java:389)
+	at org.eclipse.jdt.internal.core.CompilationUnit.codeSelect(CompilationUnit.java:382)
+	at org.eclipse.jdt.internal.ui.javaeditor.JavaElementHyperlinkDetector.detectHyperlinks(JavaElementHyperlinkDetector.java:124)
+	at org.eclipse.ui.texteditor.HyperlinkDetectorRegistry$HyperlinkDetectorDelegate.detectHyperlinks(HyperlinkDetectorRegistry.java:81)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.findHyperlinks(HyperlinkManager.java:289)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.findHyperlinks(HyperlinkManager.java:262)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.mouseMove(HyperlinkManager.java:457)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:216)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4274)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1066)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4072)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3660)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:645)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:552)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:651)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:588)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1459)
+
+!ENTRY org.eclipse.lsp4e 2 0 2025-06-10 18:06:16.536
 !MESSAGE Javadoc unavailable. Failed to obtain it.
 !STACK 0
 java.lang.InterruptedException
@@ -2128,9 +2374,467 @@ java.lang.InterruptedException
 	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
 	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
 
-!ENTRY org.eclipse.jface 2 0 2025-06-11 14:36:51.672
+!ENTRY org.eclipse.lsp4e 2 0 2025-06-10 18:26:32.502
+!MESSAGE Javadoc unavailable. Failed to obtain it.
+!STACK 0
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:65)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.lsp4e 2 0 2025-06-11 10:53:34.306
+!MESSAGE Javadoc unavailable. Failed to obtain it.
+!STACK 0
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:65)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.lsp4e 2 0 2025-06-11 12:10:39.698
+!MESSAGE Javadoc unavailable. Failed to obtain it.
+!STACK 0
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:65)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.lsp4e 2 0 2025-06-11 13:45:30.082
+!MESSAGE Javadoc unavailable. Failed to obtain it.
+!STACK 0
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:65)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.lsp4e 2 0 2025-06-11 14:00:58.667
+!MESSAGE Javadoc unavailable. Failed to obtain it.
+!STACK 0
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:65)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.lsp4e 2 0 2025-06-11 14:01:19.409
+!MESSAGE Javadoc unavailable. Failed to obtain it.
+!STACK 0
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:65)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.lsp4e 2 0 2025-06-11 14:58:03.109
+!MESSAGE Javadoc unavailable. Failed to obtain it.
+!STACK 0
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:65)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.help.base 2 0 2025-06-11 15:27:20.757
+!MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.jst.ws.consumption.ui.doc.user_1.0.700.v201903222115 [634]'. The index should be rebuilt with Lucene 9.7.0
+
+!ENTRY org.eclipse.help.base 2 0 2025-06-11 15:27:20.762
+!MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.wst.command.env.doc.user_1.5.400.v201903222115 [647]'. The index should be rebuilt with Lucene 9.7.0
+
+!ENTRY org.eclipse.help.base 2 0 2025-06-11 15:27:20.767
+!MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.wst.dtdeditor.doc.user_1.1.0.v201903222120 [660]'. The index should be rebuilt with Lucene 9.7.0
+
+!ENTRY org.eclipse.help.base 2 0 2025-06-11 15:27:20.772
+!MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.jst.j2ee.doc.user_1.1.400.v202101072335 [601]'. The index should be rebuilt with Lucene 9.7.0
+
+!ENTRY org.eclipse.help.base 2 0 2025-06-11 15:27:20.776
+!MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.wst.xmleditor.doc.user_1.1.0.v201903222120 [706]'. The index should be rebuilt with Lucene 9.7.0
+
+!ENTRY org.eclipse.help.base 2 0 2025-06-11 15:27:20.780
+!MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.wst.xsdeditor.doc.user_1.0.800.v201903222120 [709]'. The index should be rebuilt with Lucene 9.7.0
+
+!ENTRY org.eclipse.help.base 2 0 2025-06-11 15:27:20.782
+!MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.jst.ejb.doc.user_1.1.301.v201903222024 [598]'. The index should be rebuilt with Lucene 9.7.0
+
+!ENTRY org.eclipse.help.base 2 0 2025-06-11 15:27:20.784
+!MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.jst.ws.axis.ui.doc.user_1.1.200.v201903222115 [630]'. The index should be rebuilt with Lucene 9.7.0
+
+!ENTRY org.eclipse.help.base 2 0 2025-06-11 15:27:20.786
+!MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.wst.wsdl.ui.doc.user_1.0.850.v201903222115 [699]'. The index should be rebuilt with Lucene 9.7.0
+
+!ENTRY org.eclipse.help.base 2 0 2025-06-11 15:27:20.787
+!MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.wst.webtools.doc.user_1.0.500.v201903222120 [689]'. The index should be rebuilt with Lucene 9.7.0
+
+!ENTRY org.eclipse.help.base 2 0 2025-06-11 15:27:20.790
+!MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.wst.server.ui.doc.user_1.1.600.v201901310132 [475]'. The index should be rebuilt with Lucene 9.7.0
+
+!ENTRY org.eclipse.help.base 2 0 2025-06-11 15:27:20.792
+!MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.jst.ws.doc.user_1.0.700.v201903222115 [637]'. The index should be rebuilt with Lucene 9.7.0
+
+!ENTRY org.eclipse.help.base 2 0 2025-06-11 15:27:20.793
+!MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.wst.wsi.ui.doc.user_1.0.750.v201903222115 [703]'. The index should be rebuilt with Lucene 9.7.0
+
+!ENTRY org.eclipse.help.base 2 0 2025-06-11 15:27:20.795
+!MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.jst.server.ui.doc.user_1.0.600.v201901310132 [620]'. The index should be rebuilt with Lucene 9.7.0
+
+!ENTRY org.eclipse.help.base 2 0 2025-06-11 15:27:20.797
+!MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.wst.sse.doc.user_1.2.0.v201903222120 [682]'. The index should be rebuilt with Lucene 9.7.0
+!SESSION 2025-06-11 15:58:03.475 -----------------------------------------------
+eclipse.buildId=4.20.0.202309081654
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  -product org.springframework.boot.ide.branding.sts4
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.springframework.boot.ide.branding.sts4
+
+!ENTRY org.eclipse.emf.ecore 2 0 2025-06-11 15:58:04.415
+!MESSAGE Both 'org.eclipse.jst.j2ee.core' and 'org.eclipse.jst.j2ee.core' register a package for 'application.xmi'
+
+!ENTRY org.eclipse.jface 2 0 2025-06-11 15:58:07.302
 !MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2025-06-11 14:36:51.672
+!SUBENTRY 1 org.eclipse.jface 2 0 2025-06-11 15:58:07.302
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.navigate.open.type"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.lsp4e.symbolinworkspace"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-11 15:58:10.417
+!MESSAGE Command list starting LS: org.springframework.tooling.boot.ls
+START:
+C:\Development\spring-tool-suite-4-4.20.0.RELEASE-e4.29.0-win32.win32.x86_64\sts-4.20.0.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.8.v20230831-1047\jre\bin\javaw.exe
+-cp
+C:\Development\spring-tool-suite-4-4.20.0.RELEASE-e4.29.0-win32.win32.x86_64\sts-4.20.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.49.0.202309081616\servers\spring-boot-language-server\BOOT-INF\classes;C:\Development\spring-tool-suite-4-4.20.0.RELEASE-e4.29.0-win32.win32.x86_64\sts-4.20.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.49.0.202309081616\servers\spring-boot-language-server\BOOT-INF\lib\*
+-Dsts.lsp.client=eclipse
+-Dlsp.completions.indentation.enable=true
+-Xmx1024m
+-XX:+HeapDumpOnOutOfMemoryError
+-XX:TieredStopAtLevel=1
+-Xlog:jni+resolve=off
+-Dspring.config.location=file:C:\Development\spring-tool-suite-4-4.20.0.RELEASE-e4.29.0-win32.win32.x86_64\sts-4.20.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.49.0.202309081616\servers\spring-boot-language-server\BOOT-INF\classes\application.properties
+-XX:ErrorFile=D:/ReadForce/Back/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1749625090415
+org.springframework.ide.vscode.boot.app.BootLanguageServerBootApp
+--languageserver.hover-timeout=225
+END
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-11 15:58:10.418
+!MESSAGE DelegatingStreamConnectionProvider - Starting Boot LS
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-11 15:58:10.424
+!MESSAGE Started org.springframework.tooling.boot.ls LS process 29056
+
+!ENTRY org.eclipse.jface 2 0 2025-06-11 15:58:11.301
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2025-06-11 15:58:11.301
+!MESSAGE A conflict occurred for CTRL+SHIFT+C:
+Binding(CTRL+SHIFT+C,
+	ParameterizedCommand(Command(org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand,Toggle Line Comment,
+		,
+		Category(org.eclipse.tm4e.languageconfiguration.category,TM4E Language Configuration,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.textEditorScope,,,system)
+Binding(CTRL+SHIFT+C,
+	ParameterizedCommand(Command(org.springframework.tooling.boot.ls.ToggleComment,Toggle Comment,
+		,
+		Category(org.springframework.ide.eclipse.commands,Spring Generic Text Editor,Spring Language Server Commands,true),
+		WorkbenchHandlerServiceHandler("org.springframework.tooling.boot.ls.ToggleComment"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.textEditorScope,,,system)
+
+!ENTRY org.eclipse.egit.ui 2 0 2025-06-11 15:58:11.956
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\kjh91'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-11 15:58:12.082
+!MESSAGE Boot project ADDED: readforce
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-11 15:58:12.083
+!MESSAGE Starting Boot LS...
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-11 15:58:12.085
+!MESSAGE Started Boot LS process
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-11 16:00:57.161
+!MESSAGE Classpath changed for project: readforce
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-11 16:00:57.161
+!MESSAGE Boot project REMOVED: readforce
+
+!ENTRY org.eclipse.lsp4e 4 0 2025-06-11 16:00:57.177
+!MESSAGE Factory org.eclipse.jdt.ui.ClassFileEditorInputFactory returned null from createElement for editor id=org.eclipse.jdt.ui.ClassFileEditor name=null
+!STACK 1
+org.eclipse.ui.PartInitException: Factory org.eclipse.jdt.ui.ClassFileEditorInputFactory returned null from createElement for editor id=org.eclipse.jdt.ui.ClassFileEditor name=null
+	at org.eclipse.ui.internal.EditorReference.getEditorInput(EditorReference.java:302)
+	at org.eclipse.lsp4e.LSPEclipseUtils.lambda$32(LSPEclipseUtils.java:1416)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:178)
+	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:921)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:682)
+	at org.eclipse.lsp4e.LSPEclipseUtils.findOpenEditorsFor(LSPEclipseUtils.java:1422)
+	at org.eclipse.lsp4e.operations.diagnostics.LSPDiagnosticsToMarkers.accept(LSPDiagnosticsToMarkers.java:94)
+	at org.eclipse.lsp4e.operations.diagnostics.LSPDiagnosticsToMarkers.accept(LSPDiagnosticsToMarkers.java:1)
+	at org.eclipse.lsp4e.LanguageClientImpl.publishDiagnostics(LanguageClientImpl.java:97)
+	at jdk.internal.reflect.GeneratedMethodAccessor45.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.lambda$recursiveFindRpcMethods$0(GenericEndpoint.java:65)
+	at org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint.notify(GenericEndpoint.java:152)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleNotification(RemoteEndpoint.java:220)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:187)
+	at org.eclipse.lsp4e.LanguageServerWrapper.lambda$3(LanguageServerWrapper.java:285)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:194)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:94)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:113)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+!SUBENTRY 1 org.eclipse.ui 4 0 2025-06-11 16:00:57.178
+!MESSAGE Factory org.eclipse.jdt.ui.ClassFileEditorInputFactory returned null from createElement for editor id=org.eclipse.jdt.ui.ClassFileEditor name=null
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 4 0 2025-06-11 16:00:57.182
+!MESSAGE Failed to refresh Code Minings for editor.
+!STACK 1
+Java Model Exception: Error in Java Model (code 969): readforce does not exist
+	at org.eclipse.jdt.internal.core.JavaElement.newNotPresentException(JavaElement.java:550)
+	at org.eclipse.jdt.internal.core.JavaModelManager.getPerProjectInfoCheckExistence(JavaModelManager.java:2567)
+	at org.eclipse.jdt.internal.core.JavaProject.getPerProjectInfo(JavaProject.java:2445)
+	at org.eclipse.jdt.internal.core.JavaProject.getRawClasspath(JavaProject.java:2488)
+	at org.springframework.tooling.ls.eclipse.commons.STS4LanguageClientImpl.lambda$9(STS4LanguageClientImpl.java:428)
+	at org.springframework.tooling.jdt.ls.commons.classpath.ReusableClasspathListenerHandler$CallbackJob.lambda$0(ReusableClasspathListenerHandler.java:76)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.tooling.jdt.ls.commons.classpath.ReusableClasspathListenerHandler$CallbackJob.run(ReusableClasspathListenerHandler.java:76)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SUBENTRY 1 org.eclipse.jdt.core 4 969 2025-06-11 16:00:57.182
+!MESSAGE readforce does not exist
+
+!ENTRY org.eclipse.ui 4 4 2025-06-11 16:00:57.402
+!MESSAGE Unable to create part
+!STACK 1
+org.eclipse.ui.PartInitException: Factory org.eclipse.jdt.ui.ClassFileEditorInputFactory returned null from createElement for editor id=org.eclipse.jdt.ui.ClassFileEditor name=null
+	at org.eclipse.ui.internal.EditorReference.getEditorInput(EditorReference.java:302)
+	at org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor.createPart(CompatibilityEditor.java:62)
+	at org.eclipse.ui.internal.e4.compatibility.CompatibilityPart.create(CompatibilityPart.java:342)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.e4.core.internal.di.MethodRequestor.execute(MethodRequestor.java:58)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.processAnnotated(InjectorImpl.java:971)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.processAnnotated(InjectorImpl.java:936)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.internalInject(InjectorImpl.java:142)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.internalMake(InjectorImpl.java:386)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.make(InjectorImpl.java:313)
+	at org.eclipse.e4.core.contexts.ContextInjectionFactory.make(ContextInjectionFactory.java:202)
+	at org.eclipse.e4.ui.internal.workbench.ReflectionContributionFactory.createFromBundle(ReflectionContributionFactory.java:91)
+	at org.eclipse.e4.ui.internal.workbench.ReflectionContributionFactory.doCreate(ReflectionContributionFactory.java:60)
+	at org.eclipse.e4.ui.internal.workbench.ReflectionContributionFactory.create(ReflectionContributionFactory.java:42)
+	at org.eclipse.e4.ui.workbench.renderers.swt.ContributedPartRenderer.createWidget(ContributedPartRenderer.java:132)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.createWidget(PartRenderingEngine.java:995)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.safeCreateGui(PartRenderingEngine.java:659)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.safeCreateGui(PartRenderingEngine.java:763)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$2.run(PartRenderingEngine.java:728)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.createGui(PartRenderingEngine.java:712)
+	at org.eclipse.e4.ui.internal.workbench.PartServiceImpl.lambda$0(PartServiceImpl.java:105)
+	at org.eclipse.e4.ui.services.internal.events.UIEventHandler.lambda$0(UIEventHandler.java:38)
+	at org.eclipse.swt.widgets.Synchronizer.syncExec(Synchronizer.java:183)
+	at org.eclipse.ui.internal.UISynchronizer.syncExec(UISynchronizer.java:133)
+	at org.eclipse.swt.widgets.Display.syncExec(Display.java:4803)
+	at org.eclipse.e4.ui.workbench.swt.DisplayUISynchronize.syncExec(DisplayUISynchronize.java:34)
+	at org.eclipse.e4.ui.services.internal.events.UIEventHandler.handleEvent(UIEventHandler.java:38)
+	at org.eclipse.equinox.internal.event.EventHandlerWrapper.handleEvent(EventHandlerWrapper.java:205)
+	at org.eclipse.equinox.internal.event.EventHandlerTracker.dispatchEvent(EventHandlerTracker.java:203)
+	at org.eclipse.equinox.internal.event.EventHandlerTracker.dispatchEvent(EventHandlerTracker.java:1)
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:234)
+	at org.eclipse.osgi.framework.eventmgr.ListenerQueue.dispatchEventSynchronous(ListenerQueue.java:151)
+	at org.eclipse.equinox.internal.event.EventAdminImpl.dispatchEvent(EventAdminImpl.java:133)
+	at org.eclipse.equinox.internal.event.EventAdminImpl.sendEvent(EventAdminImpl.java:75)
+	at org.eclipse.equinox.internal.event.EventComponent.sendEvent(EventComponent.java:44)
+	at org.eclipse.e4.ui.services.internal.events.EventBroker.send(EventBroker.java:55)
+	at org.eclipse.e4.ui.internal.workbench.UIEventPublisher.notifyChanged(UIEventPublisher.java:63)
+	at org.eclipse.emf.common.notify.impl.BasicNotifierImpl.eNotify(BasicNotifierImpl.java:424)
+	at org.eclipse.e4.ui.model.application.ui.impl.ElementContainerImpl.setSelectedElementGen(ElementContainerImpl.java:170)
+	at org.eclipse.e4.ui.model.application.ui.impl.ElementContainerImpl.setSelectedElement(ElementContainerImpl.java:188)
+	at org.eclipse.e4.ui.internal.workbench.PartServiceImpl.hidePart(PartServiceImpl.java:1390)
+	at org.eclipse.ui.internal.WorkbenchPage.hidePart(WorkbenchPage.java:1543)
+	at org.eclipse.ui.internal.WorkbenchPage.hidePart(WorkbenchPage.java:1495)
+	at org.eclipse.ui.internal.WorkbenchPage.closeEditors(WorkbenchPage.java:1465)
+	at org.eclipse.ui.actions.CloseResourceAction.closeEditors(CloseResourceAction.java:433)
+	at org.eclipse.ui.actions.CloseResourceAction$1.run(CloseResourceAction.java:358)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.ui.actions.CloseResourceAction.lambda$2(CloseResourceAction.java:349)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.ui.actions.CloseResourceAction.closeMatchingEditors(CloseResourceAction.java:362)
+	at org.eclipse.ui.actions.DeleteResourceAction.run(DeleteResourceAction.java:453)
+	at org.eclipse.jdt.internal.ui.refactoring.reorg.DeleteAction.run(DeleteAction.java:196)
+	at org.eclipse.jdt.ui.actions.SelectionDispatchAction.dispatchRun(SelectionDispatchAction.java:274)
+	at org.eclipse.jdt.ui.actions.SelectionDispatchAction.run(SelectionDispatchAction.java:252)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:474)
+	at org.eclipse.jface.action.ActionContributionItem.handleWidgetSelection(ActionContributionItem.java:580)
+	at org.eclipse.jface.action.ActionContributionItem.lambda$4(ActionContributionItem.java:414)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4274)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1066)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4072)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3660)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:645)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:552)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:651)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:588)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1459)
+!SUBENTRY 1 org.eclipse.ui 4 0 2025-06-11 16:00:57.403
+!MESSAGE Factory org.eclipse.jdt.ui.ClassFileEditorInputFactory returned null from createElement for editor id=org.eclipse.jdt.ui.ClassFileEditor name=null
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-11 16:01:04.614
+!MESSAGE Classpath changed for project: readforce
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-11 16:01:04.616
+!MESSAGE Boot project ADDED: readforce
+!SESSION 2025-06-11 16:07:30.276 -----------------------------------------------
+eclipse.buildId=4.20.0.202309081654
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  -product org.springframework.boot.ide.branding.sts4
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.springframework.boot.ide.branding.sts4
+
+!ENTRY org.eclipse.emf.ecore 2 0 2025-06-11 16:07:31.180
+!MESSAGE Both 'org.eclipse.jst.j2ee.core' and 'org.eclipse.jst.j2ee.core' register a package for 'application.xmi'
+
+!ENTRY org.eclipse.jface 2 0 2025-06-11 16:07:33.965
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2025-06-11 16:07:33.965
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.navigate.open.type"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.lsp4e.symbolinworkspace"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.egit.ui 2 0 2025-06-11 16:07:36.625
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\kjh91'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-11 16:07:36.895
+!MESSAGE Boot project ADDED: readforce
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-11 16:07:36.895
+!MESSAGE Starting Boot LS...
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-11 16:07:36.944
+!MESSAGE Started Boot LS process
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-11 16:07:36.966
+!MESSAGE Command list starting LS: org.springframework.tooling.boot.ls
+START:
+C:\Development\spring-tool-suite-4-4.20.0.RELEASE-e4.29.0-win32.win32.x86_64\sts-4.20.0.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.8.v20230831-1047\jre\bin\javaw.exe
+-cp
+C:\Development\spring-tool-suite-4-4.20.0.RELEASE-e4.29.0-win32.win32.x86_64\sts-4.20.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.49.0.202309081616\servers\spring-boot-language-server\BOOT-INF\classes;C:\Development\spring-tool-suite-4-4.20.0.RELEASE-e4.29.0-win32.win32.x86_64\sts-4.20.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.49.0.202309081616\servers\spring-boot-language-server\BOOT-INF\lib\*
+-Dsts.lsp.client=eclipse
+-Dlsp.completions.indentation.enable=true
+-Xmx1024m
+-XX:+HeapDumpOnOutOfMemoryError
+-XX:TieredStopAtLevel=1
+-Xlog:jni+resolve=off
+-Dspring.config.location=file:C:\Development\spring-tool-suite-4-4.20.0.RELEASE-e4.29.0-win32.win32.x86_64\sts-4.20.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.49.0.202309081616\servers\spring-boot-language-server\BOOT-INF\classes\application.properties
+-XX:ErrorFile=D:/ReadForce/Back/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1749625656965
+org.springframework.ide.vscode.boot.app.BootLanguageServerBootApp
+--languageserver.hover-timeout=225
+END
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-11 16:07:36.967
+!MESSAGE DelegatingStreamConnectionProvider - Starting Boot LS
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-11 16:07:36.975
+!MESSAGE Started org.springframework.tooling.boot.ls LS process 16340
+
+!ENTRY org.eclipse.jface 2 0 2025-06-11 16:10:08.190
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2025-06-11 16:10:08.190
 !MESSAGE A conflict occurred for CTRL+SHIFT+C:
 Binding(CTRL+SHIFT+C,
 	ParameterizedCommand(Command(org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand,Toggle Line Comment,
