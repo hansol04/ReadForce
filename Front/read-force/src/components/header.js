@@ -1,17 +1,24 @@
 import './header.css';
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 const Header = () => {
     const [showLangMenu, setShowLangMenu] = useState(false);
     const [selectedLang, setSelectedLang] = useState('한국어');
+    const navigate = useNavigate();
 
     const handleLangSelect = (lang) => {
         setSelectedLang(lang);
         setShowLangMenu(false);
     };
 
-      const navigate = useNavigate();
+    
+    const isLoggedIn = !!localStorage.getItem("token");
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        navigate("/"); 
+    };
 
     return (
         <div>
@@ -21,12 +28,16 @@ const Header = () => {
                         오늘의 <span style={{ color: "#14b8a6" }}>문해력</span>
                     </a>
                 </h1>
+
                 <nav className="nav">
-                <button onClick={() => alert("한국기사 준비중입니다")}>한국기사</button>
-                <button onClick={() => alert("일본기사 준비중입니다")}>일본기사</button>
-                <button onClick={() => alert("미국기사 준비중입니다")}>미국기사</button>
-                <button onClick={() => alert("문해력 도전 준비중입니다")}>문해력 도전</button>
+
+                <Link to="/korea">한국기사</Link>
+                <Link to="/japan">일본기사</Link>
+                <Link to="/usa">미국기사</Link>
+                <Link to="/challenge">문해력 도전</Link>
+
                 </nav>
+
                 <div className="auth-buttons">
                     <div className="lang-selector">
                         <button
@@ -43,12 +54,25 @@ const Header = () => {
                             </div>
                         )}
                     </div>
-                    <button onClick={() => navigate("/login")}>로그인</button>
-                    <button onClick={() => navigate("/signup/signupchoice")}>회원가입</button>
+
+
+                   
+                    {isLoggedIn ? (
+                        <>
+                            <button onClick={handleLogout}>로그아웃</button>
+                            <button onClick={() => navigate("/mypage")}>마이페이지</button>
+                        </>
+                    ) : (
+                        <>
+                            <button onClick={() => navigate("/login")}>로그인</button>
+                            <button onClick={() => navigate("/signup/signupchoice")}>회원가입</button>
+                        </>
+                    )}
+
                 </div>
             </header>
         </div>
     );
-}
+};
 
 export default Header;

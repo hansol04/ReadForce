@@ -8,6 +8,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 import com.readforce.filter.JwtRequestFilter;
 import com.readforce.handler.OAuth2AuthenticationSuccessHandler;
@@ -63,12 +69,52 @@ public class SecurityConfig {
 					.successHandler(o_auth2_authentication_success_handler)
 			);
 
-		http_security.addFilterBefore(jwt_request_filter, UsernamePasswordAuthenticationFilter.class);
-		return http_security.build();
-		
-	}
-	
-	
-	
-	
+    private final JwtRequestFilter jwt_request_filter;
+    private final CustomAuthenticationEntryPoint custom_authentication_entry_point;
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authentication_configuration) throws Exception {
+        return authentication_configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http_security) throws Exception {
+        http_security
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    "/member/sign-in",
+                    "/member/sign-up",
+                    "/member/email-check",
+                    "/member/nickname-check",
+                    "/member/password-reset-by-link",
+                    "/email/send-verification-code-sign-up",
+                    "/email/verify-verification-code-sign-up",
+                    "/email/send-password-reset-link",
+                    "/api/news"
+                ).permitAll()
+                .anyRequest().authenticated()
+            )
+            .csrf(csrf -> csrf.disable())
+            .exceptionHandling(exception -> exception.authenticationEntryPoint(custom_authentication_entry_point))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+
+        http_security.addFilterBefore(jwt_request_filter, UsernamePasswordAuthenticationFilter.class);
+        return http_security.build();
+    }
+
+
+    // ✅ 실제 CORS 정책 설정 (Security용)
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true); // 필수: 프론트가 credentials: include 사용 시
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }
