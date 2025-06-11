@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleFileException(FileException exception){
     	
     	log.error("FileException occured : {}", exception.getMessage(), exception);
-    	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
+    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
     	
     }
     

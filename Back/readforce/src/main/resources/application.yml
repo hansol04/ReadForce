@@ -73,7 +73,17 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 file:
-  upload-dir: ./upload/image/profile/
+  image:
+    profile:
+      upload-dir: ./upload/image/profile/
+      max-size: 5242880
+      allowed-mime-types: image/jpeg,image/png,image/gif
+custom:
+  fronted:
+    password-reset-link-url: http://localhost:3000/resetpassword
+    social-login-success:
+      exist-member-url: http://localhost:3000/auth/callback
+      new-member-url: http://localhost:3000/social-sign-up
     
     
     

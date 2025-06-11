@@ -11,16 +11,19 @@ public final class MessageCode {
 	public static final String NICKNAME_NOT_BLANK = "NO0004";
 	public static final String BIRTHDAY_NOT_NULL = "NO0005";
 	public static final String TOKEN_NOT_BLANK = "NO0006";
+	public static final String FILE_NOT_NULL = "NO0007";
 	
 	// 입력값 형식 불일치
 	public static final String EMAIL_PATTERN_INVALID = "PA0001";
 	public static final String PASSWORD_PATTERN_INVALID = "PA0002";
 	public static final String NICKNAME_PATTERN_INVALID = "PA0003";
+	public static final String FILE_TYPE_INVALID = "PA0004";
 
 	// 입력값 크기/범위 불일치
 	public static final String PASSWORD_SIZE_INVALID = "SI0001";
 	public static final String NICKNAME_SIZE_INVALID = "SI0002";
 	public static final String BIRTHDAY_RANGE_INVALID = "SI0003";
+	public static final String FILE_SIZE_INVALID = "SI0004";
 	
 	// 서버 오류
 	public static final String INTERNER_SERVER_ERROR = "SE0001";
@@ -60,6 +63,7 @@ public final class MessageCode {
 	public static final String TOKEN_ERROR = "SP0006";
 	public static final String CHECK_JWT_SECERET_KEY = "SP0007";
 	public static final String EMAIL_VERIFICATION_REQUIRED = "SP0008";
+
 	
 	
 }

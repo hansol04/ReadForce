@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -23,52 +24,93 @@ import com.readforce.exception.FileException;
 import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.repository.MemberRepository;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class FileService {
 	
-	@Value("${file.upload-dir}")
-	private final String upload_dir;
+	@Value("${file.image.profile.upload-dir}")
+	private String profile_image_upload_dir;
+	@Value("${file.image.profile.max-size}")
+	private Long profile_image_max_file_size;
+	@Value("#{'${file.image.profile.allowed-mime-types}'.split(',')}")
+	private List<String> profile_image_allowed_mime_type_list;	
 	private final MemberRepository member_repository;
-	private Path file_storage_location;
 	
-	// 디렉토리 생성
-	@PostConstruct
-	public void init() {
+	// 디렉토리를 동적으로 생성
+	private Path getPath(String upload_dir) {
 		
-		file_storage_location = Paths.get(upload_dir).toAbsolutePath().normalize();
+		Path path = Paths.get(upload_dir).toAbsolutePath().normalize();
 		try {
-			Files.createDirectories(this.file_storage_location);
+			
+			Files.createDirectories(path);
+			return path;
+			
 		} catch (Exception exception) {
+			
 			throw new FileException(MessageCode.DIRECTORY_CREATION_FAIL);
+			
 		}
+	
+	}
+	
+	// 파일 유효성 검사
+	private void validateFile(MultipartFile multipart_file, long max_size, List<String> type_list) {
+		
+		// 빈 값 확인
+		if(multipart_file.isEmpty()) {
+			throw new FileException(MessageCode.FILE_NOT_NULL);
+		}
+		
+		// 사이즈 확인
+		if(multipart_file.getSize() > max_size) {
+			throw new FileException(MessageCode.FILE_SIZE_INVALID);
+		}
+		
+		// 타입 확인
+		String mime_type = multipart_file.getContentType();
+		if(mime_type == null || !type_list.contains(mime_type)) {
+			throw new FileException(MessageCode.FILE_TYPE_INVALID);
+		}
+		
 	}
 	
 	// 파일 저장
-	public String storeFile(MultipartFile multipart_file) {
+	private void storeFile(MultipartFile multipart_file, String file_name, String upload_dir) {
+		
+		// 파일 유효성 검사
+		validateFile(multipart_file, profile_image_max_file_size, profile_image_allowed_mime_type_list);
+		
+		try {
+			
+			Path target_location = this.getPath(upload_dir).resolve(file_name);
+			Files.copy(multipart_file.getInputStream(), target_location, StandardCopyOption.REPLACE_EXISTING);
+		
+		} catch (Exception exception) {
+			
+			throw new FileException(MessageCode.FILE_STORE_FAIL);
+			
+		}
+		
+	}
+	
+	// 파일명 생성
+	private String generateFileName(MultipartFile multipart_file) {
 		
 		String original_file_name = StringUtils.cleanPath(multipart_file.getOriginalFilename());
 		String extension = original_file_name.substring(original_file_name.lastIndexOf("."));
-		String stored_file_name = UUID.randomUUID().toString() + extension;
+		String file_name = UUID.randomUUID().toString() + extension;
 		
-		try {
-			Path target_location = this.file_storage_location.resolve(stored_file_name);
-			Files.copy(multipart_file.getInputStream(), target_location, StandardCopyOption.REPLACE_EXISTING);
-			return stored_file_name;
-		} catch (Exception exception) {
-			throw new FileException(MessageCode.FILE_STORE_FAIL);
-		}
+		return file_name;
 		
 	}
 	
 	// 파일 불러오기
-	public Resource loadFileAsResource(String file_name) {
+	public Resource loadFileAsResource(String file_name, String upload_dir) {
 		
 		try {
-			Path file_path = this.file_storage_location.resolve(file_name).normalize();
+			Path file_path = this.getPath(upload_dir).resolve(file_name).normalize();
 			Resource resource = new UrlResource(file_path.toUri());
 			if(resource.exists()) {
 				return resource;
@@ -84,10 +126,10 @@ public class FileService {
 	}
 	
 	// 파일 삭제
-	public void deleteFile(String file_name) {
+	public void deleteFile(String file_name, String upload_dir) {
 		
 		try {
-			Path file_path = this.file_storage_location.resolve(file_name).normalize();
+			Path file_path = this.getPath(upload_dir).resolve(file_name).normalize();
 			Files.deleteIfExists(file_path);
 		} catch (IOException exception) {
 			throw new FileException(MessageCode.FILE_DELETE_FAIL);
@@ -106,30 +148,21 @@ public class FileService {
 				member_repository.findByEmailAndStatus(email, Status.ACTIVE)
 								 .orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
 		
-		// 기존 이미지가 있으면 삭제
-		if(member.getProfile_image_url() != null && !member.getProfile_image_url().isEmpty()) {
-			deleteFile(member.getProfile_image_url());
-		}
+		// 기존 이미지 파일 경로
+		String old_profile_image_url = member.getProfile_image_url();
 		
-		String file_name = storeFile(multipart_file);
+		// 파일명 생성
+		String file_name = generateFileName(multipart_file);
+		
+		// 회원 정보 수정
 		member.setProfile_image_url(file_name);
 		
-	}
-	
-	// 프로필 이미지 삭제
-	@Transactional
-	public void deleteProfileImage(String email) {
+		// 파일 저장
+		storeFile(multipart_file, file_name, profile_image_upload_dir);
 		
-		// 회원 정보 조회
-		Member member = 
-				member_repository.findByEmailAndStatus(email, Status.ACTIVE)
-								 .orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
-		
-		if(member.getProfile_image_url() == null || member.getProfile_image_url().isEmpty()) {
-			throw new ResourceNotFoundException(MessageCode.PROFILE_IMAGE_URL_NOT_FOUND);
-		} else {
-			deleteFile(member.getProfile_image_url());
-			member.setProfile_image_url(null);
+		// 기존 이미지가 있으면 삭제
+		if(old_profile_image_url != null && !old_profile_image_url.isEmpty()) {
+			deleteFile(old_profile_image_url, profile_image_upload_dir);
 		}
 		
 	}
@@ -146,10 +179,36 @@ public class FileService {
 		if(member.getProfile_image_url() == null || member.getProfile_image_url().isEmpty()) {
 			throw new ResourceNotFoundException(MessageCode.PROFILE_IMAGE_URL_NOT_FOUND);
 		} else {
-			return loadFileAsResource(member.getProfile_image_url());
+			return loadFileAsResource(member.getProfile_image_url(), profile_image_upload_dir);
 		}
 		
 	}
+	
+	// 프로필 이미지 삭제
+	@Transactional
+	public void deleteProfileImage(String email) {
+		
+		// 회원 정보 조회
+		Member member = 
+				member_repository.findByEmailAndStatus(email, Status.ACTIVE)
+								 .orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
+		
+		String profile_image_url = member.getProfile_image_url();
+		
+		if(profile_image_url == null || profile_image_url.isEmpty()) {
+			throw new ResourceNotFoundException(MessageCode.PROFILE_IMAGE_URL_NOT_FOUND);
+		} else {
+			
+			// 회원 정보 변경
+			member.setProfile_image_url(null);
+			
+			// 프로필 이미지 파일 삭제 
+			deleteFile(profile_image_url, profile_image_upload_dir);			
+		
+		}
+		
+	}
+	
 
 	
 	
