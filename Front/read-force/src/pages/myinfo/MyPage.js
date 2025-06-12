@@ -1,6 +1,7 @@
 import React from 'react';
 import './MyPage.css';
 import Calendar from 'react-calendar';
+import { useEffect, useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import { Bar, Line } from 'react-chartjs-2';
 import {Chart as ChartJS,CategoryScale,LinearScale,BarElement,LineElement,PointElement,Title,Tooltip,Legend} from 'chart.js';
