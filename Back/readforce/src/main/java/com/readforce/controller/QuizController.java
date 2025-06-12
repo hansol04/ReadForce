@@ -4,8 +4,12 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.readforce.dto.QuizDto;
 import com.readforce.service.GeminiQuizService;
 
 import lombok.RequiredArgsConstructor;
@@ -20,12 +24,14 @@ public class QuizController {
     @PostMapping("/generate")
     public ResponseEntity<?> generateQuiz(@RequestBody Map<String, String> body) {
         String article = body.get("article");
+        String language = body.getOrDefault("language", "한국어"); 
+
         if (article == null || article.isBlank()) {
             return ResponseEntity.badRequest().body("기사 내용이 필요합니다.");
         }
 
         try {
-            Map<String, Object> quiz = geminiQuizService.generateQuiz(article);
+            QuizDto quiz = geminiQuizService.generateQuiz(article, language);
             return ResponseEntity.ok(quiz);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

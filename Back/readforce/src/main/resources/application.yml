@@ -13,7 +13,7 @@ spring:
         show_sql: true
         format_sql: true
         hbm2ddl:
-          auto: validate
+          auto: none
   data:
     redis:
       host: localhost
@@ -80,4 +80,6 @@ newsapi:
   key: 52047c836f2d4b659280136c95e8132c
 
 gemini:
-  key: AIzaSyCM4bos91g7zvIEbXvmwjsjYRN3ma2tMD4
+  api:
+    key: AIzaSyA-lne7X5fB-JCAuDQmLaHZ5RWKMCJZUaQ
+
