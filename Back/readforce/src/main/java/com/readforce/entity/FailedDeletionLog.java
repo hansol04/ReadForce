@@ -31,7 +31,7 @@ public class FailedDeletionLog {
 	
 	private String reason;
 	
-	private Long retry_count;
+	private Long retry_count = 0L;
 	
 	@CreatedDate
 	private LocalDateTime created_date;

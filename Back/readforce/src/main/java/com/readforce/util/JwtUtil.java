@@ -92,7 +92,7 @@ public class JwtUtil {
 		
 	}
 	// JWT 생성
-	public String generateToken(UserDetails user_details) {
+	public String generateAcessToken(UserDetails user_details) {
 		
 		Map<String, Object> claims = new HashMap<>();
 		List<String> roles = user_details.getAuthorities().stream()
@@ -115,10 +115,10 @@ public class JwtUtil {
 		
 	}
 	// 토큰 유효성 검사
-	public Boolean validateToken(String token, UserDetails user_details) {
+	public Boolean validateToken(String access_token, UserDetails user_details) {
 		
-		final String username = extractUsername(token);
-		return (username.equals(user_details.getUsername()) && !isTokenExpired(token));
+		final String username = extractUsername(access_token);
+		return (username.equals(user_details.getUsername()) && !isTokenExpired(access_token));
 		
 	}
 	

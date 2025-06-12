@@ -116,7 +116,7 @@ public class MemberDto {
 	public static class PasswordReset{
 		
 		@NotBlank(message = MessageCode.TOKEN_NOT_BLANK)
-		private String token;
+		private String temporal_token;
 		
 		@NotBlank(message = MessageCode.PASSWORD_NOT_BLANK)
 		@Size(min = 8, max = 20, message = MessageCode.PASSWORD_SIZE_INVALID)
