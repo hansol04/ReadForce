@@ -1,13 +1,23 @@
 .footer {
   background-color: #439395;
-  padding: 20px 0;
-  font-size: 14px;
+  padding: 20px 0 25px;
   color: white;
   border-top: 1px solid #ddd;
 }
 
-.container {
+.footer .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+}
+
+.footer-title {
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.footer p {
+  margin: 4px 0;
+  font-size: 15px;
 }
