@@ -23,6 +23,7 @@ const Header = () => {
     return (
         <div>
             <header className="header">
+                <div className="container header-inner">
                 <h1 className="title">
                     <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
                         오늘의 <span style={{ color: "#14b8a6" }}>문해력</span>
@@ -30,12 +31,10 @@ const Header = () => {
                 </h1>
 
                 <nav className="nav">
-
-                <Link to="/korea">한국기사</Link>
-                <Link to="/japan">일본기사</Link>
-                <Link to="/usa">미국기사</Link>
-                <Link to="/challenge">문해력 도전</Link>
-
+                    <Link to="/korea">한국기사</Link>
+                    <Link to="/japan">일본기사</Link>
+                    <Link to="/usa">미국기사</Link>
+                    <Link to="/challenge">문해력 도전</Link>
                 </nav>
 
                 <div className="auth-buttons">
@@ -69,6 +68,7 @@ const Header = () => {
                         </>
                     )}
 
+                </div>
                 </div>
             </header>
         </div>

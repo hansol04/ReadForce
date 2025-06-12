@@ -1,5 +1,6 @@
 import "./main.css";
 import React, { useState } from "react";
+import mainImage from "../assets/image/mainimage.png";
 
 const Main = () => {
     const [showLangMenu, setShowLangMenu] = useState(false);
@@ -13,12 +14,22 @@ const Main = () => {
     return (
         <div>
             <section className="hero">
-                <h2>문해력, <br />세상을 읽는 힘입니다</h2>
-                <p>한국·일본·미국 뉴스로 나의 문해력을 테스트 해보세요!</p>
-                <button>문해력 테스트 시작하기</button>
+                <div className="container">
+                <div className="hero-content">
+                    <div className="hero-text">
+                    <h2>문해력, <br />세상을 읽는 힘입니다</h2>
+                    <p>한국·일본·미국 뉴스로 나의 문해력을 테스트 해보세요!</p>
+                    <button>문해력 테스트 시작하기</button>
+                    </div>
+                    <div className="main-hero-image">
+                    <img src={mainImage} alt="문해력 일러스트" />
+                    </div>
+                </div>
+                </div>
             </section>
 
             <section className="stats-section">
+                <div className="container stat-container">
                 <div className="stat-box top5">
                     <h3>🏆 <span className="bold">주간 Top 5</span></h3>
                     <div className="tabs">
@@ -84,6 +95,7 @@ const Main = () => {
                             <div className="author">송경모 기자<br /><span className="sub">국민일보</span></div>
                         </div>
                     </div>
+                </div>
                 </div>
             </section>
         </div>
