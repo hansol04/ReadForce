@@ -16,17 +16,21 @@ export default function Login() {
       const response = await fetch('/member/sign-in', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: id, password : password}),
+        body: JSON.stringify({ email: id, password: password }),
       });
-      const data = await response.json(); 
+      const data = await response.json();
       const MESSAGE_CODE = data.MESSAGE_CODE;
       console.log(MESSAGE_CODE)
 
+      console.log("로그인 응답 데이터", data); // 👈 여기에 nickname이 포함돼야 함
+
       if (response.ok) {
-        const token = data.TOKEN; 
+        const token = data.TOKEN;
+        const nickname = data.nickname || data.NICKNAME;
         // const messageCode = data.MESSAGE_CODE;
 
         localStorage.setItem('token', token);
+        localStorage.setItem('nickname', nickname);
 
         navigate('/');
       } else {
@@ -71,9 +75,9 @@ export default function Login() {
           </div>
 
           <div className="social-login">
-            <button type="button" className="kakao" aria-label="카카오 로그인" onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/kakao" } />
-            <button type="button" className="naver" aria-label="네이버 로그인" onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/naver" } />
-            <button type="button" className="google" aria-label="구글 로그인" onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/google" } />
+            <button type="button" className="kakao" aria-label="카카오 로그인" onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/kakao"} />
+            <button type="button" className="naver" aria-label="네이버 로그인" onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/naver"} />
+            <button type="button" className="google" aria-label="구글 로그인" onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/google"} />
           </div>
 
           {error && <p className="error-message">{error}</p>}
