@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
+import kakaoIcon from '../../assets/image/kakao.png';
+import naverIcon from '../../assets/image/naver.png';
+import googleIcon from '../../assets/image/google.png';
 
 export default function Login() {
   const [id, setId] = useState('');
@@ -71,10 +74,29 @@ export default function Login() {
           </div>
 
           <div className="social-login">
-            <button type="button" className="kakao" aria-label="카카오 로그인" onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/kakao" } />
-            <button type="button" className="naver" aria-label="네이버 로그인" onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/naver" } />
-            <button type="button" className="google" aria-label="구글 로그인" onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/google" } />
+            <button
+              type="button"
+              className="social-btn"
+              onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/kakao"}
+            >
+              <img src={kakaoIcon} alt="카카오" />
+            </button>
+            <button
+              type="button"
+              className="social-btn"
+              onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/naver"}
+            >
+              <img src={naverIcon} alt="네이버" />
+            </button>
+            <button
+              type="button"
+              className="social-btn"
+              onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/google"}
+            >
+              <img src={googleIcon} alt="구글" />
+            </button>
           </div>
+
 
           {error && <p className="error-message">{error}</p>}
 
