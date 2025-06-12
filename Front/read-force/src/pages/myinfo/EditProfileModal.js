@@ -6,12 +6,14 @@ const EditProfileModal = ({ onClose }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const modalRef = useRef(null);
+    const [showMenu, setShowMenu] = useState(false);
+    const [profileImage, setProfileImage] = useState('https://via.placeholder.com/100'); // 임시 이미지
+
 
     useEffect(() => {
-        // 컴포넌트 마운트 시 애니메이션 트리거
         setTimeout(() => {
             modalRef.current?.classList.add('show');
-        }, 10); // 약간의 delay로 트리거
+        }, 10);
     }, []);
 
     const handleSubmit = (e) => {
@@ -26,14 +28,42 @@ const EditProfileModal = ({ onClose }) => {
         onClose(); // 닫기
     };
 
+    const handleUploadClick = () => {
+        console.log("프로필 사진 업로드 클릭");
+        // TODO: 파일 업로드 로직
+    };
+
+    const handleDeleteClick = () => {
+        console.log("프로필 사진 삭제 클릭");
+        // TODO: 삭제 API 호출
+    };
+
+    const handleWithdraw = () => {
+        console.log("회원 탈퇴 버튼 클릭");
+        // TODO: 탈퇴 API 호출
+    };
+
+
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div
                 className="modal-content"
                 ref={modalRef}
                 onClick={(e) => e.stopPropagation()}
-            >                
-            <h2>회원정보 수정</h2>
+            >
+                <h2>회원정보 수정</h2>
+                <div className="profile-section">
+                    <div className="profile-wrapper">
+                        <img src={profileImage} alt="프로필" className="profile-image" />
+                        <button className="profile-settings" onClick={() => setShowMenu(!showMenu)}>⚙️</button>
+                        {showMenu && (
+                            <div className="profile-menu">
+                                <div onClick={handleUploadClick}>프로필 사진 업로드</div>
+                                <div onClick={handleDeleteClick}>프로필 사진 삭제</div>
+                            </div>
+                        )}
+                    </div>
+                </div>
                 <form onSubmit={handleSubmit} className="edit-form">
                     <label>닉네임</label>
                     <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
@@ -46,6 +76,9 @@ const EditProfileModal = ({ onClose }) => {
 
                     <div className="button-group">
                         <button type="submit">수정</button>
+                        <div className="button-group center">
+                            <button className="withdraw-button" onClick={handleWithdraw}>회원 탈퇴</button>
+                        </div>
                         <button type="button" onClick={onClose}>취소</button>
                     </div>
                 </form>

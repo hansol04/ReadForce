@@ -57,7 +57,7 @@ public class MemberController {
     private final MemberRepository member_repository;
 
 	
-	// 로그인
+	// e-mail 로그인
     @PostMapping("/sign-in")
     public ResponseEntity<Map<String, String>> signIn(@Valid @RequestBody MemberDto.SignIn sign_in){	
     	
