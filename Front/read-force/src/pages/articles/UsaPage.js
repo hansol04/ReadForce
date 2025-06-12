@@ -1,26 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useQuizHandler } from '../../hooks/useQuizHandler';
 import NewsList from '../../components/NewsList';
-import QuizModal from '../../components/QuizModal';
 
 const UsaPage = () => {
-  const [quizData, setQuizData] = useState(null);
-
-  const handleSolve = async (article) => {
-    const res = await fetch('http://localhost:8080/api/quiz/generate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ article: article.content || article.description }),
-            });
-
-    const quiz = await res.json();
-    setQuizData(quiz);
-  };
+  const { handleSolve } = useQuizHandler('navigate', 'us');
 
   return (
     <div style={{ padding: '20px' }}>
       <h2>미국 기사</h2>
       <NewsList country="us" onSolve={handleSolve} />
-      <QuizModal quiz={quizData} onClose={() => setQuizData(null)} />
     </div>
   );
 };
