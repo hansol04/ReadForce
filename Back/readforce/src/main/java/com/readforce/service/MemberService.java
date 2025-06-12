@@ -299,7 +299,7 @@ public class MemberService{
 	public String socialSignUp(@Valid MemberDto.SocialSignUp social_sign_up) {
 		
 		// 토큰 검증
-		String email = redis_template.opsForValue().get(Prefix.SOCIAL_SIGN_UP.getName() + social_sign_up.getToken());
+		String email = redis_template.opsForValue().get(Prefix.SOCIAL_SIGN_UP.getName() + social_sign_up.getTemporal_token());
 		if(email == null) {
 			throw new AuthenticationException(MessageCode.TOKEN_ERROR);
 		}
@@ -318,7 +318,7 @@ public class MemberService{
 		member_repository.save(new_member);
 		
 		// 토큰 삭제
-		redis_template.delete(Prefix.SOCIAL_SIGN_UP.getName() + social_sign_up.getToken());
+		redis_template.delete(Prefix.SOCIAL_SIGN_UP.getName() + social_sign_up.getTemporal_token());
 		
 		return email;
 		

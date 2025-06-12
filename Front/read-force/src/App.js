@@ -38,7 +38,7 @@ function App() {
           <Route path="/signup/signupcompletepage" element={<SignupCompletePage />} />
           <Route path="/challenge" element={<ChallengePage />} />
           <Route path="/oauth2/redirect" element={<Oauth2redirect />} />
-          <Route path="/auth/callback" element={<Authcallback />} />
+          <Route path="/authcallback" element={<Authcallback />} />
           <Route path="/social-sign-up" element={<Socialsignup />} />
        </Route>
       </Routes>

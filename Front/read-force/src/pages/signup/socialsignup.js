@@ -11,7 +11,7 @@ export default function Socialsignup() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const token = params.get('token');
+    const token = params.get('TEMPORAL_TOKEN');
     if (!token) {
       alert('잘못된 접근입니다.');
       navigate('/login');
@@ -31,11 +31,12 @@ export default function Socialsignup() {
     }
 
     try {
+      console.log(tempToken)
       const response = await fetch('/member/social-sign-up', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          token: tempToken,
+          temporal_token: tempToken, // ✅ 이름 변경됨
           nickname,
           birthday,
         }),
@@ -43,9 +44,10 @@ export default function Socialsignup() {
 
       const data = await response.json();
       if (response.ok) {
+        localStorage.setItem('token', data.access_token); // ✅ ACCESS_TOKEN 저장
         setMessage('🎉 소셜 회원가입이 완료되었습니다!');
         setTimeout(() => {
-          navigate('/login');
+          navigate('/');
         }, 1500);
       } else {
         setError(data.message || '회원가입 실패');
