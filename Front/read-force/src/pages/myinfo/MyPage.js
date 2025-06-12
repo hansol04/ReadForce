@@ -106,6 +106,13 @@ const MyPage = () => {
             <h3>{nickname} 님</h3>
             <span className="badge">{user.level}</span>
           </div>
+          <button
+              className="settings-button"
+              onClick={() => window.location.href = '/editprofile'}
+              title="회원정보 수정"
+            >
+              ⚙️
+            </button>
         </div>
 
         <div className="right-top">
