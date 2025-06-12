@@ -90,7 +90,7 @@ custom:
   fronted:
     password-reset-link-url: http://localhost:3000/resetpassword
     social-login-success:
-      exist-member-url: http://localhost:3000/auth/callback
+      exist-member-url: http://localhost:3000/authcallback
       new-member-url: http://localhost:3000/social-sign-up
     
     
