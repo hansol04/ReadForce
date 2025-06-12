@@ -78,7 +78,6 @@ const SignupCompletePage = () => {
       setIsBirthdayValid(false);
     }
   };
-
     // - 자동 추가
     const handleBirthdayChange = (value) => {
       // 숫자만 남기기
@@ -133,6 +132,7 @@ const SignupCompletePage = () => {
     if (!email) {
       const msg = '이메일 인증이 누락되었습니다.';
       setError(msg);
+      alert(msg);
 
       return;
     }
@@ -161,7 +161,7 @@ const SignupCompletePage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage('🎉 회원가입이 완료되었습니다!');
+        setMessage('회원가입이 완료되었습니다!');
         setTimeout(() => {
           navigate('/login');
         }, 1500);

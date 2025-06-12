@@ -65,12 +65,37 @@ public class SecurityConfig {
 				    })
 				);
 
-		http_security.addFilterBefore(jwt_request_filter, UsernamePasswordAuthenticationFilter.class);
-		return http_security.build();
-		
-	}
-	
-	
-	
-	
+    private final JwtRequestFilter jwt_request_filter;
+    private final CustomAuthenticationEntryPoint custom_authentication_entry_point;
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authentication_configuration) throws Exception {
+        return authentication_configuration.getAuthenticationManager();
+    }
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http_security) throws Exception {
+        http_security
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    "/member/sign-in",
+                    "/member/sign-up",
+                    "/member/email-check",
+                    "/member/nickname-check",
+                    "/member/password-reset-by-link",
+                    "/email/send-verification-code-sign-up",
+                    "/email/verify-verification-code-sign-up",
+                    "/email/send-password-reset-link",
+                    "/api/news"
+                ).permitAll()
+                .anyRequest().authenticated()
+            )
+            .csrf(csrf -> csrf.disable())
+            .exceptionHandling(exception -> exception.authenticationEntryPoint(custom_authentication_entry_point))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .cors(); 
+
+        http_security.addFilterBefore(jwt_request_filter, UsernamePasswordAuthenticationFilter.class);
+        return http_security.build();
+    }
+
 }
