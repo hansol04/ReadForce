@@ -4,20 +4,18 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.readforce.dto.OAuthAttributesDto;
+import com.readforce.dto.OAuth2UserDto;
+import com.readforce.enums.Name;
 import com.readforce.enums.Prefix;
-import com.readforce.enums.Role;
+import com.readforce.service.AttendanceService;
 import com.readforce.service.AuthService;
 import com.readforce.util.JwtUtil;
 
@@ -32,8 +30,12 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 	
 	private final JwtUtil jwt_util;
 	private final AuthService auth_service;
+	private final AttendanceService attendance_service;
 	private final StringRedisTemplate redis_template;
-	private final ClientRegistrationRepository client_registration_repository;
+	@Value("${custom.fronted.social-login-success.exist-member-url}")
+	private String social_login_success_exist_member_url;
+	@Value("${custom.fronted.social-login-success.new-member-url}")
+	private String social_login_success_new_member_url;
 	
 	@Override
 	public void onAuthenticationSuccess(
@@ -42,45 +44,37 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 			Authentication authentication
 	) throws IOException, ServletException{
 		
-		OAuth2User o_auth2_user = (OAuth2User) authentication.getPrincipal();
+		OAuth2UserDto o_auth2_user_dto = (OAuth2UserDto) authentication.getPrincipal();
 		
 		// 신규 소셜 회원인지 확인
-		boolean isNewUser = o_auth2_user.getAuthorities()
-								.stream()
-								.anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(Prefix.ROLE.getName() + Role.GUEST.toString()));
+		boolean is_new_user = o_auth2_user_dto.isNewUser();
+		String email = o_auth2_user_dto.getEmail();
 		
-		String registration_id = ((org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken) authentication)
-				.getAuthorizedClientRegistrationId();
+		String target_url;
 		
-		// ClientRegistrationRepository를 사용하여 ClientRegistration 객체 조회
-        ClientRegistration client_registration = client_registration_repository.findByRegistrationId(registration_id);
-        String user_name_attribute_name = client_registration.getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
-
-        OAuthAttributesDto o_auth_attributes_dto = OAuthAttributesDto.of(registration_id, user_name_attribute_name, o_auth2_user.getAttributes());
-        String email = o_auth_attributes_dto.getEmail();
-
-        String target_url;
-
-        if (isNewUser) {
+        if (is_new_user) {
             // 신규 회원
-            String temp_token = UUID.randomUUID().toString();
+            String temporal_token = UUID.randomUUID().toString();
             redis_template.opsForValue().set(
-                    Prefix.SOCIAL_SIGN_UP.getName() + temp_token,
+                    Prefix.SOCIAL_SIGN_UP.getName() + temporal_token,
                     email,
                     Duration.ofMinutes(10));
             // 프론트 엔드 추가 정보 입력 페이지로 리다이렉트
-            target_url = UriComponentsBuilder.fromUriString("http://localhost:3000/social-sign-up")
-                    .queryParam("token", temp_token)
+            target_url = UriComponentsBuilder.fromUriString(social_login_success_new_member_url)
+                    .queryParam(Name.TEMPORAL_TOKEN.toString(), temporal_token)
                     .build()
                     .toUriString();
         } else {
             // 기존 회원
             final UserDetails user_details = auth_service.loadUserByUsername(email);
-            final String jwt = jwt_util.generateToken(user_details);
+            final String access_token = jwt_util.generateAcessToken(user_details);
+            
+            // 출석 체크
+            attendance_service.recordAttendance(email);
 
             // 프론트 엔드 로그인 콜백
-            target_url = UriComponentsBuilder.fromUriString("http://localhost:3000/auth/callback")
-                    .queryParam("token", jwt)
+            target_url = UriComponentsBuilder.fromUriString(social_login_success_exist_member_url)
+                    .queryParam(Name.ACCESS_TOKEN.toString(), access_token)
                     .build()
                     .toUriString();
         }

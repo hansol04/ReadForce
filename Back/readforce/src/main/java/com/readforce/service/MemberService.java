@@ -1,11 +1,11 @@
 package com.readforce.service;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,14 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.readforce.dto.MemberDto;
 import com.readforce.dto.OAuthAttributesDto;
+import com.readforce.entity.FailedDeletionLog;
 import com.readforce.entity.Member;
+import com.readforce.entity.NeedAdminCheckFailedDeletionLog;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.Prefix;
 import com.readforce.enums.Status;
 import com.readforce.exception.AuthenticationException;
 import com.readforce.exception.DuplicateException;
 import com.readforce.exception.ResourceNotFoundException;
+import com.readforce.repository.FailedDeletionLogRepository;
 import com.readforce.repository.MemberRepository;
+import com.readforce.repository.NeedAdminCheckFailedDeletionLogRepository;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +41,10 @@ public class MemberService{
 	private final EmailService email_service;
 	private final StringRedisTemplate redis_template;
 	private final FileService file_service;
+	private final NeedAdminCheckFailedDeletionLogRepository need_admin_check_failed_deletion_log_repository;
+	private final FailedDeletionLogRepository failed_deletion_log_repository;
+	@Value("${file.image.profile.upload-dir}")
+	private String profile_image_upload_dir;
 
 	// 회원 찾기
 	@Transactional(readOnly = true)
@@ -73,25 +81,111 @@ public class MemberService{
 		if(pending_deletion_member_list.isEmpty()) {
 			
 			log.info("삭제할 탈퇴 회원이 없습니다.");
-		
-		}else {
+			return;
 			
-			// 회원과 연관된 정보 삭제
-			for(Member member : pending_deletion_member_list) {
+		}
+		
+		// 파일 삭제 성공/실패를 분리하기 위한 리스트
+		List<Member> successfully_deleted_file_member = new ArrayList<>();
+		
+		// 파일 삭제 시도 및 결과 분리
+		for(Member member : pending_deletion_member_list) {
+			
+			// 프로필 이미지가 비어있으면 성공 리스트에 추가
+			if(member.getProfile_image_url() == null || member.getProfile_image_url().isEmpty()) {
+				successfully_deleted_file_member.add(member);
+				continue;
+			}
+			
+			try {
 				
-				// 프로필 이미지 삭제
-				file_service.deleteFile(member.getProfile_image_url());;
+				// 파일 삭제 시도
+				file_service.deleteFile(member.getProfile_image_url(), profile_image_upload_dir);
+				// 오류가 발생하지 않으면 성공 리스트에 추가
+				successfully_deleted_file_member.add(member);
 				
+			} catch(Exception exception) {
+				
+				// 삭제 실패 로그 테이블 생성
+				log.error("프로필 이미지 삭제 실패. Member email : {}, File : {}", member.getEmail(), member.getProfile_image_url(), exception);
+				FailedDeletionLog failed_deletion_log = new FailedDeletionLog(
+						member.getEmail(),
+						member.getProfile_image_url(),
+						exception.getMessage()
+				);
+				failed_deletion_log_repository.save(failed_deletion_log);
+			}
+		}
+		
+		if(!successfully_deleted_file_member.isEmpty()) {
+			
+			// 성공 리스트에 있는 탈퇴 회원 테이블 삭제
+			log.info("{}명의 탈퇴 회원 정보를 DB에서 삭제합니다.", successfully_deleted_file_member.size());
+			member_repository.deleteAllInBatch(successfully_deleted_file_member);
+			log.info("회원 정보 DB 삭제를 성공했습니다.");
+			
+		} else {
+			
+			log.warn("파일 삭제에 모두 실패하여 DB에서 삭제할 회원이 없습니다.");
+			
+		}
+	}
+	
+	@Scheduled(cron = "0 0 * * * ?")
+	@Transactional
+	public void retryFailedFileDeletion() {
+		
+		log.info("실패한 파일 삭제 재시도 스케쥴러를 실행합니다.");
+		List<FailedDeletionLog> failed_deletion_log_list = failed_deletion_log_repository.findAll();
+		
+		if(failed_deletion_log_list.isEmpty()) {
+			
+			log.info("삭제할 파일이 없습니다.");
+			return;
+			
+		}
+		
+		for(FailedDeletionLog failed_deletion_log : failed_deletion_log_list) {
+			
+			if(failed_deletion_log.getRetry_count() >= 2) {
+				
+				// 관리자 확인 필요 삭제 파일 로그 테이블 생성
+				NeedAdminCheckFailedDeletionLog need_admin_check_failed_deletion_log = 
+						new NeedAdminCheckFailedDeletionLog(
+								failed_deletion_log.getEmail(),
+								failed_deletion_log.getFile_path(),
+								failed_deletion_log.getReason()
+						);
+				need_admin_check_failed_deletion_log_repository.save(need_admin_check_failed_deletion_log);
+				// 파일 삭제 로그 테이블 삭제
+				failed_deletion_log_repository.deleteById(failed_deletion_log.getFailed_deletion_log_no());
+				
+				continue;
+			}
+			
+			try {
+				
+				// 회원 테이블이 아직 삭제되지 않았는지 확인 후 파일 삭제 재시도
+				member_repository.findByEmail(failed_deletion_log.getEmail()).ifPresent(
+						member -> {
+							// 파일 삭제가 성공하면 실패 로그를 DB에서 삭제
+							file_service.deleteFile(failed_deletion_log.getFile_path(), profile_image_upload_dir);
+							failed_deletion_log_repository.delete(failed_deletion_log);
+							log.info("파일 삭제 재시도 성공 : {}", failed_deletion_log.getFile_path());
+						}
+				);
+				
+			} catch(Exception exception) {
+				
+				log.error("파일 삭제 재시도 실패 : {}", failed_deletion_log.getFile_path(), exception);
+				// 재시도 횟수 추가
+				failed_deletion_log.setRetry_count(failed_deletion_log.getRetry_count() + 1);
 				
 			}
 			
-			log.info("{}명의 탈퇴 회원 정보를 삭제합니다.", pending_deletion_member_list.size());
-			member_repository.deleteAll(pending_deletion_member_list);
-			log.info("탈퇴 회원 정보 삭제를 완료했습니다.");
 		}
 		
 	}
-
 	
 
 	// 회원 가입
@@ -176,10 +270,10 @@ public class MemberService{
 
 	// 비밀번호 재설정
 	@Transactional
-	public void passwordResetByLink(String token, String new_password) {
+	public void passwordResetByLink(String temporal_token, String new_password) {
 		
 		// Redis에서 id 조회
-		String member_email = redis_template.opsForValue().get(Prefix.PASSWORD_RESET_BY_LINK.getName() + token);
+		String member_email = redis_template.opsForValue().get(Prefix.PASSWORD_RESET_BY_LINK.getName() + temporal_token);
 		
 		if(member_email == null) {
 			throw new AuthenticationException(MessageCode.AUTHENTICATION_FAIL);
@@ -193,27 +287,10 @@ public class MemberService{
 		member.setPassword(password_encoder.encode(new_password));
 		
 		// 토큰 삭제
-		redis_template.delete(Prefix.PASSWORD_RESET_BY_LINK.getName() + token);
+		redis_template.delete(Prefix.PASSWORD_RESET_BY_LINK.getName() + temporal_token);
 		
 		// 이메일 변경 알림 이메일 발송
 		email_service.sendPasswordChangeNotification(member.getEmail());
-		
-	}
-
-	// 토큰 생성
-	public String createSignUpToken(String email, String prefix, long expire_time) {
-		
-		// 토큰 생성
-		String token = UUID.randomUUID().toString();
-		
-		// Redis 저장
-		redis_template.opsForValue().set(
-				prefix + email,
-				token,
-				Duration.ofMinutes(expire_time)
-		);
-		
-		return token;
 		
 	}
 

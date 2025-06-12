@@ -4,6 +4,7 @@ import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -28,7 +29,8 @@ public class EmailService {
 	private final StringRedisTemplate redis_template;
 	private final String SIGN_UP_MESSAGE = "ReadForce에 가입하신 것을 환영합니다.";
 	private final String DEFAULT_MESSAGE = "ReadForce을 이용해주셔서 감사합니다.";
-	private final String PASSWORD_RESET_URL = "http://localhost:3000/resetpassword?token=";
+	@Value("${custom.fronted.password-reset-link-url}")
+	private String PASSWORD_RESET_URL;
 	
 	
 	// 인증 번호 생성
@@ -143,17 +145,17 @@ public class EmailService {
 		member_repository.findByEmailAndStatus(email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
 		
 		// 토큰 생성
-		String token = UUID.randomUUID().toString();
+		String temporal_token = UUID.randomUUID().toString();
 		
 		// 내용 작성
 		String subject = "[ReadForce] 비밀번호 재설정 안내";
 		String text = 
 				DEFAULT_MESSAGE + "\n"
 				+ "비밀번호를 재설정 하시려면 아래의 링크를 눌러주세요.\n"
-				+ PASSWORD_RESET_URL + token;
+				+ PASSWORD_RESET_URL + "?token=" + temporal_token;
 		
 		redis_template.opsForValue().set(
-				Prefix.PASSWORD_RESET_BY_LINK.getName() + token,
+				Prefix.PASSWORD_RESET_BY_LINK.getName() + temporal_token,
 				email,
 				Duration.ofMinutes(ExpireTime.DEFAULT.getTime())
 		);

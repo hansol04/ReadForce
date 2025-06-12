@@ -4,6 +4,7 @@ package com.readforce.handler;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -40,7 +41,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleFileException(FileException exception){
     	
     	log.error("FileException occured : {}", exception.getMessage(), exception);
-    	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
+    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
     	
     }
     
@@ -52,6 +53,17 @@ public class GlobalExceptionHandler {
     	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.CHECK_JWT_SECERET_KEY));
     }
 	
+    // 데이터 무결성 제약 조건 위배 에러
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, String>> handleDataIntegrityViolationException(DataIntegrityViolationException exception){
+    	
+    	log.error("DataIntegrityViolationException occured : {}", exception.getMessage(), exception);
+    	return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.DATA_INTEGRITY_VIOLATION));
+    	
+    }
+    
+    
+    
 	// 유효성 검사 에러
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException exception){

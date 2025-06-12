@@ -1,7 +1,4 @@
 package com.readforce.config;
-
-import com.readforce.filter.JwtRequestFilter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,17 +8,62 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.List;
+import com.readforce.filter.JwtRequestFilter;
+import com.readforce.handler.OAuth2AuthenticationSuccessHandler;
+import com.readforce.service.CustomOAuth2UserService;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+	
+	private final JwtRequestFilter jwt_request_filter;
+	private final CustomAuthenticationEntryPoint custom_authentication_entry_point;
+	private final CustomOAuth2UserService custom_o_auth2_user_service;
+	private final OAuth2AuthenticationSuccessHandler o_auth2_authentication_success_handler;
+	
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authentication_configuration) throws Exception{
+		
+		return authentication_configuration.getAuthenticationManager();
+		
+	}
+	
+	@Bean SecurityFilterChain securityFilterChain(HttpSecurity http_security) throws Exception{
+		
+		http_security
+			.csrf(csrf -> csrf.disable())
+			.exceptionHandling(exception -> exception.authenticationEntryPoint(custom_authentication_entry_point))
+			.authorizeHttpRequests(
+					auth -> 
+					auth
+						.requestMatchers(
+								"/member/sign-in",
+					            "/member/sign-up",
+					            "/member/social-sign-up",
+					            "/member/email-check",
+					            "/member/nickname-check",
+					            "/member/password-reset-by-link",
+					            "/email/send-verification-code-sign-up",
+					            "/email/verify-verification-code-sign-up",
+					            "/email/send-password-reset-link",
+					            "/oauth2/**"
+						).permitAll()
+						.anyRequest().authenticated()
+			)
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			// 소셜 로그인(OAuth2) 기능 활성화
+			.oauth2Login(oauth2 -> oauth2
+				    .userInfoEndpoint(userInfo -> userInfo.userService(custom_o_auth2_user_service))
+				    .successHandler(o_auth2_authentication_success_handler)
+				    .failureHandler((request, response, exception) -> {
+				        exception.printStackTrace(); // ✅ 실패 원인 콘솔에 찍힘
+				        response.sendRedirect("/login?error"); // 실패 시 이동 경로
+				    })
+				);
 
     private final JwtRequestFilter jwt_request_filter;
     private final CustomAuthenticationEntryPoint custom_authentication_entry_point;

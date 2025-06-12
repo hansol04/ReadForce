@@ -38,10 +38,6 @@ export default function Login() {
     }
   };
 
-  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_KAKAO_REDIRECT_URI}&response_type=code`;
-  const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_NAVER_REDIRECT_URI}&state=naver_login`;
-  const googleURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile openid&access_type=offline`;
-
   return (
     <div>
       <div className="login-wrapper">
@@ -75,9 +71,9 @@ export default function Login() {
           </div>
 
           <div className="social-login">
-            <button type="button" className="kakao" aria-label="카카오 로그인" onClick={() => window.location.href = kakaoURL} />
-            <button type="button" className="naver" aria-label="네이버 로그인" onClick={() => window.location.href = naverURL} />
-            <button type="button" className="google" aria-label="구글 로그인" onClick={() => window.location.href = googleURL} />
+            <button type="button" className="kakao" aria-label="카카오 로그인" onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/kakao" } />
+            <button type="button" className="naver" aria-label="네이버 로그인" onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/naver" } />
+            <button type="button" className="google" aria-label="구글 로그인" onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/google" } />
           </div>
 
           {error && <p className="error-message">{error}</p>}
