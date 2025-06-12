@@ -13,7 +13,10 @@ import SignupCompletePage from "./pages/signup/signupcompletepage";
 import Login from "./pages/login/login";
 import FindPassword from "./pages/login/findpassword";
 import ResetPassword from "./pages/login/resetpassword";
-
+import ChallengePage from "./pages/challenge/challengepage";
+import Oauth2redirect from './pages/login/oauth2redirect';
+import Authcallback from './pages/login/authcallback';
+import Socialsignup from './pages/signup/socialsignup';
 
 function App() {
   return (
@@ -33,8 +36,11 @@ function App() {
           <Route path="/signup" element={<SignupWithEmail />} />
           <Route path="/signup/emailverifypage" element={<EmailVerifyPage />} />
           <Route path="/signup/signupcompletepage" element={<SignupCompletePage />} />
-
-        </Route>
+          <Route path="/challenge" element={<ChallengePage />} />
+          <Route path="/oauth2/redirect" element={<Oauth2redirect />} />
+          <Route path="/auth/callback" element={<Authcallback />} />
+          <Route path="/social-sign-up" element={<Socialsignup />} />
+       </Route>
       </Routes>
     </Router>
   );
