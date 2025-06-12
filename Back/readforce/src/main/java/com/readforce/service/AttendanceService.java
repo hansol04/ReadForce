@@ -43,7 +43,6 @@ public class AttendanceService {
 			Attendance attendance = new Attendance();
 			attendance.setMember(member);
 			attendance.setEmail(email);
-			attendance.setAttendance_date(LocalDate.now());
 			
 			attendance_repository.save(attendance);
 			

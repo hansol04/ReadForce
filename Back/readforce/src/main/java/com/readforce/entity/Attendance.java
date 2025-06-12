@@ -1,7 +1,8 @@
 package com.readforce.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
@@ -13,8 +14,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,10 +25,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(
-		name = "attendance",
-		uniqueConstraints = {@UniqueConstraint(columnNames = {"email", "attendance_date"})}
-)
 public class Attendance {
 	
 	@Id
@@ -43,7 +38,7 @@ public class Attendance {
 	@JoinColumn(name = "email", insertable = false, updatable = false)
 	private Member member;
 	
-	@Column(nullable = false)
-	private LocalDate attendance_date;
+	@CreatedDate
+	private LocalDateTime createdDate;
 	
 }
