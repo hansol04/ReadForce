@@ -136,7 +136,7 @@ public class MemberDto {
 	public static class SocialSignUp {
 		
 		@NotBlank(message = MessageCode.TOKEN_NOT_BLANK)
-		private String token;
+		private String temporal_token;
 		
 		@NotBlank(message = MessageCode.NICKNAME_NOT_BLANK)
 		@Size(min = 2, max = 12, message = MessageCode.NICKNAME_SIZE_INVALID)

@@ -24,8 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.readforce.dto.MemberDto;
+import com.readforce.entity.Member;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.Name;
+import com.readforce.repository.MemberRepository;
 import com.readforce.service.AttendanceService;
 import com.readforce.service.AuthService;
 import com.readforce.service.FileService;
@@ -52,6 +54,7 @@ public class MemberController {
 	private final JwtUtil jwt_util;
 	private final FileService file_service;
 	private final AttendanceService attendance_service;
+    private final MemberRepository member_repository;
 
 	
 	// 로그인
@@ -70,7 +73,11 @@ public class MemberController {
     	final UserDetails user_details = auth_service.loadUserByUsername(sign_in.getEmail());
     	final String access_token = jwt_util.generateAcessToken(user_details);
     	
-    	return ResponseEntity.status(HttpStatus.OK).body(Map.of(Name.ACCESS_TOKEN.toString(), access_token, MessageCode.MESSAGE_CODE, MessageCode.SIGN_IN_SUCCESS)); 
+        // 닉네임 조회
+        Member member = member_repository.findByEmail(sign_in.getEmail())
+            .orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다."));
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(Map.of(Name.ACCESS_TOKEN.toString(), access_token, "nickname", member.getNickname(), MessageCode.MESSAGE_CODE, MessageCode.SIGN_IN_SUCCESS)); 
     	
     }
     

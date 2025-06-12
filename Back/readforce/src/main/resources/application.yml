@@ -78,11 +78,19 @@ file:
       upload-dir: ./upload/image/profile/
       max-size: 5242880
       allowed-mime-types: image/jpeg,image/png,image/gif
+newsapi:
+  key: 52047c836f2d4b659280136c95e8132c
+
+gemini:
+  api:
+    key: AIzaSyA-lne7X5fB-JCAuDQmLaHZ5RWKMCJZUaQ
+
+  
 custom:
   fronted:
     password-reset-link-url: http://localhost:3000/resetpassword
     social-login-success:
-      exist-member-url: http://localhost:3000/auth/callback
+      exist-member-url: http://localhost:3000/authcallback
       new-member-url: http://localhost:3000/social-sign-up
     
     

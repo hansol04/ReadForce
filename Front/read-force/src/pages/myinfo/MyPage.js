@@ -1,13 +1,24 @@
 import React from 'react';
 import './MyPage.css';
 import Calendar from 'react-calendar';
+import { useEffect, useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import { Bar, Line } from 'react-chartjs-2';
-import {Chart as ChartJS,CategoryScale,LinearScale,BarElement,LineElement,PointElement,Title,Tooltip,Legend} from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend } from 'chart.js';
 
-ChartJS.register(CategoryScale,LinearScale,BarElement,LineElement,PointElement,Title,Tooltip,Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend);
 
 const MyPage = () => {
+  const [nickname, setNickname] = useState('');
+  const isLoggedIn = !!localStorage.getItem("token");
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      const storedNickname = localStorage.getItem("nickname");
+      setNickname(storedNickname || "사용자");
+    }
+  }, [isLoggedIn]);
+
   const user = {
     name: '쌀튀밥감정',
     level: '중급',
@@ -16,7 +27,7 @@ const MyPage = () => {
     avgAccuracy: 78,
   };
 
- 
+
   const barData = {
     labels: ['초급', '중급', '고급'],
     datasets: [{
@@ -39,14 +50,14 @@ const MyPage = () => {
 
 
   const levelMap = { '초급': 0, '중급': 1, '고급': 2 };
-  const reverseLevelMap = ['고급', '중급', '초급']; 
+  const reverseLevelMap = ['고급', '중급', '초급'];
 
   const levelData = {
     labels: ['1월', '2월', '3월'],
     datasets: [
       {
         label: '문해력 레벨 변화',
-        data: [0, 1, 2], 
+        data: [0, 1, 2],
         borderColor: '#4ABDAC',
         backgroundColor: '#4ABDAC',
         tension: 0.3,
@@ -84,17 +95,24 @@ const MyPage = () => {
 
   return (
     <div className="mypage-container">
-      <header className="mypage-header">
+      {/* <header className="mypage-header">
         <h2>오늘의 문해력</h2>
-      </header>
+      </header> */}
 
       <div className="top-section">
         <div className="left-top">
           <img src="https://via.placeholder.com/80" alt="프로필" className="profile-img" />
           <div>
-            <h3>{user.name}</h3>
+            <h3>{nickname} 님</h3>
             <span className="badge">{user.level}</span>
           </div>
+          <button
+              className="settings-button"
+              onClick={() => window.location.href = '/editprofile'}
+              title="회원정보 수정"
+            >
+              ⚙️
+            </button>
         </div>
 
         <div className="right-top">
