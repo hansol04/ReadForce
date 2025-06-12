@@ -63,6 +63,7 @@ public final class MessageCode {
 	public static final String TOKEN_ERROR = "SP0006";
 	public static final String CHECK_JWT_SECERET_KEY = "SP0007";
 	public static final String EMAIL_VERIFICATION_REQUIRED = "SP0008";
+	public static final String DATA_INTEGRITY_VIOLATION = "SP0009";
 
 	
 	

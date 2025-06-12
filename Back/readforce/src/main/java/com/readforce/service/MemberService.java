@@ -1,11 +1,9 @@
 package com.readforce.service;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -272,10 +270,10 @@ public class MemberService{
 
 	// 비밀번호 재설정
 	@Transactional
-	public void passwordResetByLink(String token, String new_password) {
+	public void passwordResetByLink(String temporal_token, String new_password) {
 		
 		// Redis에서 id 조회
-		String member_email = redis_template.opsForValue().get(Prefix.PASSWORD_RESET_BY_LINK.getName() + token);
+		String member_email = redis_template.opsForValue().get(Prefix.PASSWORD_RESET_BY_LINK.getName() + temporal_token);
 		
 		if(member_email == null) {
 			throw new AuthenticationException(MessageCode.AUTHENTICATION_FAIL);
@@ -289,27 +287,10 @@ public class MemberService{
 		member.setPassword(password_encoder.encode(new_password));
 		
 		// 토큰 삭제
-		redis_template.delete(Prefix.PASSWORD_RESET_BY_LINK.getName() + token);
+		redis_template.delete(Prefix.PASSWORD_RESET_BY_LINK.getName() + temporal_token);
 		
 		// 이메일 변경 알림 이메일 발송
 		email_service.sendPasswordChangeNotification(member.getEmail());
-		
-	}
-
-	// 토큰 생성
-	public String createSignUpToken(String email, String prefix, long expire_time) {
-		
-		// 토큰 생성
-		String token = UUID.randomUUID().toString();
-		
-		// Redis 저장
-		redis_template.opsForValue().set(
-				prefix + email,
-				token,
-				Duration.ofMinutes(expire_time)
-		);
-		
-		return token;
 		
 	}
 

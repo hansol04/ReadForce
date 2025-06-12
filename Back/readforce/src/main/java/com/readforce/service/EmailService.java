@@ -145,17 +145,17 @@ public class EmailService {
 		member_repository.findByEmailAndStatus(email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
 		
 		// 토큰 생성
-		String token = UUID.randomUUID().toString();
+		String temporal_token = UUID.randomUUID().toString();
 		
 		// 내용 작성
 		String subject = "[ReadForce] 비밀번호 재설정 안내";
 		String text = 
 				DEFAULT_MESSAGE + "\n"
 				+ "비밀번호를 재설정 하시려면 아래의 링크를 눌러주세요.\n"
-				+ PASSWORD_RESET_URL + "?token=" + token;
+				+ PASSWORD_RESET_URL + "?token=" + temporal_token;
 		
 		redis_template.opsForValue().set(
-				Prefix.PASSWORD_RESET_BY_LINK.getName() + token,
+				Prefix.PASSWORD_RESET_BY_LINK.getName() + temporal_token,
 				email,
 				Duration.ofMinutes(ExpireTime.DEFAULT.getTime())
 		);

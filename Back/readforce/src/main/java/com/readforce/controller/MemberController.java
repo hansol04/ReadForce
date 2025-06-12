@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.readforce.dto.MemberDto;
 import com.readforce.enums.MessageCode;
+import com.readforce.enums.Name;
+import com.readforce.service.AttendanceService;
 import com.readforce.service.AuthService;
 import com.readforce.service.FileService;
 import com.readforce.service.MemberService;
@@ -48,6 +51,7 @@ public class MemberController {
 	private final AuthenticationManager authentication_manager;
 	private final JwtUtil jwt_util;
 	private final FileService file_service;
+	private final AttendanceService attendance_service;
 
 	
 	// 로그인
@@ -59,11 +63,14 @@ public class MemberController {
     			new UsernamePasswordAuthenticationToken(sign_in.getEmail(), sign_in.getPassword())
     	);
     	
+    	// 출석 체크
+    	attendance_service.recordAttendance(sign_in.getEmail());
+    	
     	// jwt 생성
     	final UserDetails user_details = auth_service.loadUserByUsername(sign_in.getEmail());
-    	final String jwt = jwt_util.generateToken(user_details);
+    	final String access_token = jwt_util.generateAcessToken(user_details);
     	
-    	return ResponseEntity.status(HttpStatus.OK).body(Map.of("TOKEN", jwt, MessageCode.MESSAGE_CODE, MessageCode.SIGN_IN_SUCCESS)); 
+    	return ResponseEntity.status(HttpStatus.OK).body(Map.of(Name.ACCESS_TOKEN.toString(), access_token, MessageCode.MESSAGE_CODE, MessageCode.SIGN_IN_SUCCESS)); 
     	
     }
     
@@ -139,7 +146,7 @@ public class MemberController {
 	public ResponseEntity<Map<String, String>> passwordResetByLink(@Valid @RequestBody MemberDto.PasswordReset password_reset){
 		
 		// 비밀번호 재설정
-		member_service.passwordResetByLink(password_reset.getToken(), password_reset.getNew_password());
+		member_service.passwordResetByLink(password_reset.getTemporal_token(), password_reset.getNew_password());
 		return ResponseEntity.status(HttpStatus.OK).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.PASSWORD_RESET_SUCCESS));
 		
 	}
@@ -151,17 +158,20 @@ public class MemberController {
 		// 소셜 회원가입
 		String email = member_service.socialSignUp(social_sign_up);
 		
-		final UserDetails user_details = auth_service.loadUserByUsername(email);
-		final String jwt = jwt_util.generateToken(user_details);
+		// 출석 체크
+		attendance_service.recordAttendance(email);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(Map.of("TOKEN", jwt, MessageCode.MESSAGE_CODE, MessageCode.SIGN_UP_SUCCESS));
+		final UserDetails user_details = auth_service.loadUserByUsername(email);
+		final String jwt = jwt_util.generateAcessToken(user_details);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(Name.ACCESS_TOKEN.toString(), jwt, MessageCode.MESSAGE_CODE, MessageCode.SIGN_UP_SUCCESS));
 		
 	}
 	
 	// 프로필 이미지 업로드
 	@PostMapping("/upload-profile-image")
 	public ResponseEntity<Map<String, String>> uploadProfileImage(
-			@Valid @RequestParam("profile-image-file") MultipartFile profile_image_file,
+			@Valid @RequestParam("profile_image_file") MultipartFile profile_image_file,
 			@AuthenticationPrincipal UserDetails user_details
 	){
 		
@@ -207,6 +217,7 @@ public class MemberController {
 		
 		return ResponseEntity.status(HttpStatus.OK)
 				.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+				.contentType(MediaType.parseMediaType(content_type))
 				.body(resource);
 		
 	}
