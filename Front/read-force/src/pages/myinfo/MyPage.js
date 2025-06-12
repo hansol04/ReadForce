@@ -5,12 +5,14 @@ import { useEffect, useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import { Bar, Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend } from 'chart.js';
+import EditProfileModal from './EditProfileModal';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend);
 
 const MyPage = () => {
   const [nickname, setNickname] = useState('');
   const isLoggedIn = !!localStorage.getItem("token");
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -106,13 +108,8 @@ const MyPage = () => {
             <h3>{nickname} 님</h3>
             <span className="badge">{user.level}</span>
           </div>
-          <button
-              className="settings-button"
-              onClick={() => window.location.href = '/editprofile'}
-              title="회원정보 수정"
-            >
-              ⚙️
-            </button>
+          <button className='settings-button' onClick={() => setShowModal(true)}>⚙️</button>
+          {showModal && <EditProfileModal onClose={() => setShowModal(false)} />}
         </div>
 
         <div className="right-top">
