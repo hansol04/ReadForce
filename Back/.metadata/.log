@@ -3361,3 +3361,6 @@ org.eclipse.swt.SWTException: Invalid thread access
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
 	at java.base/java.lang.Thread.run(Thread.java:833)
 >>>>>>> Stashed changes
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-12 16:31:43.693
+!MESSAGE Classpath changed for project: readforce
