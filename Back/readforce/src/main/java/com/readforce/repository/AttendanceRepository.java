@@ -9,7 +9,7 @@ import com.readforce.entity.Attendance;
 
 @Repository
 public interface AttendanceRepository extends JpaRepository<Attendance, Long>{
-
+	
 	boolean existsByMemberEmailAndCreatedDateBetween(String email, LocalDateTime startOfDay, LocalDateTime endOfDay);
 
 }
