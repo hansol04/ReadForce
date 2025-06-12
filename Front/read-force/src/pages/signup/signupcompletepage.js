@@ -180,6 +180,7 @@ const SignupCompletePage = () => {
       <form className="signup-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>닉네임</label>
+          <div className='input-with-message'>
           <input
               type="text"
               placeholder="한글 8자, 영문 20자 이내로 작성해주세요"
@@ -201,6 +202,7 @@ const SignupCompletePage = () => {
             >
               {nicknameMessage}
             </span>
+        </div>
         </div>
         <div className="form-group">
           <label>생년월일</label>
