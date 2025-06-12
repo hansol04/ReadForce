@@ -19,17 +19,21 @@ export default function Login() {
       const response = await fetch('/member/sign-in', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: id, password : password}),
+        body: JSON.stringify({ email: id, password: password }),
       });
-      const data = await response.json(); 
+      const data = await response.json();
       const MESSAGE_CODE = data.MESSAGE_CODE;
       console.log(MESSAGE_CODE)
 
+      console.log("로그인 응답 데이터", data); // 👈 여기에 nickname이 포함돼야 함
+
       if (response.ok) {
-        const token = data.TOKEN; 
+        const token = data.TOKEN;
+        const nickname = data.nickname || data.NICKNAME;
         // const messageCode = data.MESSAGE_CODE;
 
         localStorage.setItem('token', token);
+        localStorage.setItem('nickname', nickname);
 
         navigate('/');
       } else {

@@ -1,7 +1,7 @@
 .mypage-container {
   padding: 40px 20px;
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: 800px;
   font-family: 'Noto Sans KR', sans-serif;
   color: #333;
 }
@@ -159,4 +159,17 @@
 .react-calendar__tile--now {
   background: #e8f4f8 !important;
   border-radius: 8px;
+}
+
+.settings-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-left: 4px;
+}
+
+.settings-button:hover {
+  transform: scale(1.2);
 }
