@@ -3004,7 +3004,6 @@ java.lang.InterruptedException
 	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
 	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
 	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
-<<<<<<< Updated upstream
 !SESSION 2025-06-12 09:59:52.601 -----------------------------------------------
 eclipse.buildId=4.20.0.202309081654
 java.version=17.0.8.1
@@ -3098,9 +3097,6 @@ Binding(CTRL+SHIFT+C,
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.textEditorScope,,,system)
 !SESSION 2025-06-12 10:26:29.088 -----------------------------------------------
-=======
-!SESSION 2025-06-12 10:09:37.476 -----------------------------------------------
->>>>>>> Stashed changes
 eclipse.buildId=4.20.1.202310260003
 java.version=17.0.8.1
 java.vendor=Eclipse Adoptium
@@ -3108,21 +3104,12 @@ BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
 Framework arguments:  -product org.springframework.boot.ide.branding.sts4
 Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.springframework.boot.ide.branding.sts4
 
-<<<<<<< Updated upstream
-!ENTRY org.eclipse.emf.ecore 2 0 2025-06-12 10:26:29.873
-!MESSAGE Both 'org.eclipse.jst.j2ee.core' and 'org.eclipse.jst.j2ee.core' register a package for 'application.xmi'
-
-!ENTRY org.eclipse.jface 2 0 2025-06-12 10:26:31.978
-!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2025-06-12 10:26:31.978
-=======
 !ENTRY org.eclipse.emf.ecore 2 0 2025-06-12 10:09:39.819
 !MESSAGE Both 'org.eclipse.jst.j2ee.core' and 'org.eclipse.jst.j2ee.core' register a package for 'application.xmi'
 
 !ENTRY org.eclipse.jface 2 0 2025-06-12 10:09:56.231
 !MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
 !SUBENTRY 1 org.eclipse.jface 2 0 2025-06-12 10:09:56.231
->>>>>>> Stashed changes
 !MESSAGE A conflict occurred for CTRL+SHIFT+T:
 Binding(CTRL+SHIFT+T,
 	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
@@ -3141,11 +3128,7 @@ Binding(CTRL+SHIFT+T,
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.contexts.window,,,system)
 
-<<<<<<< Updated upstream
-!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-12 10:26:34.829
-=======
 !ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-12 10:10:01.276
->>>>>>> Stashed changes
 !MESSAGE Command list starting LS: org.springframework.tooling.boot.ls
 START:
 C:\DEV\sts-4.20.1.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.8.v20230831-1047\jre\bin\javaw.exe
@@ -3158,24 +3141,11 @@ C:\DEV\sts-4.20.1.RELEASE\plugins\org.springframework.tooling.boot.ls_1.50.0.202
 -XX:TieredStopAtLevel=1
 -Xlog:jni+resolve=off
 -Dspring.config.location=file:C:\DEV\sts-4.20.1.RELEASE\plugins\org.springframework.tooling.boot.ls_1.50.0.202310252332\servers\spring-boot-language-server\BOOT-INF\classes\application.properties
-<<<<<<< Updated upstream
--XX:ErrorFile=C:/Users/tj/CWT/ReadForce/Back/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1749691594829
-=======
 -XX:ErrorFile=C:/Users/tj/CWT/ReadForce/Back/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1749690601275
->>>>>>> Stashed changes
 org.springframework.ide.vscode.boot.app.BootLanguageServerBootApp
 --languageserver.hover-timeout=225
 END
 
-<<<<<<< Updated upstream
-!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-12 10:26:34.830
-!MESSAGE DelegatingStreamConnectionProvider - Starting Boot LS
-
-!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-12 10:26:34.835
-!MESSAGE Started org.springframework.tooling.boot.ls LS process 19884
-
-!ENTRY org.eclipse.egit.ui 2 0 2025-06-12 10:26:35.557
-=======
 !ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-12 10:10:01.277
 !MESSAGE DelegatingStreamConnectionProvider - Starting Boot LS
 
@@ -3183,7 +3153,6 @@ END
 !MESSAGE Started org.springframework.tooling.boot.ls LS process 18600
 
 !ENTRY org.eclipse.egit.ui 2 0 2025-06-12 10:10:02.384
->>>>>>> Stashed changes
 !MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
 user global configuration and to define the default location to store repositories: 'C:\Users\tj'. If this is
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
@@ -3200,7 +3169,11 @@ This warning can be switched off on the Team > Git > Confirmations and Warnings 
 !ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-12 10:26:35.622
 !MESSAGE Started Boot LS process
 
+<<<<<<< HEAD
+!ENTRY org.eclipse.lsp4e 2 0 2025-06-12 15:05:43.015
+=======
 !ENTRY org.eclipse.lsp4e 2 0 2025-06-12 11:18:57.363
+>>>>>>> origin/develop
 !MESSAGE Javadoc unavailable. Failed to obtain it.
 !STACK 0
 java.lang.InterruptedException
@@ -3211,6 +3184,8 @@ java.lang.InterruptedException
 	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
 	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
 	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+<<<<<<< HEAD
+=======
 
 !ENTRY org.eclipse.jface 2 0 2025-06-12 11:30:17.430
 !MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
@@ -3364,3 +3339,4 @@ org.eclipse.swt.SWTException: Invalid thread access
 
 !ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-12 16:31:43.693
 !MESSAGE Classpath changed for project: readforce
+>>>>>>> origin/develop
