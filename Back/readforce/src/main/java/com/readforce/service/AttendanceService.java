@@ -48,16 +48,19 @@ public class AttendanceService {
 			attendance_repository.save(attendance);
 			
 		}
+		
+		
 	}
 	
 	// 김기찬 추가
-	public List<LocalDate> getAttendanceDates(String email) {
-	    List<Attendance> records = attendance_repository.findByEmail(email);
-	    return records.stream()
-	        .map(att -> att.getCreatedDate().toLocalDate())
-	        .distinct()
-	        .sorted()
-	        .toList();
-	}
+		public List<LocalDate> getAttendanceDates(String email) {
+		    List<Attendance> records = attendance_repository.findByEmail(email);
+		    return records.stream()
+		        .map(att -> att.getCreatedDate().toLocalDate())
+		        .distinct()
+		        .sorted()
+		        .toList();
+		}
+	
 	
 }

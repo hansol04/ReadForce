@@ -29,11 +29,12 @@ export default function Login() {
 
       if (response.ok) {
         const token = data.ACCESS_TOKEN;
-        const nickname = data.nickname || data.NICKNAME;
-        // const messageCode = data.MESSAGE_CODE;
+        const refreshToken = data.REFRESH_TOKEN; // ✅ 추가
+        const nickname = data.NICK_NAME || data.nickname;
 
         localStorage.setItem('token', token);
-        localStorage.setItem('nickname', nickname);
+        localStorage.setItem('refresh_token', refreshToken); // ✅ 추가
+        localStorage.setItem('nickname', nickname); // ✅ 이게 없으면 Header에서 못 뜸
 
         navigate('/');
       } else {

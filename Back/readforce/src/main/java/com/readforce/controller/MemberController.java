@@ -1,10 +1,10 @@
 package com.readforce.controller;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.core.io.Resource;
@@ -61,7 +61,7 @@ public class MemberController {
 	private final FileService file_service;
 	private final AttendanceService attendance_service;
 	
-	// e-mail 로그인
+	// 로그인
     @PostMapping("/sign-in")
     public ResponseEntity<Map<String, String>> signIn(@Valid @RequestBody MemberDto.SignIn sign_in){	
     	
@@ -138,12 +138,11 @@ public class MemberController {
 
     }
     
-    // 김기찬이 추가 출석
-    @GetMapping("/attendance-dates")
-    public ResponseEntity<List<LocalDate>> getAttendanceDates(@AuthenticationPrincipal UserDetails userDetails) {
-        String email = userDetails.getUsername();
-        List<LocalDate> attendanceDates = attendance_service.getAttendanceDates(email);
-        return ResponseEntity.ok(attendanceDates);
+    // 사용자 정보 반
+    @GetMapping("/my-info")
+    public ResponseEntity<GetMemberObject> getMyInfo(@AuthenticationPrincipal UserDetails userDetails) {
+        GetMemberObject info = member_service.getMemberObjectByEmail(userDetails.getUsername());
+        return ResponseEntity.ok(info);
     }
     
     // 이메일 중복 확인
@@ -336,7 +335,13 @@ public class MemberController {
 		
 	}
 	
-	
+	// 김기찬이 추가 출석
+    @GetMapping("/attendance-dates")
+    public ResponseEntity<List<LocalDate>> getAttendanceDates(@AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        List<LocalDate> attendanceDates = attendance_service.getAttendanceDates(email);
+        return ResponseEntity.ok(attendanceDates);
+    }
 	
 
 }
