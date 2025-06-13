@@ -47,6 +47,7 @@ public class SecurityConfig {
 					            "/member/email-check",
 					            "/member/nickname-check",
 					            "/member/password-reset-by-link",
+					            "/member/reissue-refresh-token",
 					            "/email/send-verification-code-sign-up",
 					            "/email/verify-verification-code-sign-up",
 					            "/email/send-password-reset-link",
@@ -57,13 +58,11 @@ public class SecurityConfig {
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			// 소셜 로그인(OAuth2) 기능 활성화
 			.oauth2Login(oauth2 -> oauth2
-				    .userInfoEndpoint(userInfo -> userInfo.userService(custom_o_auth2_user_service))
-				    .successHandler(o_auth2_authentication_success_handler)
-				    .failureHandler((request, response, exception) -> {
-				        exception.printStackTrace(); // ✅ 실패 원인 콘솔에 찍힘
-				        response.sendRedirect("/login?error"); // 실패 시 이동 경로
-				    })
-				);
+					// 소셜 서비스에서 사용자 정보를 가져온 후 처리할 서비스 지정
+					.userInfoEndpoint(userInfo -> userInfo.userService(custom_o_auth2_user_service))
+					// 인증 성공 후 로직을 처리할 핸들러 지정
+					.successHandler(o_auth2_authentication_success_handler)
+			);
 
 		http_security.addFilterBefore(jwt_request_filter, UsernamePasswordAuthenticationFilter.class);
 		return http_security.build();

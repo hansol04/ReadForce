@@ -13,10 +13,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.readforce.dto.OAuth2UserDto;
+import com.readforce.dto.MemberDto.GetMemberObject;
 import com.readforce.enums.Name;
 import com.readforce.enums.Prefix;
 import com.readforce.service.AttendanceService;
 import com.readforce.service.AuthService;
+import com.readforce.service.MemberService;
 import com.readforce.util.JwtUtil;
 
 import jakarta.servlet.ServletException;
@@ -30,6 +32,7 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 	
 	private final JwtUtil jwt_util;
 	private final AuthService auth_service;
+	private final MemberService member_service;
 	private final AttendanceService attendance_service;
 	private final StringRedisTemplate redis_template;
 	@Value("${custom.fronted.social-login-success.exist-member-url}")
@@ -68,13 +71,22 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
             // 기존 회원
             final UserDetails user_details = auth_service.loadUserByUsername(email);
             final String access_token = jwt_util.generateAcessToken(user_details);
+            final String refresh_token = jwt_util.generateRefreshToken(user_details);
+      
+            // 리프레쉬 토큰 저장
+            auth_service.storeRefreshToken(email, refresh_token);
             
             // 출석 체크
             attendance_service.recordAttendance(email);
+            
+            // 회원 조회
+        	GetMemberObject get_member_dto = member_service.getMemberObjectByEmail(email);
 
             // 프론트 엔드 로그인 콜백
             target_url = UriComponentsBuilder.fromUriString(social_login_success_exist_member_url)
                     .queryParam(Name.ACCESS_TOKEN.toString(), access_token)
+                    .queryParam(Name.REFRESH_TOKEN.toString(), refresh_token)
+                    .queryParam(Name.NICK_NAME.toString(), get_member_dto.getNickname())
                     .build()
                     .toUriString();
         }

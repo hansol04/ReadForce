@@ -3,6 +3,8 @@ package com.readforce.controller;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 
 import org.springframework.core.io.Resource;
@@ -26,28 +28,30 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.readforce.dto.MemberDto;
-import com.readforce.entity.Member;
+import com.readforce.dto.MemberDto.GetMemberObject;
+import com.readforce.dto.MemberDto.PasswordResetBySite;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.Name;
-import com.readforce.repository.MemberRepository;
+import com.readforce.exception.AuthenticationException;
 import com.readforce.service.AttendanceService;
 import com.readforce.service.AuthService;
 import com.readforce.service.FileService;
 import com.readforce.service.MemberService;
 import com.readforce.util.JwtUtil;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/member")
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class MemberController {
 	
 	private final MemberService member_service;
@@ -56,8 +60,6 @@ public class MemberController {
 	private final JwtUtil jwt_util;
 	private final FileService file_service;
 	private final AttendanceService attendance_service;
-    private final MemberRepository member_repository;
-
 	
 	// e-mail 로그인
     @PostMapping("/sign-in")
@@ -71,16 +73,69 @@ public class MemberController {
     	// 출석 체크
     	attendance_service.recordAttendance(sign_in.getEmail());
     	
-    	// jwt 생성
+    	// 엑세스 토큰, 리프레쉬 토큰 생성
     	final UserDetails user_details = auth_service.loadUserByUsername(sign_in.getEmail());
     	final String access_token = jwt_util.generateAcessToken(user_details);
+    	final String refresh_token = jwt_util.generateRefreshToken(user_details);
     	
-        // 닉네임 조회
-        Member member = member_repository.findByEmail(sign_in.getEmail())
-            .orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다."));
+    	// 회원 조회
+    	GetMemberObject get_member_dto = member_service.getMemberObjectByEmail(user_details.getUsername());
     	
-    	return ResponseEntity.status(HttpStatus.OK).body(Map.of(Name.ACCESS_TOKEN.toString(), access_token, "nickname", member.getNickname(), MessageCode.MESSAGE_CODE, MessageCode.SIGN_IN_SUCCESS)); 
+    	// 리프레쉬 토큰 저장
+    	auth_service.storeRefreshToken(user_details.getUsername(), refresh_token);
     	
+    	return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+    			Name.ACCESS_TOKEN.toString(), access_token,
+    			Name.REFRESH_TOKEN.toString(), refresh_token,
+    			Name.NICK_NAME.toString(), get_member_dto.getNickname(),
+    			MessageCode.MESSAGE_CODE, MessageCode.SIGN_IN_SUCCESS)
+    	); 
+    	
+    }
+    
+    // 엑세스 토큰 재발급
+    @PostMapping("/reissue-refresh-token")
+    public ResponseEntity<?> reissueRefreshToken(
+    		@RequestParam("refresh_token")
+    		@NotBlank(message = MessageCode.REFRESH_TOKEN_NOT_BLANK)
+    		String refresh_token
+    ){
+    	
+    	String username = jwt_util.extractUsername(refresh_token);
+    	String stored_refresh_token = auth_service.getRefreshToken(username);
+    	
+    	// 저장된 리프레쉬 토큰이 없는 경우(이미 사용되었거나 탈취 가능성 고려)
+    	if(stored_refresh_token == null) {
+    		
+    		// 보안 위협으로 간주하고 해당 유저의 모든 리프레쉬 토큰을 삭제하여 강제 로그아웃 처리
+    		auth_service.deleteRefreshToken(username);
+    		log.warn("보안 경고 : 유효하지 않은 리프레쉬 토큰 사용 시도. 사용자 {}", username);
+    		throw new AuthenticationException(MessageCode.AUTHENTICATION_FAIL);
+    		
+    	}
+    	
+    	
+    	// 저장된 리프레쉬 토큰과 일치하는지, 만료되지 않았는지 확인
+    	if(!stored_refresh_token.equals(refresh_token) || jwt_util.expiredToken(refresh_token)) {
+    		
+    		throw new AuthenticationException(MessageCode.AUTHENTICATION_FAIL);
+    		
+    	}
+    	
+    	// 새로운 토큰 생성
+    	final UserDetails user_details = auth_service.loadUserByUsername(username);
+    	final String new_access_token = jwt_util.generateAcessToken(user_details);
+    	final String new_refresh_token = jwt_util.generateRefreshToken(user_details);
+    	
+    	// 새로운 리프레쉬 토큰 저장(회전 전략)
+    	auth_service.storeRefreshToken(username, new_refresh_token);
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+    			Name.ACCESS_TOKEN.toString(), new_access_token,
+    			Name.REFRESH_TOKEN.toString(), new_refresh_token,
+    			MessageCode.MESSAGE_CODE, MessageCode.TOKEN_SUCCESS
+    	));
+
     }
     
     // 김기찬이 추가 출석
@@ -160,12 +215,35 @@ public class MemberController {
 	
 	// 비밀번호 재설정(링크)
 	@PatchMapping("/password-reset-by-link")
-	public ResponseEntity<Map<String, String>> passwordResetByLink(@Valid @RequestBody MemberDto.PasswordReset password_reset){
+	public ResponseEntity<Map<String, String>> passwordResetByLink(@Valid @RequestBody MemberDto.PasswordResetByLink password_reset_by_link){
 		
 		// 비밀번호 재설정
-		member_service.passwordResetByLink(password_reset.getTemporal_token(), password_reset.getNew_password());
+		member_service.passwordResetByLink(password_reset_by_link.getTemporal_token(), password_reset_by_link.getNew_password());
 		return ResponseEntity.status(HttpStatus.OK).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.PASSWORD_RESET_SUCCESS));
 		
+	}
+	
+	// 비밀번호 재설정(회원 정보 수정)
+	@PatchMapping("/password-reset-by-site")
+	public ResponseEntity<Map<String, String>> passwordResetBySite(
+			@Valid @RequestBody MemberDto.PasswordResetBySite password_reset_by_site,
+			@AuthenticationPrincipal UserDetails user_details
+	){
+		
+		// 기존 비밀번호 확인
+		if(!user_details.getPassword().equals(password_reset_by_site.getOld_password())) {
+			
+			throw new AuthenticationException(MessageCode.AUTHENTICATION_FAIL);
+		
+		};
+		
+		// 비밀번호 재설정
+		member_service.changePassword(user_details.getUsername(), password_reset_by_site.getNew_password());
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.PASSWORD_RESET_SUCCESS
+		));
+				
 	}
 	
 	// 소셜 회원가입
@@ -175,13 +253,25 @@ public class MemberController {
 		// 소셜 회원가입
 		String email = member_service.socialSignUp(social_sign_up);
 		
+		// 회원 조회
+    	GetMemberObject get_member_dto = member_service.getMemberObjectByEmail(email);
+		
 		// 출석 체크
 		attendance_service.recordAttendance(email);
 		
 		final UserDetails user_details = auth_service.loadUserByUsername(email);
 		final String jwt = jwt_util.generateAcessToken(user_details);
+		final String refresh_token = jwt_util.generateRefreshToken(user_details);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(Map.of(Name.ACCESS_TOKEN.toString(), jwt, MessageCode.MESSAGE_CODE, MessageCode.SIGN_UP_SUCCESS));
+		// 리프레쉬 토큰 저장
+    	auth_service.storeRefreshToken(user_details.getUsername(), refresh_token);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				Name.ACCESS_TOKEN.toString(), jwt,
+				Name.REFRESH_TOKEN.toString(), refresh_token,
+				Name.NICK_NAME.toString(), get_member_dto.getNickname(),
+				MessageCode.MESSAGE_CODE, MessageCode.SIGN_UP_SUCCESS)
+		);
 		
 	}
 	
@@ -213,8 +303,7 @@ public class MemberController {
 	// 프로필 이미지 불러오기
 	@GetMapping("/get-profile-image")
 	public ResponseEntity<Resource> getProfileImage(
-			@AuthenticationPrincipal UserDetails user_details,
-			HttpServletRequest http_servlet_request
+			@AuthenticationPrincipal UserDetails user_details
 	){
 		
 		// 이미지 파일 불러오기
@@ -223,12 +312,20 @@ public class MemberController {
 		
 		try {
 			
-			content_type = http_servlet_request.getServletContext()
-					.getMimeType(resource.getFile().getAbsolutePath());
+			Path file_path = resource.getFile().toPath();
+			content_type = Files.probeContentType(file_path);
+			
+			if(content_type == null) {
+				
+				content_type = "application/octet-stream";
+				log.warn("이미지 파일 타입을 결정하지 못했습니다. {}, 기본 타입인 application/octet-stream 타입으로 결정되었습니다.", resource.getFilename());
+				
+			}
 		
 		} catch (IOException ex) {
 			
 			content_type = "application/octet-stream";
+			log.warn("이미지 파일에 접근하지 못하여 타입을 결정하지 못했습니다. {}, 기본 타입인 application/octet-stream 타입으로 결정되었습니다.", resource.getFilename());
 			
 		}
 		

@@ -30,9 +30,12 @@ public class JwtUtil {
 	
 	@Value("${spring.jwt.secret}")
 	private String secret;
-
-	@Value("${spring.jwt.expiration-time}")
-	private long expiration_time;
+	
+	@Value("${spring.jwt.access-expiration-time}")
+	private long access_expiration_time;
+	
+	@Value("${spring.jwt.refresh-expiration-time}")
+	private long refresh_expiration_time;
 	
 	// JWT secret key 검증
 	@PostConstruct
@@ -60,18 +63,21 @@ public class JwtUtil {
 		return Keys.hmacShaKeyFor(key_bytes);
 		
 	}
+	
 	// 아이디 추출
 	public String extractUsername(String token) {
 		
 		return extractClaim(token, Claims::getSubject);
 				
 	}
+	
 	// 만료시간 추출
 	public Date extractExpiration(String token) {
 		
 		return extractClaim(token, Claims::getExpiration);
 		
 	}
+	
 	// 특정 클레임 추출
 	public <T> T extractClaim(String token, Function<Claims, T> claims_resolver) {
 		
@@ -79,19 +85,15 @@ public class JwtUtil {
 		return claims_resolver.apply(claims);
 		
 	}
+	
 	// 모든 클레임 추출
 	public Claims extractAllClaims(String token) {
 		
 		return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
 		
 	}
-	// 토큰 만료 확인
-	private Boolean isTokenExpired(String token) {
-		
-		return extractExpiration(token).before(new Date());
-		
-	}
-	// JWT 생성
+	
+	// Access Token 생성
 	public String generateAcessToken(UserDetails user_details) {
 		
 		Map<String, Object> claims = new HashMap<>();
@@ -99,11 +101,19 @@ public class JwtUtil {
 				.map(GrantedAuthority :: getAuthority)
 				.collect(Collectors.toList());
 		claims.put("roles", roles);
-		return createToken(claims, user_details.getUsername());
+		return createToken(claims, user_details.getUsername(), access_expiration_time);
 		
 	}
+	
+	// Refresh Token 생성
+	public String generateRefreshToken(UserDetails user_details) {
+		
+		return createToken(new HashMap<>(), user_details.getUsername(), refresh_expiration_time);
+		
+	}
+	
 	// 최종 JWT 생성
-	private String createToken(Map<String, Object> claims, String subject) {
+	private String createToken(Map<String, Object> claims, String subject, long expiration_time) {
 		
 		return Jwts.builder()
 				.setClaims(claims)
@@ -114,11 +124,19 @@ public class JwtUtil {
 				.compact();
 		
 	}
+	
+	// 토큰 만료 확인
+	public Boolean expiredToken(String token) {
+		
+		return extractExpiration(token).before(new Date());
+		
+	}
+	
 	// 토큰 유효성 검사
 	public Boolean validateToken(String access_token, UserDetails user_details) {
 		
 		final String username = extractUsername(access_token);
-		return (username.equals(user_details.getUsername()) && !isTokenExpired(access_token));
+		return username.equals(user_details.getUsername());
 		
 	}
 	
