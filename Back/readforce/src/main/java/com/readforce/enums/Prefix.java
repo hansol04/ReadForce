@@ -7,7 +7,10 @@ public enum Prefix {
 	PASSWORD_RESET_BY_LINK("PasswordResetByLink_"),
 	COMPLETE_EMAIL_VERIFY("CompleteEmailVerify_"),
 	SOCIAL_SIGN_UP("SocialSignUp_"),
-	ROLE("ROLE_");
+	ROLE("ROLE_"),
+	REFRESH_TOKEN("RefreshToken_"),
+	BEARER("Bearer "),
+	X_REFRESH_TOKEN("X-Refresh-Token ");
 
 	private final String prefix;
 	

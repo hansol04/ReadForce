@@ -1,7 +1,10 @@
 package com.readforce.service;
 
+import java.time.Duration;
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +27,11 @@ public class AuthService implements UserDetailsService{
 
 	public final MemberRepository member_repository;
 	
+	private final StringRedisTemplate redis_template;
+	
+	@Value("${spring.jwt.refresh-expiration-time}")
+	private long refresh_expiration_time;
+	
 	// Spring Security가 사용할 UserDetails 반환
 	@Override
 	@Transactional(readOnly = true)
@@ -42,4 +50,29 @@ public class AuthService implements UserDetailsService{
 	
 	}
 	
+	// 리프레쉬 토큰 저장
+	public void storeRefreshToken(String username, String refresh_token) {
+		
+		redis_template.opsForValue().set(
+				Prefix.REFRESH_TOKEN.getName() + username,
+				refresh_token,
+				Duration.ofMillis(refresh_expiration_time)
+		);
+		
+	}
+	
+	// 리프레쉬 토큰 가져오기
+	public String getRefreshToken(String username) {
+		
+		return redis_template.opsForValue().get(Prefix.REFRESH_TOKEN.getName() + username);
+		
+	}
+	
+	// 리프레쉬 토큰 삭제
+	public void deleteRefreshToken(String username) {
+		
+		redis_template.delete(Prefix.REFRESH_TOKEN.getName() + username);
+		
+	}
+
 }
