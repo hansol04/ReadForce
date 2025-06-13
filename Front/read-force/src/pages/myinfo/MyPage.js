@@ -13,6 +13,87 @@ const MyPage = () => {
   const [nickname, setNickname] = useState('');
   const isLoggedIn = !!localStorage.getItem("token");
   const [showModal, setShowModal] = useState(false);
+  const [attendanceDates, setAttendanceDates] = useState([]);
+  const [summary, setSummary] = useState({
+    total: 0,
+    monthlyRate: 0,
+    streak: 0,
+  });
+
+  // 출석 통계
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth(); // 0-based
+
+  const thisMonthDates = attendanceDates.filter(date =>
+    date.getFullYear() === currentYear && date.getMonth() === currentMonth
+  );
+
+  const currentDayOfMonth = today.getDate();
+  const monthlyRate = Math.round((thisMonthDates.length / currentDayOfMonth) * 100);
+
+  const getStreak = (dates) => {
+    const sorted = [...dates]
+      .map(d => new Date(d.getFullYear(), d.getMonth(), d.getDate()))
+      .sort((a, b) => b - a); // 최신순 정렬
+
+    let streak = 0;
+    let current = new Date(); // 오늘
+
+    for (const date of sorted) {
+      if (
+        date.toDateString() === current.toDateString()
+      ) {
+        streak++;
+        current.setDate(current.getDate() - 1); // 하루 전으로 이동
+      } else if (
+        date.toDateString() === new Date(current.getFullYear(), current.getMonth(), current.getDate() - 1).toDateString()
+      ) {
+        streak++;
+        current.setDate(current.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+    return streak;
+  };
+
+  const streak = getStreak(attendanceDates);
+
+  useEffect(() => {
+    fetch('/member/attendance-dates', {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        let dates = [];
+        if (Array.isArray(data)) {
+          dates = data.map(dateStr => new Date(dateStr));
+        } else if (Array.isArray(data.dates)) {
+          dates = data.dates.map(dateStr => new Date(dateStr));
+        }
+
+        setAttendanceDates(dates);
+
+        // 계산
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        const currentMonth = today.getMonth();
+        const thisMonthDates = dates.filter(
+          d => d.getFullYear() === currentYear && d.getMonth() === currentMonth
+        );
+        const monthlyRate = Math.round((thisMonthDates.length / today.getDate()) * 100);
+
+        const streak = getStreak(dates);
+
+        setSummary({
+          total: dates.length,
+          monthlyRate,
+          streak,
+        });
+      });
+  }, []);
+  // 
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -20,6 +101,20 @@ const MyPage = () => {
       setNickname(storedNickname || "사용자");
     }
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    fetch('/member/attendance-dates', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log('✅ API 응답 확인:', data);
+        const parsed = data.map(dateStr => new Date(dateStr));
+        setAttendanceDates(parsed);
+      })
+      .catch(err => console.error("❌ 출석 데이터 불러오기 실패:", err));
+  }, []);
 
   const user = {
     name: '쌀튀밥감정',
@@ -135,12 +230,36 @@ const MyPage = () => {
 
         <div className="calendar-section">
           <h4>출석 현황</h4>
-          <Calendar />
           <div className="calendar-summary">
-            <p>총 출석일: 18일</p>
-            <p>이번 달 출석률: 62%</p>
-            <p>연속 출석: 5일</p>
+            <div className="summary-row">
+              <div className="summary-title">총 출석일</div>
+              <div className="summary-title">이번 달 출석률</div>
+              <div className="summary-title">연속 출석</div>
+            </div>
+            <div className="summary-row">
+              <div className="summary-value">{summary.total}일</div>
+              <div className="summary-value">{summary.monthlyRate}%</div>
+              <div className="summary-value">{summary.streak}일</div>
+            </div>
           </div>
+          <Calendar
+            calendarType="gregory"
+            next2Label={null}
+            prev2Label={null}
+            minDetail="month"
+            maxDetail="month"
+            tileClassName={({ date, view }) => {
+              if (view === 'month') {
+                const isAttendance = attendanceDates.some(att => att.toDateString() === date.toDateString());
+                const day = date.getDay(); // 0 = 일요일, 6 = 토요일
+
+                if (isAttendance) return 'attended-day';
+                if (day === 0) return 'sunday'; // ✅ 일요일 날짜
+                if (day === 6) return 'saturday'; // ✅ 토요일 날짜
+              }
+              return null;
+            }}
+          />
         </div>
       </div>
 

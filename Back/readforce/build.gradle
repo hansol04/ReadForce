@@ -36,7 +36,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
 	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 
-	implementation 'org.json:json:20210307'
+	implementation 'org.json:json:20240303'
 	implementation 'org.jsoup:jsoup:1.17.2'
 	compileOnly 'org.projectlombok:lombok'
 

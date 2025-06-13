@@ -28,7 +28,7 @@ export default function Login() {
       console.log("로그인 응답 데이터", data); // 👈 여기에 nickname이 포함돼야 함
 
       if (response.ok) {
-        const token = data.TOKEN;
+        const token = data.ACCESS_TOKEN;
         const nickname = data.nickname || data.NICKNAME;
         // const messageCode = data.MESSAGE_CODE;
 

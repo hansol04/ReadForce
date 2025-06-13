@@ -1,6 +1,8 @@
 package com.readforce.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.core.io.Resource;
@@ -79,6 +81,14 @@ public class MemberController {
     	
     	return ResponseEntity.status(HttpStatus.OK).body(Map.of(Name.ACCESS_TOKEN.toString(), access_token, "nickname", member.getNickname(), MessageCode.MESSAGE_CODE, MessageCode.SIGN_IN_SUCCESS)); 
     	
+    }
+    
+    // 김기찬이 추가 출석
+    @GetMapping("/attendance-dates")
+    public ResponseEntity<List<LocalDate>> getAttendanceDates(@AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        List<LocalDate> attendanceDates = attendance_service.getAttendanceDates(email);
+        return ResponseEntity.ok(attendanceDates);
     }
     
     // 이메일 중복 확인
