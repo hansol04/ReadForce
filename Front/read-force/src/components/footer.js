@@ -2,12 +2,14 @@ import './footer.css';
 
 const Footer = () => {
     return (
-        <div>
-            <footer>
-                오늘의 문해력 | 서울 강남구 강남대로72길 8 한국빌딩 8층 | 상담시간: 09:00~18:00 (점심시간: 12:50~13:50)
-            </footer>
-        </div>
+        <footer className="footer">
+            <div className="container">
+                <h3 className="footer-title">오늘의 문해력</h3>
+                <p>서울 강남구 강남대로78길 8 한국빌딩 8층</p>
+                <p>상담시간 9:00~18:00 (점심시간 12:50~13:50)</p>
+            </div>
+        </footer>
     );
-}
+};
 
 export default Footer;
