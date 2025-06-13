@@ -15,11 +15,13 @@ import com.readforce.enums.MessageCode;
 import com.readforce.exception.AuthenticationException;
 import com.readforce.exception.DuplicateException;
 import com.readforce.exception.FileException;
+import com.readforce.exception.GeminiException;
 import com.readforce.exception.InvalidJwtSecretKeyException;
+import com.readforce.exception.NewsException;
 import com.readforce.exception.NotMatchException;
 import com.readforce.exception.ResourceNotFoundException;
 
-import io.jsonwebtoken.JwtException;
+import org.springframework.security.oauth2.jwt.JwtException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,8 +34,26 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleJwtException(JwtException exception) {
         
     	log.error("JwtException occurred : {}", exception.getMessage(), exception);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.TOKEN_ERROR));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
     
+    }
+    
+    // 제미나이 관련 에러
+    @ExceptionHandler(GeminiException.class)
+    public ResponseEntity<Map<String, String>> handleGeminiException(GeminiException exception){
+    	
+    	log.error("GeminiException occured : {}", exception.getMessage(), exception);
+    	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
+    	
+    }
+    
+    // 뉴스 관련 에러
+    @ExceptionHandler(NewsException.class)
+    public ResponseEntity<Map<String, String>> handleNewsException(NewsException exception){
+    	
+    	log.error("NewsException occured : {}", exception.getMessage(), exception);
+    	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
+    	
     }
     
     // 파일 관련 에러
@@ -133,7 +153,7 @@ public class GlobalExceptionHandler {
 	protected ResponseEntity<Map<String, String>> handlerException(Exception exception){
 	
 		log.error("Exception occured : {}", exception.getMessage(), exception);
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.INTERNER_SERVER_ERROR));
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
 		
 	}
 }

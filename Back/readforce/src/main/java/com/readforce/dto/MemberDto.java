@@ -108,15 +108,40 @@ public class MemberDto {
 		}
 	}
 	
-	// 비밀번호 재설정
+	// 비밀번호 재설정(링크)
 	@Getter
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class PasswordReset{
+	public static class PasswordResetByLink{
 		
 		@NotBlank(message = MessageCode.TOKEN_NOT_BLANK)
 		private String temporal_token;
+		
+		@NotBlank(message = MessageCode.PASSWORD_NOT_BLANK)
+		@Size(min = 8, max = 20, message = MessageCode.PASSWORD_SIZE_INVALID)
+		@Pattern(
+		        regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()-_=+]).*$"
+		        , message = MessageCode.PASSWORD_PATTERN_INVALID
+		)
+		private String new_password;
+		
+	}
+	
+	// 비밀번호 재설정(회원 정보 수정)
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class PasswordResetBySite{
+		
+		@NotBlank(message = MessageCode.PASSWORD_NOT_BLANK)
+		@Size(min = 8, max = 20, message = MessageCode.PASSWORD_SIZE_INVALID)
+		@Pattern(
+		        regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()-_=+]).*$"
+		        , message = MessageCode.PASSWORD_PATTERN_INVALID
+		)
+		private String old_password;
 		
 		@NotBlank(message = MessageCode.PASSWORD_NOT_BLANK)
 		@Size(min = 8, max = 20, message = MessageCode.PASSWORD_SIZE_INVALID)
@@ -156,6 +181,22 @@ public class MemberDto {
 		}
 		
 	}
+	
+	// 회원 정보 불러오기
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class GetMemberObject{
+		
+		private String email;
+		private String nickname;
+		private LocalDate birthday;
+		
+	}
+	
+	
+
 	
 	
 }
