@@ -28,12 +28,13 @@ export default function Login() {
       console.log("로그인 응답 데이터", data); // 👈 여기에 nickname이 포함돼야 함
 
       if (response.ok) {
-        const token = data.TOKEN;
-        const nickname = data.nickname || data.NICKNAME;
-        // const messageCode = data.MESSAGE_CODE;
+        const token = data.ACCESS_TOKEN;
+        const refreshToken = data.REFRESH_TOKEN; // ✅ 추가
+        const nickname = data.NICK_NAME || data.nickname;
 
         localStorage.setItem('token', token);
-        localStorage.setItem('nickname', nickname);
+        localStorage.setItem('refresh_token', refreshToken); // ✅ 추가
+        localStorage.setItem('nickname', nickname); // ✅ 이게 없으면 Header에서 못 뜸
 
         navigate('/');
       } else {

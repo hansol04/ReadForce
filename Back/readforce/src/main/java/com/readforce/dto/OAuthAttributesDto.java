@@ -32,7 +32,7 @@ public class OAuthAttributesDto {
 		
 		// 네이버
 		if("naver".equals(registrationId)) {
-			return ofNaver("id", attributes);
+			return ofNaver(userNameAttributeName, attributes);
 		}
 		// 카카오
 		if("kakao".equals(registrationId)) {
