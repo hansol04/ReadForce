@@ -30,7 +30,7 @@ const SignupCompletePage = () => {
   
         if (res.ok) {
           const data = await res.json();
-          console.log(data.message); // "닉네임은 사용 가능합니다."
+          console.log(data.message);
           return true;
         } else {
           const data = await res.json();
@@ -78,12 +78,11 @@ const SignupCompletePage = () => {
       setIsBirthdayValid(false);
     }
   };
-    // - 자동 추가
-    const handleBirthdayChange = (value) => {
-      // 숫자만 남기기
+
+    const handleBirthdayChange = (value) => {            // - 자동 추가  /숫자만 남기기   /  자동으로 YYYY-MM-DD 형태로 변환  /유효성 검사 호출
+
       const numeric = value.replace(/\D/g, '').slice(0, 8);
-  
-      // 자동으로 YYYY-MM-DD 형태로 변환
+
       let formatted = numeric;
       if (numeric.length >= 5) {
         formatted = `${numeric.slice(0, 4)}-${numeric.slice(4, 6)}`;
@@ -91,9 +90,8 @@ const SignupCompletePage = () => {
           formatted += `-${numeric.slice(6, 8)}`;
         }
       }
-  
       setBirthday(formatted);
-      validateBirthday(formatted); // 유효성 검사 호출
+      validateBirthday(formatted);
     };
     // 비밀번호 유효성 검사
     const validatePassword = (value) => {
@@ -197,7 +195,6 @@ const SignupCompletePage = () => {
               style={{
                 color: isNicknameValid === null ? 'inherit' : isNicknameValid ? 'green' : 'red',
                 fontSize: '0.85rem',
-                // marginTop: '4px',
               }}
             >
               {nicknameMessage}

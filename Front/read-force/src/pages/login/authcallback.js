@@ -8,12 +8,9 @@ export default function Authcallback() {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('ACCESS_TOKEN');
 
-    console.log('[✅ 콜백 URL 전체]', window.location.href);
-    console.log('[✅ ACCESS_TOKEN]', token);
-
     if (token) {
       localStorage.setItem('token', token);
-      window.location.href = '/';  // ✅ 새로고침 포함되어 확실하게 동작
+      window.location.href = '/'
       return;
     }
 

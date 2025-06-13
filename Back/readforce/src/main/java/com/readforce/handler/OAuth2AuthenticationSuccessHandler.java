@@ -13,8 +13,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.readforce.dto.OAuth2UserDto;
+import com.readforce.entity.Member;
+import com.readforce.enums.MessageCode;
 import com.readforce.enums.Name;
 import com.readforce.enums.Prefix;
+import com.readforce.enums.Status;
+import com.readforce.exception.ResourceNotFoundException;
+import com.readforce.repository.MemberRepository;
 import com.readforce.service.AttendanceService;
 import com.readforce.service.AuthService;
 import com.readforce.util.JwtUtil;
@@ -29,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler{
 	
 	private final JwtUtil jwt_util;
+	private final MemberRepository member_repository;
 	private final AuthService auth_service;
 	private final AttendanceService attendance_service;
 	private final StringRedisTemplate redis_template;
@@ -71,10 +77,14 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
             
             // 출석 체크
             attendance_service.recordAttendance(email);
+            
+            // 회원 정보 불러오기
+            Member member = member_repository.findByEmailAndStatus(email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
 
             // 프론트 엔드 로그인 콜백
             target_url = UriComponentsBuilder.fromUriString(social_login_success_exist_member_url)
                     .queryParam(Name.ACCESS_TOKEN.toString(), access_token)
+                    .queryParam("NICKNAME", member.getNickname())
                     .build()
                     .toUriString();
         }

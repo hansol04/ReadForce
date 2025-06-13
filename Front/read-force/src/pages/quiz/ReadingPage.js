@@ -28,7 +28,7 @@ const ReadingPage = () => {
         if (prev <= 1) {
           clearInterval(timer);
           navigate('/quiz', {
-            state: { article, quiz, from } // ✅ from 같이 넘기기
+            state: { article, quiz, from }
           });
         }
         return prev - 1;

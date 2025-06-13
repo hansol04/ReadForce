@@ -19,7 +19,7 @@ import ChallengePage from "./pages/challenge/challengepage";
 import Oauth2redirect from './pages/login/oauth2redirect';
 import Authcallback from './pages/login/authcallback';
 import Socialsignup from './pages/signup/socialsignup';
-
+import ProfileEditPage from './pages/myinfo/ProfileEditPage';
 function App() {
   return (
     <Router>
@@ -43,6 +43,7 @@ function App() {
           <Route path="/oauth2/redirect" element={<Oauth2redirect />} />
           <Route path="/authcallback" element={<Authcallback />} />
           <Route path="/social-sign-up" element={<Socialsignup />} />
+          <Route path="/profile-edit" element={<ProfileEditPage />} />
        </Route>
       </Routes>
     </Router>

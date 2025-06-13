@@ -27,6 +27,8 @@ import com.readforce.dto.MemberDto;
 import com.readforce.entity.Member;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.Name;
+import com.readforce.enums.Status;
+import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.repository.MemberRepository;
 import com.readforce.service.AttendanceService;
 import com.readforce.service.AuthService;
@@ -168,10 +170,13 @@ public class MemberController {
 		// 출석 체크
 		attendance_service.recordAttendance(email);
 		
+		// 회원 정보 불러오기
+		Member member = member_repository.findByEmailAndStatus(email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
+		
 		final UserDetails user_details = auth_service.loadUserByUsername(email);
 		final String jwt = jwt_util.generateAcessToken(user_details);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(Map.of(Name.ACCESS_TOKEN.toString(), jwt, MessageCode.MESSAGE_CODE, MessageCode.SIGN_UP_SUCCESS));
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(Name.ACCESS_TOKEN.toString(), jwt, MessageCode.MESSAGE_CODE, MessageCode.SIGN_UP_SUCCESS, "NICKNAME", member.getNickname()));
 		
 	}
 	

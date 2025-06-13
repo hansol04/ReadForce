@@ -25,16 +25,13 @@ export default function Login() {
       const MESSAGE_CODE = data.MESSAGE_CODE;
       console.log(MESSAGE_CODE)
 
-      console.log("로그인 응답 데이터", data); // 👈 여기에 nickname이 포함돼야 함
+      console.log("로그인 응답 데이터", data); 
 
       if (response.ok) {
         const token = data.TOKEN;
         const nickname = data.nickname || data.NICKNAME;
-        // const messageCode = data.MESSAGE_CODE;
-
         localStorage.setItem('token', token);
         localStorage.setItem('nickname', nickname);
-
         navigate('/');
       } else {
         setError(data.message || '로그인에 실패했습니다.');
@@ -44,7 +41,6 @@ export default function Login() {
       setError('서버 오류가 발생했습니다.');
     }
   };
-
   return (
     <div>
       <div className="login-wrapper">

@@ -23,7 +23,7 @@ export default function Socialsignup() {
 
       if (res.ok) {
         const data = await res.json();
-        console.log(data.message); // "닉네임은 사용 가능합니다."
+        console.log(data.message);
         return true;
       } else {
         const data = await res.json();
@@ -59,7 +59,7 @@ export default function Socialsignup() {
     }
   };
 
-  // ✅ 생년월일 유효성 검사
+  // 생년월일 유효성 검사
   const validateBirthday = (value) => {
     const birthdayRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (birthdayRegex.test(value)) {
@@ -84,7 +84,7 @@ export default function Socialsignup() {
     validateBirthday(formatted);
   };
 
-  // ✅ 토큰 검증
+  // 토큰 검증
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get('TEMPORAL_TOKEN');
@@ -95,7 +95,7 @@ export default function Socialsignup() {
     setTempToken(token);
   }, [navigate]);
 
-  // ✅ 최종 제출
+  // 최종 제출
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -121,6 +121,7 @@ export default function Socialsignup() {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('token', data.access_token);
+        localStorage.setItem('nickname', nickname); 
         setMessage('🎉 소셜 회원가입이 완료되었습니다!');
         setTimeout(() => navigate('/'), 1500);
       } else {

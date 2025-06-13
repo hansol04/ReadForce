@@ -48,7 +48,7 @@ public class MemberService{
 
 	// 회원 찾기
 	@Transactional(readOnly = true)
-	public Member getMemberObjectById(String email) {
+	public Member getMemberObjectByEmail(String email) {
 		return member_repository.findByEmailAndStatus(email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
 	}
 

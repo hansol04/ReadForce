@@ -5,7 +5,6 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 
-/* 상단 타이틀 */
 .title {
   font-size: 24px;
   text-align: center;
@@ -17,7 +16,6 @@
   color: #14b8a6;
 }
 
-/* 통계 + TOP5 레이아웃 */
 .top-container {
   display: flex;
   justify-content: space-between;
@@ -25,7 +23,6 @@
   margin-bottom: 3rem;
 }
 
-/* 실시간 통계 박스 */
 .stats-box {
   flex: 1;
   background: white;
@@ -36,7 +33,6 @@
   text-align: center;
 }
 
-/* 실시간 통계 제목 왼쪽 정렬 */
 .stats-box h3 {
   text-align: left;
   font-size: 16px;
@@ -45,7 +41,6 @@
   padding-left: 0.5rem;
 }
 
-/* 실시간 통계 4x2 그리드 */
 .grid-4x2 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -83,7 +78,6 @@
   background: #14b8a6;
 }
 
-/* 주간 TOP 5 */
 .top5-box {
   flex: 1;
   background: white;
@@ -123,12 +117,10 @@
   font-weight: bold;
 }
 
-/* 가장 많이 틀린 문제 섹션 */
 .wrong-section {
   margin-top: 2rem;
 }
 
-/* ✅ 헤더 라인: 문제 제목 + 정답률 텍스트 (수직 정렬용) */
 .wrong-header-row {
   display: grid;
   grid-template-columns: 1fr 60px 90px;
@@ -148,7 +140,6 @@
   text-align: center;
 }
 
-/* ✅ 각 문제 항목: 표 형식 3열 */
 .wrong-item {
   display: grid;
   grid-template-columns: 1fr 60px 90px;
