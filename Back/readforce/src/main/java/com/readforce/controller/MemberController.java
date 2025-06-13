@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -342,6 +343,15 @@ public class MemberController {
         List<LocalDate> attendanceDates = attendance_service.getAttendanceDates(email);
         return ResponseEntity.ok(attendanceDates);
     }
+    
+    // 관리자 전용 - 전체 회원 목록 조회
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/get-all-members")
+    public ResponseEntity<List<GetMemberObject>> getAllMembers() {
+        List<GetMemberObject> memberList = member_service.getAllMemberObjects();
+        return ResponseEntity.ok(memberList);
+    }
+    
 	
 
 }

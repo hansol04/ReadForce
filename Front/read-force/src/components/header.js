@@ -35,11 +35,11 @@ const Header = () => {
             <div className="container header-inner">
 
                 <div className="header-left">
-                <h1 className="title">
-                    <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                        오늘의 문해<span style={{ color: "#439395" }}>력</span>
-                    </a>
-                </h1>
+                    <h1 className="title">
+                        <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                            오늘의 문해<span style={{ color: "#439395" }}>력</span>
+                        </a>
+                    </h1>
                 </div>
 
                 <div className="header-center">
@@ -77,6 +77,14 @@ const Header = () => {
                             {showUserMenu && (
                                 <div className="user-dropdown">
                                     <div onClick={() => { setShowUserMenu(false); navigate("/mypage"); }}>마이페이지</div>
+
+                                    {/* 관리자 전용 메뉴 */}
+                                    {nickname === "관리자" && (
+                                        <div onClick={() => { setShowUserMenu(false); navigate("/adminpage"); }}>
+                                            관리자 페이지
+                                        </div>
+                                    )}
+
                                     <div onClick={handleLogout}>로그아웃</div>
                                 </div>
                             )}

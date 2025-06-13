@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.readforce.entity.Member;
 import com.readforce.enums.MessageCode;
 
 import jakarta.validation.constraints.AssertTrue;
@@ -192,9 +193,20 @@ public class MemberDto {
 		private String email;
 		private String nickname;
 		private LocalDate birthday;
-		
+		private LocalDate createDate;
+	    private String status;    
 	}
 	
+	// 기무찬 
+	public static GetMemberObject from(Member member) {
+	    return new GetMemberObject(
+	        member.getEmail(),
+	        member.getNickname(),
+	        member.getBirthday(),
+	        member.getCreateDate(),
+	        member.getStatus()
+	    );
+	}
 	
 
 	
