@@ -85,5 +85,13 @@ custom:
     social-login-success:
       exist-member-url: http://localhost:3000/auth/callback
       new-member-url: http://localhost:3000/social-sign-up
-    kakao-logout-url: https://kauth.kakao.com/oauth/logout?client_id=
     logout-redirect-url: http://localhost:3000/
+    kakao-logout-url: https://kauth.kakao.com/oauth/logout?client_id=
+rate-limiting:
+  enabled: true
+  ip:
+    requests: 100
+    per-minute: 1
+  email:
+    requests: 20
+    per-minute: 1

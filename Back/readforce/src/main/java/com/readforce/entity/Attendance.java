@@ -39,6 +39,6 @@ public class Attendance {
 	private Member member;
 	
 	@CreatedDate
-	private LocalDateTime createdDate;
+	private LocalDateTime created_date;
 	
 }

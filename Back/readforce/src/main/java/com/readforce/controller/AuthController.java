@@ -77,7 +77,7 @@ public class AuthController {
     	return ResponseEntity.status(HttpStatus.OK).body(Map.of(
     			Name.ACCESS_TOKEN.toString(), new_access_token,
     			Name.REFRESH_TOKEN.toString(), new_refresh_token,
-    			MessageCode.MESSAGE_CODE, MessageCode.TOKEN_SUCCESS
+    			MessageCode.MESSAGE_CODE, MessageCode.REISSUE_ACCESS_TOKEN_SUCCESS
     	));
 
     }
@@ -104,6 +104,7 @@ public class AuthController {
 		try {
 			
 			tokens = new ObjectMapper().readValue(token_json, new TypeReference<Map<String, String>>(){});
+			tokens.put(MessageCode.MESSAGE_CODE, MessageCode.GET_TOKENS_SUCCESS);
 			
 		} catch (JsonMappingException e) {
 			

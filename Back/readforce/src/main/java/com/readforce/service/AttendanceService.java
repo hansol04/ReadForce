@@ -16,7 +16,9 @@ import com.readforce.repository.AttendanceRepository;
 import com.readforce.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AttendanceService {
@@ -33,7 +35,7 @@ public class AttendanceService {
 		
 		// 오늘 이미 출석했는지 확인
 		boolean already_attended =
-				attendance_repository.existsByMemberEmailAndCreatedDateBetween(email, startOfDay, endOfDay);
+				attendance_repository.existsByEmailAndCreatedDateBetween(email, startOfDay, endOfDay);
 		
 		if(!already_attended) {
 			
