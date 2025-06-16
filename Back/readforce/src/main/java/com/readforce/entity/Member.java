@@ -65,6 +65,12 @@ public class Member {
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.USER;
 	
+	@Column(nullable = true)
+	private String social_provider;
+	
+	@Column(nullable = true)
+	private String social_provider_id;
+	
 	@Override
     public boolean equals(Object object) {
         if (this == object) return true;

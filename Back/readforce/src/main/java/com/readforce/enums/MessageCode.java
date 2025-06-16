@@ -13,6 +13,7 @@ public final class MessageCode {
 	public static final String TOKEN_NOT_BLANK = "NO0006";
 	public static final String FILE_NOT_NULL = "NO0007";
 	public static final String REFRESH_TOKEN_NOT_BLANK = "NO0008";
+	public static final String TEMPORAL_TOKEN_NOT_BLANK = "NO0009";
 
 	
 	// 입력값 형식 불일치
@@ -53,7 +54,10 @@ public final class MessageCode {
 	public static final String DIRECTORY_CREATION_FAIL = "FA0004";
 	public static final String FILE_STORE_FAIL = "FA0005";
 	public static final String FILE_DELETE_FAIL = "FA0006";
-
+	public static final String TEMPORAL_TOKEN_AUTHENTICATION_FAIL = "FA0007";
+	public static final String JSON_MAPPING_FAIL = "FA0008";
+	public static final String JSON_PROCESSING_FAIL = "FA0009";
+	
 	
 	// 데이터 없음
 	public static final String MEMBER_NOT_FOUND_WITH_EMAIL = "NF0001";
@@ -73,6 +77,9 @@ public final class MessageCode {
 	public static final String EMAIL_VERIFICATION_REQUIRED = "SP0008";
 	public static final String DATA_INTEGRITY_VIOLATION = "SP0009";
 	public static final String ACCESS_TOKEN_EXPIRED = "SP0010";
+	public static final String SOCIAL_EMAIL_ALREADY_CONNECTED_WITH_OTHER_MEMBER = "SP0011";
+	public static final String SOCIAL_EMAIL_ALREADY_USE_BY_OTHER_MEMBER = "SP0012";
+	
 
 	
 

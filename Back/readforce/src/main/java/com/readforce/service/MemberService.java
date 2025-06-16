@@ -28,7 +28,6 @@ import com.readforce.repository.MemberRepository;
 import com.readforce.repository.NeedAdminCheckFailedDeletionLogRepository;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,6 +57,7 @@ public class MemberService{
 		get_member_object.setEmail(member.getEmail());
 		get_member_object.setNickname(member.getNickname());
 		get_member_object.setBirthday(member.getBirthday());
+		get_member_object.setProvider(member.getSocial_provider());
 		
 		return get_member_object;
 		
@@ -290,6 +290,34 @@ public class MemberService{
 	}
 	
 
+	// 기존 회원과 소셜 계정 연동
+	@Transactional
+	public void linkSocialAccount(String signed_in_email, String provider, String provider_id, String social_email) {
+		
+		// 해당 소셜 계정이 다른 사용자에게 이미 연결되어있는지 확인
+		member_repository.findBySocialProviderAndSocialProviderId(provider, provider_id)
+			.ifPresent(member -> {
+				if(!member.getEmail().equals(signed_in_email)) {
+					throw new DuplicateException(MessageCode.SOCIAL_EMAIL_ALREADY_CONNECTED_WITH_OTHER_MEMBER);
+				}
+			});
+
+		// 소셜 계정의 이메일이 다른 기존 회원의 이메일인지 확인
+		member_repository.findByEmail(social_email)
+			.ifPresent(member -> {
+				if(!member.getEmail().equals(signed_in_email)) {
+					throw new DuplicateException(MessageCode.SOCIAL_EMAIL_ALREADY_USE_BY_OTHER_MEMBER);
+				}
+			});
+		
+		// 현재 로그인된 사용자를 조회 및 소셜 정보 업데이트
+		Member member = member_repository.findByEmailAndStatus(signed_in_email, Status.ACTIVE)
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
+
+		member.setSocial_provider(provider);
+		member.setSocial_provider_id(provider_id);
+		
+	}
 	
 	
 	

@@ -19,6 +19,7 @@ import com.readforce.exception.AuthenticationException;
 import com.readforce.exception.DuplicateException;
 import com.readforce.exception.FileException;
 import com.readforce.exception.InvalidJwtSecretKeyException;
+import com.readforce.exception.JsonException;
 import com.readforce.exception.NotMatchException;
 import com.readforce.exception.ResourceNotFoundException;
 
@@ -38,6 +39,14 @@ public class GlobalExceptionHandler {
     
     }
     
+    // JSON 관련 에러
+    @ExceptionHandler(JsonException.class)
+    public ResponseEntity<Map<String, String>> JsonException(JsonException exception){
+    	
+    	log.error("JsonException occured : {}", exception.getMessage(), exception);
+    	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
+    	
+    }
     
     
     // 파일 관련 에러

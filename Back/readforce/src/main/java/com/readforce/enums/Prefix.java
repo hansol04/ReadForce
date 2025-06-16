@@ -10,7 +10,9 @@ public enum Prefix {
 	ROLE("ROLE_"),
 	REFRESH_TOKEN("RefreshToken_"),
 	BEARER("Bearer "),
-	X_REFRESH_TOKEN("X-Refresh-Token ");
+	X_REFRESH_TOKEN("X-Refresh-Token "),
+	TEMPORAL_TOKEN("TemporalToken "),
+	EXIST_MEMBER_SOCIAL_LOGIN("ExistMemberSocialLogin_");
 
 	private final String prefix;
 	
