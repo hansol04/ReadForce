@@ -3,6 +3,7 @@ package com.readforce.controller;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -98,8 +99,8 @@ public class MemberController {
     			Name.REFRESH_TOKEN.toString(), refresh_token,
     			Name.NICK_NAME.toString(), get_member_dto.getNickname(),
     			Name.PROVIDER.toString(), get_member_dto.getProvider(),
-    			MessageCode.MESSAGE_CODE, MessageCode.SIGN_IN_SUCCESS)
-    	); 
+    			MessageCode.MESSAGE_CODE, MessageCode.SIGN_IN_SUCCESS
+    	)); 
     	
     }
     
@@ -107,31 +108,32 @@ public class MemberController {
     @DeleteMapping("/sign-out")
     public ResponseEntity<Map<String, String>>signOut(@AuthenticationPrincipal UserDetails user_details){
     	
-    	// 리프레쉬 토큰 삭제
-    	auth_service.deleteRefreshToken(user_details.getUsername());
-    	
-    	return ResponseEntity.status(HttpStatus.OK).body(Map.of(
-    			MessageCode.MESSAGE_CODE, MessageCode.SIGN_OUT_SUCCESS
-    	)); 
-    	
-    }
-    
-    // 카카오 로그아웃
-    @DeleteMapping("/kakao-sign-out")
-    public ResponseEntity<Map<String, String>> kakaoSignOut(@AuthenticationPrincipal UserDetails user_details){
+    	String email = user_details.getUsername();   	
     	
     	// 리프레쉬 토큰 삭제
     	auth_service.deleteRefreshToken(user_details.getUsername());
     	
-    	// 카카오톡 로그아웃
-    	String kako_logout_url= custom_fronted_kakao_logout_url
-				 + kakao_client_id
-				 + "&logout_redirect_uri="
-				 + custom_fronted_logout_redirect_url;
-    	return ResponseEntity.status(HttpStatus.OK).body(Map.of(
-				MessageCode.MESSAGE_CODE, MessageCode.SIGN_OUT_SUCCESS,
-				"KAKAO_LOGOUT_URL", kako_logout_url		
-		));
+    	// 회원 조회
+    	GetMemberObject member_info = member_service.getMemberObjectByEmail(email);
+    	String provider = member_info.getProvider();
+    	
+    	// 응답 본문 생성
+    	Map<String, String> response_body = new HashMap<>();
+    	response_body.put(MessageCode.MESSAGE_CODE, MessageCode.SIGN_OUT_SUCCESS);
+    	
+    	// 카카오 소셜 계정
+    	if("kakao".equals(provider)) {
+    		
+    		String kakao_sign_out_url = custom_fronted_kakao_logout_url
+    				+ kakao_client_id
+    				+ "&logout_redirect_uri="
+    				+ custom_fronted_logout_redirect_url;
+    		
+    		response_body.put(Name.KAKAO_SIGN_OUT_URL.toString(), kakao_sign_out_url);
+    		
+    	}
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(response_body); 
     	
     }
     
@@ -260,8 +262,8 @@ public class MemberController {
 				Name.REFRESH_TOKEN.toString(), refresh_token,
 				Name.NICK_NAME.toString(), get_member_dto.getNickname(),
 				Name.PROVIDER.toString(), get_member_dto.getProvider(),
-				MessageCode.MESSAGE_CODE, MessageCode.SIGN_UP_SUCCESS)
-		);
+				MessageCode.MESSAGE_CODE, MessageCode.SIGN_UP_SUCCESS
+		));
 		
 	}
 	

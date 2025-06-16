@@ -5,6 +5,7 @@ package com.readforce.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -13,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.readforce.dto.MemberDto;
 import com.readforce.dto.MemberDto.GetMemberObject;
 import com.readforce.dto.OAuthAttributesDto;
@@ -23,6 +26,7 @@ import com.readforce.enums.Prefix;
 import com.readforce.enums.Status;
 import com.readforce.exception.AuthenticationException;
 import com.readforce.exception.DuplicateException;
+import com.readforce.exception.JsonException;
 import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.repository.MemberRepository;
 import com.readforce.repository.NeedAdminCheckFailedDeletionLogRepository;
@@ -251,21 +255,46 @@ public class MemberService{
 	@Transactional
 	public String socialSignUp(@Valid MemberDto.SocialSignUp social_sign_up) {
 		
-		// 토큰 검증
-		String email = redis_template.opsForValue().get(Prefix.SOCIAL_SIGN_UP.getName() + social_sign_up.getTemporal_token());
-		if(email == null) {
+		// Redis에서 소셜 정보 JSON 가져오기
+		String social_info_json = redis_template.opsForValue().get(Prefix.SOCIAL_SIGN_UP.getName() + social_sign_up.getTemporal_token());
+
+		if(social_info_json == null) {
+			
 			throw new AuthenticationException(MessageCode.TOKEN_ERROR);
+			
 		}
+		
+		// JSON을 Map으로 변환
+		Map<String, String> social_info;
+		try {
+			
+			social_info = new ObjectMapper().readValue(social_info_json, new TypeReference<Map<String, String>>() {});
+			
+		} catch(Exception exception) {
+			
+			throw new JsonException(MessageCode.JSON_PROCESSING_FAIL);
+			
+		}
+		
+		String email = social_info.get("email");
+		String provider = social_info.get("provider");
+		String provider_id = social_info.get("provider_id");
 		
 		// 닉네임 중복 확인
 		if(member_repository.findByNickname(social_sign_up.getNickname()).isPresent()) {
+			
 			throw new DuplicateException(MessageCode.DUPLICATE_NICKNAME);
+		
 		}
 		
 		OAuthAttributesDto o_auth_attributes = OAuthAttributesDto.builder().email(email).build();
 		Member new_member = o_auth_attributes.toEntity(social_sign_up.getNickname(), social_sign_up.getBirthday());
 		
 		new_member.setPassword(password_encoder.encode(new_member.getPassword()));
+		
+		// 소셜 정보 저장
+		new_member.setSocial_provider(provider);
+		new_member.setSocial_provider_id(provider_id);
 		
 		// 새로운 회원 추가
 		member_repository.save(new_member);

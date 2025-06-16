@@ -13,19 +13,21 @@ public class OAuth2UserDto extends DefaultOAuth2User {
 
 	private static final long serialVersionUID = 1L;
 	private final String email;
-	private final boolean isNewUser;
-	
+	private final boolean is_new_user;
+	private final String registration_id;
 	
 	public OAuth2UserDto(
 			Collection<? extends GrantedAuthority> authorities, 
 			Map<String, Object> attributes,
-			String nameAttributeKey,
+			String name_attribute_key,
 			String email,
-			boolean isNewUser
+			boolean is_new_user,
+			String registration_id
 	) {
-		super(authorities, attributes, nameAttributeKey);
+		super(authorities, attributes, name_attribute_key);
 		this.email = email;
-		this.isNewUser = isNewUser;
+		this.is_new_user = is_new_user;
+		this.registration_id = registration_id;
 	}
 	
 }
