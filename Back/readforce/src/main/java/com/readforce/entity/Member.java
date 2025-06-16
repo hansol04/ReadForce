@@ -44,7 +44,7 @@ public class Member {
 	@Column(nullable = false)
 	private LocalDate birthday;
 	
-	@Column(nullable = true)
+	@Column(name = "profile_image_url", nullable = true)
 	private String profile_image_url;
 	
 	@CreatedDate
@@ -54,8 +54,8 @@ public class Member {
 	@LastModifiedDate
 	private LocalDateTime last_modified_date;
 	
-	@Column(nullable = true)
-	private LocalDateTime withdrawDate;
+	@Column(name = "withdraw_date", nullable = true)
+	private LocalDateTime withdraw_date;
 	
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
@@ -65,10 +65,10 @@ public class Member {
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.USER;
 	
-	@Column(nullable = true)
+	@Column(name = "social_provider", nullable = true)
 	private String social_provider;
 	
-	@Column(nullable = true)
+	@Column(name = "social_provider_id", nullable = true)
 	private String social_provider_id;
 	
 	@Override

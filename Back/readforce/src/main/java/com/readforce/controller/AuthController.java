@@ -2,7 +2,7 @@ package com.readforce.controller;
 
 import java.util.Map;
 
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,7 +35,7 @@ public class AuthController {
 
 	private final AuthService auth_service;
 	private final JwtUtil jwt_util;
-	private final RedisTemplate redis_template;
+	private final StringRedisTemplate redis_template;
 	
 	// 엑세스 토큰 재발급
     @PostMapping("/reissue-refresh-token")

@@ -326,10 +326,6 @@ public class MemberController {
 		
 	}
 	
-	// 소설 계정 연결
-
-	
-	
 	
 
 }
