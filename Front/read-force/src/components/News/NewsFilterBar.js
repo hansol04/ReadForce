@@ -1,6 +1,6 @@
 import React from 'react';
 import './css/NewsFilterBar.css';
-import SortDropdown from './SortDropdown';
+import Select from 'react-select';
 
 const NewsFilterBar = ({ level, setLevel, sort, setSort, category, setCategory }) => {
   const levelClass = (lvl) => {
@@ -13,17 +13,33 @@ const NewsFilterBar = ({ level, setLevel, sort, setSort, category, setCategory }
     return `${base} ${level === lvl ? 'selected' : ''}`;
   };
 
+  const categoryOptions = [
+    { value: 'all', label: '모두' },
+    { value: '정치', label: '정치' },
+    { value: '경제', label: '경제' },
+    { value: '사회', label: '사회' },
+    { value: '생활/문화', label: '생활/문화' },
+    { value: 'IT/과학', label: 'IT/과학' },
+  ];
+
+  const selectedCategory = categoryOptions.find((o) => o.value === category) || categoryOptions[0];
+
   return (
     <div className="filter-bar-layout">
+      
       <div className="filter-left">
-        <select value={category} onChange={(e) => setCategory(e.target.value)} className="dropdown">
-          <option value="all">모두</option>
-          <option value="정치">정치</option>
-          <option value="경제">경제</option>
-          <option value="사회">사회</option>
-          <option value="생활/문화">생활/문화</option>
-          <option value="IT/과학">IT/과학</option>
-        </select>
+        <button
+          className={`sort-button ${sort === 'latest' ? 'active' : ''}`}
+          onClick={() => setSort('latest')}
+        >
+          최신순
+        </button>
+        <button
+          className={`sort-button ${sort === 'oldest' ? 'active' : ''}`}
+          onClick={() => setSort('oldest')}
+        >
+          오래된순
+        </button>
       </div>
 
       <div className="filter-center">
@@ -35,11 +51,14 @@ const NewsFilterBar = ({ level, setLevel, sort, setSort, category, setCategory }
       </div>
 
       <div className="filter-right">
-        <select
-            className="select-box" value={sort} onChange={(e) => setSort(e.target.value)}>
-            <option value="latest">최신순</option>
-            <option value="oldest">오래된순</option>
-        </select>
+        <Select
+          className="custom-select"
+          classNamePrefix="react-select"
+          options={categoryOptions}
+          value={selectedCategory}
+          onChange={(selected) => setCategory(selected.value)}
+          isSearchable={false}
+        />
       </div>
     </div>
   );

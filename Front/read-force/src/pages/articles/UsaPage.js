@@ -7,7 +7,6 @@ const UsaPage = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>미국 기사</h2>
       <NewsList country="us" onSolve={handleSolve} />
     </div>
   );

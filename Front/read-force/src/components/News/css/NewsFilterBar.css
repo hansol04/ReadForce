@@ -1,23 +1,36 @@
+/* 전체 레이아웃 */
 .filter-bar-layout {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
   flex-wrap: wrap;
+  margin-bottom: 20px;
   gap: 12px;
 }
 
-.filter-left,
-.filter-right {
+/* 왼쪽: 정렬 버튼 */
+.filter-left {
   flex: 1;
   display: flex;
   justify-content: flex-start;
+  gap: 10px;
 }
 
-.filter-right {
-  justify-content: flex-end;
+.sort-button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #999;
+  cursor: pointer;
+  padding: 6px 10px;
 }
 
+.sort-button.active {
+  font-weight: bold;
+  color: #333;
+}
+
+/* 가운데: 난이도 버튼 */
 .filter-center {
   flex: 1;
   display: flex;
@@ -25,32 +38,10 @@
   gap: 10px;
 }
 
-.select-box {
-  padding: 8px 14px;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  background-color: white;
-  font-size: 14px;
-  cursor: pointer;
-  appearance: none; 
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 16px;
-}
-
-.select-box:focus {
-  outline: none; /* 파란 테두리 제거 */
-  border: 1px solid #aaa;
-}
-
 .level-button {
   border: none;
   padding: 8px 14px;
   border-radius: 12px;
-  color: white;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
@@ -72,5 +63,46 @@
 }
 
 .level-button.selected {
-  outline: 2px solid #444;
+  filter: brightness(0.9); /* 밝기 90% → 살짝 어두워짐 */
+}
+
+/* 오른쪽: 카테고리 */
+.filter-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.custom-select {
+  width: 120px;
+  font-size: 14px;
+}
+
+.custom-select .react-select__control {
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  box-shadow: none;
+  min-height: 38px;
+  cursor: pointer;
+}
+
+.custom-select .react-select__control--is-focused {
+  border-color: #aaa;
+  box-shadow: none;
+}
+
+.custom-select .react-select__menu {
+  border-radius: 12px;
+  font-size: 14px;
+  z-index: 10;
+}
+
+.custom-select .react-select__option--is-selected {
+  background-color: #3e8e8c;
+  color: white;
+}
+
+.custom-select .react-select__option--is-focused {
+  background-color: #d1eceb;
+  color: #222;
 }
