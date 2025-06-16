@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuizHandler } from '../../hooks/useQuizHandler';
-import NewsList from '../../components/NewsList';
+import NewsList from '../../components/News/NewsList';
 
 const JapanPage = () => {
   const { handleSolve } = useQuizHandler('navigate', 'jp');

@@ -1,0 +1,76 @@
+.filter-bar-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.filter-left,
+.filter-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.filter-right {
+  justify-content: flex-end;
+}
+
+.filter-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.select-box {
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background-color: white;
+  font-size: 14px;
+  cursor: pointer;
+  appearance: none; 
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+
+.select-box:focus {
+  outline: none; /* 파란 테두리 제거 */
+  border: 1px solid #aaa;
+}
+
+.level-button {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.level-button.beginner {
+  background-color: #d1eceb;
+  color: #222;
+}
+
+.level-button.intermediate {
+  background-color: #73bfb8;
+  color: #fff;
+}
+
+.level-button.advanced {
+  background-color: #3e8e8c;
+  color: #fff;
+}
+
+.level-button.selected {
+  outline: 2px solid #444;
+}
