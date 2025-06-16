@@ -16,7 +16,7 @@ export default function Socialsignup() {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
-  // 닉네임 중복 검사 함수
+  // 닉네임 중복 검사
   const checkNicknameDuplicate = async (nickname) => {
     try {
       const res = await fetch(`/member/nickname-check?nickname=${nickname}`);
@@ -36,7 +36,7 @@ export default function Socialsignup() {
     }
   };
 
-  // 닉네임 형식 검사 함수
+  // 닉네임 형식 검사
   const validateNickname = async (value) => {
     const onlyKorean = /^[가-힣]+$/.test(value);
     const onlyEnglish = /^[a-zA-Z]+$/.test(value);
@@ -95,7 +95,6 @@ export default function Socialsignup() {
     setTempToken(token);
   }, [navigate]);
 
-  // 최종 제출
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -121,7 +120,8 @@ export default function Socialsignup() {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('token', data.access_token);
-        localStorage.setItem('nickname', nickname); 
+        localStorage.setItem("refresh_token", data.REFRESH_TOKEN);
+        localStorage.setItem("nickname", data.NICK_NAME || data.nickname);
         setMessage('🎉 소셜 회원가입이 완료되었습니다!');
         setTimeout(() => navigate('/'), 1500);
       } else {

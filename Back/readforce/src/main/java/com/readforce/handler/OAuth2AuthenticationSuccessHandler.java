@@ -88,6 +88,7 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
                     .queryParam(Name.REFRESH_TOKEN.toString(), refresh_token)
                     .queryParam(Name.NICK_NAME.toString(), get_member_dto.getNickname())
                     .build()
+                    .encode()
                     .toUriString();
         }
 

@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 export default function Oauth2RedirectHandler() {
   const navigate = useNavigate();
@@ -9,7 +8,7 @@ export default function Oauth2RedirectHandler() {
     const params = new URLSearchParams(window.location.search);
     const token = params.get('token');
     const isNew = params.get('isNew');
-    const nickname = params.get('NICKNAME'); // ✅ 닉네임 추가
+    const nickname = params.get('NICKNAME'); // 닉네임 추가
 
     if (!token) {
       alert('로그인에 실패했습니다.');

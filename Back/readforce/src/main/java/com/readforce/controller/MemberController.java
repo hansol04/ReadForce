@@ -14,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.readforce.dto.MemberDto;
 import com.readforce.dto.MemberDto.GetMemberObject;
-import com.readforce.dto.MemberDto.PasswordResetBySite;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.Name;
 import com.readforce.exception.AuthenticationException;
@@ -58,6 +58,7 @@ public class MemberController {
 	private final JwtUtil jwt_util;
 	private final FileService file_service;
 	private final AttendanceService attendance_service;
+	private final PasswordEncoder password_encoder;
 	
 	// 로그인
     @PostMapping("/sign-in")
@@ -221,7 +222,7 @@ public class MemberController {
 	){
 		
 		// 기존 비밀번호 확인
-		if(!user_details.getPassword().equals(password_reset_by_site.getOld_password())) {
+		if(!password_encoder.matches(password_reset_by_site.getOld_password(), user_details.getPassword())){
 			
 			throw new AuthenticationException(MessageCode.AUTHENTICATION_FAIL);
 		

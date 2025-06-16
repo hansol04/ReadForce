@@ -28,10 +28,13 @@ export default function Login() {
       console.log("로그인 응답 데이터", data); 
 
       if (response.ok) {
-        const token = data.TOKEN;
-        const nickname = data.nickname || data.NICKNAME;
+        const token = data.ACCESS_TOKEN;
+        const refreshToken = data.REFRESH_TOKEN;
+        const nickname = data.NICK_NAME || data.nickname;
+
         localStorage.setItem('token', token);
-        localStorage.setItem('nickname', nickname);
+        localStorage.setItem('refresh_token', refreshToken); 
+        localStorage.setItem('nickname', nickname); 
         navigate('/');
       } else {
         setError(data.message || '로그인에 실패했습니다.');
@@ -41,6 +44,7 @@ export default function Login() {
       setError('서버 오류가 발생했습니다.');
     }
   };
+
   return (
     <div>
       <div className="login-wrapper">

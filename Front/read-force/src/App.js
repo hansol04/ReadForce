@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import Main from "./pages/main";
 import LayOut from "./components/layout";
 
@@ -20,6 +21,7 @@ import Oauth2redirect from './pages/login/oauth2redirect';
 import Authcallback from './pages/login/authcallback';
 import Socialsignup from './pages/signup/socialsignup';
 import ProfileEditPage from './pages/myinfo/ProfileEditPage';
+import ChangePasswordPage from './pages/myinfo/ChangePasswordPage';
 function App() {
   return (
     <Router>
@@ -44,6 +46,7 @@ function App() {
           <Route path="/authcallback" element={<Authcallback />} />
           <Route path="/social-sign-up" element={<Socialsignup />} />
           <Route path="/profile-edit" element={<ProfileEditPage />} />
+          <Route path="/change-password" element={<ChangePasswordPage />} />
        </Route>
       </Routes>
     </Router>

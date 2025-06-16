@@ -23,7 +23,7 @@ const SignupCompletePage = () => {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
-    // 닉네임 중복 검사 함수
+    // 닉네임 중복 검사
     const checkNicknameDuplicate = async (nickname) => {
       try {
         const res = await fetch(`/member/nickname-check?nickname=${nickname}`);
@@ -43,7 +43,7 @@ const SignupCompletePage = () => {
       }
     };
   
-    // 닉네임 형식 검사 함수
+    // 닉네임 형식 검사
     const validateNickname = async (value) => {
       const onlyKorean = /^[가-힣]+$/.test(value);
       const onlyEnglish = /^[a-zA-Z]+$/.test(value);
@@ -142,7 +142,7 @@ const SignupCompletePage = () => {
       return;
     }
 
-    // 생년월일 형식 확인 (간단한 정규표현식)
+    // 생년월일 형식 확인
     const birthdayRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!birthdayRegex.test(birthday)) {
       setError('생년월일은 YYYY-MM-DD 형식이어야 합니다.');
