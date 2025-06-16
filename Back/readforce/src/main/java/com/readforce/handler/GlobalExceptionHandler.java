@@ -2,11 +2,14 @@ package com.readforce.handler;
 
 
 import java.util.Map;
+
+
 import java.util.stream.Collectors;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,13 +18,10 @@ import com.readforce.enums.MessageCode;
 import com.readforce.exception.AuthenticationException;
 import com.readforce.exception.DuplicateException;
 import com.readforce.exception.FileException;
-import com.readforce.exception.GeminiException;
 import com.readforce.exception.InvalidJwtSecretKeyException;
-import com.readforce.exception.NewsException;
 import com.readforce.exception.NotMatchException;
 import com.readforce.exception.ResourceNotFoundException;
 
-import org.springframework.security.oauth2.jwt.JwtException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,23 +38,7 @@ public class GlobalExceptionHandler {
     
     }
     
-    // 제미나이 관련 에러
-    @ExceptionHandler(GeminiException.class)
-    public ResponseEntity<Map<String, String>> handleGeminiException(GeminiException exception){
-    	
-    	log.error("GeminiException occured : {}", exception.getMessage(), exception);
-    	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
-    	
-    }
     
-    // 뉴스 관련 에러
-    @ExceptionHandler(NewsException.class)
-    public ResponseEntity<Map<String, String>> handleNewsException(NewsException exception){
-    	
-    	log.error("NewsException occured : {}", exception.getMessage(), exception);
-    	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
-    	
-    }
     
     // 파일 관련 에러
     @ExceptionHandler(FileException.class)

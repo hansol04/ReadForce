@@ -13,7 +13,7 @@ spring:
         show_sql: true
         format_sql: true
         hbm2ddl:
-          auto: none
+          auto: create-only
   data:
     redis:
       host: localhost
@@ -83,22 +83,7 @@ custom:
   fronted:
     password-reset-link-url: http://localhost:3000/resetpassword
     social-login-success:
-      exist-member-url: http://localhost:3000/authcallback
+      exist-member-url: http://localhost:3000/auth/callback
       new-member-url: http://localhost:3000/social-sign-up
-news:
-  api:
-    key: ${NEWS_API_KEY}
-    user-agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" 
-    timeout: 5000
-    korean-url: https://newsapi.org/v2/everything?q=한국&language=ko&pageSize=5&page=%d&apiKey=%s
-    japanese-url: https://newsapi.org/v2/everything?q=Japan&pageSize=5&page=%d&language=en&sortBy=publishedAt&apiKey=%s
-    english-url: https://newsapi.org/v2/top-headlines?country=%s&pageSize=5&page=%d&apiKey=%s
-gemini:
-  api:
-    key: ${GEMINI_API_KEY}
-    call-url: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent
-    
-    
-    
-    
-  
+    kakao-logout-url: https://kauth.kakao.com/oauth/logout?client_id=
+    logout-redirect-url: http://localhost:3000/

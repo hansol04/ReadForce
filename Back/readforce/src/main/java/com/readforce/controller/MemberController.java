@@ -3,10 +3,9 @@ package com.readforce.controller;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.readforce.dto.MemberDto;
 import com.readforce.dto.MemberDto.GetMemberObject;
-import com.readforce.dto.MemberDto.PasswordResetBySite;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.Name;
 import com.readforce.exception.AuthenticationException;
@@ -60,6 +59,16 @@ public class MemberController {
 	private final JwtUtil jwt_util;
 	private final FileService file_service;
 	private final AttendanceService attendance_service;
+	private final PasswordEncoder password_encoder;
+	
+	@Value("${custom.fronted.kakao-logout-url}")
+	private String custom_fronted_kakao_logout_url;
+	
+	@Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+	private String kakao_client_id;
+	
+	@Value("${custom.fronted.logout-redirect-url}")
+	private String custom_fronted_logout_redirect_url;
 	
 	// 로그인
     @PostMapping("/sign-in")
@@ -93,56 +102,36 @@ public class MemberController {
     	
     }
     
-    // 엑세스 토큰 재발급
-    @PostMapping("/reissue-refresh-token")
-    public ResponseEntity<?> reissueRefreshToken(
-    		@RequestParam("refresh_token")
-    		@NotBlank(message = MessageCode.REFRESH_TOKEN_NOT_BLANK)
-    		String refresh_token
-    ){
+    // 일반 로그아웃
+    @DeleteMapping("/sign-out")
+    public ResponseEntity<Map<String, String>>signOut(@AuthenticationPrincipal UserDetails user_details){
     	
-    	String username = jwt_util.extractUsername(refresh_token);
-    	String stored_refresh_token = auth_service.getRefreshToken(username);
-    	
-    	// 저장된 리프레쉬 토큰이 없는 경우(이미 사용되었거나 탈취 가능성 고려)
-    	if(stored_refresh_token == null) {
-    		
-    		// 보안 위협으로 간주하고 해당 유저의 모든 리프레쉬 토큰을 삭제하여 강제 로그아웃 처리
-    		auth_service.deleteRefreshToken(username);
-    		log.warn("보안 경고 : 유효하지 않은 리프레쉬 토큰 사용 시도. 사용자 {}", username);
-    		throw new AuthenticationException(MessageCode.AUTHENTICATION_FAIL);
-    		
-    	}
-    	
-    	
-    	// 저장된 리프레쉬 토큰과 일치하는지, 만료되지 않았는지 확인
-    	if(!stored_refresh_token.equals(refresh_token) || jwt_util.expiredToken(refresh_token)) {
-    		
-    		throw new AuthenticationException(MessageCode.AUTHENTICATION_FAIL);
-    		
-    	}
-    	
-    	// 새로운 토큰 생성
-    	final UserDetails user_details = auth_service.loadUserByUsername(username);
-    	final String new_access_token = jwt_util.generateAcessToken(user_details);
-    	final String new_refresh_token = jwt_util.generateRefreshToken(user_details);
-    	
-    	// 새로운 리프레쉬 토큰 저장(회전 전략)
-    	auth_service.storeRefreshToken(username, new_refresh_token);
+    	// 리프레쉬 토큰 삭제
+    	auth_service.deleteRefreshToken(user_details.getUsername());
     	
     	return ResponseEntity.status(HttpStatus.OK).body(Map.of(
-    			Name.ACCESS_TOKEN.toString(), new_access_token,
-    			Name.REFRESH_TOKEN.toString(), new_refresh_token,
-    			MessageCode.MESSAGE_CODE, MessageCode.TOKEN_SUCCESS
-    	));
-
+    			MessageCode.MESSAGE_CODE, MessageCode.SIGN_OUT_SUCCESS
+    	)); 
+    	
     }
     
-    // 사용자 정보 반
-    @GetMapping("/my-info")
-    public ResponseEntity<GetMemberObject> getMyInfo(@AuthenticationPrincipal UserDetails userDetails) {
-        GetMemberObject info = member_service.getMemberObjectByEmail(userDetails.getUsername());
-        return ResponseEntity.ok(info);
+    // 카카오 로그아웃
+    @DeleteMapping("/kakao-sign-out")
+    public ResponseEntity<Map<String, String>> kakaoSignOut(@AuthenticationPrincipal UserDetails user_details){
+    	
+    	// 리프레쉬 토큰 삭제
+    	auth_service.deleteRefreshToken(user_details.getUsername());
+    	
+    	// 카카오톡 로그아웃
+    	String kako_logout_url= custom_fronted_kakao_logout_url
+				 + kakao_client_id
+				 + "&logout_redirect_uri="
+				 + custom_fronted_logout_redirect_url;
+    	return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.SIGN_OUT_SUCCESS,
+				"KAKAO_LOGOUT_URL", kako_logout_url		
+		));
+    	
     }
     
     // 이메일 중복 확인
@@ -217,7 +206,7 @@ public class MemberController {
 	public ResponseEntity<Map<String, String>> passwordResetByLink(@Valid @RequestBody MemberDto.PasswordResetByLink password_reset_by_link){
 		
 		// 비밀번호 재설정
-		member_service.passwordResetByLink(password_reset_by_link.getTemporal_token(), password_reset_by_link.getNew_password());
+		member_service.passwordResetByLink(password_reset_by_link.getTemporal_token(), password_reset_by_link.getNew_password(), password_reset_by_link.getBirthday());
 		return ResponseEntity.status(HttpStatus.OK).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.PASSWORD_RESET_SUCCESS));
 		
 	}
@@ -230,7 +219,7 @@ public class MemberController {
 	){
 		
 		// 기존 비밀번호 확인
-		if(!user_details.getPassword().equals(password_reset_by_site.getOld_password())) {
+		if(!password_encoder.matches(password_reset_by_site.getOld_password(), user_details.getPassword())) {
 			
 			throw new AuthenticationException(MessageCode.AUTHENTICATION_FAIL);
 		
@@ -335,13 +324,7 @@ public class MemberController {
 		
 	}
 	
-	// 김기찬이 추가 출석
-    @GetMapping("/attendance-dates")
-    public ResponseEntity<List<LocalDate>> getAttendanceDates(@AuthenticationPrincipal UserDetails userDetails) {
-        String email = userDetails.getUsername();
-        List<LocalDate> attendanceDates = attendance_service.getAttendanceDates(email);
-        return ResponseEntity.ok(attendanceDates);
-    }
+	
 	
 
 }

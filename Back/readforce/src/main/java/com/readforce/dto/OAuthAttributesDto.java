@@ -61,7 +61,7 @@ public class OAuthAttributesDto {
 		return OAuthAttributesDto.builder()
 				.email((String) response.get("email"))
 				.attributes(response)
-				.nameAttributeKey(userNameAttributeName)
+				.nameAttributeKey("id")
 				.build();
 		
 	}
