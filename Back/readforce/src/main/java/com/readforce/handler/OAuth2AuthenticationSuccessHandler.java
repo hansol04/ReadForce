@@ -35,8 +35,10 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 	private final MemberService member_service;
 	private final AttendanceService attendance_service;
 	private final StringRedisTemplate redis_template;
+	
 	@Value("${custom.fronted.social-login-success.exist-member-url}")
 	private String social_login_success_exist_member_url;
+	
 	@Value("${custom.fronted.social-login-success.new-member-url}")
 	private String social_login_success_new_member_url;
 	

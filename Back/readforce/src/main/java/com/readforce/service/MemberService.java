@@ -28,6 +28,7 @@ import com.readforce.repository.MemberRepository;
 import com.readforce.repository.NeedAdminCheckFailedDeletionLogRepository;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -214,9 +215,9 @@ public class MemberService{
 
 	// 비밀번호 재설정
 	@Transactional
-	public void passwordResetByLink(String temporal_token, String new_password) {
+	public void passwordResetByLink(String temporal_token, String new_password, LocalDate birthday) {
 		
-		// Redis에서 id 조회
+		// Redis에서 email 조회
 		String member_email = redis_template.opsForValue().get(Prefix.PASSWORD_RESET_BY_LINK.getName() + temporal_token);
 		
 		if(member_email == null) {
@@ -226,6 +227,14 @@ public class MemberService{
 		// 회원 정보 불러오기
 		Member member = 
 				member_repository.findByEmailAndStatus(member_email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
+		
+		
+		// 생년월일 확인
+		if(!birthday.equals(member.getBirthday())) {
+			
+			throw new AuthenticationException(MessageCode.AUTHENTICATION_FAIL);
+			
+		}
 		
 		// 비밀번호 재설정
 		member.setPassword(password_encoder.encode(new_password));
@@ -279,7 +288,6 @@ public class MemberService{
 		member.setPassword(password_encoder.encode(new_password));
 		
 	}
-	
 	
 
 	
