@@ -57,6 +57,7 @@ public class MemberService{
 		get_member_object.setEmail(member.getEmail());
 		get_member_object.setNickname(member.getNickname());
 		get_member_object.setBirthday(member.getBirthday());
+		get_member_object.setProvider(member.getSocial_provider());
 		
 		return get_member_object;
 		
@@ -214,9 +215,9 @@ public class MemberService{
 
 	// 비밀번호 재설정
 	@Transactional
-	public void passwordResetByLink(String temporal_token, String new_password) {
+	public void passwordResetByLink(String temporal_token, String new_password, LocalDate birthday) {
 		
-		// Redis에서 id 조회
+		// Redis에서 email 조회
 		String member_email = redis_template.opsForValue().get(Prefix.PASSWORD_RESET_BY_LINK.getName() + temporal_token);
 		
 		if(member_email == null) {
@@ -226,6 +227,14 @@ public class MemberService{
 		// 회원 정보 불러오기
 		Member member = 
 				member_repository.findByEmailAndStatus(member_email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
+		
+		
+		// 생년월일 확인
+		if(!birthday.equals(member.getBirthday())) {
+			
+			throw new AuthenticationException(MessageCode.AUTHENTICATION_FAIL);
+			
+		}
 		
 		// 비밀번호 재설정
 		member.setPassword(password_encoder.encode(new_password));
@@ -280,8 +289,35 @@ public class MemberService{
 		
 	}
 	
-	
 
+	// 기존 회원과 소셜 계정 연동
+	@Transactional
+	public void linkSocialAccount(String signed_in_email, String provider, String provider_id, String social_email) {
+		
+		// 해당 소셜 계정이 다른 사용자에게 이미 연결되어있는지 확인
+		member_repository.findBySocialProviderAndSocialProviderId(provider, provider_id)
+			.ifPresent(member -> {
+				if(!member.getEmail().equals(signed_in_email)) {
+					throw new DuplicateException(MessageCode.SOCIAL_EMAIL_ALREADY_CONNECTED_WITH_OTHER_MEMBER);
+				}
+			});
+
+		// 소셜 계정의 이메일이 다른 기존 회원의 이메일인지 확인
+		member_repository.findByEmail(social_email)
+			.ifPresent(member -> {
+				if(!member.getEmail().equals(signed_in_email)) {
+					throw new DuplicateException(MessageCode.SOCIAL_EMAIL_ALREADY_USE_BY_OTHER_MEMBER);
+				}
+			});
+		
+		// 현재 로그인된 사용자를 조회 및 소셜 정보 업데이트
+		Member member = member_repository.findByEmailAndStatus(signed_in_email, Status.ACTIVE)
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
+
+		member.setSocial_provider(provider);
+		member.setSocial_provider_id(provider_id);
+		
+	}
 	
 	
 	

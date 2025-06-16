@@ -22,11 +22,13 @@ import Authcallback from './pages/login/authcallback';
 import Socialsignup from './pages/signup/socialsignup';
 import ProfileEditPage from './pages/myinfo/ProfileEditPage';
 import ChangePasswordPage from './pages/myinfo/ChangePasswordPage';
+import ClassicPage from './pages/literature/ClassicPage';
+
 function App() {
   return (
     <Router>
       <Routes>
-        <Route element={<LayOut />}>
+        <Route element={<LayOut />}/>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
           <Route path="/findpassword" element={<FindPassword />} /> 
@@ -47,9 +49,9 @@ function App() {
           <Route path="/social-sign-up" element={<Socialsignup />} />
           <Route path="/profile-edit" element={<ProfileEditPage />} />
           <Route path="/change-password" element={<ChangePasswordPage />} />
-       </Route>
+          <Route path="/literature/classic" element={<ClassicPage />} />
       </Routes>
-    </Router>
+      </Router>
   );
 }
 
