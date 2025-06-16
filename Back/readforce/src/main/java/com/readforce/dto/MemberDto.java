@@ -50,10 +50,16 @@ public class MemberDto {
 		@JsonIgnore
 		@AssertTrue(message = MessageCode.BIRTHDAY_RANGE_INVALID)
 		public boolean birthdayValid() {
-			if(birthday == null) return true;
-			final LocalDate min_date = LocalDate.of(1900, 1, 1);
-			final LocalDate max_date = LocalDate.now().minusYears(3);
+			
+			if(birthday == null) {
+				return true;
+			}
+			
+			final LocalDate min_date = LocalDate.of(1900, 1, 1); // 1900-1-1 부터
+			final LocalDate max_date = LocalDate.now().minusYears(3); // 오늘날짜의 3년전 까지
+			
 			return !birthday.isBefore(min_date) && !birthday.isAfter(max_date);
+			
 		}
 		
 	}
@@ -117,6 +123,24 @@ public class MemberDto {
 		
 		@NotBlank(message = MessageCode.TOKEN_NOT_BLANK)
 		private String temporal_token;
+		
+		@NotBlank(message = MessageCode.BIRTHDAY_NOT_NULL)
+		private LocalDate birthday;
+		
+		@JsonIgnore
+		@AssertTrue(message = MessageCode.BIRTHDAY_RANGE_INVALID)
+		public boolean birthdayValid() {
+			
+			if(birthday == null) {
+				return true;
+			}
+			
+			final LocalDate min_date = LocalDate.of(1900, 1, 1); // 1900-1-1 부터
+			final LocalDate max_date = LocalDate.now().minusYears(3); // 오늘날짜의 3년전 까지
+			
+			return !birthday.isBefore(min_date) && !birthday.isAfter(max_date);
+			
+		}
 		
 		@NotBlank(message = MessageCode.PASSWORD_NOT_BLANK)
 		@Size(min = 8, max = 20, message = MessageCode.PASSWORD_SIZE_INVALID)
@@ -191,6 +215,7 @@ public class MemberDto {
 		
 		private String email;
 		private String nickname;
+		private String provider;
 		private LocalDate birthday;
 		
 	}

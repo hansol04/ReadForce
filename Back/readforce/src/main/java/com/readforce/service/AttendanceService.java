@@ -3,7 +3,6 @@ package com.readforce.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,16 +50,6 @@ public class AttendanceService {
 		
 		
 	}
-	
-	// 김기찬 추가
-		public List<LocalDate> getAttendanceDates(String email) {
-		    List<Attendance> records = attendance_repository.findByEmail(email);
-		    return records.stream()
-		        .map(att -> att.getCreatedDate().toLocalDate())
-		        .distinct()
-		        .sorted()
-		        .toList();
-		}
 	
 	
 }

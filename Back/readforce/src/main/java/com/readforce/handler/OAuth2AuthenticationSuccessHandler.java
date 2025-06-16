@@ -2,6 +2,7 @@ package com.readforce.handler;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -12,8 +13,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.readforce.dto.OAuth2UserDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.readforce.dto.MemberDto.GetMemberObject;
+import com.readforce.dto.OAuth2UserDto;
 import com.readforce.enums.Name;
 import com.readforce.enums.Prefix;
 import com.readforce.service.AttendanceService;
@@ -35,8 +37,10 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 	private final MemberService member_service;
 	private final AttendanceService attendance_service;
 	private final StringRedisTemplate redis_template;
+	
 	@Value("${custom.fronted.social-login-success.exist-member-url}")
 	private String social_login_success_exist_member_url;
+	
 	@Value("${custom.fronted.social-login-success.new-member-url}")
 	private String social_login_success_new_member_url;
 	
@@ -68,12 +72,29 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
                     .build()
                     .toUriString();
         } else {
+        	
             // 기존 회원
             final UserDetails user_details = auth_service.loadUserByUsername(email);
             final String access_token = jwt_util.generateAcessToken(user_details);
             final String refresh_token = jwt_util.generateRefreshToken(user_details);
-      
-            // 리프레쉬 토큰 저장
+        	
+        	// 임시 기존 회원 인증 토큰 생성
+        	String temporal_token = UUID.randomUUID().toString();
+        	
+        	// redis 엑세스 토큰과 리프레쉬 토큰 저장
+        	Map<String, String> token_map = Map.of(
+        		Name.ACCESS_TOKEN.toString(), access_token,
+        		Name.REFRESH_TOKEN.toString(), refresh_token
+        	);
+        	
+        	// Map을 JSON 문자열로 변환 후 저장
+        	redis_template.opsForValue().set(
+        			Prefix.TEMPORAL_TOKEN.getName() + temporal_token, 
+        			new ObjectMapper().writeValueAsString(token_map),
+        			Duration.ofMinutes(1)
+        	);
+        	
+        	// 리프레쉬 토큰 저장
             auth_service.storeRefreshToken(email, refresh_token);
             
             // 출석 체크
@@ -81,12 +102,12 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
             
             // 회원 조회
         	GetMemberObject get_member_dto = member_service.getMemberObjectByEmail(email);
-
+   
             // 프론트 엔드 로그인 콜백
             target_url = UriComponentsBuilder.fromUriString(social_login_success_exist_member_url)
-                    .queryParam(Name.ACCESS_TOKEN.toString(), access_token)
-                    .queryParam(Name.REFRESH_TOKEN.toString(), refresh_token)
+                    .queryParam(Name.TEMPORAL_TOKEN.toString(), temporal_token)
                     .queryParam(Name.NICK_NAME.toString(), get_member_dto.getNickname())
+                    .queryParam(Name.PROVIDER.toString(), get_member_dto.getProvider())
                     .build()
                     .toUriString();
         }

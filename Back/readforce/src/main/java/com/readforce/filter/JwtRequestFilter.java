@@ -43,7 +43,7 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 		
 		if(authorization_header != null && authorization_header.startsWith(Prefix.BEARER.getName())) {
 			
-			access_token = authorization_header.substring(7);
+			access_token = authorization_header.substring(Prefix.BEARER.getName().length());
 			username = jwt_util.extractUsername(access_token);
 		
 		}
