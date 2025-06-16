@@ -74,7 +74,7 @@ public class MemberService{
 		
 		// 회원 상태 변경
 		member.setStatus(Status.PENDING_DELETION);
-		member.setWithdrawDate(LocalDateTime.now());
+		member.setWithdraw_date(LocalDateTime.now());
 		
 		// 리프레쉬 토큰 삭제
 		redis_template.delete(Prefix.REFRESH_TOKEN.getName() + email);
