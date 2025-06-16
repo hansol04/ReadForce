@@ -215,6 +215,7 @@ public class MemberDto {
 		
 		private String email;
 		private String nickname;
+		private String provider;
 		private LocalDate birthday;
 		
 	}

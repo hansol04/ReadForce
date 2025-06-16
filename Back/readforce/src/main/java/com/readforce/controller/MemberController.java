@@ -97,6 +97,7 @@ public class MemberController {
     			Name.ACCESS_TOKEN.toString(), access_token,
     			Name.REFRESH_TOKEN.toString(), refresh_token,
     			Name.NICK_NAME.toString(), get_member_dto.getNickname(),
+    			Name.PROVIDER.toString(), get_member_dto.getProvider(),
     			MessageCode.MESSAGE_CODE, MessageCode.SIGN_IN_SUCCESS)
     	); 
     	
@@ -258,6 +259,7 @@ public class MemberController {
 				Name.ACCESS_TOKEN.toString(), jwt,
 				Name.REFRESH_TOKEN.toString(), refresh_token,
 				Name.NICK_NAME.toString(), get_member_dto.getNickname(),
+				Name.PROVIDER.toString(), get_member_dto.getProvider(),
 				MessageCode.MESSAGE_CODE, MessageCode.SIGN_UP_SUCCESS)
 		);
 		
@@ -323,6 +325,9 @@ public class MemberController {
 				.body(resource);
 		
 	}
+	
+	// 소설 계정 연결
+
 	
 	
 	

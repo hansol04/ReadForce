@@ -3,21 +3,27 @@ package com.readforce.service;
 import java.util.Collections;
 import java.util.Optional;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.readforce.dto.OAuth2UserDto;
 import com.readforce.dto.OAuthAttributesDto;
 import com.readforce.entity.Member;
+import com.readforce.enums.MessageCode;
 import com.readforce.enums.Prefix;
 import com.readforce.enums.Role;
 import com.readforce.enums.Status;
+import com.readforce.exception.DuplicateException;
+import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -26,11 +32,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>{
 	
+	private final MemberService member_service;
 	private final MemberRepository member_repository;
 	
 	@Override
+	@Transactional
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException{
 		
+		// 표준 OAuth2 사용자 정보 로딩
 		OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
 		OAuth2User o_auth2_user = delegate.loadUser(userRequest);
 		
@@ -41,40 +50,97 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 		
 		// 서비스에서 받아온 사용자 정보를 DTO로 변환
 		OAuthAttributesDto o_auth_attributes_dto = OAuthAttributesDto.of(registration_id, user_name_attribute_name, o_auth2_user.getAttributes());
+		String provider = registration_id;
+		String provider_id = o_auth_attributes_dto.getProvider_id();
+		String social_email = o_auth_attributes_dto.getEmail();
 		
-		// DB에서 사용자 조회
-        Optional<Member> member_optional = member_repository.findByEmailAndStatus(o_auth_attributes_dto.getEmail(), Status.ACTIVE);
+		// 소셜 계정 연동 시나리오(사용자가 이미 로그인 상태인지 확인)
+		Authentication existing_auth = SecurityContextHolder.getContext().getAuthentication();
+		if(existing_auth != null && existing_auth.isAuthenticated() && !"anonymousUser".equals(existing_auth.getPrincipal())) {
+			
+			String signed_in_user_email = existing_auth.getName();
+			
+			try {
+				
+				member_service.linkSocialAccount(signed_in_user_email, provider, provider_id, social_email);
+				
+			} catch(DuplicateException exception){
+				
+				throw new OAuth2AuthenticationException(exception.getMessage());
+				
+			}
+			
+			// 연동된 사용자의 정보로 계속 진행
+			
+			Member linked_member = member_repository.findByEmailAndStatus(signed_in_user_email, Status.ACTIVE)
+					.orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL)); 
+			
+			return createOAuth2UserDto(linked_member, o_auth_attributes_dto, false);
+			
+		}
 		
-        boolean is_new_user;
-        Role role;
+		// 일반 소셜 로그인 시나리오(사용자가 로그인 하지 않은 상태)
+		
+		// 소설 제공자 정보로 회원 조회
+		Optional<Member> member_optional = member_repository.findBySocialProviderAndSocialProviderId(provider, provider_id);
+		
+		if(!member_optional.isPresent()) {
+			
+			// 소셜 제공자 정보로 찾지 못했다면 이메일로 회원 조회(첫 소셜 로그인시 자동 연동)
+			Optional<Member> member_optional_email = member_repository.findByEmailAndStatus(social_email, Status.ACTIVE);			
+			
+			if(member_optional_email.isPresent()) {
+				
+				// 이 이메일을 가진 사용자가 존재함으로 자동으로 연동 진행
+				Member member = member_optional_email.get();
+				member.setSocial_provider(provider);
+				member.setSocial_provider_id(provider_id);
+				
+			}
 
-        if (member_optional.isPresent()) {
-            
-        	// 기존 회원일 경우
-        	is_new_user = false;
-        	role = member_optional.get().getRole();
-
-        } else {
-            
-        	// 신규 회원일 경우
-        	is_new_user = true;
-        	role = Role.USER;
-
-        }
-        
-        GrantedAuthority granted_authority = 
-        		new SimpleGrantedAuthority(Prefix.ROLE.getName() + role.name());
-        
-        
-		// OAuth2UserDto 반환
+		}
+		
+		boolean is_new_user = !member_optional.isPresent();
+		Member member = member_optional.orElse(null);
+		
+		return createOAuth2UserDto(member, o_auth_attributes_dto, is_new_user);
+	}
+	
+	private OAuth2UserDto createOAuth2UserDto(Member member, OAuthAttributesDto o_auth_attributes_dto, boolean is_new_user) {
+		
+		String primary_email;
+		Role role;
+		
+		if(is_new_user) {
+			
+			// 신규 사용자는 소셜 이메일을 기본 이메일로 사용
+			primary_email = o_auth_attributes_dto.getEmail();
+			role = Role.USER;
+			
+		} else {
+			
+			// 기존 사용자는 DB의 기본 이메일 사용
+			primary_email = member.getEmail();
+			role = member.getRole();
+			
+		}
+		
+		GrantedAuthority granted_authority = new SimpleGrantedAuthority(Prefix.ROLE.getName() + role.name());
+		
 		return new OAuth2UserDto(
-				Collections.singleton(granted_authority),
-				o_auth_attributes_dto.getAttributes(),
-				o_auth_attributes_dto.getNameAttributeKey(),
-				o_auth_attributes_dto.getEmail(),
-				is_new_user
+					Collections.singleton(granted_authority),
+					o_auth_attributes_dto.getAttributes(),
+					o_auth_attributes_dto.getNameAttributeKey(),
+					primary_email,
+					is_new_user
 		);
+		
 		
 	}
 	
 }
+
+
+	
+	
+	

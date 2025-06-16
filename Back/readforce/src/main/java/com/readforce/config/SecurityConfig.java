@@ -51,6 +51,7 @@ public class SecurityConfig {
 					            "/email/send-verification-code-sign-up",
 					            "/email/verify-verification-code-sign-up",
 					            "/email/send-password-reset-link",
+					            "/auth/get-tokens",
 					            "/oauth2/**"
 						).permitAll()
 						.anyRequest().authenticated()
