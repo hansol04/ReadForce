@@ -3,6 +3,7 @@ import './css/NewsFilterBar.css';
 import './css/NewsCard.css';    
 import NewsCard from './NewsCard';
 import NewsFilterBar from './NewsFilterBar';
+import ArticleQuestion from './ArticleQuestion';
 
 const dummyArticles = [
   {
@@ -53,6 +54,7 @@ const NewsList = ({ country = 'kr', onSolve = () => {} }) => {
   const [level, setLevel] = useState('');
   const [sort, setSort] = useState('latest');
   const [category, setCategory] = useState('모두');
+  const [selectedArticle, setSelectedArticle] = useState(null);
 
   const filtered = level ? dummyArticles.filter(a => a.difficulty === level) : dummyArticles;
 
@@ -63,13 +65,25 @@ const NewsList = ({ country = 'kr', onSolve = () => {} }) => {
   });
 
   return (
-    <div>
+    <div className="news-quiz-container">
       <NewsFilterBar level={level} setLevel={setLevel} sort={sort} setSort={setSort} category={category} setCategory={setCategory} />
 
+    <div className="news-list">
       {sorted.map((item) => (
-        <NewsCard key={item.id} article={item} onSolve={onSolve} />
+        <NewsCard
+          key={item.id}
+          article={item}
+          onSolve={() => setSelectedArticle(item)}
+        />
       ))}
     </div>
+
+    {selectedArticle && (
+      <div className="quiz-panel">
+        <ArticleQuestion article={selectedArticle} />
+      </div>
+    )}
+  </div>
   );
 };
 

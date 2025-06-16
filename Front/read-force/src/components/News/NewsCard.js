@@ -1,6 +1,6 @@
 import './css/NewsCard.css';
 
-const NewsCard = ({ article, onSolve }) => {
+const NewsCard = ({ article, setSelectedArticle }) => {
   return (
     <div className="news-card">
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -9,7 +9,7 @@ const NewsCard = ({ article, onSolve }) => {
       </div>
       <p className="news-summary">{article.summary}</p>
       <p className="news-meta">등록일: {article.publishedAt}</p>
-      <button className="news-button" onClick={() => onSolve(article)}>문제 풀기</button>
+      <button className="news-button" onClick={() => setSelectedArticle(article)}>문제 풀기</button>
     </div>
   );
 };
