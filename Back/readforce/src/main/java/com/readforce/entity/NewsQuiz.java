@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,25 +39,31 @@ public class NewsQuiz {
 	@JoinColumn(name = "news_passage_no", insertable = false, updatable = false)
 	private NewsPassage news_passage;
 	
-	@Column(name = "question_text", nullable = false)
+	@Lob
+	@Column(name = "question_text", nullable = false, columnDefinition = "text")
 	private String question_text;
 	
-	@Column(nullable = false)
+	@Lob
+	@Column(nullable = false, columnDefinition = "text")
 	private String choice1;
 	
-	@Column(nullable = false)
+	@Lob
+	@Column(nullable = false, columnDefinition = "text")
 	private String choice2;
 	
-	@Column(nullable = false)
+	@Lob
+	@Column(nullable = false, columnDefinition = "text")
 	private String choice3;
 	
-	@Column(nullable = false)
+	@Lob
+	@Column(nullable = false, columnDefinition = "text")
 	private String choice4;
 	
 	@Column(name = "correct_answer_index", nullable = false)
 	private Long correct_answer_index;
 	
-	@Column(nullable = false)
+	@Lob
+	@Column(nullable = false, columnDefinition = "text")
 	private String explanation;
 	
 	@Column(nullable = false)
