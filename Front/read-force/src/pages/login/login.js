@@ -25,17 +25,16 @@ export default function Login() {
       const MESSAGE_CODE = data.MESSAGE_CODE;
       console.log(MESSAGE_CODE)
 
-      console.log("로그인 응답 데이터", data); // 👈 여기에 nickname이 포함돼야 함
+      console.log("로그인 응답 데이터", data); 
 
       if (response.ok) {
         const token = data.ACCESS_TOKEN;
-        const refreshToken = data.REFRESH_TOKEN; // ✅ 추가
+        const refreshToken = data.REFRESH_TOKEN;
         const nickname = data.NICK_NAME || data.nickname;
 
         localStorage.setItem('token', token);
-        localStorage.setItem('refresh_token', refreshToken); // ✅ 추가
-        localStorage.setItem('nickname', nickname); // ✅ 이게 없으면 Header에서 못 뜸
-
+        localStorage.setItem('refresh_token', refreshToken); 
+        localStorage.setItem('nickname', nickname); 
         navigate('/');
       } else {
         setError(data.message || '로그인에 실패했습니다.');

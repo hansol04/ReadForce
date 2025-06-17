@@ -3,7 +3,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* min-height: 100vh; */
   padding: 2rem;
   background-color: #fff;
 }
@@ -32,7 +31,6 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  /* align-items: center; */
 }
 
 .form-group label {
@@ -43,7 +41,7 @@
 }
 
 .input-with-message {
-  position: relative; /* 기준 잡기 */
+  position: relative;
   display: inline-block;
   gap: 12px;
 }
@@ -51,14 +49,14 @@
 .form-group input {
   padding: 8px;
   font-size: 14px;
-  display: inline-block; /* 핵심 */
+  display: inline-block;
   box-sizing: border-box;
 }
 
 .validation-message {
   position: absolute;
   top: 50%;
-  left: calc(100% + 12px); /* input 오른쪽 옆으로 띄움 */
+  left: calc(100% + 12px);
   transform: translateY(-50%);
   font-size: 0.85rem;
   white-space: nowrap;

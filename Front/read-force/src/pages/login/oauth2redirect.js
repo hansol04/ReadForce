@@ -1,4 +1,3 @@
-// ✅ 새로운 Oauth2RedirectHandler.js
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,7 +7,8 @@ export default function Oauth2RedirectHandler() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get('token');
-    const isNew = params.get('isNew'); // 백엔드에서 신규 회원 여부 전달
+    const isNew = params.get('isNew');
+    const nickname = params.get('NICKNAME'); // 닉네임 추가
 
     if (!token) {
       alert('로그인에 실패했습니다.');
@@ -16,13 +16,14 @@ export default function Oauth2RedirectHandler() {
       return;
     }
 
+    localStorage.setItem('token', token);
+
     if (isNew === 'true') {
-      // 신규 회원: 토큰만 전달하고 페이지 전환
       navigate(`/social-sign-up?token=${token}`);
     } else {
-      // 기존 회원: 바로 로그인 처리
-      localStorage.setItem('token', token);
-      navigate('/');
+      // ✅ 닉네임도 저장
+      localStorage.setItem('nickname', nickname || '사용자');
+      window.location.href = '/';
     }
   }, [navigate]);
 
