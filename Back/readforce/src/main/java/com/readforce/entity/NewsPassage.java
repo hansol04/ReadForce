@@ -39,7 +39,7 @@ public class NewsPassage {
 	private String title;
 	
 	@Lob
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "text")
 	private String content;
 	
 	@CreatedDate

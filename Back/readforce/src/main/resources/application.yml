@@ -79,6 +79,7 @@ file:
       upload-dir: ./upload/image/profile/
       max-size: 5242880
       allowed-mime-types: image/jpeg,image/png,image/gif
+      default-image-url: 4b2d7245-2ca2-45ce-9954-e00f7553014a
 custom:
   fronted:
     password-reset-link-url: http://localhost:3000/resetpassword
