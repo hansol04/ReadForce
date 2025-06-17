@@ -30,6 +30,5 @@ public interface MemberRepository extends JpaRepository<Member, String>{
 
 	Optional<Member> findByEmailAndStatus(String email, Status active);
 
-	List<GetMemberObject> findAllMember();
 	
 }
