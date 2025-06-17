@@ -22,6 +22,15 @@ public class AdminController {
 	private final MemberService member_service;
 
 	// 전체 회원 목록 조회
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/get-all-member-list")
+	public ResponseEntity<List<GetMemberObject>> getAllMemberList(){
+		
+		List<GetMemberObject> member_list = member_service.getAllMemberList();
+		
+		return ResponseEntity.status(HttpStatus.OK).body(member_list);
+		
+	}
 	
 	// 
 	
