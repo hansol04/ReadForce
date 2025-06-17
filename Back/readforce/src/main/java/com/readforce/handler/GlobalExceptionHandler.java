@@ -18,6 +18,7 @@ import com.readforce.exception.DuplicateException;
 import com.readforce.exception.FileException;
 import com.readforce.exception.InvalidJwtSecretKeyException;
 import com.readforce.exception.JsonException;
+import com.readforce.exception.NewsException;
 import com.readforce.exception.NotMatchException;
 import com.readforce.exception.RateLimitExceededException;
 import com.readforce.exception.ResourceNotFoundException;
@@ -36,6 +37,15 @@ public class GlobalExceptionHandler {
     	log.error("JwtException occurred : {}", exception.getMessage(), exception);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
     
+    }
+    
+    // 뉴스 관련 에러
+    @ExceptionHandler(NewsException.class)
+    public ResponseEntity<Map<String, String>> handleNewsException(NewsException exception){
+    	
+    	log.error("NewsException occurred : {}", exception.getMessage(), exception);
+    	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
+    	
     }
     
     // 요청 횟수 제한 초과 에러
