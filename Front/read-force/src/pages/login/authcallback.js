@@ -6,15 +6,13 @@ export default function Authcallback() {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const nickname = urlParams.get('NICK_NAME');
     const temporalToken = urlParams.get('TEMPORAL_TOKEN');
-    const provider = urlParams.get('PROVIDER');
+    const MESSAGE_CODE = urlParams.get('MESSAGE_CODE');
 
-    const handleNewUser = (temporalToken, nickname, provider) => {
-      if (temporalToken && nickname && provider) {
+    // 신규 회원 처리 함수
+    const handleNewUser = (temporalToken) => {
+      if (temporalToken) {
         localStorage.setItem('temporal_token', temporalToken);
-        localStorage.setItem('nickname', nickname);
-        localStorage.setItem('provider', provider);
         window.location.replace('/signup/social');
       } else {
         console.error('[❌ 신규 회원 처리 실패] 파라미터 누락');
@@ -22,7 +20,9 @@ export default function Authcallback() {
         navigate('/login');
       }
     };
-    if (temporalToken && nickname) {
+
+    // 기존 회원 처리
+    if (temporalToken) {
       fetch('http://localhost:3000/auth/get-tokens', {
         method: 'POST',
         headers: {
@@ -30,30 +30,32 @@ export default function Authcallback() {
         },
         body: new URLSearchParams({ temporal_token: temporalToken }),
       })
-        .then(async res => {
+        .then(async (res) => {
           const data = await res.json();
-          const { ACCESS_TOKEN, REFRESH_TOKEN } = data;
+          const { ACCESS_TOKEN, REFRESH_TOKEN, NICK_NAME, PROVIDER } = data;
 
-          if (ACCESS_TOKEN && REFRESH_TOKEN) {
+          if (ACCESS_TOKEN && REFRESH_TOKEN && NICK_NAME && PROVIDER !== undefined) {
             localStorage.setItem('token', ACCESS_TOKEN);
             localStorage.setItem('refresh_token', REFRESH_TOKEN);
-            localStorage.setItem('nickname', nickname);
-            if (provider) localStorage.setItem('provider', provider);
+            localStorage.setItem('nickname', NICK_NAME);
+            localStorage.setItem('provider', PROVIDER);
             window.location.replace('/');
           } else {
             console.warn('[ℹ️ 기존 회원 아님] → 소셜 가입 이동');
-            handleNewUser(temporalToken, nickname, provider);
+            handleNewUser(temporalToken);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error('[❌ 토큰 요청 실패]', err);
           console.warn('[ℹ️ 기존 회원 처리 실패] → 소셜 가입 이동');
-          handleNewUser(temporalToken, nickname, provider);
+          handleNewUser(temporalToken);
         });
 
       return;
     }
 
+    // 파라미터 자체가 없음 (기존/신규 구분 불가)
+    console.log(MESSAGE_CODE);
     console.error('[❌ 로그인 실패 이유] 필요한 파라미터가 없습니다.');
     alert('로그인에 실패했습니다.');
     navigate('/login');
