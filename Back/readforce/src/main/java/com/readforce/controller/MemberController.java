@@ -98,7 +98,7 @@ public class MemberController {
     			Name.ACCESS_TOKEN.toString(), access_token,
     			Name.REFRESH_TOKEN.toString(), refresh_token,
     			Name.NICK_NAME.toString(), get_member_dto.getNickname(),
-    			Name.PROVIDER.toString(), get_member_dto.getProvider(),
+    			Name.PROVIDER.toString(), get_member_dto.getProvider() == null ? "" : get_member_dto.getProvider(),
     			MessageCode.MESSAGE_CODE, MessageCode.SIGN_IN_SUCCESS
     	)); 
     	
