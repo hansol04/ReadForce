@@ -188,7 +188,13 @@ public class MemberController {
 		
 		member_service.modifyInfo(current_member_email, modify);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.MEMBER_INFO_MODIFY_SUCCESS));
+		// 회원 정보 조회
+		GetMemberObject member_info = member_service.getMemberObjectByEmail(current_member_email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.MEMBER_INFO_MODIFY_SUCCESS,
+				Name.NICK_NAME.toString(), member_info.getNickname()
+		));
 		
 	}
 	
@@ -261,7 +267,7 @@ public class MemberController {
 				Name.ACCESS_TOKEN.toString(), jwt,
 				Name.REFRESH_TOKEN.toString(), refresh_token,
 				Name.NICK_NAME.toString(), get_member_dto.getNickname(),
-				Name.PROVIDER.toString(), get_member_dto.getProvider(),
+				Name.PROVIDER.toString(), get_member_dto.getProvider() == null ? "" : get_member_dto.getProvider(),
 				MessageCode.MESSAGE_CODE, MessageCode.SIGN_UP_SUCCESS
 		));
 		

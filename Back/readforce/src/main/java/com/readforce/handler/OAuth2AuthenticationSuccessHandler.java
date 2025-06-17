@@ -101,13 +101,18 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
             final String access_token = jwt_util.generateAcessToken(user_details);
             final String refresh_token = jwt_util.generateRefreshToken(user_details);
         	
+            // 회원 조회
+        	GetMemberObject get_member_dto = member_service.getMemberObjectByEmail(email);
+            
         	// 임시 기존 회원 인증 토큰 생성
         	String temporal_token = UUID.randomUUID().toString();
         	
         	// redis 엑세스 토큰과 리프레쉬 토큰 저장
         	Map<String, String> token_map = Map.of(
         		Name.ACCESS_TOKEN.toString(), access_token,
-        		Name.REFRESH_TOKEN.toString(), refresh_token
+        		Name.REFRESH_TOKEN.toString(), refresh_token,
+        		Name.NICK_NAME.toString(), get_member_dto.getNickname(),
+        		Name.PROVIDER.toString(), get_member_dto.getProvider()
         	);
         	
         	// Map을 JSON 문자열로 변환 후 저장
@@ -123,14 +128,11 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
             // 출석 체크
             attendance_service.recordAttendance(email);
             
-            // 회원 조회
-        	GetMemberObject get_member_dto = member_service.getMemberObjectByEmail(email);
+            
    
             // 프론트 엔드 로그인 콜백
             target_url = UriComponentsBuilder.fromUriString(social_login_success_exist_member_url)
                     .queryParam(Name.TEMPORAL_TOKEN.toString(), temporal_token)
-                    .queryParam(Name.NICK_NAME.toString(), get_member_dto.getNickname())
-                    .queryParam(Name.PROVIDER.toString(), get_member_dto.getProvider())
                     .build()
                     .toUriString();
         }
