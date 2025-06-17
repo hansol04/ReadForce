@@ -20,7 +20,6 @@ export default function Socialsignup() {
   const checkNicknameDuplicate = async (nickname) => {
     try {
       const res = await fetch(`/member/nickname-check?nickname=${nickname}`);
-
       if (res.ok) {
         const data = await res.json();
         console.log(data.message);
@@ -36,14 +35,14 @@ export default function Socialsignup() {
     }
   };
 
-  // 닉네임 형식 검사
+  // 닉네임 형식 + 중복 검사
   const validateNickname = async (value) => {
     const onlyKorean = /^[가-힣]+$/.test(value);
     const onlyEnglish = /^[a-zA-Z]+$/.test(value);
 
     if (
-      (onlyKorean && value.length <= 8) ||
-      (onlyEnglish && value.length <= 20)
+      (onlyKorean && value.length >= 2 && value.length <= 8) ||
+      (onlyEnglish && value.length >= 2 && value.length <= 20)
     ) {
       const isAvailable = await checkNicknameDuplicate(value);
       if (isAvailable) {
@@ -54,7 +53,7 @@ export default function Socialsignup() {
         setIsNicknameValid(false);
       }
     } else {
-      setNicknameMessage('한글 8자, 영문 20자 이하로 입력해주세요');
+      setNicknameMessage('한글 2~8자, 영문 2~20자만 입력해주세요');
       setIsNicknameValid(false);
     }
   };
@@ -120,8 +119,8 @@ export default function Socialsignup() {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('token', data.access_token);
-        localStorage.setItem("refresh_token", data.REFRESH_TOKEN);
-        localStorage.setItem("nickname", data.NICK_NAME || data.nickname);
+        localStorage.setItem('refresh_token', data.REFRESH_TOKEN);
+        localStorage.setItem('nickname', data.NICK_NAME || data.nickname);
         setMessage('🎉 소셜 회원가입이 완료되었습니다!');
         setTimeout(() => navigate('/'), 1500);
       } else {
@@ -139,28 +138,33 @@ export default function Socialsignup() {
       <form className="signup-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>닉네임</label>
-          <div className='input-with-message'>
-          <input
+          <div className="input-with-message">
+            <input
               type="text"
               placeholder="한글 8자, 영문 20자 이내로 작성해주세요"
               value={nickname}
               onChange={async (e) => {
                 const value = e.target.value;
                 setNickname(value);
-                await validateNickname(value);
+                if (value.length >= 2) {
+                  await validateNickname(value);
+                } else {
+                  setNicknameMessage('2자 이상 입력해주세요');
+                  setIsNicknameValid(false);
+                }
               }}
               required
-              />
-          <span
-            className="validation-message"
-            style={{
-              color: isNicknameValid === null ? 'inherit' : isNicknameValid ? 'green' : 'red',
-              fontSize: '0.85rem',
-            }}
-          >
-            {nicknameMessage}
-          </span>
-        </div>
+            />
+            <span
+              className="validation-message"
+              style={{
+                color: isNicknameValid === null ? 'inherit' : isNicknameValid ? 'green' : 'red',
+                fontSize: '0.85rem',
+              }}
+            >
+              {nicknameMessage}
+            </span>
+          </div>
         </div>
         <div className="form-group">
           <label>생년월일</label>

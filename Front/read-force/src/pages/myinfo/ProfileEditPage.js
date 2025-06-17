@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
+import defaultProfileImage from '../../assets/image/default-profile.png';
 import './EditProfilePage.css';
 
 const ProfileEditPage = () => {
@@ -9,7 +10,33 @@ const ProfileEditPage = () => {
   const [birthday, setBirthday] = useState('');
   const [birthdayMessage, setBirthdayMessage] = useState('');
   const [isBirthdayValid, setIsBirthdayValid] = useState(null);
+
   const [preview, setPreview] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [serverProfileImageUrl, setServerProfileImageUrl] = useState(defaultProfileImage);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const res = await axiosInstance.get('/member/get-profile-image', {
+          responseType: 'blob',
+        });
+        const isImage = res.data.type.startsWith('image/');
+        if (isImage) {
+          const imageUrl = URL.createObjectURL(res.data);
+          setServerProfileImageUrl(imageUrl);
+        } else {
+          console.warn('서버 응답이 이미지가 아님');
+          setServerProfileImageUrl(defaultProfileImage);
+        }
+      } catch (error) {
+        console.log('프로필 이미지 없음 또는 오류 → 기본 이미지 사용');
+        setServerProfileImageUrl(defaultProfileImage);
+      }
+    };
+    fetchProfileImage();
+  }, []);
 
   const checkNicknameDuplicate = async (nickname) => {
     if (!nickname || nickname.length < 2) return false;
@@ -36,7 +63,7 @@ const ProfileEditPage = () => {
 
   const validateBirthday = (value) => {
     const regex = /^\d{4}-\d{2}-\d{2}$/;
-    setBirthdayMessage(regex.test(value) ? '생일 입력 완료' : 'YYYY-MM-DD 형식으로 입력해주세요');
+    setBirthdayMessage(regex.test(value) ? '' : 'YYYY-MM-DD 형식으로 입력해주세요');
     setIsBirthdayValid(regex.test(value));
   };
 
@@ -65,6 +92,11 @@ const ProfileEditPage = () => {
     }
 
     if (preview) {
+      try {
+        await axiosInstance.delete('/member/delete-profile-image');
+      } catch (err) {
+        console.warn('서버 이미지 삭제 실패', err);
+      }
       const formData = new FormData();
       formData.append('profile_image_file', preview);
       updates.push(
@@ -84,7 +116,6 @@ const ProfileEditPage = () => {
   };
 
   const handleWithdraw = async () => {
-    if (!window.confirm('정말로 탈퇴하시겠습니까?')) return;
     try {
       await axiosInstance.delete('/member/withdraw-member');
       localStorage.clear();
@@ -95,6 +126,17 @@ const ProfileEditPage = () => {
     }
   };
 
+  const removeImage = async () => {
+    setPreview(null);
+    setPreviewUrl(null);
+    setServerProfileImageUrl(defaultProfileImage);
+    try {
+      await axiosInstance.delete('/member/delete-profile-image');
+    } catch (err) {
+      console.warn('서버 이미지 삭제 실패', err);
+    }
+  };
+
   return (
     <div className="profile-edit-page">
       <h2>회원정보 수정</h2>
@@ -102,23 +144,29 @@ const ProfileEditPage = () => {
         <div className="form-group">
           <label>회원 이미지</label>
           <div className="profile-image-box">
-            {preview ? (
-              <img
-                src={URL.createObjectURL(preview)}
-                alt="프로필 미리보기"
-                className="profile-image"
-              />
-            ) : (
-              <div className="profile-image preview-placeholder">프로필 미리보기</div>
-            )}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) setPreview(file);
-              }}
+            <img
+              src={previewUrl || serverProfileImageUrl || defaultProfileImage}
+              alt="프로필 이미지"
+              className="profile-image"
+              onError={(e) => (e.target.src = defaultProfileImage)}
             />
+
+            <div className="image-control-row">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    setPreview(file);
+                    setPreviewUrl(URL.createObjectURL(file));
+                  }
+                }}
+              />
+              <button type="button" className="remove-image-button" onClick={removeImage}>
+                이미지 제거
+              </button>
+            </div>
           </div>
         </div>
 
@@ -134,9 +182,12 @@ const ProfileEditPage = () => {
                 await validateNickname(value);
               }}
             />
-            <span className="validation-message" style={{ color: isNicknameValid ? 'green' : 'red' }}>
-              {nicknameMessage}
-            </span>
+            <div className="message-row">
+              <span className="inline-hint">한글 8자, 영문 20자 이하로 입력해주세요</span>
+              <span className="validation-message" style={{ color: isNicknameValid ? 'green' : 'red' }}>
+                {nicknameMessage}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -149,19 +200,37 @@ const ProfileEditPage = () => {
               value={birthday}
               onChange={(e) => handleBirthdayChange(e.target.value)}
             />
-            <span className="validation-message" style={{ color: isBirthdayValid ? 'green' : 'red' }}>
-              {birthdayMessage}
-            </span>
+            <div className="message-row">
+              <span className="inline-hint">YYYY-MM-DD 형식으로 입력해주세요</span>
+              <span className="validation-message" style={{ color: isBirthdayValid ? 'green' : 'red' }}>
+                {birthdayMessage}
+              </span>
+            </div>
           </div>
         </div>
 
         <div className="button-group">
           <button type="submit">정보 수정</button>
-          <button type="button" className="withdraw-button" onClick={handleWithdraw}>
+        </div>
+
+        <div className="withdraw-area">
+          <button type="button" className="withdraw-button" onClick={() => setShowModal(true)}>
             회원 탈퇴
           </button>
         </div>
       </form>
+
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <p>정말로 탈퇴하시겠습니까?</p>
+            <div className="modal-buttons">
+              <button className="confirm" onClick={handleWithdraw}>예</button>
+              <button className="cancel" onClick={() => setShowModal(false)}>아니요</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

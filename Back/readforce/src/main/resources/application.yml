@@ -83,12 +83,12 @@ custom:
   fronted:
     password-reset-link-url: http://localhost:3000/resetpassword
     social-login-success:
-      exist-member-url: http://localhost:3000/auth/callback
+      exist-member-url: http://localhost:3000/authcallback
       new-member-url: http://localhost:3000/social-sign-up
     logout-redirect-url: http://localhost:3000/
     kakao-logout-url: https://kauth.kakao.com/oauth/logout?client_id=
 rate-limiting:
-  enabled: true
+  enabled: false
   ip:
     requests: 100
     per-minute: 1
