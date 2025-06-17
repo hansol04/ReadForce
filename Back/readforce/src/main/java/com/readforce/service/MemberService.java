@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -14,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.readforce.dto.MemberDto;
 import com.readforce.dto.MemberDto.GetMemberObject;
 import com.readforce.dto.OAuthAttributesDto;
@@ -24,6 +27,7 @@ import com.readforce.enums.Prefix;
 import com.readforce.enums.Status;
 import com.readforce.exception.AuthenticationException;
 import com.readforce.exception.DuplicateException;
+import com.readforce.exception.JsonException;
 import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.repository.MemberRepository;
 import com.readforce.repository.NeedAdminCheckFailedDeletionLogRepository;
@@ -59,6 +63,7 @@ public class MemberService{
 		get_member_object.setEmail(member.getEmail());
 		get_member_object.setNickname(member.getNickname());
 		get_member_object.setBirthday(member.getBirthday());
+		get_member_object.setProvider(member.getSocial_provider());
 		
 		return get_member_object;
 		
@@ -75,7 +80,7 @@ public class MemberService{
 		
 		// 회원 상태 변경
 		member.setStatus(Status.PENDING_DELETION);
-		member.setWithdrawDate(LocalDateTime.now());
+		member.setWithdraw_date(LocalDateTime.now());
 		
 		// 리프레쉬 토큰 삭제
 		redis_template.delete(Prefix.REFRESH_TOKEN.getName() + email);
@@ -216,9 +221,9 @@ public class MemberService{
 
 	// 비밀번호 재설정
 	@Transactional
-	public void passwordResetByLink(String temporal_token, String new_password) {
+	public void passwordResetByLink(String temporal_token, String new_password, LocalDate birthday) {
 		
-		// Redis에서 id 조회
+		// Redis에서 email 조회
 		String member_email = redis_template.opsForValue().get(Prefix.PASSWORD_RESET_BY_LINK.getName() + temporal_token);
 		
 		if(member_email == null) {
@@ -228,6 +233,14 @@ public class MemberService{
 		// 회원 정보 불러오기
 		Member member = 
 				member_repository.findByEmailAndStatus(member_email, Status.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
+		
+		
+		// 생년월일 확인
+		if(!birthday.equals(member.getBirthday())) {
+			
+			throw new AuthenticationException(MessageCode.AUTHENTICATION_FAIL);
+			
+		}
 		
 		// 비밀번호 재설정
 		member.setPassword(password_encoder.encode(new_password));
@@ -244,21 +257,46 @@ public class MemberService{
 	@Transactional
 	public String socialSignUp(@Valid MemberDto.SocialSignUp social_sign_up) {
 		
-		// 토큰 검증
-		String email = redis_template.opsForValue().get(Prefix.SOCIAL_SIGN_UP.getName() + social_sign_up.getTemporal_token());
-		if(email == null) {
+		// Redis에서 소셜 정보 JSON 가져오기
+		String social_info_json = redis_template.opsForValue().get(Prefix.SOCIAL_SIGN_UP.getName() + social_sign_up.getTemporal_token());
+
+		if(social_info_json == null) {
+			
 			throw new AuthenticationException(MessageCode.TOKEN_ERROR);
+			
 		}
+		
+		// JSON을 Map으로 변환
+		Map<String, String> social_info;
+		try {
+			
+			social_info = new ObjectMapper().readValue(social_info_json, new TypeReference<Map<String, String>>() {});
+			
+		} catch(Exception exception) {
+			
+			throw new JsonException(MessageCode.JSON_PROCESSING_FAIL);
+			
+		}
+		
+		String email = social_info.get("email");
+		String provider = social_info.get("provider");
+		String provider_id = social_info.get("provider_id");
 		
 		// 닉네임 중복 확인
 		if(member_repository.findByNickname(social_sign_up.getNickname()).isPresent()) {
+			
 			throw new DuplicateException(MessageCode.DUPLICATE_NICKNAME);
+		
 		}
 		
 		OAuthAttributesDto o_auth_attributes = OAuthAttributesDto.builder().email(email).build();
 		Member new_member = o_auth_attributes.toEntity(social_sign_up.getNickname(), social_sign_up.getBirthday());
 		
 		new_member.setPassword(password_encoder.encode(new_member.getPassword()));
+		
+		// 소셜 정보 저장
+		new_member.setSocial_provider(provider);
+		new_member.setSocial_provider_id(provider_id);
 		
 		// 새로운 회원 추가
 		member_repository.save(new_member);
@@ -289,6 +327,34 @@ public class MemberService{
 	            .collect(Collectors.toList());
 	}
 
+	// 기존 회원과 소셜 계정 연동
+	@Transactional
+	public void linkSocialAccount(String signed_in_email, String provider, String provider_id, String social_email) {
+		
+		// 해당 소셜 계정이 다른 사용자에게 이미 연결되어있는지 확인
+		member_repository.findBySocialProviderAndSocialProviderId(provider, provider_id)
+			.ifPresent(member -> {
+				if(!member.getEmail().equals(signed_in_email)) {
+					throw new DuplicateException(MessageCode.SOCIAL_EMAIL_ALREADY_CONNECTED_WITH_OTHER_MEMBER);
+				}
+			});
+
+		// 소셜 계정의 이메일이 다른 기존 회원의 이메일인지 확인
+		member_repository.findByEmail(social_email)
+			.ifPresent(member -> {
+				if(!member.getEmail().equals(signed_in_email)) {
+					throw new DuplicateException(MessageCode.SOCIAL_EMAIL_ALREADY_USE_BY_OTHER_MEMBER);
+				}
+			});
+		
+		// 현재 로그인된 사용자를 조회 및 소셜 정보 업데이트
+		Member member = member_repository.findByEmailAndStatus(signed_in_email, Status.ACTIVE)
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
+
+		member.setSocial_provider(provider);
+		member.setSocial_provider_id(provider_id);
+		
+	}
 	
 	
 	

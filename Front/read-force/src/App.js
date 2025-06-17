@@ -20,6 +20,7 @@ import Oauth2redirect from './pages/login/oauth2redirect';
 import Authcallback from './pages/login/authcallback';
 import Socialsignup from './pages/signup/socialsignup';
 import AdminPage from './pages/adminpages/adminpage';
+import ClassicPage from './pages/literature/ClassicPage';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/authcallback" element={<Authcallback />} />
           <Route path="/social-sign-up" element={<Socialsignup />} />
           <Route path="/adminpage" element={<AdminPage />} />
+          <Route path="/literature/classic" element={<ClassicPage />} />
        </Route>
       </Routes>
     </Router>

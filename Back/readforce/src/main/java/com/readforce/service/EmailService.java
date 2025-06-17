@@ -114,30 +114,6 @@ public class EmailService {
 		
 	}
 	
-	// 회원 정보 수정 인증 번호 전송
-	public void sendVerificationCodeModifyInfo(String email) {
-
-		sendVerificationCode(
-				email, 
-				DEFAULT_MESSAGE,
-				createAuthCode(),
-				ExpireTime.DEFAULT.getTime(),
-				Prefix.MODIFY_INFO.getName()
-		);
-		
-	}
-
-	// 회원 정보 수정 인증 번호 확인
-	public void verifyVerificationCodeModifyInfo(String email, String code) {
-
-		VerifyVerificationCode(
-				email,
-				code,
-				Prefix.MODIFY_INFO.getName()
-		);
-		
-	};
-	
 	// 비밀번호 재설정 링크 전송
 	public void sendPasswordResetLink(String email) {
 		

@@ -51,10 +51,10 @@ public class AuthService implements UserDetailsService{
 	}
 	
 	// 리프레쉬 토큰 저장
-	public void storeRefreshToken(String username, String refresh_token) {
+	public void storeRefreshToken(String email, String refresh_token) {
 		
 		redis_template.opsForValue().set(
-				Prefix.REFRESH_TOKEN.getName() + username,
+				Prefix.REFRESH_TOKEN.getName() + email,
 				refresh_token,
 				Duration.ofMillis(refresh_expiration_time)
 		);
@@ -62,16 +62,16 @@ public class AuthService implements UserDetailsService{
 	}
 	
 	// 리프레쉬 토큰 가져오기
-	public String getRefreshToken(String username) {
+	public String getRefreshToken(String email) {
 		
-		return redis_template.opsForValue().get(Prefix.REFRESH_TOKEN.getName() + username);
+		return redis_template.opsForValue().get(Prefix.REFRESH_TOKEN.getName() + email);
 		
 	}
 	
 	// 리프레쉬 토큰 삭제
-	public void deleteRefreshToken(String username) {
+	public void deleteRefreshToken(String email) {
 		
-		redis_template.delete(Prefix.REFRESH_TOKEN.getName() + username);
+		redis_template.delete(Prefix.REFRESH_TOKEN.getName() + email);
 		
 	}
 
