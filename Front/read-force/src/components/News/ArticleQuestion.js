@@ -1,33 +1,15 @@
-import React from 'react';
-import './css/ArticleQuestion.css';
+import ArticleQuestion from './ArticleQuestion';
 
-const ArticleQuestion = ({ article }) => {
-  // 임시 더미 문제
-  const question = {
+const ArticleQuestionPage = () => {
+  const article = {
     id: 1,
-    text: `${article.title} 관련 문제입니다. 언제 발표되었나요?`,
-    options: [
-      '2025년 6월 15일',
-      '2025년 6월 14일',
-      '2025년 6월 13일',
-      '2025년 6월 12일',
-    ],
-    correct: article.publishedAt,
+    title: "임시 뉴스 제목",
+    summary: "이건 임시 뉴스입니다.",
+    difficulty: "초급",
+    publishedAt: "2025-06-16",
   };
 
-  return (
-    <div className="article-question">
-      <h3>문제 {question.id}</h3>
-      <p className="question-text">{question.text}</p>
-      <ul className="options-list">
-        {question.options.map((opt, idx) => (
-          <li key={idx} className={`option ${opt === question.correct ? 'correct' : ''}`}>
-            {opt}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  return <ArticleQuestion article={article} />;
 };
 
-export default ArticleQuestion;
+export default ArticleQuestionPage;

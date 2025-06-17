@@ -1,12 +1,13 @@
 .news-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px 24px; 
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.04);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  justify-content: space-between;
+  height: 200px; 
 }
 
 .news-card:hover {
@@ -14,21 +15,29 @@
 }
 
 .news-title {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 18px;
+  font-weight: 700;
   margin-bottom: 8px;
 }
 
 .news-summary {
-  font-size: 14px;
-  margin-bottom: 8px;
-  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-height: 1.5;
+  max-height: calc(1.5em * 3);
+  color: #555;
+  font-size: 15px;
+  margin: 8px 0 0 0;
+  max-width: calc(100% - 160px); 
 }
 
 .news-meta {
-  font-size: 12px;
-  color: #777;
-  margin-bottom: 12px;
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 8px;
 }
 
 .news-button {
@@ -52,6 +61,7 @@
   border-radius: 12px;
   margin-left: auto;
   margin-bottom: 8px;
+  margin-top: 4px;
 }
 
 .news-badge.초급 {
@@ -67,4 +77,24 @@
 .news-badge.고급 {
   background-color: #4b9fa0;
   color : white;
+}
+
+.news-category {
+  font-size: 13px;
+  color: #666;
+  margin: 4px 0 0 0;
+}
+
+.news-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+.news-date {
+  font-size: 13px;
+  color: #aaa;
+  margin: 0;
 }

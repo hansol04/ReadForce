@@ -1,25 +1,36 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import Main from "./pages/main";
+import MyPage from './pages/myinfo/MyPage';
 import LayOut from "./components/layout";
 
-import MyPage from './pages/myinfo/MyPage';
 import KoreaPage from './pages/articles/KoreaPage';
 import JapanPage from './pages/articles/JapanPage';
 import UsaPage from './pages/articles/UsaPage';
+
 import SignupWithEmail from "./pages/signup/signupwithemail";
 import SignupChoice from "./pages/signup/signupchoice";
 import EmailVerifyPage from "./pages/signup/emailverifypage";
 import SignupCompletePage from "./pages/signup/signupcompletepage";
+import Socialsignup from './pages/signup/socialsignup';
+
 import Login from "./pages/login/login";
 import FindPassword from "./pages/login/findpassword";
 import ResetPassword from "./pages/login/resetpassword";
-import QuizPage from './pages/quiz/QuizPage';
-import ReadingPage from './pages/quiz/ReadingPage';
-import ChallengePage from "./pages/challenge/challengepage";
 import Oauth2redirect from './pages/login/oauth2redirect';
 import Authcallback from './pages/login/authcallback';
-import Socialsignup from './pages/signup/socialsignup';
+
+import QuizPage from './pages/quiz/QuizPage';
+import ReadingPage from './pages/quiz/ReadingPage';
+
+import ChallengePage from "./pages/challenge/challengepage";
+
 import ClassicPage from './pages/literature/ClassicPage';
+
+import NewsList from './components/News/NewsList';
+import ArticleQuestion from './components/News/ArticleQuestion';
+
+
 
 function App() {
   return (
@@ -45,6 +56,7 @@ function App() {
           <Route path="/authcallback" element={<Authcallback />} />
           <Route path="/social-sign-up" element={<Socialsignup />} />
           <Route path="/literature/classic" element={<ClassicPage />} />
+          <Route path="/question/:id" element={<ArticleQuestion />} />
        </Route>
       </Routes>
     </Router>
