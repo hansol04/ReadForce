@@ -52,12 +52,21 @@ const dummyArticles = [
 
 const categorizeArticle = (text) => {
   const content = text.toLowerCase();
-  if (/정치|정부|대통령|의회|선거|국회/.test(content)) return '정치';
-  if (/경제|금리|무역|환율|증시|소비자|투자|체결/.test(content)) return '경제';
-  if (/사회|범죄|교육|복지|노동|인권|잠수함/.test(content)) return '사회';
-  if (/생활|문화|연예|음식|관광|건강|패션|축구|뮤지컬/.test(content)) return '생활/문화';
-  if (/it|과학|기술|ai|로봇|인터넷|우주/.test(content)) return 'IT/과학';
-  return '기타';
+  const categories = {
+    '정치': ['정치', '정부', '대통령', '의회', '선거', '국회'],
+    '경제': ['경제', '금리', '무역', '환율', '증시', '소비자', '투자', '체결'],
+    '사회': ['사회', '범죄', '교육', '복지', '노동', '인권', '잠수함'],
+    '생활/문화': ['생활', '문화', '연예', '음식', '관광', '건강', '패션', '축구', '뮤지컬'],
+    'IT/과학': ['it', '과학', '기술', 'ai', '로봇', '인터넷', '우주'],
+  };
+
+  const counts = {};
+  for (const [category, keywords] of Object.entries(categories)) {
+    counts[category] = keywords.reduce((acc, word) => acc + (content.includes(word) ? 1 : 0), 0);
+  }
+
+  const topCategory = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+  return topCategory[1] > 0 ? topCategory[0] : '기타';
 };
 
 const initialArticles = dummyArticles.map(article => ({
@@ -117,6 +126,14 @@ const NewsList = ({ country = 'kr', onSolve = () => {} }) => {
         {paginated.map((item) => (
         <NewsCard key={item.id} article={item} />
         ))}
+      </div>
+
+      <div className="news-list">
+        {paginated.length === 0 ? (
+          <p className="no-articles">조건에 맞는 기사가 없습니다.</p>
+        ) : (
+          paginated.map((item) => <NewsCard key={item.id} article={item} />)
+        )}
       </div>
 
       <div className="pagination">

@@ -23,9 +23,6 @@
 .news-summary {
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
   line-height: 1.5;
   max-height: calc(1.5em * 3);
   color: #555;
@@ -49,6 +46,7 @@
   font-size: 16px;
   cursor: pointer;
   align-self: flex-end;
+  text-decoration: none;
 }
 
 .news-button:hover {
@@ -80,7 +78,7 @@
 }
 
 .news-category {
-  font-size: 13px;
+  font-size: 15px;
   color: #666;
   margin: 4px 0 0 0;
 }

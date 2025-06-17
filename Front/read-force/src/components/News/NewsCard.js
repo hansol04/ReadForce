@@ -1,8 +1,8 @@
 import './css/NewsCard.css';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import React from 'react';
 
-const NewsCard = ({ article }) => {
-  const navigate = useNavigate();
+const NewsCard = React.memo (({ article }) => {
 
   return (
     <div className="news-card">
@@ -15,15 +15,15 @@ const NewsCard = ({ article }) => {
 
       <div className="news-footer">
         <div>
-          <p className="news-date">등록일: {article.publishedAt}</p>
           <p className="news-category"># {article.category}</p>
         </div>
-        <button className="news-button" onClick={() => navigate(`/question/${article.id}`)}>
-          문제 풀기
-        </button>
+        
+      <Link to={`/question/${article.id}`} className="news-button">
+        문제 풀기
+      </Link>
       </div>
     </div>
   );
-};
+});
 
 export default NewsCard;
