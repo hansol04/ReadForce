@@ -9,8 +9,6 @@ import com.readforce.enums.MessageCode;
 import com.readforce.exception.RateLimitExceededException;
 import com.readforce.service.RateLimitingService;
 
-import io.github.bucket4j.Bucket;
-import io.github.bucket4j.ConsumptionProbe;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,32 +22,25 @@ public class RateLimitingInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 		
-		// email 기반 Rate Limiting(로그인한 회원 경우)
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
 		if(authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
 			
 			String email = authentication.getName();
-			Bucket email_bucket = rate_limiting_service.resolveBucketForMail(email);
-			ConsumptionProbe email_probe = email_bucket.tryConsumeAndReturnRemaining(1);
-			
-			if(!email_probe.isConsumed()) {
+			if(!rate_limiting_service.isEmailRequestAllowed(email)) {
 				
 				throw new RateLimitExceededException(MessageCode.EMAIL_REQUEST_LIMIT_EXCEEDED);
 				
 			}
-			
+
 		} else {
 			
-			// IP 기반 Rate Limiting
 			String ip_address = getClientIp(request);
-			Bucket ip_bucket = rate_limiting_service.resolveBucketForIp(ip_address);
-			ConsumptionProbe ip_probe = ip_bucket.tryConsumeAndReturnRemaining(1);
-			
-			if(!ip_probe.isConsumed()) {
+			if(!rate_limiting_service.isIpRequestAllowed(ip_address)) {
 				
 				throw new RateLimitExceededException(MessageCode.IP_ADDRESS_REQUEST_LIMIT_EXCEEDED);
-			
-			}			
+				
+			}
 			
 		}
 		
