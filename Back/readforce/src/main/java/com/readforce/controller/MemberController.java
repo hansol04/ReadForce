@@ -3,7 +3,9 @@ package com.readforce.controller;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -334,6 +337,22 @@ public class MemberController {
 		
 	}
 	
+	// 김기찬이 추가 출석
+    @GetMapping("/attendance-dates")
+    public ResponseEntity<List<LocalDate>> getAttendanceDates(@AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        List<LocalDate> attendanceDates = attendance_service.getAttendanceDates(email);
+        return ResponseEntity.ok(attendanceDates);
+    }
+    
+    // 관리자 전용 - 전체 회원 목록 조회
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/get-all-members")
+    public ResponseEntity<List<GetMemberObject>> getAllMembers() {
+        List<GetMemberObject> memberList = member_service.getAllMemberObjects();
+        return ResponseEntity.ok(memberList);
+    }
+    
 	
 
 }
