@@ -17,6 +17,8 @@ import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.repository.AttendanceRepository;
 import com.readforce.repository.MemberRepository;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -72,6 +74,21 @@ public class AttendanceService {
 		
 		return attendance_date_list;
 		
+	}
+	
+	// 출석 횟수 가져오기
+	@Transactional(readOnly = true)
+	public Long getAttendanceCount(String email) {
+
+		Long attendance_count = attendance_repository.countByEmail(email);
+		
+		if(attendance_count == null) {
+			
+			throw new ResourceNotFoundException(MessageCode.ATTENDANCE_DATE_NOT_FOUND);
+			
+		}
+		
+		return attendance_count;
 	}
 	
 	

@@ -347,7 +347,7 @@ public class MemberController {
 		return ResponseEntity.status(HttpStatus.OK).body(getAttendanceDateList);
 	}
 	
-	// 회원 복구
+	
 	
 	
 
