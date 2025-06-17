@@ -178,6 +178,7 @@ public class MemberDto {
 	    return new GetMemberObject(
 	        member.getEmail(),
 	        member.getNickname(),
+	        member.getProvider(),        
 	        member.getBirthday(),
 	        member.getCreateDate(),
 	        member.getStatus()
