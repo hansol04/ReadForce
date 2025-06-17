@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Main from "./pages/main";
 import LayOut from "./components/layout";
-
 import MyPage from './pages/myinfo/MyPage';
 import KoreaPage from './pages/articles/KoreaPage';
 import JapanPage from './pages/articles/JapanPage';
@@ -23,12 +22,12 @@ import Socialsignup from './pages/signup/socialsignup';
 import ProfileEditPage from './pages/myinfo/ProfileEditPage';
 import ChangePasswordPage from './pages/myinfo/ChangePasswordPage';
 import ClassicPage from './pages/literature/ClassicPage';
-
+import ReadTest from './pages/challenge/readtest';
 function App() {
   return (
     <Router>
       <Routes>
-        <Route element={<LayOut />}/>
+        <Route element={<LayOut />}>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
           <Route path="/findpassword" element={<FindPassword />} /> 
@@ -50,8 +49,10 @@ function App() {
           <Route path="/profile-edit" element={<ProfileEditPage />} />
           <Route path="/change-password" element={<ChangePasswordPage />} />
           <Route path="/literature/classic" element={<ClassicPage />} />
+          <Route path="/test-start" element={<ReadTest />} />
+        </Route>
       </Routes>
-      </Router>
+    </Router>
   );
 }
 

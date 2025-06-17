@@ -75,7 +75,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 			Member linked_member = member_repository.findByEmailAndStatus(signed_in_user_email, Status.ACTIVE)
 					.orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL)); 
 			
-			return createOAuth2UserDto(linked_member, o_auth_attributes_dto, false);
+			return createOAuth2UserDto(linked_member, o_auth_attributes_dto, false, registration_id);
 			
 		}
 		
@@ -84,7 +84,16 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 		// 소설 제공자 정보로 회원 조회
 		Optional<Member> member_optional = member_repository.findBySocialProviderAndSocialProviderId(provider, provider_id);
 		
-		if(!member_optional.isPresent()) {
+		Member member;
+		boolean is_new_user;
+		
+		if(member_optional.isPresent()) {
+			
+			// 소셜 제공자 정보로 회원을 찾음(기존 회원)
+			member = member_optional.get();
+			is_new_user = false;
+			
+		} else {	
 			
 			// 소셜 제공자 정보로 찾지 못했다면 이메일로 회원 조회(첫 소셜 로그인시 자동 연동)
 			Optional<Member> member_optional_email = member_repository.findByEmailAndStatus(social_email, Status.ACTIVE);			
@@ -92,21 +101,25 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 			if(member_optional_email.isPresent()) {
 				
 				// 이 이메일을 가진 사용자가 존재함으로 자동으로 연동 진행
-				Member member = member_optional_email.get();
+				member = member_optional_email.get();
 				member.setSocial_provider(provider);
 				member.setSocial_provider_id(provider_id);
+				is_new_user = false;
+			
+			} else {
 				
+				// 소셜 제공자 정보와 이메일로 모두 회원을 찾을 수 없음(신규 회원)
+				member = null;
+				is_new_user = true;
+								
 			}
 
 		}
-		
-		boolean is_new_user = !member_optional.isPresent();
-		Member member = member_optional.orElse(null);
-		
-		return createOAuth2UserDto(member, o_auth_attributes_dto, is_new_user);
+				
+		return createOAuth2UserDto(member, o_auth_attributes_dto, is_new_user, registration_id);
 	}
 	
-	private OAuth2UserDto createOAuth2UserDto(Member member, OAuthAttributesDto o_auth_attributes_dto, boolean is_new_user) {
+	private OAuth2UserDto createOAuth2UserDto(Member member, OAuthAttributesDto o_auth_attributes_dto, boolean is_new_user, String registration_id) {
 		
 		String primary_email;
 		Role role;
@@ -132,7 +145,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 					o_auth_attributes_dto.getAttributes(),
 					o_auth_attributes_dto.getNameAttributeKey(),
 					primary_email,
-					is_new_user
+					is_new_user,
+					registration_id
 		);
 		
 		

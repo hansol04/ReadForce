@@ -13,11 +13,14 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.readforce.dto.MemberDto.GetMemberObject;
 import com.readforce.dto.OAuth2UserDto;
+import com.readforce.enums.MessageCode;
 import com.readforce.enums.Name;
 import com.readforce.enums.Prefix;
+import com.readforce.exception.JsonException;
 import com.readforce.service.AttendanceService;
 import com.readforce.service.AuthService;
 import com.readforce.service.MemberService;
@@ -54,7 +57,7 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 		OAuth2UserDto o_auth2_user_dto = (OAuth2UserDto) authentication.getPrincipal();
 		
 		// 신규 소셜 회원인지 확인
-		boolean is_new_user = o_auth2_user_dto.isNewUser();
+		boolean is_new_user = o_auth2_user_dto.is_new_user();
 		String email = o_auth2_user_dto.getEmail();
 		
 		String target_url;
@@ -62,10 +65,30 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
         if (is_new_user) {
             // 신규 회원
             String temporal_token = UUID.randomUUID().toString();
-            redis_template.opsForValue().set(
-                    Prefix.SOCIAL_SIGN_UP.getName() + temporal_token,
-                    email,
-                    Duration.ofMinutes(10));
+            
+            // 소셜 정보(이메일, 제공자, 제공자 ID)를 Map에 담기
+            Map<String, String> social_info = Map.of(
+            	"email", email,
+            	"provider", o_auth2_user_dto.getRegistration_id(),
+            	"provider_id", o_auth2_user_dto.getName()
+            );
+            
+            try {
+            	
+            	// Map을 JSON 문자열로 변환하여 Redis에 저장
+            	String social_info_json = new ObjectMapper().writeValueAsString(social_info);
+            	redis_template.opsForValue().set(
+            			Prefix.SOCIAL_SIGN_UP.getName() + temporal_token, 
+            			social_info_json,
+            			Duration.ofMinutes(10)
+            	);
+            	
+            } catch(JsonProcessingException exception) {
+            	
+            	throw new JsonException(MessageCode.JSON_PROCESSING_FAIL);
+            	
+            }
+       
             // 프론트 엔드 추가 정보 입력 페이지로 리다이렉트
             target_url = UriComponentsBuilder.fromUriString(social_login_success_new_member_url)
                     .queryParam(Name.TEMPORAL_TOKEN.toString(), temporal_token)

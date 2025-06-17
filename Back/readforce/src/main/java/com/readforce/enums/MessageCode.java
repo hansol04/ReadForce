@@ -43,10 +43,10 @@ public final class MessageCode {
 	public static final String SEND_PASSWORD_RESET_LINK_SUCCESS = "SU0008";
 	public static final String PROFILE_IMAGE_UPLOAD_SUCCESS = "SU0009";
 	public static final String PROFILE_IMAGE_DELETE_SUCCESS = "SU0010";
-	public static final String TOKEN_SUCCESS = "SU0011"; // 엑세스 토큰 재발급 성공
+	public static final String REISSUE_ACCESS_TOKEN_SUCCESS = "SU0011"; // 엑세스 토큰 재발급 성공
 	public static final String SIGN_OUT_SUCCESS = "SU0012";
+	public static final String GET_TOKENS_SUCCESS = "SU0013";
 
-	
 	// 실패
 	public static final String VERIFICATION_CODE_SEND_FAIL = "FA0001";
 	public static final String VERIFICATION_CODE_VERIFY_FAIL = "FA0002";
@@ -79,7 +79,8 @@ public final class MessageCode {
 	public static final String ACCESS_TOKEN_EXPIRED = "SP0010";
 	public static final String SOCIAL_EMAIL_ALREADY_CONNECTED_WITH_OTHER_MEMBER = "SP0011";
 	public static final String SOCIAL_EMAIL_ALREADY_USE_BY_OTHER_MEMBER = "SP0012";
-	
+	public static final String IP_ADDRESS_REQUEST_LIMIT_EXCEEDED = "SP0013";
+	public static final String EMAIL_REQUEST_LIMIT_EXCEEDED = "SP0014";
 
 	
 
