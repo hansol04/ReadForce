@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Main from "./pages/main";
-import LayOut from "./components/layout";
 import MyPage from './pages/myinfo/MyPage';
+import LayOut from "./components/layout";
 import KoreaPage from './pages/articles/KoreaPage';
 import JapanPage from './pages/articles/JapanPage';
 import UsaPage from './pages/articles/UsaPage';
@@ -10,19 +10,23 @@ import SignupWithEmail from "./pages/signup/signupwithemail";
 import SignupChoice from "./pages/signup/signupchoice";
 import EmailVerifyPage from "./pages/signup/emailverifypage";
 import SignupCompletePage from "./pages/signup/signupcompletepage";
+import Socialsignup from './pages/signup/socialsignup';
 import Login from "./pages/login/login";
 import FindPassword from "./pages/login/findpassword";
 import ResetPassword from "./pages/login/resetpassword";
-import QuizPage from './pages/quiz/QuizPage';
-import ReadingPage from './pages/quiz/ReadingPage';
-import ChallengePage from "./pages/challenge/challengepage";
 import Oauth2redirect from './pages/login/oauth2redirect';
 import Authcallback from './pages/login/authcallback';
-import Socialsignup from './pages/signup/socialsignup';
 import ProfileEditPage from './pages/myinfo/ProfileEditPage';
 import ChangePasswordPage from './pages/myinfo/ChangePasswordPage';
 import ClassicPage from './pages/literature/ClassicPage';
 import ReadTest from './pages/challenge/readtest';
+import AdminPage from './pages/adminpages/adminpage';
+import QuizPage from './pages/quiz/QuizPage';
+import ReadingPage from './pages/quiz/ReadingPage';
+import ChallengePage from "./pages/challenge/challengepage";
+import NewsList from './components/News/NewsList';
+import ArticleQuestion from './components/News/ArticleQuestion';
+
 function App() {
   return (
     <Router>
@@ -50,7 +54,10 @@ function App() {
           <Route path="/change-password" element={<ChangePasswordPage />} />
           <Route path="/literature/classic" element={<ClassicPage />} />
           <Route path="/test-start" element={<ReadTest />} />
-        </Route>
+          <Route path="/adminpage" element={<AdminPage />} />
+          <Route path="/literature/classic" element={<ClassicPage />} />
+          <Route path="/question/:id" element={<ArticleQuestion />} />
+       </Route>
       </Routes>
     </Router>
   );

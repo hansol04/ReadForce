@@ -32,11 +32,18 @@ public class FileService {
 	
 	@Value("${file.image.profile.upload-dir}")
 	private String profile_image_upload_dir;
+	
 	@Value("${file.image.profile.max-size}")
 	private Long profile_image_max_file_size;
+	
 	@Value("#{'${file.image.profile.allowed-mime-types}'.split(',')}")
 	private List<String> profile_image_allowed_mime_type_list;	
+	
+	@Value("${file.image.profile.default-image-url}")
+	private String profile_default_image_url;
+	
 	private final MemberRepository member_repository;
+	
 	
 	// 디렉토리를 동적으로 생성
 	private Path getPath(String upload_dir) {
@@ -177,9 +184,13 @@ public class FileService {
 								 .orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
 
 		if(member.getProfile_image_url() == null || member.getProfile_image_url().isEmpty()) {
-			throw new ResourceNotFoundException(MessageCode.PROFILE_IMAGE_URL_NOT_FOUND);
+
+			return loadFileAsResource(profile_default_image_url, profile_image_upload_dir);
+			
 		} else {
+			
 			return loadFileAsResource(member.getProfile_image_url(), profile_image_upload_dir);
+		
 		}
 		
 	}

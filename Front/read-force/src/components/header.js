@@ -137,8 +137,15 @@ const Header = () => {
               {showUserMenu && (
                 <div className="user-dropdown">
                   <div onClick={() => { setShowUserMenu(false); navigate("/mypage"); }}>마이페이지</div>
+
                   <div onClick={() => { setShowUserMenu(false); navigate("/profile-edit"); }}>회원정보 수정</div>
                   <div onClick={() => { setShowUserMenu(false); navigate("/change-password"); }}>비밀번호 수정</div>
+                  {/* 관리자 전용 메뉴 */}
+                  {nickname === "관리자" && (
+                    <div onClick={() => { setShowUserMenu(false); navigate("/adminpage"); }}>
+                      관리자 페이지
+                    </div>
+                  )}
                   <div onClick={handleLogout}>로그아웃</div>
                 </div>
               )}

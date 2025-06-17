@@ -3,7 +3,9 @@ package com.readforce.controller;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -188,7 +190,13 @@ public class MemberController {
 		
 		member_service.modifyInfo(current_member_email, modify);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.MEMBER_INFO_MODIFY_SUCCESS));
+		// 회원 정보 조회
+		GetMemberObject member_info = member_service.getMemberObjectByEmail(current_member_email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.MEMBER_INFO_MODIFY_SUCCESS,
+				Name.NICK_NAME.toString(), member_info.getNickname()
+		));
 		
 	}
 	
@@ -261,7 +269,7 @@ public class MemberController {
 				Name.ACCESS_TOKEN.toString(), jwt,
 				Name.REFRESH_TOKEN.toString(), refresh_token,
 				Name.NICK_NAME.toString(), get_member_dto.getNickname(),
-				Name.PROVIDER.toString(), get_member_dto.getProvider(),
+				Name.PROVIDER.toString(), get_member_dto.getProvider() == null ? "" : get_member_dto.getProvider(),
 				MessageCode.MESSAGE_CODE, MessageCode.SIGN_UP_SUCCESS
 		));
 		
@@ -328,7 +336,19 @@ public class MemberController {
 		
 	}
 	
+	// 출석 확인
+	@GetMapping("/get-attendance-date-list")
+	public ResponseEntity<List<LocalDate>> getAttendanceDateList(@AuthenticationPrincipal UserDetails user_details){
+		
+		String email = user_details.getUsername();
+		
+		List<LocalDate> getAttendanceDateList = attendance_service.getAttendanceDateList(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(getAttendanceDateList);
+	}
+	
+	// 회원 복구
+	
 	
 
 }
-

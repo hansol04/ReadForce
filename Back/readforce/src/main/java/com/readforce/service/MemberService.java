@@ -347,6 +347,20 @@ public class MemberService{
 		member.setSocial_provider_id(provider_id);
 		
 	}
+
+	// 관리자 - 모든 회원 조회
+	public List<GetMemberObject> getAllMemberList() {
+		
+		List<GetMemberObject> member_list = member_repository.getAllMemberList();
+		
+		if(member_list.isEmpty()) {
+			
+			throw new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND);
+			
+		}
+		
+		return member_list;
+	}
 	
 	
 	

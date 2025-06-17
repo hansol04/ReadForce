@@ -13,7 +13,7 @@ spring:
         show_sql: true
         format_sql: true
         hbm2ddl:
-          auto: none
+          auto: update
   data:
     redis:
       host: localhost
@@ -79,6 +79,7 @@ file:
       upload-dir: ./upload/image/profile/
       max-size: 5242880
       allowed-mime-types: image/jpeg,image/png,image/gif
+      default-image-url: 4b2d7245-2ca2-45ce-9954-e00f7553014a
 custom:
   fronted:
     password-reset-link-url: http://localhost:3000/resetpassword
@@ -88,13 +89,13 @@ custom:
     logout-redirect-url: http://localhost:3000/
     kakao-logout-url: https://kauth.kakao.com/oauth/logout?client_id=
 rate-limiting:
-  enabled: false
+  enabled: true
   ip:
-    requests: 100
+    max-requests: 100
     per-minute: 1
   email:
-    requests: 20
+    max-requests: 20
     per-minute: 1
   email-verification:
-    requests: 3
+    max-requests: 3
     per-hour: 1 
