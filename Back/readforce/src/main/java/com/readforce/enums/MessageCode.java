@@ -79,7 +79,8 @@ public final class MessageCode {
 	public static final String ACCESS_TOKEN_EXPIRED = "SP0010";
 	public static final String SOCIAL_EMAIL_ALREADY_CONNECTED_WITH_OTHER_MEMBER = "SP0011";
 	public static final String SOCIAL_EMAIL_ALREADY_USE_BY_OTHER_MEMBER = "SP0012";
-	
+	public static final String IP_ADDRESS_REQUEST_LIMIT_EXCEEDED = "SP0013";
+	public static final String EMAIL_REQUEST_LIMIT_EXCEEDED = "SP0014";
 
 	
 

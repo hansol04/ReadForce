@@ -95,3 +95,6 @@ rate-limiting:
   email:
     requests: 20
     per-minute: 1
+  email-verification:
+    requests: 3
+    per-hour: 1 

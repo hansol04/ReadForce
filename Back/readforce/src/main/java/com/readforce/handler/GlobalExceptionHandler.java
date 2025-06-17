@@ -2,8 +2,6 @@ package com.readforce.handler;
 
 
 import java.util.Map;
-
-
 import java.util.stream.Collectors;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,6 +19,7 @@ import com.readforce.exception.FileException;
 import com.readforce.exception.InvalidJwtSecretKeyException;
 import com.readforce.exception.JsonException;
 import com.readforce.exception.NotMatchException;
+import com.readforce.exception.RateLimitExceededException;
 import com.readforce.exception.ResourceNotFoundException;
 
 import jakarta.validation.ConstraintViolationException;
@@ -37,6 +36,15 @@ public class GlobalExceptionHandler {
     	log.error("JwtException occurred : {}", exception.getMessage(), exception);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
     
+    }
+    
+    // 요청 횟수 제한 초과 에러
+    @ExceptionHandler(RateLimitExceededException.class)
+    public ResponseEntity<Map<String, String>> handleRateLimitExceededException(RateLimitExceededException exception){
+    	
+    	log.warn("RateLimitExceededException occurred : {}", exception.getMessage(), exception);
+    	return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
+    	
     }
     
     // JSON 관련 에러
