@@ -347,6 +347,8 @@ public class MemberService{
 		member.setSocial_provider_id(provider_id);
 		
 	}
+
+
 	
 	
 	

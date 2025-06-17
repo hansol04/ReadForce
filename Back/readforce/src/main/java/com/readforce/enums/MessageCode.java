@@ -70,6 +70,8 @@ public final class MessageCode {
 	public static final String PROFILE_IMAGE_URL_NOT_FOUND = "NF0003";
 	public static final String NEWS_PASSAGE_NOT_FOUND = "NF0004";
 	public static final String NEWS_QUIZ_NOT_FOUND = "NF0005";
+	public static final String ATTENDANCE_DATE_NOT_FOUND = "NF0006";
+	public static final String MEMBER_NOT_FOUND = "NF0007";
 	
 	
 	// 특정 상황

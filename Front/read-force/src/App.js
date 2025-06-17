@@ -19,6 +19,7 @@ import FindPassword from "./pages/login/findpassword";
 import ResetPassword from "./pages/login/resetpassword";
 import Oauth2redirect from './pages/login/oauth2redirect';
 import Authcallback from './pages/login/authcallback';
+import AdminPage from './pages/adminpages/adminpage';
 
 import QuizPage from './pages/quiz/QuizPage';
 import ReadingPage from './pages/quiz/ReadingPage';
@@ -55,6 +56,7 @@ function App() {
           <Route path="/oauth2/redirect" element={<Oauth2redirect />} />
           <Route path="/authcallback" element={<Authcallback />} />
           <Route path="/social-sign-up" element={<Socialsignup />} />
+          <Route path="/adminpage" element={<AdminPage />} />
           <Route path="/literature/classic" element={<ClassicPage />} />
           <Route path="/question/:id" element={<ArticleQuestion />} />
        </Route>

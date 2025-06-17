@@ -3,7 +3,9 @@ package com.readforce.controller;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -332,6 +334,17 @@ public class MemberController {
 				.contentType(MediaType.parseMediaType(content_type))
 				.body(resource);
 		
+	}
+	
+	// 출석 확인
+	@GetMapping("/get-attendance-date-list")
+	public ResponseEntity<List<LocalDate>> getAttendanceDateList(@AuthenticationPrincipal UserDetails user_details){
+		
+		String email = user_details.getUsername();
+		
+		List<LocalDate> getAttendanceDateList = attendance_service.getAttendanceDateList(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(getAttendanceDateList);
 	}
 	
 	

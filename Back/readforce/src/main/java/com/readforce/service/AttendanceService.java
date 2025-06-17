@@ -3,6 +3,8 @@ package com.readforce.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +52,25 @@ public class AttendanceService {
 			
 		}
 		
+		
+	}
+
+	// 출석일 불러오기
+	@Transactional(readOnly = true)
+	public List<LocalDate> getAttendanceDateList(String email) {
+		
+		List<LocalDate> attendance_date_list = attendance_repository.findAllByEmail(email)
+				.stream()
+				.map(attendance -> attendance.getCreated_date().toLocalDate())
+				.collect(Collectors.toList());
+		
+		if(attendance_date_list.isEmpty()) {
+			
+			throw new ResourceNotFoundException(MessageCode.ATTENDANCE_DATE_NOT_FOUND);
+			
+		}
+		
+		return attendance_date_list;
 		
 	}
 	
