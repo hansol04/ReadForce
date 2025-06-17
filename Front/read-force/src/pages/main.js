@@ -1,11 +1,12 @@
 import "./main.css";
 import React, { useState } from "react";
 import mainImage from "../assets/image/mainimage.png";
+import { useNavigate } from "react-router-dom";
 
 const Main = () => {
     const [showLangMenu, setShowLangMenu] = useState(false);
     const [selectedLang, setSelectedLang] = useState('한국어');
-
+    const navigate = useNavigate();
     const handleLangSelect = (lang) => {
         setSelectedLang(lang);
         setShowLangMenu(false);
@@ -22,7 +23,7 @@ const Main = () => {
                         세상을 읽는 힘입니다
                         </h2>
                     <p>한국·일본·미국 뉴스로 나의 문해력을 테스트 해보세요!</p>
-                    <button>문해력 테스트 시작하기</button>
+                    <button onClick={() => navigate("/test-start")}>문해력 테스트 시작하기</button>
                     </div>
                     <div className="main-hero-image">
                     <img src={mainImage} alt="문해력 일러스트" />

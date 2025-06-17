@@ -26,7 +26,6 @@ const EmailVerifyPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // ✅ 인증 성공 시 email 쿼리로 넘기며 다음 단계로 이동
         alert("E-mail 인증이 완료되었습니다.");
         navigate(`/signup/signupcompletepage?email=${encodeURIComponent(email)}`);
       } else {

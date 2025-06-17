@@ -23,14 +23,14 @@ const SignupCompletePage = () => {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
-    // 닉네임 중복 검사 함수
+    // 닉네임 중복 검사
     const checkNicknameDuplicate = async (nickname) => {
       try {
         const res = await fetch(`/member/nickname-check?nickname=${nickname}`);
   
         if (res.ok) {
           const data = await res.json();
-          console.log(data.message); // "닉네임은 사용 가능합니다."
+          console.log(data.message);
           return true;
         } else {
           const data = await res.json();
@@ -43,7 +43,7 @@ const SignupCompletePage = () => {
       }
     };
   
-    // 닉네임 형식 검사 함수
+    // 닉네임 형식 검사
     const validateNickname = async (value) => {
       const onlyKorean = /^[가-힣]+$/.test(value);
       const onlyEnglish = /^[a-zA-Z]+$/.test(value);
@@ -78,12 +78,11 @@ const SignupCompletePage = () => {
       setIsBirthdayValid(false);
     }
   };
-    // - 자동 추가
-    const handleBirthdayChange = (value) => {
-      // 숫자만 남기기
+
+    const handleBirthdayChange = (value) => {            // - 자동 추가  /숫자만 남기기   /  자동으로 YYYY-MM-DD 형태로 변환  /유효성 검사 호출
+
       const numeric = value.replace(/\D/g, '').slice(0, 8);
-  
-      // 자동으로 YYYY-MM-DD 형태로 변환
+
       let formatted = numeric;
       if (numeric.length >= 5) {
         formatted = `${numeric.slice(0, 4)}-${numeric.slice(4, 6)}`;
@@ -91,9 +90,8 @@ const SignupCompletePage = () => {
           formatted += `-${numeric.slice(6, 8)}`;
         }
       }
-  
       setBirthday(formatted);
-      validateBirthday(formatted); // 유효성 검사 호출
+      validateBirthday(formatted);
     };
     // 비밀번호 유효성 검사
     const validatePassword = (value) => {
@@ -144,7 +142,7 @@ const SignupCompletePage = () => {
       return;
     }
 
-    // 생년월일 형식 확인 (간단한 정규표현식)
+    // 생년월일 형식 확인
     const birthdayRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!birthdayRegex.test(birthday)) {
       setError('생년월일은 YYYY-MM-DD 형식이어야 합니다.');
@@ -181,6 +179,7 @@ const SignupCompletePage = () => {
       <form className="signup-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>닉네임</label>
+          <div className='input-with-message'>
           <input
               type="text"
               placeholder="한글 8자, 영문 20자 이내로 작성해주세요"
@@ -197,11 +196,11 @@ const SignupCompletePage = () => {
               style={{
                 color: isNicknameValid === null ? 'inherit' : isNicknameValid ? 'green' : 'red',
                 fontSize: '0.85rem',
-                // marginTop: '4px',
               }}
             >
               {nicknameMessage}
             </span>
+        </div>
         </div>
         <div className="form-group">
           <label>생년월일</label>

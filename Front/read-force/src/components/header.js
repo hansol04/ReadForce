@@ -25,9 +25,40 @@ const Header = () => {
     setShowLangMenu(false);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("nickname");
+  const handleLogout = async () => {
+    const token = localStorage.getItem("token");
+    const provider = localStorage.getItem("provider");
+
+    try {
+      if (provider === "KAKAO") {
+        const response = await fetch("/member/kakao-sign-out", {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          localStorage.clear();
+          window.location.href = data.KAKAO_LOGOUT_URL;
+          return;
+        } else {
+          alert("카카오 로그아웃에 실패했습니다.");
+        }
+      } else {
+        await fetch("/member/sign-out", {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("로그아웃 중 오류 발생:", error);
+    }
+
+    localStorage.clear();
     setShowUserMenu(false);
     navigate("/");
   };
@@ -107,13 +138,15 @@ const Header = () => {
               {showUserMenu && (
                 <div className="user-dropdown">
                   <div onClick={() => { setShowUserMenu(false); navigate("/mypage"); }}>마이페이지</div>
+
+                  <div onClick={() => { setShowUserMenu(false); navigate("/profile-edit"); }}>회원정보 수정</div>
+                  <div onClick={() => { setShowUserMenu(false); navigate("/change-password"); }}>비밀번호 수정</div>
                   {/* 관리자 전용 메뉴 */}
                   {nickname === "관리자" && (
                     <div onClick={() => { setShowUserMenu(false); navigate("/adminpage"); }}>
                       관리자 페이지
                     </div>
                   )}
-
                   <div onClick={handleLogout}>로그아웃</div>
                 </div>
               )}

@@ -29,7 +29,7 @@ export const useQuizHandler = (mode = 'navigate', country = 'kr') => {
     }
 
     const language = getLanguage(country);
-    const from = getFromPath(country); // ✅ 시작 경로 계산
+    const from = getFromPath(country); // 시작 경로 계산
 
     try {
       const transformRes = await fetch('http://localhost:8080/api/news/transform', {
@@ -59,7 +59,7 @@ export const useQuizHandler = (mode = 'navigate', country = 'kr') => {
           state: {
             article: { content: rewritten },
             quiz,
-            from // ✅ 여기 포함
+            from // 포함
           }
         });
       } else {
