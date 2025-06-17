@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import fetchWithAuth from '../../utils/fetchWithAuth'; // 경로는 상황에 따라 조정
+import fetchWithAuth from '../../utils/fetchWithAuth';
 
 const AdminPage = () => {
     const navigate = useNavigate();
