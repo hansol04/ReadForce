@@ -32,6 +32,8 @@ import com.readforce.repository.MemberRepository;
 import com.readforce.repository.NeedAdminCheckFailedDeletionLogRepository;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -349,6 +351,7 @@ public class MemberService{
 	}
 
 	// 관리자 - 모든 회원 조회
+	@Transactional(readOnly = true)
 	public List<GetMemberObject> getAllMemberList() {
 		
 		List<GetMemberObject> member_list = member_repository.getAllMemberList();
@@ -360,6 +363,17 @@ public class MemberService{
 		}
 		
 		return member_list;
+	}
+
+	// 관리자 - 계정 활성화
+	@Transactional
+	public void activateMember(String email) {
+		
+		Member member = member_repository.findByEmailAndStatus(email, Status.PENDING_DELETION)
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.WITHDRAW_NOT_FOUND));
+		
+		member.setStatus(Status.ACTIVE);
+		
 	}
 	
 	

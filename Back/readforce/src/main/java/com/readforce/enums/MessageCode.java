@@ -51,6 +51,8 @@ public final class MessageCode {
 	public static final String REISSUE_ACCESS_TOKEN_SUCCESS = "SU0011"; // 엑세스 토큰 재발급 성공
 	public static final String SIGN_OUT_SUCCESS = "SU0012";
 	public static final String GET_TOKENS_SUCCESS = "SU0013";
+	public static final String MEMBER_DEACTIVATE_SUCCESS = "SU0014";
+	public static final String MEMBER_ACTIVATE_SUCCESS = "SU0015";
 
 	// 실패
 	public static final String VERIFICATION_CODE_SEND_FAIL = "FA0001";
@@ -72,6 +74,7 @@ public final class MessageCode {
 	public static final String NEWS_QUIZ_NOT_FOUND = "NF0005";
 	public static final String ATTENDANCE_DATE_NOT_FOUND = "NF0006";
 	public static final String MEMBER_NOT_FOUND = "NF0007";
+	public static final String WITHDRAW_NOT_FOUND = "NF0008";
 	
 	
 	// 특정 상황

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.readforce.dto.MemberDto.GetMemberObject;
 import com.readforce.enums.MessageCode;
+import com.readforce.service.AttendanceService;
 import com.readforce.service.MemberService;
 
 import jakarta.validation.constraints.Email;
@@ -28,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class AdminController {
 	
 	private final MemberService member_service;
+	private final AttendanceService attendance_service;
 
 	// 전체 회원 목록 조회
 	@PreAuthorize("hasRole('ADMIN')")
@@ -41,7 +43,7 @@ public class AdminController {
 	
 	// 계정 비활성화
 	@PreAuthorize("hasRole('ADMIN')")
-	@PatchMapping("/withd-member")
+	@PatchMapping("/deactivate-member")
 	public ResponseEntity<Map<String, String>> deactivateMember(
 			@RequestParam("email")
 			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
@@ -49,8 +51,43 @@ public class AdminController {
 			String email
 	){
 		
-		return null;
+		member_service.withdrawMember(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.MEMBER_DEACTIVATE_SUCCESS));
 		
 	}
+	
+	// 계정 활성화
+	@PreAuthorize("hasRole('ADMIN')")
+	@PatchMapping("/activate-member")
+	public ResponseEntity<Map<String, String>> activateMember(
+			@RequestParam("email")
+			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+			String email		
+	){
+		
+		member_service.activateMember(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.MEMBER_ACTIVATE_SUCCESS));
+		
+	}
+	
+	// 출석일 조회
+	@PreAuthorize("hasRole('ADMIN')")
+	@PatchMapping("/get-attendance-count")
+	public ResponseEntity<Long>  getAttendanceCount(
+			@RequestParam("email")
+			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+			String email		
+	){
+		
+		Long attandance_count = attendance_service.getAttendanceCount(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(attandance_count);
+		
+	}
+	
 	
 }

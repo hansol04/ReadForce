@@ -25,4 +25,6 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long>{
 
 	List<Attendance> findAllByEmail(String email);
 
+	Long countByEmail(String email);
+
 }
