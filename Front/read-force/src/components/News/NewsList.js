@@ -32,16 +32,24 @@ const NewsList = ({ country = 'kr', onSolve = () => {} }) => {
   const [category, setCategory] = useState('');
 
   useEffect(() => {
-    axios.get(`/news?country=${country}`)
-      .then(res => {
-        const enriched = res.data.map(article => ({
-          ...article,
-          category: categorizeArticle(article.title + ' ' + article.summary),
-        }));
-        setArticles(enriched);
-      })
-      .catch(err => console.error('뉴스 로딩 실패', err));
-  }, [country]);
+    if (!level) return; // level이 없으면 요청 안 보냄
+
+    axios.get("/news/get-news-passage-list", {
+      params: {
+        country: "kr",
+        level: level
+      }
+    })
+    .then(res => {
+      console.log("응답 데이터 확인 👉", res.data);
+      const enriched = res.data.map(article => ({
+        ...article,
+        category: categorizeArticle(article.title + ' ' + article.summary),
+      }));
+      setArticles(enriched);
+    })
+    .catch(err => console.error('뉴스 로딩 실패', err));
+  }, [country, level]);
 
   const filtered = articles.filter((a) => {
     const levelMatch = level ? a.difficulty === level : true;

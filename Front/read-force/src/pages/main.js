@@ -78,26 +78,37 @@ const Main = () => {
                 <div className="stat-box wrong-articles">
                     <h3>가장 많이 틀린 기사</h3>
                     <div className="article">
-                        <img src="/flags/japan.png" alt="JP" className="flag" />
+                        <div className="flag">🇯🇵</div>
                         <div>
                             <div className="title">福島：花の癒し力</div>
-                            <div className="author">Ueno Yamamoto<br /><span className="sub">NHK World</span></div>
+                            <div className="author">
+                            Ueno Yamamoto<br />
+                            <span className="sub">NHK World</span>
+                            </div>
                         </div>
-                    </div>
-                    <div className="article">
-                        <img src="/flags/usa.png" alt="US" className="flag" />
+                        </div>
+
+                        <div className="article">
+                        <div className="flag">🇺🇸</div>
                         <div>
                             <div className="title">How 'big, beautiful' bill led to big ugly breakup for Trump and Musk</div>
-                            <div className="author">Anthony Zurcher<br /><span className="sub">North America Correspondent</span></div>
+                            <div className="author">
+                            Anthony Zurcher<br />
+                            <span className="sub">North America Correspondent</span>
+                            </div>
                         </div>
-                    </div>
-                    <div className="article">
-                        <img src="/flags/korea.png" alt="KR" className="flag" />
+                        </div>
+
+                        <div className="article">
+                        <div className="flag">🇰🇷</div>
                         <div>
                             <div className="title">성남·경기도 라인 ‘7인회’ 대통령실 속속 합류</div>
-                            <div className="author">송경모 기자<br /><span className="sub">국민일보</span></div>
+                            <div className="author">
+                            송경모 기자<br />
+                            <span className="sub">국민일보</span>
+                            </div>
                         </div>
-                    </div>
+                        </div>
                 </div>
                 </div>
             </section>
