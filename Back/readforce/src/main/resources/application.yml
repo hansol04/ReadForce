@@ -90,11 +90,11 @@ custom:
 rate-limiting:
   enabled: true
   ip:
-    requests: 100
+    max-requests: 100
     per-minute: 1
   email:
-    requests: 20
+    max-requests: 20
     per-minute: 1
   email-verification:
-    requests: 3
+    max-requests: 3
     per-hour: 1 

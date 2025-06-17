@@ -3,47 +3,71 @@ package com.readforce.service;
 import java.time.Duration;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
-import io.github.bucket4j.Bandwidth;
-import io.github.bucket4j.Bucket;
+import com.readforce.enums.Prefix;
+
 import lombok.RequiredArgsConstructor;
 
-@EnableCaching
 @Service
 @RequiredArgsConstructor
 public class RateLimitingService {
 
-	@Value("${rate-limiting.ip.requests}")
-	private int ip_requests;
+	@Value("${rate-limiting.ip.max-requests}")
+	private int ip_max_requests;
 	
 	@Value("${rate-limiting.ip.per-minute}")
 	private int ip_per_minute;
 	
-	@Value("${rate-limiting.email.requests}")
-	private int email_requests;
+	@Value("${rate-limiting.email.max-requests}")
+	private int email_max_requests;
 	
 	@Value("${rate-limiting.email.per-minute}")
 	private int email_per_minute;
 	
-	private final CacheManager cache_manager;
+	private final StringRedisTemplate redis_template;
 	
-	public Bucket resolveBucketForIp(String ip_address) {
+	// IP 주소 기반
+	public boolean isIpRequestAllowed(String ip_address) {
 		
-		Bandwidth limit = Bandwidth.simple(ip_requests, Duration.ofMinutes(ip_per_minute));
-		return cache_manager.getCache("rate-limit-buckets")
-				.get(ip_address, () -> Bucket.builder().addLimit(limit).build());
+		String key = Prefix.RATE_LIMIT_IP + ip_address;
+		
+		return isRequestAllowed(key, ip_max_requests, Duration.ofMinutes(ip_per_minute));
 		
 	}
 	
-	public Bucket resolveBucketForMail(String email) {
+	// email 주소 기반
+	public boolean isEmailRequestAllowed(String email) {
 		
-		Bandwidth limit = Bandwidth.simple(email_requests, Duration.ofMinutes(email_per_minute));
-		return cache_manager.getCache("rate-limit-buckets")
-				.get(email, () -> Bucket.builder().addLimit(limit).build());
+		String key = Prefix.RATE_LIMIT_EMAIL + email;
 		
-	}	
+		return isRequestAllowed(key, email_max_requests, Duration.ofMinutes(email_per_minute));
+		
+	}
+	
+	public boolean isRequestAllowed(String key, long max_requests, Duration duration) {
+		
+		ValueOperations<String, String> operations = redis_template.opsForValue();
+		
+		Long current_requests = operations.increment(key);
+		
+		if(current_requests == null) {
+
+			return false;
+
+		}
+		
+		// 해당 키로 첫 요청이 오면 만료 시각 설정
+		if(current_requests == 1) {
+			
+			redis_template.expire(key, duration);
+			
+		}
+		
+		return current_requests <= max_requests;		
+		
+	}
 	
 }

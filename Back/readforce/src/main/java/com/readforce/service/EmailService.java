@@ -33,14 +33,14 @@ public class EmailService {
 	private final String SIGN_UP_MESSAGE = "ReadForce에 가입하신 것을 환영합니다.";
 	private final String DEFAULT_MESSAGE = "ReadForce을 이용해주셔서 감사합니다.";
 	
-	@Value("${rate-limiting.email-verification.requests}")
-	private int email_verification_requests;
+	@Value("${rate-limiting.email-verification.max-requests}")
+	private int email_verification_max_requests;
 
 	@Value("${rate-limiting.email-verification.per-hour}")
 	private int email_verification_per_hour;
 	
 	@Value("${custom.fronted.password-reset-link-url}")
-	private String PASSWORD_RESET_URL;
+	private String password_reset_url;
 	
 	
 	// 인증 번호 생성
@@ -140,7 +140,7 @@ public class EmailService {
 		String text = 
 				DEFAULT_MESSAGE + "\n"
 				+ "비밀번호를 재설정 하시려면 아래의 링크를 눌러주세요.\n"
-				+ PASSWORD_RESET_URL + "?token=" + temporal_token;
+				+ password_reset_url + "?token=" + temporal_token;
 		
 		redis_template.opsForValue().set(
 				Prefix.PASSWORD_RESET_BY_LINK.getName() + temporal_token,
@@ -200,7 +200,7 @@ public class EmailService {
 		String current_attempts_string = operations.get(key);
 		int current_attempts = (current_attempts_string == null) ? 0 : Integer.parseInt(current_attempts_string);
 		
-		if(current_attempts >= email_verification_requests) {
+		if(current_attempts >= email_verification_max_requests) {
 			
 			throw new RateLimitExceededException(MessageCode.EMAIL_REQUEST_LIMIT_EXCEEDED);
 			

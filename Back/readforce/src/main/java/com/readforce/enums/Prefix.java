@@ -13,7 +13,11 @@ public enum Prefix {
 	X_REFRESH_TOKEN("X-Refresh-Token "),
 	TEMPORAL_TOKEN("TemporalToken "),
 	EXIST_MEMBER_SOCIAL_LOGIN("ExistMemberSocialLogin_"),
-	EMAIL_VERIFY_ATTEMPT_PREFIX("EmailVerifyAttempt_");
+	EMAIL_VERIFY_ATTEMPT_PREFIX("EmailVerifyAttempt_"),
+	RATE_LIMIT_IP("RateLimitIp:"),
+	RATE_LIMIT_EMAIL("RateLimitEmail:")
+	
+	;
 
 	private final String prefix;
 	
