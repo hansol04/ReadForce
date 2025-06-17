@@ -5,7 +5,6 @@ package com.readforce.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +23,6 @@ import com.readforce.entity.Member;
 import com.readforce.entity.NeedAdminCheckFailedDeletionLog;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.Prefix;
-import com.readforce.enums.Role;
 import com.readforce.enums.Status;
 import com.readforce.exception.AuthenticationException;
 import com.readforce.exception.DuplicateException;
@@ -48,8 +46,7 @@ public class MemberService{
 	private final StringRedisTemplate redis_template;
 	private final FileService file_service;
 	private final NeedAdminCheckFailedDeletionLogRepository need_admin_check_failed_deletion_log_repository;
-	private final MemberRepository memberRepository; //김기찬 관리자 페이짖
-	
+
 	@Value("${file.image.profile.upload-dir}")
 	private String profile_image_upload_dir;
 
@@ -321,12 +318,6 @@ public class MemberService{
 		
 	}
 	
-	// 김기찬 관리잗ㅈㄹ더지ㅏㅜ
-	public List<GetMemberObject> getAllMemberObjects() {
-	    return memberRepository.findAll().stream()
-	            .map(MemberDto::from)
-	            .collect(Collectors.toList());
-	}
 
 	// 기존 회원과 소셜 계정 연동
 	@Transactional
@@ -354,38 +345,30 @@ public class MemberService{
 
 		member.setSocial_provider(provider);
 		member.setSocial_provider_id(provider_id);
+		
 	}
-	
-	// 관리자 전용 계정 비활성화 기능 - 기찬
-	@Transactional
-	public void deactivateByAdmin(String email) {
-	    Member member = member_repository.findByEmail(email)
-	        .orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
-	    
-	 // 관리자 계정 보호
-	    if (member.getRole() == Role.ADMIN) {
-	        throw new IllegalStateException("관리자 계정은 비활성화할 수 없습니다.");
-	    }
-	    
-	    member.setStatus(Status.PENDING_DELETION); 
-	    member.setWithdraw_date(LocalDateTime.now());
-	}
-	
-	// 관리자 전용 계정 활성화 기능 - 기찬
-	@Transactional
-	public void activateMember(String email) {
-	    Member member = memberRepository.findByEmail(email)
-	        .orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
 
-	    if (member.getRole() == Role.ADMIN) {
-	        throw new IllegalStateException("관리자 계정은 상태 변경이 불가능합니다.");
-	    }
-	    
-	    // PENDING_DELETION 상태일 때만 다시 ACTIVE로 변경
-	    if (member.getStatus() == Status.PENDING_DELETION) {
-	        member.setStatus(Status.ACTIVE);
-	    } else {
-	        throw new IllegalStateException("이미 활성화된 계정입니다.");
-	    }
+	// 관리자 - 모든 회원 조회
+	public List<GetMemberObject> getAllMemberList() {
+		
+		List<GetMemberObject> member_list = member_repository.findAllMember();
+		
+		if(member_list.isEmpty()) {
+			
+			throw new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND);
+			
+		}
+		
+		return member_list;
+	
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

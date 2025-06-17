@@ -51,5 +51,28 @@ public class AttendanceService {
 			attendance_repository.save(attendance);
 			
 		}
+		
+		
 	}
+
+	// 출석일 불러오기
+	@Transactional(readOnly = true)
+	public List<LocalDate> getAttendanceDateList(String email) {
+		
+		List<LocalDate> attendance_date_list = attendance_repository.findAllByEmail(email)
+				.stream()
+				.map(attendance -> attendance.getCreated_date().toLocalDate())
+				.collect(Collectors.toList());
+		
+		if(attendance_date_list.isEmpty()) {
+			
+			throw new ResourceNotFoundException(MessageCode.ATTENDANCE_DATE_NOT_FOUND);
+			
+		}
+		
+		return attendance_date_list;
+		
+	}
+	
+	
 }

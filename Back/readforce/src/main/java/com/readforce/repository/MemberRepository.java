@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.readforce.dto.MemberDto.GetMemberObject;
 import com.readforce.entity.Member;
 import com.readforce.enums.Status;
 
@@ -28,5 +29,7 @@ public interface MemberRepository extends JpaRepository<Member, String>{
 	Optional<Member> findByNickname(String nickname);
 
 	Optional<Member> findByEmailAndStatus(String email, Status active);
+
+	List<GetMemberObject> findAllMember();
 	
 }

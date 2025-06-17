@@ -14,7 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -337,34 +336,17 @@ public class MemberController {
 		
 	}
 	
-	// 김기찬이 추가 출석
-    @GetMapping("/attendance-dates")
-    public ResponseEntity<List<LocalDate>> getAttendanceDates(@AuthenticationPrincipal UserDetails userDetails) {
-        String email = userDetails.getUsername();
-        List<LocalDate> attendanceDates = attendance_service.getAttendanceDates(email);
-        return ResponseEntity.ok(attendanceDates);
-    }
-    
-    // 관리자 전용 - 전체 회원 목록 조회
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/get-all-members")
-    public ResponseEntity<List<GetMemberObject>> getAllMembers() {
-        List<GetMemberObject> memberList = member_service.getAllMemberObjects();
-        return ResponseEntity.ok(memberList);
-    }
-    
-    // 관리자 전용 - 계정 비활성화 - 기찬
-    @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping("/deactivate-member")
-    public ResponseEntity<Map<String, String>> deactivateMember(@RequestParam("email") String email) {
-        member_service.deactivateByAdmin(email);
-        return ResponseEntity.ok(Map.of("message", "회원 비활성화 완료"));
-    }
-    
-    // 관리자 전용 - 계정 활성화 - 기찬
-    @PatchMapping("/activate-member")
-    public ResponseEntity<?> activateMember(@RequestParam("email") String email) {
-        member_service.activateMember(email);
-        return ResponseEntity.ok().build();
-    }
+	// 출석 확인
+	@GetMapping("/get-attendance-date-list")
+	public ResponseEntity<List<LocalDate>> getAttendanceDateList(@AuthenticationPrincipal UserDetails user_details){
+		
+		String email = user_details.getUsername();
+		
+		List<LocalDate> getAttendanceDateList = attendance_service.getAttendanceDateList(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(getAttendanceDateList);
+	}
+	
+	
+
 }

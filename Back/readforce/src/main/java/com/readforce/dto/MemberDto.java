@@ -3,7 +3,6 @@ package com.readforce.dto;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.readforce.entity.Member;
 import com.readforce.enums.MessageCode;
 import com.readforce.validation.ValidBirthday;
 
@@ -169,21 +168,9 @@ public class MemberDto {
 		private String nickname;
 		private String provider;
 		private LocalDate birthday;
-		private LocalDate createDate;
-	    private String status;    
+		
 	}
 	
-	// 기무찬 
-	public static GetMemberObject from(Member member) {
-		return new GetMemberObject(
-				member.getEmail(),
-			    member.getNickname(),
-			    member.getSocial_provider(),
-			    member.getBirthday(),
-			    member.getCreate_date().toLocalDate(),
-			    member.getStatus().toString()
-			);
-	}
 	
 
 	
