@@ -122,11 +122,6 @@ const NewsList = ({ country = 'kr', onSolve = () => {} }) => {
         category={category}
         setCategory={setCategory}
       />
-      <div className="news-list">
-        {paginated.map((item) => (
-        <NewsCard key={item.id} article={item} />
-        ))}
-      </div>
 
       <div className="news-list">
         {paginated.length === 0 ? (

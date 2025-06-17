@@ -12,11 +12,6 @@
   border-radius: 4px;
 }
 
-.pagination button.active {
-  background-color: #439395;
-  color: white;
-}
-
 .pagination .active {
   background-color: #439395;
   color: white;

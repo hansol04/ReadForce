@@ -29,8 +29,7 @@ import ChallengePage from "./pages/challenge/challengepage";
 import ClassicPage from './pages/literature/ClassicPage';
 
 import NewsList from './components/News/NewsList';
-import ArticleQuestion from './components/News/ArticleQuestion';
-
+import ArticleQuestionPage from './components/News/ArticleQuestionPage';
 
 
 function App() {
@@ -58,7 +57,7 @@ function App() {
           <Route path="/social-sign-up" element={<Socialsignup />} />
           <Route path="/adminpage" element={<AdminPage />} />
           <Route path="/literature/classic" element={<ClassicPage />} />
-          <Route path="/question/:id" element={<ArticleQuestion />} />
+          <Route path="/question/:id" element={<ArticleQuestionPage />} />
        </Route>
       </Routes>
     </Router>
