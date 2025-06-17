@@ -5552,3 +5552,6 @@ java.util.concurrent.TimeoutException
 
 !ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-17 11:03:19.671
 !MESSAGE Classpath changed for project: readforce
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-17 11:09:56.913
+!MESSAGE Classpath changed for project: readforce
