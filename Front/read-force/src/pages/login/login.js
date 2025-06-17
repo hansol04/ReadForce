@@ -1,3 +1,4 @@
+// ✅ 공통 레이아웃 .page-container 반영됨
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
@@ -48,6 +49,7 @@ export default function Login() {
 
   return (
     <div>
+      <div className="page-container">
       <div className="login-wrapper">
         <h2 className="login-title">로그인</h2>
         <form className="login-form" onSubmit={handleLogin}>
@@ -108,6 +110,7 @@ export default function Login() {
           <button type="submit" className="login-btn">로그인</button>
         </form>
       </div>
+    </div>
     </div>
   );
 }

@@ -5,12 +5,6 @@
   border-top: 1px solid #ddd;
 }
 
-.footer .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
 .footer-title {
   font-size: 25px;
   font-weight: bold;

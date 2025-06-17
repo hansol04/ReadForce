@@ -125,3 +125,50 @@
   font-weight: bold;
   cursor: pointer;
 }
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 1.5rem;
+  }
+
+  .edit-form input {
+    font-size: 14px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .button-group button {
+    width: 100%;
+  }
+
+  .profile-section {
+    margin-bottom: 1rem;
+  }
+
+  .profile-wrapper {
+    width: 80px;
+    height: 80px;
+  }
+
+  .profile-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .profile-settings {
+    font-size: 14px;
+    padding: 2px 5px;
+  }
+
+  .profile-menu div {
+    font-size: 14px;
+  }
+
+  .withdraw-button {
+    padding: 10px;
+    font-size: 14px;
+  }
+}

@@ -106,3 +106,42 @@
   background-color: #d1eceb;
   color: #222;
 }
+
+@media (max-width: 600px) {
+  .filter-bar-layout {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .filter-left,
+  .filter-center,
+  .filter-right {
+    flex: none;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sort-button {
+    font-size: 14px;
+    padding: 6px 8px;
+  }
+
+  .level-button {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .custom-select {
+    width: 100%;
+  }
+
+  .custom-select .react-select__control {
+    min-height: 36px;
+    font-size: 14px;
+  }
+
+  .custom-select .react-select__menu {
+    font-size: 14px;
+  }
+}

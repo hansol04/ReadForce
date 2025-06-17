@@ -1,3 +1,4 @@
+// ✅ 공통 레이아웃 .page-container 반영됨
 import { useParams } from 'react-router-dom';
 import ArticleQuestion from './ArticleQuestion';
 
@@ -16,10 +17,14 @@ const ArticleQuestionPage = () => {
   const article = dummyArticles.find(a => a.id === Number(id));
 
   if (!article) {
-    return <p>기사를 찾을 수 없습니다.</p>;
+    return <div className="page-container"><p>기사를 찾을 수 없습니다.</p></div>;
   }
 
-  return <ArticleQuestion article={article} />;
+  return (
+    <div className="page-container">
+      <ArticleQuestion article={article} />
+    </div>
+  );
 };
 
 export default ArticleQuestionPage;

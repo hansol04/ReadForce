@@ -9,6 +9,7 @@ const SignupChoice = () => {
   const navigate = useNavigate();
 
   return (
+    <div className="page-container">
     <div className="signup-page">
       <h2 className="signup-title">Read Force 시작하기</h2>
 
@@ -37,6 +38,7 @@ const SignupChoice = () => {
           <span className="arrow">›</span>
         </button>
       </div>
+    </div>
     </div>
   );
 };

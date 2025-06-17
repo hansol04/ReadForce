@@ -136,6 +136,7 @@ export default function Socialsignup() {
   };
 
   return (
+    <div className="page-container">
     <div className="signup-wrapper">
       <h2 className="signup-title">추가 정보 입력</h2>
       <form className="signup-form" onSubmit={handleSubmit}>
@@ -188,6 +189,7 @@ export default function Socialsignup() {
         {error && <p className="error-message">{error}</p>}
         {message && <p className="success-message">{message}</p>}
       </form>
+    </div>
     </div>
   );
 }

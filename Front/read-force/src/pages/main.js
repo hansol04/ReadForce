@@ -14,7 +14,7 @@ const Main = () => {
     return (
         <div>
             <section className="hero">
-                <div className="container">
+                <div className="page-container">
                 <div className="hero-content">
                     <div className="hero-text">
                         <h2>
@@ -32,7 +32,7 @@ const Main = () => {
             </section>
 
             <section className="stats-section">
-                <div className="container stat-container">
+                <div className="page-container stat-container">
                 <div className="stat-box top5">
                     <h3>🏆 <span className="bold">주간 Top 5</span></h3>
                     <div className="tabs">

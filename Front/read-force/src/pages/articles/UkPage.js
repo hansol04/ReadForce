@@ -1,15 +1,16 @@
+// ✅ 공통 레이아웃 .page-container 반영됨
 import React from 'react';
 import { useQuizHandler } from '../../hooks/useQuizHandler';
 import NewsList from '../../components/News/NewsList';
 
-const UsaPage = () => {
+const UkPage = () => {
   const { handleSolve } = useQuizHandler('navigate', 'uk');
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="page-container">
       <NewsList country="uk" onSolve={handleSolve} />
     </div>
   );
 };
 
-export default UsaPage;
+export default UkPage;

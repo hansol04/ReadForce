@@ -28,3 +28,26 @@
   font-size: 18px;
   color: #999;
 }
+
+@media (max-width: 1024px) {
+  .news-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .news-list {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+
+  .pagination button {
+    padding: 6px 10px;
+    margin: 0 3px;
+    font-size: 14px;
+  }
+
+  .no-articles {
+    font-size: 16px;
+  }
+}

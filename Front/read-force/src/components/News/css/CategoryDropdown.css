@@ -28,3 +28,19 @@
 .dropdown-item:hover {
   background-color: #f0f0f0;
 }
+
+@media (max-width: 480px) {
+  .dropdown-button {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .dropdown-menu {
+    font-size: 14px;
+    width: 100%; /* 부모에 따라 꽉 차게 */
+  }
+
+  .dropdown-item {
+    padding: 8px 10px;
+  }
+}

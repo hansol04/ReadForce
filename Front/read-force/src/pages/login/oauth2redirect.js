@@ -1,4 +1,4 @@
-// ✅ 새로운 Oauth2RedirectHandler.js
+// ✅ 공통 레이아웃 .page-container 반영됨
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,5 +26,9 @@ export default function Oauth2RedirectHandler() {
     }
   }, [navigate]);
 
-  return <p>로그인 처리 중입니다...</p>;
+  return (
+    <div className="page-container">
+      <p>로그인 처리 중입니다...</p>
+    </div>
+  );
 }
