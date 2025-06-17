@@ -175,14 +175,14 @@ public class MemberDto {
 	
 	// 기무찬 
 	public static GetMemberObject from(Member member) {
-	    return new GetMemberObject(
-	        member.getEmail(),
-	        member.getNickname(),
-	        member.getProvider(),        
-	        member.getBirthday(),
-	        member.getCreateDate(),
-	        member.getStatus()
-	    );
+		return new GetMemberObject(
+				member.getEmail(),
+			    member.getNickname(),
+			    member.getSocial_provider(),
+			    member.getBirthday(),
+			    member.getCreate_date().toLocalDate(),
+			    member.getStatus().toString()
+			);
 	}
 	
 
