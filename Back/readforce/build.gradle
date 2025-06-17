@@ -55,10 +55,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     
     implementation 'com.bucket4j:bucket4j-core:8.1.0'
-    implementation 'com.bucket4j:bucket4j-jcache:8.1.0'
+    
     implementation 'org.springframework.boot:spring-boot-starter-cache'
-    implementation 'javax.cache:cache-api:1.1.1'
-    implementation 'org.redisson:redisson:3.17.7'
+    
+    
 }
 
 tasks.named('test') {
