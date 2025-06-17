@@ -12,7 +12,8 @@ public enum Prefix {
 	BEARER("Bearer "),
 	X_REFRESH_TOKEN("X-Refresh-Token "),
 	TEMPORAL_TOKEN("TemporalToken "),
-	EXIST_MEMBER_SOCIAL_LOGIN("ExistMemberSocialLogin_");
+	EXIST_MEMBER_SOCIAL_LOGIN("ExistMemberSocialLogin_"),
+	EMAIL_VERIFY_ATTEMPT_PREFIX("EmailVerifyAttempt_");
 
 	private final String prefix;
 	

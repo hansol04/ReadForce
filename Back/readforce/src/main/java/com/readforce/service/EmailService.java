@@ -3,9 +3,11 @@ package com.readforce.service;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import com.readforce.enums.MessageCode;
 import com.readforce.enums.Prefix;
 import com.readforce.enums.Status;
 import com.readforce.exception.AuthenticationException;
+import com.readforce.exception.RateLimitExceededException;
 import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.repository.MemberRepository;
 
@@ -29,6 +32,13 @@ public class EmailService {
 	private final StringRedisTemplate redis_template;
 	private final String SIGN_UP_MESSAGE = "ReadForce에 가입하신 것을 환영합니다.";
 	private final String DEFAULT_MESSAGE = "ReadForce을 이용해주셔서 감사합니다.";
+	
+	@Value("${rate-limiting.email-verification.requests}")
+	private int email_verification_requests;
+
+	@Value("${rate-limiting.email-verification.per-hour}")
+	private int email_verification_per_hour;
+	
 	@Value("${custom.fronted.password-reset-link-url}")
 	private String PASSWORD_RESET_URL;
 	
@@ -93,6 +103,8 @@ public class EmailService {
 	// 회원 가입 인증 번호 전송
 	public void sendVerificationCodeSignUp(String email) {
 		
+		checkAndIncrementVerificationAttempts(email);
+		
 		sendVerificationCode(
 				email, 
 				SIGN_UP_MESSAGE,
@@ -102,7 +114,7 @@ public class EmailService {
 		);
 		
 	}
-	
+
 	// 회원 가입 인증 번호 확인
 	public void verifyVerificationCodeSignUp(String email, String code) {
 
@@ -176,6 +188,36 @@ public class EmailService {
 		
 	}
 
+	// 이메일 인증 요청 횟수 제한
+	private void checkAndIncrementVerificationAttempts(String email) {
+		
+		ValueOperations<String, String> operations = redis_template.opsForValue();
+		
+		// Redis key 생성
+		String key = Prefix.EMAIL_VERIFY_ATTEMPT_PREFIX.getName() + email;
+		
+		// 현재 요청 횟수 확인
+		String current_attempts_string = operations.get(key);
+		int current_attempts = (current_attempts_string == null) ? 0 : Integer.parseInt(current_attempts_string);
+		
+		if(current_attempts >= email_verification_requests) {
+			
+			throw new RateLimitExceededException(MessageCode.EMAIL_REQUEST_LIMIT_EXCEEDED);
+			
+		}
+		
+		// 횟수 증가
+		operations.increment(key);
+		
+		// 키가 새로 생성된 경우
+		if(current_attempts == 0) {
+			
+			redis_template.expire(key, email_verification_per_hour, TimeUnit.HOURS);
+			
+		}
+		
+		
+	}
 	
 	
 	
