@@ -24,6 +24,7 @@ import com.readforce.entity.Member;
 import com.readforce.entity.NeedAdminCheckFailedDeletionLog;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.Prefix;
+import com.readforce.enums.Role;
 import com.readforce.enums.Status;
 import com.readforce.exception.AuthenticationException;
 import com.readforce.exception.DuplicateException;
@@ -353,15 +354,38 @@ public class MemberService{
 
 		member.setSocial_provider(provider);
 		member.setSocial_provider_id(provider_id);
-		
 	}
 	
+	// 관리자 전용 계정 비활성화 기능 - 기찬
+	@Transactional
+	public void deactivateByAdmin(String email) {
+	    Member member = member_repository.findByEmail(email)
+	        .orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
+	    
+	 // 관리자 계정 보호
+	    if (member.getRole() == Role.ADMIN) {
+	        throw new IllegalStateException("관리자 계정은 비활성화할 수 없습니다.");
+	    }
+	    
+	    member.setStatus(Status.PENDING_DELETION); 
+	    member.setWithdraw_date(LocalDateTime.now());
+	}
 	
-	
-	
-	
-	
-	
-	
-	
+	// 관리자 전용 계정 활성화 기능 - 기찬
+	@Transactional
+	public void activateMember(String email) {
+	    Member member = memberRepository.findByEmail(email)
+	        .orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL));
+
+	    if (member.getRole() == Role.ADMIN) {
+	        throw new IllegalStateException("관리자 계정은 상태 변경이 불가능합니다.");
+	    }
+	    
+	    // PENDING_DELETION 상태일 때만 다시 ACTIVE로 변경
+	    if (member.getStatus() == Status.PENDING_DELETION) {
+	        member.setStatus(Status.ACTIVE);
+	    } else {
+	        throw new IllegalStateException("이미 활성화된 계정입니다.");
+	    }
+	}
 }
