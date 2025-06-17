@@ -4,12 +4,14 @@ import java.time.Duration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import lombok.RequiredArgsConstructor;
 
+@EnableCaching
 @Service
 @RequiredArgsConstructor
 public class RateLimitingService {
@@ -26,7 +28,7 @@ public class RateLimitingService {
 	@Value("${rate-limiting.email.per-minute}")
 	private int email_per_minute;
 	
-	private CacheManager cache_manager;
+	private final CacheManager cache_manager;
 	
 	public Bucket resolveBucketForIp(String ip_address) {
 		
