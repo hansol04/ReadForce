@@ -353,6 +353,18 @@ public class MemberController {
         return ResponseEntity.ok(memberList);
     }
     
-	
-
+    // 관리자 전용 - 계정 비활성화 - 기찬
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/deactivate-member")
+    public ResponseEntity<Map<String, String>> deactivateMember(@RequestParam("email") String email) {
+        member_service.deactivateByAdmin(email);
+        return ResponseEntity.ok(Map.of("message", "회원 비활성화 완료"));
+    }
+    
+    // 관리자 전용 - 계정 활성화 - 기찬
+    @PatchMapping("/activate-member")
+    public ResponseEntity<?> activateMember(@RequestParam("email") String email) {
+        member_service.activateMember(email);
+        return ResponseEntity.ok().build();
+    }
 }
