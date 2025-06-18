@@ -32,22 +32,49 @@ const NewsList = ({ country = 'kr', onSolve = () => {} }) => {
   const [category, setCategory] = useState('');
 
   useEffect(() => {
-    const params = { country };
-    if (['초급', '중급', '고급'].includes(level)) {
-      params.level = level;
-    }
 
-    axios.get("/news/get-news-passage-list", { params })
-      .then(res => {
-        console.log("응답 데이터 확인 👉", res.data);
-        const enriched = res.data.map(article => ({
-          ...article,
-          category: categorizeArticle(article.title + ' ' + (article.content || '')),
-        }));
-        setArticles(enriched);
-      })
-      .catch(err => console.error('뉴스 로딩 실패', err));
-  }, [country, level]);
+    //if (!level) return; // level이 없으면 요청 안 보냄
+
+  //   axios.get("/news/get-news-passage-list", {
+  //     params: {
+  //       country: "kr",
+  //       level: level
+  //     }
+  //   })
+  //   .then(res => {
+  //     console.log("응답 데이터 확인 👉", res.data);
+  //     const enriched = res.data.map(article => ({
+  //       ...article,
+  //       category: categorizeArticle(article.title + ' ' + article.summary),
+  //     }));
+  //     setArticles(enriched);
+  //   })
+  //   .catch(err => console.error('뉴스 로딩 실패', err));
+  // }, [country, level]);
+
+    const dummyArticles = [
+    {
+      id: 1,
+      title: "AI 기술이 바꾸는 미래",
+      summary: "AI 기술이 다양한 산업에 도입되며 삶의 질을 변화시키고 있다.",
+      difficulty: "초급",
+      publishedAt: "2025-06-16",
+    },
+    {
+      id: 2,
+      title: "기후 변화 대응 위한 국제 협약 체결",
+      summary: "전 세계가 협력해 기후 위기에 대응하는 협약을 체결했다.",
+      difficulty: "중급",
+      publishedAt: "2025-06-15",
+    }
+  ];
+
+  const enriched = dummyArticles.map(article => ({
+    ...article,
+    category: categorizeArticle(article.title + ' ' + article.summary),
+  }));
+  setArticles(enriched);
+}, [country, level]);
 
   const filtered = articles.filter((a) => {
     const levelMatch = level === 'all' || a.level === level;
