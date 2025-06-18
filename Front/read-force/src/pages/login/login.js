@@ -1,3 +1,4 @@
+// ✅ 공통 레이아웃 .page-container 반영됨
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
@@ -25,17 +26,16 @@ export default function Login() {
       const MESSAGE_CODE = data.MESSAGE_CODE;
       console.log(MESSAGE_CODE)
 
-      console.log("로그인 응답 데이터", data); // 👈 여기에 nickname이 포함돼야 함
+      console.log("로그인 응답 데이터", data); 
 
       if (response.ok) {
         const token = data.ACCESS_TOKEN;
-        const refreshToken = data.REFRESH_TOKEN; // ✅ 추가
+        const refreshToken = data.REFRESH_TOKEN;
         const nickname = data.NICK_NAME || data.nickname;
 
         localStorage.setItem('token', token);
-        localStorage.setItem('refresh_token', refreshToken); // ✅ 추가
-        localStorage.setItem('nickname', nickname); // ✅ 이게 없으면 Header에서 못 뜸
-
+        localStorage.setItem('refresh_token', refreshToken); 
+        localStorage.setItem('nickname', nickname); 
         navigate('/');
       } else {
         setError(data.message || '로그인에 실패했습니다.');
@@ -48,6 +48,7 @@ export default function Login() {
 
   return (
     <div>
+      <div className="page-container">
       <div className="login-wrapper">
         <h2 className="login-title">로그인</h2>
         <form className="login-form" onSubmit={handleLogin}>
@@ -108,6 +109,7 @@ export default function Login() {
           <button type="submit" className="login-btn">로그인</button>
         </form>
       </div>
+    </div>
     </div>
   );
 }

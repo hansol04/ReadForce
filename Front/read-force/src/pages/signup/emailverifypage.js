@@ -26,7 +26,6 @@ const EmailVerifyPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // ✅ 인증 성공 시 email 쿼리로 넘기며 다음 단계로 이동
         alert("E-mail 인증이 완료되었습니다.");
         navigate(`/signup/signupcompletepage?email=${encodeURIComponent(email)}`);
       } else {
@@ -39,6 +38,7 @@ const EmailVerifyPage = () => {
   };
 
   return (
+    <div className="page-container">
     <div className="signup-wrapper">
       <h2 className="signup-title">E-mail 인증</h2>
       <form className="signup-form" onSubmit={handleVerify}>
@@ -55,6 +55,7 @@ const EmailVerifyPage = () => {
         <button className="submit-btn">확인</button>
         {error && <p className="error-message">{error}</p>}
       </form>
+    </div>
     </div>
   );
 };

@@ -1,29 +1,3 @@
-// import { useEffect } from 'react';
-// import { useNavigate } from 'react-router-dom';
-
-// export default function Authcallback() {
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     const urlParams = new URLSearchParams(window.location.search);
-//     const token = urlParams.get('ACCESS_TOKEN');
-
-//     console.log('[✅ 콜백 URL 전체]', window.location.href);
-//     console.log('[✅ ACCESS_TOKEN]', token);
-
-//     if (token) {
-//       localStorage.setItem('token', token);
-//       window.location.href = '/';  // ✅ 새로고침 포함되어 확실하게 동작
-//       return;
-//     }
-
-//     console.error('[❌ 로그인 실패 이유] ACCESS_TOKEN이 없습니다.');
-//     alert('로그인에 실패했습니다.');
-//     navigate('/login');
-//   }, [navigate]);
-
-//   return <p>로그인 처리 중입니다...</p>;
-// }
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -32,21 +6,64 @@ export default function Authcallback() {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('ACCESS_TOKEN');
-    const refreshToken = urlParams.get('REFRESH_TOKEN');     const nickname = urlParams.get('NICK_NAME');
-    if (token && refreshToken && nickname) {
-      localStorage.setItem('token', token);
-      localStorage.setItem('refresh_token', refreshToken);
-      localStorage.setItem('nickname', nickname); 
+    const temporalToken = urlParams.get('TEMPORAL_TOKEN');
+    const MESSAGE_CODE = urlParams.get('MESSAGE_CODE');
 
-      window.location.replace('/');
+    // 신규 회원 처리 함수
+    const handleNewUser = (temporalToken) => {
+      if (temporalToken) {
+        localStorage.setItem('temporal_token', temporalToken);
+        window.location.replace('/signup/social');
+      } else {
+        console.error('[❌ 신규 회원 처리 실패] 파라미터 누락');
+        alert('회원가입에 실패했습니다.');
+        navigate('/login');
+      }
+    };
+
+    // 기존 회원 처리
+    if (temporalToken) {
+      fetch('http://localhost:3000/auth/get-tokens', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({ temporal_token: temporalToken }),
+      })
+        .then(async (res) => {
+          const data = await res.json();
+          const { ACCESS_TOKEN, REFRESH_TOKEN, NICK_NAME, PROVIDER } = data;
+
+          if (ACCESS_TOKEN && REFRESH_TOKEN && NICK_NAME && PROVIDER !== undefined) {
+            localStorage.setItem('token', ACCESS_TOKEN);
+            localStorage.setItem('refresh_token', REFRESH_TOKEN);
+            localStorage.setItem('nickname', NICK_NAME);
+            localStorage.setItem('provider', PROVIDER);
+            window.location.replace('/');
+          } else {
+            console.warn('[ℹ️ 기존 회원 아님] → 소셜 가입 이동');
+            handleNewUser(temporalToken);
+          }
+        })
+        .catch((err) => {
+          console.error('[❌ 토큰 요청 실패]', err);
+          console.warn('[ℹ️ 기존 회원 처리 실패] → 소셜 가입 이동');
+          handleNewUser(temporalToken);
+        });
+
       return;
     }
 
+    // 파라미터 자체가 없음 (기존/신규 구분 불가)
+    console.log(MESSAGE_CODE);
     console.error('[❌ 로그인 실패 이유] 필요한 파라미터가 없습니다.');
     alert('로그인에 실패했습니다.');
     navigate('/login');
   }, [navigate]);
 
-  return <p>로그인 처리 중입니다...</p>;
+  return (
+    <div className="page-container">
+      <p>로그인 처리 중입니다...</p>
+    </div>
+  );
 }

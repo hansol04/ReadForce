@@ -1,11 +1,12 @@
 import "./main.css";
 import React, { useState } from "react";
 import mainImage from "../assets/image/mainimage.png";
+import { useNavigate } from "react-router-dom";
 
 const Main = () => {
     const [showLangMenu, setShowLangMenu] = useState(false);
     const [selectedLang, setSelectedLang] = useState('한국어');
-
+    const navigate = useNavigate();
     const handleLangSelect = (lang) => {
         setSelectedLang(lang);
         setShowLangMenu(false);
@@ -14,7 +15,7 @@ const Main = () => {
     return (
         <div>
             <section className="hero">
-                <div className="container">
+                <div className="page-container">
                 <div className="hero-content">
                     <div className="hero-text">
                         <h2>
@@ -22,7 +23,7 @@ const Main = () => {
                         세상을 읽는 힘입니다
                         </h2>
                     <p>한국·일본·미국 뉴스로 나의 문해력을 테스트 해보세요!</p>
-                    <button>문해력 테스트 시작하기</button>
+                    <button onClick={() => navigate("/test-start")}>문해력 테스트 시작하기</button>
                     </div>
                     <div className="main-hero-image">
                     <img src={mainImage} alt="문해력 일러스트" />
@@ -32,7 +33,7 @@ const Main = () => {
             </section>
 
             <section className="stats-section">
-                <div className="container stat-container">
+                <div className="page-container stat-container">
                 <div className="stat-box top5">
                     <h3>🏆 <span className="bold">주간 Top 5</span></h3>
                     <div className="tabs">
@@ -78,26 +79,37 @@ const Main = () => {
                 <div className="stat-box wrong-articles">
                     <h3>가장 많이 틀린 기사</h3>
                     <div className="article">
-                        <img src="/flags/japan.png" alt="JP" className="flag" />
+                        <div className="flag">🇯🇵</div>
                         <div>
                             <div className="title">福島：花の癒し力</div>
-                            <div className="author">Ueno Yamamoto<br /><span className="sub">NHK World</span></div>
+                            <div className="author">
+                            Ueno Yamamoto<br />
+                            <span className="sub">NHK World</span>
+                            </div>
                         </div>
-                    </div>
-                    <div className="article">
-                        <img src="/flags/usa.png" alt="US" className="flag" />
+                        </div>
+
+                        <div className="article">
+                        <div className="flag">🇺🇸</div>
                         <div>
                             <div className="title">How 'big, beautiful' bill led to big ugly breakup for Trump and Musk</div>
-                            <div className="author">Anthony Zurcher<br /><span className="sub">North America Correspondent</span></div>
+                            <div className="author">
+                            Anthony Zurcher<br />
+                            <span className="sub">North America Correspondent</span>
+                            </div>
                         </div>
-                    </div>
-                    <div className="article">
-                        <img src="/flags/korea.png" alt="KR" className="flag" />
+                        </div>
+
+                        <div className="article">
+                        <div className="flag">🇰🇷</div>
                         <div>
                             <div className="title">성남·경기도 라인 ‘7인회’ 대통령실 속속 합류</div>
-                            <div className="author">송경모 기자<br /><span className="sub">국민일보</span></div>
+                            <div className="author">
+                            송경모 기자<br />
+                            <span className="sub">국민일보</span>
+                            </div>
                         </div>
-                    </div>
+                        </div>
                 </div>
                 </div>
             </section>

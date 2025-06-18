@@ -1,4 +1,3 @@
-/* 전체 로그인 박스 */
 .login-wrapper {
   display: flex;
   flex-direction: column;
@@ -7,7 +6,6 @@
   background-color: #fff;
 }
 
-/* 제목 */
 .login-title {
   font-size: 24px;
   font-weight: bold;
@@ -15,7 +13,6 @@
   text-align: center;
 }
 
-/* 로그인 폼 */
 .login-form {
   width: 100%;
   max-width: 400px;
@@ -24,7 +21,6 @@
   gap: 1.2rem;
 }
 
-/* 입력 그룹 */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -44,7 +40,6 @@
   border-radius: 6px;
 }
 
-/* 비밀번호 재설정 링크 */
 .login-links {
   display: flex;
   justify-content: flex-end;
@@ -58,7 +53,6 @@
   text-decoration: underline;
 }
 
-/* 소셜 로그인 버튼들 (원형 아이콘) */
 .social-login {
   display: flex;
   justify-content: center;
@@ -94,7 +88,6 @@
   outline: 2px solid #aaa;
 }
 
-/* 로그인 버튼 */
 .login-btn {
   margin-top: 1rem;
   background-color: #319690;
@@ -111,7 +104,6 @@
   background-color: #267973;
 }
 
-/* 에러 메시지 */
 .error-message {
   color: red;
   font-size: 14px;
@@ -119,7 +111,6 @@
   margin-top: -0.5rem;
 }
 
-/* ✅ 반응형 대응 */
 @media screen and (max-width: 480px) {
   .login-form {
     padding: 1rem;

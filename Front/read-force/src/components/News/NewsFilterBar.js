@@ -14,12 +14,13 @@ const NewsFilterBar = ({ level, setLevel, sort, setSort, category, setCategory }
   };
 
   const categoryOptions = [
-    { value: 'all', label: '모두' },
+    { value: '', label: '모두' },
     { value: '정치', label: '정치' },
     { value: '경제', label: '경제' },
     { value: '사회', label: '사회' },
     { value: '생활/문화', label: '생활/문화' },
     { value: 'IT/과학', label: 'IT/과학' },
+    { value: '기타', label: '기타' },
   ];
 
   const selectedCategory = categoryOptions.find((o) => o.value === category) || categoryOptions[0];

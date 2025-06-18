@@ -1,15 +1,12 @@
-import ArticleQuestion from './ArticleQuestion';
+const ArticleQuestion = ({ article }) => {
+  if (!article) return <p>기사 정보가 없습니다.</p>;
 
-const ArticleQuestionPage = () => {
-  const article = {
-    id: 1,
-    title: "임시 뉴스 제목",
-    summary: "이건 임시 뉴스입니다.",
-    difficulty: "초급",
-    publishedAt: "2025-06-16",
-  };
-
-  return <ArticleQuestion article={article} />;
+  return (
+    <div>
+      <h1>{article.title}</h1>
+      <p>{article.summary}</p>
+    </div>
+  );
 };
 
-export default ArticleQuestionPage;
+export default ArticleQuestion;

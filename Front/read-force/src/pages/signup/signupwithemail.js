@@ -7,13 +7,12 @@ const SignupWithEmail = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [emailMessage, setEmailMessage] = useState('');
-  const [isEmailValid, setIsEmailValid] = useState(null); // true/false/null
+  const [isEmailValid, setIsEmailValid] = useState(null);
 
   const [modal, setModal] = useState({ open: false, title: '', message: '' });
 
   const [message, setMessage] = useState('');
 
-  // 이메일 중복 확인
   const checkEmailDuplicate = async (value) => {
     try {
       const response = await fetch(`/member/email-check?email=${value}`);
@@ -31,7 +30,6 @@ const SignupWithEmail = () => {
     }
   };
 
-  // 이메일 형식 및 중복 확인 트리거
   useEffect(() => {
     const delay = setTimeout(() => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -44,7 +42,7 @@ const SignupWithEmail = () => {
         setEmailMessage('');
         setIsEmailValid(null);
       }
-    }, 400); // 디바운스
+    }, 400);
 
     return () => clearTimeout(delay);
   }, [email]);
@@ -75,6 +73,7 @@ const SignupWithEmail = () => {
   };
 
   return (
+    <div className="page-container">
     <div className="signup-wrapper">
       <h2 className="signup-title">E-Mail 입력</h2>
       <form className="signup-form" onSubmit={handleSubmit}>
@@ -113,6 +112,7 @@ const SignupWithEmail = () => {
           onClose={() => setModal({ open: false, title: '', message: '' })}
         />
       )}
+    </div>
     </div>
   );
 };

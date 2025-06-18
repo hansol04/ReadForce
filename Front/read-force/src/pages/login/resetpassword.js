@@ -1,3 +1,4 @@
+// ✅ 공통 레이아웃 .page-container 반영됨
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './resetpassword.css';
@@ -50,6 +51,7 @@ export default function ResetPassword() {
 
   return (
     <div>
+      <div className="page-container">
       <div className="reset-password-wrapper">
         <h2 className="reset-password-title">비밀번호 재설정</h2>
         <form className="reset-password-form" onSubmit={handleResetPassword}>
@@ -80,6 +82,7 @@ export default function ResetPassword() {
           </button>
         </form>
       </div>
+    </div>
     </div>
   );
 }
