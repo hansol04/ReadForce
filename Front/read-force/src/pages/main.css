@@ -1,22 +1,18 @@
-
-.flag {
-  font-size: 1.5rem;
-  margin-right: 8px;
-  display: inline-block;
-  width: 2rem;
-  text-align: center;
-}
-
 .hero-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 300px;
+  gap: 60px;
   max-width: 1200px;
   margin: 0 auto;
-  flex-wrap: wrap;     /* 반응형: 좁은 화면에서 줄 바꿈 */
+  flex-wrap: wrap;
   padding-top: 40px;
   padding-bottom: 100px;
+}
+
+.hero-text {
+  flex: 1;
+  min-width: 280px;
 }
 
 .hero-text h2 {
@@ -28,9 +24,13 @@
 .hero-text p {
   font-size: 18px;
   color: #5A5A5A;
-  margin-bottom: 24px;
   font-weight: bold;
   margin-bottom: 40px;
+}
+
+.main-hero-image {
+  flex: 1;
+  min-width: 280px;
 }
 
 .main-hero-image img {
@@ -40,7 +40,7 @@
 }
 
 .hero button {
-  background-color: #439395; /* teal-500 */
+  background-color: #439395;
   color: white;
   padding: 0.75rem 1.5rem;
   font-size: 20px;
@@ -51,13 +51,13 @@
 }
 
 .hero button:hover {
-  background-color: rgb(13, 109, 101); /* teal-600 */
+  background-color: rgb(13, 109, 101);
 }
 
 .stats-section {
   padding: 2rem 0;
   border-top: 1px solid #ddd;
-  background-color: #fafafa; /* 필요시 */
+  background-color: #fafafa;
 }
 
 .stat-container {
@@ -73,7 +73,7 @@
   background-color: white;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .stat-box h3 {
@@ -138,6 +138,8 @@
   width: 24px;
   height: 16px;
   margin-top: 4px;
+  font-size: 1.5rem;
+  text-align: center;
 }
 
 .wrong-articles .title {
@@ -154,4 +156,26 @@
 .wrong-articles .author .sub {
   color: #888;
   font-size: 11px;
+}
+
+/* ✅ 반응형 */
+@media (max-width: 768px) {
+  .hero-content {
+    flex-direction: column;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .hero-text h2 {
+    font-size: 36px;
+  }
+
+  .hero-text p {
+    font-size: 16px;
+  }
+
+  .main-hero-image img {
+    width: 100%;
+    max-width: 350px;
+  }
 }
