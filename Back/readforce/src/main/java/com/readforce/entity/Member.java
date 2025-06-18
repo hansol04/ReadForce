@@ -71,9 +71,6 @@ public class Member {
 	@Column(name = "social_provider_id", nullable = true)
 	private String social_provider_id;
 	
-	@Column(nullable = false)
-	private Double socre = 0.0;
-	
 	@Override
     public boolean equals(Object object) {
         if (this == object) return true;

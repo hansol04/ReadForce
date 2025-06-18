@@ -32,13 +32,6 @@ public class NewsQuiz {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long news_quiz_no;
 	
-	@Column(nullable = false)
-	private Long news_passage_no;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "news_passage_no", insertable = false, updatable = false)
-	private NewsPassage news_passage;
-	
 	@Column(name = "question_text", nullable = false, columnDefinition = "text")
 	private String question_text;
 	
@@ -57,7 +50,6 @@ public class NewsQuiz {
 	@Column(name = "correct_answer_index", nullable = false)
 	private Integer correct_answer_index;
 	
-	@Lob
 	@Column(nullable = false, columnDefinition = "text")
 	private String explanation;
 	
@@ -66,5 +58,13 @@ public class NewsQuiz {
 	
 	@CreatedDate
 	private LocalDateTime created_date;
+	
+	@Column(nullable = false)
+	private Long news_passage_no;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "news_passage_no", insertable = false, updatable = false)
+	private News news_passage;
+	
 	
 }

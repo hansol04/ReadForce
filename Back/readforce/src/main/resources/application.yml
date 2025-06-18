@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
   application:
     name: readforce
   datasource:
@@ -78,8 +82,9 @@ file:
     profile:
       upload-dir: ./upload/image/profile/
       max-size: 5242880
+      max-request-size: 5MB
       allowed-mime-types: image/jpeg,image/png,image/gif
-      default-image-url: 4b2d7245-2ca2-45ce-9954-e00f7553014a
+      default-image-url: 4b2d7245-2ca2-45ce-9954-e00f7553014a.png
 custom:
   fronted:
     password-reset-link-url: http://localhost:3000/resetpassword
