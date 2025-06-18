@@ -1,6 +1,6 @@
 // ✅ 공통 레이아웃 .page-container 반영됨
 import { useParams } from 'react-router-dom';
-import ArticleQuestion from './ArticleQuestion';
+import ArticleQuestion from '../../components/news/ArticleQuestion';
 
 const dummyArticles = [
   {
