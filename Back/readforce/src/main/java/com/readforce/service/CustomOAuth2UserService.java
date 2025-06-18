@@ -104,6 +104,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 				member = member_optional_email.get();
 				member.setSocial_provider(provider);
 				member.setSocial_provider_id(provider_id);
+				member_repository.save(member);
 				is_new_user = false;
 			
 			} else {

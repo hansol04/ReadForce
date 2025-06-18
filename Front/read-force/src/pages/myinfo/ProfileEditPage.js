@@ -1,42 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import axiosInstance from '../../api/axiosInstance';
-import defaultProfileImage from '../../assets/image/default-profile.png';
+import kakaoIcon from '../../assets/image/kakao.png';
+import naverIcon from '../../assets/image/naver.png';
+import googleIcon from '../../assets/image/google.png';
 import './EditProfilePage.css';
 
 const ProfileEditPage = () => {
   const [nickname, setNickname] = useState('');
-  const [nicknameMessage, setNicknameMessage] = useState('');
   const [isNicknameValid, setIsNicknameValid] = useState(null);
   const [birthday, setBirthday] = useState('');
-  const [birthdayMessage, setBirthdayMessage] = useState('');
   const [isBirthdayValid, setIsBirthdayValid] = useState(null);
-
   const [preview, setPreview] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-  const [serverProfileImageUrl, setServerProfileImageUrl] = useState(defaultProfileImage);
   const [showModal, setShowModal] = useState(false);
-
-  useEffect(() => {
-    const fetchProfileImage = async () => {
-      try {
-        const res = await axiosInstance.get('/member/get-profile-image', {
-          responseType: 'blob',
-        });
-        const isImage = res.data.type.startsWith('image/');
-        if (isImage) {
-          const imageUrl = URL.createObjectURL(res.data);
-          setServerProfileImageUrl(imageUrl);
-        } else {
-          console.warn('서버 응답이 이미지가 아님');
-          setServerProfileImageUrl(defaultProfileImage);
-        }
-      } catch (error) {
-        console.log('프로필 이미지 없음 또는 오류 → 기본 이미지 사용');
-        setServerProfileImageUrl(defaultProfileImage);
-      }
-    };
-    fetchProfileImage();
-  }, []);
 
   const checkNicknameDuplicate = async (nickname) => {
     if (!nickname || nickname.length < 2) return false;
@@ -48,22 +23,8 @@ const ProfileEditPage = () => {
     }
   };
 
-  const validateNickname = async (value) => {
-    const onlyKorean = /^[\uAC00-\uD7A3]+$/.test(value);
-    const onlyEnglish = /^[a-zA-Z]+$/.test(value);
-    if ((onlyKorean && value.length <= 8) || (onlyEnglish && value.length <= 20)) {
-      const isAvailable = await checkNicknameDuplicate(value);
-      setNicknameMessage(isAvailable ? '사용 가능한 닉네임입니다.' : '이미 존재하는 닉네임입니다.');
-      setIsNicknameValid(isAvailable);
-    } else {
-      setNicknameMessage('한글 8자, 영문 20자 이하로 입력해주세요');
-      setIsNicknameValid(false);
-    }
-  };
-
   const validateBirthday = (value) => {
     const regex = /^\d{4}-\d{2}-\d{2}$/;
-    setBirthdayMessage(regex.test(value) ? '' : 'YYYY-MM-DD 형식으로 입력해주세요');
     setIsBirthdayValid(regex.test(value));
   };
 
@@ -92,11 +53,6 @@ const ProfileEditPage = () => {
     }
 
     if (preview) {
-      try {
-        await axiosInstance.delete('/member/delete-profile-image');
-      } catch (err) {
-        console.warn('서버 이미지 삭제 실패', err);
-      }
       const formData = new FormData();
       formData.append('profile_image_file', preview);
       updates.push(
@@ -126,17 +82,6 @@ const ProfileEditPage = () => {
     }
   };
 
-  const removeImage = async () => {
-    setPreview(null);
-    setPreviewUrl(null);
-    setServerProfileImageUrl(defaultProfileImage);
-    try {
-      await axiosInstance.delete('/member/delete-profile-image');
-    } catch (err) {
-      console.warn('서버 이미지 삭제 실패', err);
-    }
-  };
-
   return (
     <div className="profile-edit-page">
       <h2>회원정보 수정</h2>
@@ -144,68 +89,67 @@ const ProfileEditPage = () => {
         <div className="form-group">
           <label>회원 이미지</label>
           <div className="profile-image-box">
-            <img
-              src={previewUrl || serverProfileImageUrl || defaultProfileImage}
-              alt="프로필 이미지"
-              className="profile-image"
-              onError={(e) => (e.target.src = defaultProfileImage)}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  setPreview(file);
+                }
+              }}
             />
-
-            <div className="image-control-row">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    setPreview(file);
-                    setPreviewUrl(URL.createObjectURL(file));
-                  }
-                }}
-              />
-              <button type="button" className="remove-image-button" onClick={removeImage}>
-                이미지 제거
-              </button>
-            </div>
           </div>
         </div>
 
         <div className="form-group">
           <label>닉네임</label>
-          <div className="input-with-message">
-            <input
-              type="text"
-              value={nickname}
-              onChange={async (e) => {
-                const value = e.target.value;
-                setNickname(value);
-                await validateNickname(value);
-              }}
-            />
-            <div className="message-row">
-              <span className="inline-hint">한글 8자, 영문 20자 이하로 입력해주세요</span>
-              <span className="validation-message" style={{ color: isNicknameValid ? 'green' : 'red' }}>
-                {nicknameMessage}
-              </span>
-            </div>
-          </div>
+          <input
+            type="text"
+            value={nickname}
+            onChange={async (e) => {
+              const value = e.target.value;
+              setNickname(value);
+              const isValid = await checkNicknameDuplicate(value);
+              setIsNicknameValid(isValid);
+            }}
+          />
         </div>
 
         <div className="form-group">
           <label>생년월일</label>
-          <div className="input-with-message">
-            <input
-              type="text"
-              placeholder="예: 1997-11-04"
-              value={birthday}
-              onChange={(e) => handleBirthdayChange(e.target.value)}
-            />
-            <div className="message-row">
-              <span className="inline-hint">YYYY-MM-DD 형식으로 입력해주세요</span>
-              <span className="validation-message" style={{ color: isBirthdayValid ? 'green' : 'red' }}>
-                {birthdayMessage}
-              </span>
-            </div>
+          <input
+            type="text"
+            placeholder="예: 1997-11-04"
+            value={birthday}
+            onChange={(e) => handleBirthdayChange(e.target.value)}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>SNS 계정 연동</label>
+          <div className="social-login">
+            <button
+              type="button"
+              className="social-btn"
+              onClick={() => window.location.href = 'http://localhost:8080/oauth2/authorization/kakao'}
+            >
+              <img src={kakaoIcon} alt="카카오" />
+            </button>
+            <button
+              type="button"
+              className="social-btn"
+              onClick={() => window.location.href = 'http://localhost:8080/oauth2/authorization/naver'}
+            >
+              <img src={naverIcon} alt="네이버" />
+            </button>
+            <button
+              type="button"
+              className="social-btn"
+              onClick={() => window.location.href = 'http://localhost:8080/oauth2/authorization/google'}
+            >
+              <img src={googleIcon} alt="구글" />
+            </button>
           </div>
         </div>
 

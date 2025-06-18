@@ -48,7 +48,9 @@ public class MemberService{
 	private final StringRedisTemplate redis_template;
 	private final FileService file_service;
 	private final NeedAdminCheckFailedDeletionLogRepository need_admin_check_failed_deletion_log_repository;
-
+	 public boolean existsByEmail(String email) {
+	        return member_repository.findByEmailAndStatus(email, Status.ACTIVE).isPresent();
+	    }
 	@Value("${file.image.profile.upload-dir}")
 	private String profile_image_upload_dir;
 
@@ -222,7 +224,7 @@ public class MemberService{
 	// 비밀번호 재설정
 	@Transactional
 	public void passwordResetByLink(String temporal_token, String new_password, LocalDate birthday) {
-		
+		  log.info("[🔍 비밀번호 재설정 요청] token = {}, birthday = {}", temporal_token, birthday);
 		// Redis에서 email 조회
 		String member_email = redis_template.opsForValue().get(Prefix.PASSWORD_RESET_BY_LINK.getName() + temporal_token);
 		

@@ -97,7 +97,7 @@ public class MemberDto {
 		@NotBlank(message = MessageCode.TOKEN_NOT_BLANK)
 		private String temporal_token;
 		
-		@NotBlank(message = MessageCode.BIRTHDAY_NOT_NULL)
+		@NotNull(message = MessageCode.BIRTHDAY_NOT_NULL)
 		@ValidBirthday
 		private LocalDate birthday;
 		

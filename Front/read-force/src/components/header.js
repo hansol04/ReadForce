@@ -11,6 +11,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   const isLoggedIn = !!localStorage.getItem("token");
+  const provider = localStorage.getItem("provider"); // ✅ 추가
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -26,7 +27,6 @@ const Header = () => {
 
   const handleLogout = async () => {
     const token = localStorage.getItem("token");
-    const provider = localStorage.getItem("provider");
 
     try {
       if (provider === "KAKAO") {
@@ -137,10 +137,15 @@ const Header = () => {
               {showUserMenu && (
                 <div className="user-dropdown">
                   <div onClick={() => { setShowUserMenu(false); navigate("/mypage"); }}>마이페이지</div>
-
                   <div onClick={() => { setShowUserMenu(false); navigate("/profile-edit"); }}>회원정보 수정</div>
-                  <div onClick={() => { setShowUserMenu(false); navigate("/change-password"); }}>비밀번호 수정</div>
-                  {/* 관리자 전용 메뉴 */}
+
+                  {/* ✅ 일반 회원만 노출 */}
+                  {(!provider || provider === '') && (
+                    <div onClick={() => { setShowUserMenu(false); navigate("/change-password"); }}>
+                      비밀번호 수정
+                    </div>
+                  )}
+
                   {nickname === "관리자" && (
                     <div onClick={() => { setShowUserMenu(false); navigate("/adminpage"); }}>
                       관리자 페이지

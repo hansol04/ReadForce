@@ -8,6 +8,17 @@ export default function Authcallback() {
     const urlParams = new URLSearchParams(window.location.search);
     const temporalToken = urlParams.get('TEMPORAL_TOKEN');
     const MESSAGE_CODE = urlParams.get('MESSAGE_CODE');
+    const nickname = urlParams.get('NICK_NAME');
+    const provider = urlParams.get('PROVIDER');
+
+    // ✅ 연동만 된 경우 → 바로 로그인 처리
+    if (temporalToken && nickname && provider) {
+      localStorage.setItem('temporal_token', temporalToken);
+      localStorage.setItem('nickname', nickname);
+      localStorage.setItem('provider', provider);
+      window.location.replace('/');
+      return;
+    }
 
     // 신규 회원 처리 함수
     const handleNewUser = (temporalToken) => {

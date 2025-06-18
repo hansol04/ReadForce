@@ -59,7 +59,13 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 		// 신규 소셜 회원인지 확인
 		boolean is_new_user = o_auth2_user_dto.is_new_user();
 		String email = o_auth2_user_dto.getEmail();
-		
+		String providerId = o_auth2_user_dto.getName();
+		   boolean existsInDB = member_service.existsByEmail(email);
+
+	     
+	        if (!existsInDB) {
+	            is_new_user = true;
+	        }
 		String target_url;
 		
         if (is_new_user) {

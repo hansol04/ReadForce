@@ -266,10 +266,6 @@ public class MemberController {
     	auth_service.storeRefreshToken(user_details.getUsername(), refresh_token);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
-				Name.ACCESS_TOKEN.toString(), jwt,
-				Name.REFRESH_TOKEN.toString(), refresh_token,
-				Name.NICK_NAME.toString(), get_member_dto.getNickname(),
-				Name.PROVIDER.toString(), get_member_dto.getProvider() == null ? "" : get_member_dto.getProvider(),
 				MessageCode.MESSAGE_CODE, MessageCode.SIGN_UP_SUCCESS
 		));
 		
