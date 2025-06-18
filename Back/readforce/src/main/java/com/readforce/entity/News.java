@@ -22,14 +22,17 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewsPassage {
+public class News {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long new_passage_no;
+	private Long new_no;
 	
 	@Column(nullable = false)
-	private String country;
+	private String language;
+	
+	@Column(nullable = false)
+	private String category;
 	
 	@Column(nullable = false)
 	private String level;
