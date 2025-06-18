@@ -3,6 +3,7 @@ package com.readforce.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.readforce.entity.NewsPassage;
 import org.springframework.stereotype.Service;
 
 import com.readforce.dto.NewsDto.GetNewsPassage;
@@ -23,9 +24,9 @@ public class NewsService {
 	private final NewsQuizRepository news_quiz_repository;
 	
 	// 뉴스 기사 리스트(내림차순) 가져오기
-	public List<GetNewsPassage> getNewsPassagelist(String country, String level) {
+	public List<NewsPassage> getNewsPassagelist(String country, String level) {
 		
-		List<GetNewsPassage> news_passage_list = news_passage_repository.findByCountryAndLevelOrderByCreatedDate(country, level);
+		List<NewsPassage> news_passage_list = news_passage_repository.findByCountryAndLevelOrderByCreatedDate(country, level);
 		
 		if(news_passage_list.isEmpty()) {
 			

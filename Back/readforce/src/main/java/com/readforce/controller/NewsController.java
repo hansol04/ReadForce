@@ -2,6 +2,7 @@ package com.readforce.controller;
 
 import java.util.List;
 
+import com.readforce.entity.NewsPassage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,7 +31,7 @@ public class NewsController {
 	
 	// 뉴스기사 가져오기(반환시 내림차순 리스트 반환)
 	@GetMapping("/get-news-passage-list")
-	public ResponseEntity<List<GetNewsPassage>> getNewsPassagelist(
+	public ResponseEntity<List<NewsPassage>> getNewsPassagelist(
 			@RequestParam("country")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_COUNTRY_NOT_BLANK)
 			@Pattern(regexp = "^(kr|jp|uk|us)$", message = MessageCode.NEWS_ARTICLE_COUNTRY_PATTERN_INVALID)
@@ -42,7 +43,7 @@ public class NewsController {
 	){
 		
 		// 뉴스 기사 리스트(내림차순) 가져오기
-		List<GetNewsPassage> news_passage_list = news_service.getNewsPassagelist(country, level);
+		List<NewsPassage> news_passage_list = news_service.getNewsPassagelist(country, level);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(news_passage_list);		
 		

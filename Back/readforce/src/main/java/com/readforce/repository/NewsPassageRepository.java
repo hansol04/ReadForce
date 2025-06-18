@@ -13,8 +13,8 @@ import com.readforce.entity.NewsPassage;
 @Repository
 public interface NewsPassageRepository extends JpaRepository<NewsPassage, Long>{
 
-	@Query("SELECT np FROM NewsPassage np WHERE np.country = :country AND np.level = :level ORDER BY np.created_date DESC")
-	List<GetNewsPassage> findByCountryAndLevelOrderByCreatedDate(
+	@Query(value = "SELECT * FROM news_passage WHERE country = :country AND level = :level ORDER BY created_date DESC", nativeQuery = true)
+	List<NewsPassage> findByCountryAndLevelOrderByCreatedDate(
 			@Param("country") String country, 
 			@Param("level") String level
 	);
