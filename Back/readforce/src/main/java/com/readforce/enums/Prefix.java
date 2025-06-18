@@ -15,8 +15,8 @@ public enum Prefix {
 	EXIST_MEMBER_SOCIAL_LOGIN("ExistMemberSocialLogin_"),
 	EMAIL_VERIFY_ATTEMPT_PREFIX("EmailVerifyAttempt_"),
 	RATE_LIMIT_IP("RateLimitIp:"),
-	RATE_LIMIT_EMAIL("RateLimitEmail:")
-	
+	RATE_LIMIT_EMAIL("RateLimitEmail:"),
+	SOCIAL_LINK_STATE("SocialLinkState_")
 	;
 
 	private final String prefix;

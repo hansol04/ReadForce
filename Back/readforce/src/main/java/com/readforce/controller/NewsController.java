@@ -28,9 +28,25 @@ public class NewsController {
 
 	private final NewsService news_service;
 	
-	// 뉴스기사 가져오기(반환시 내림차순 리스트 반환)
-	@GetMapping("/get-news-passage-list")
-	public ResponseEntity<List<GetNewsPassage>> getNewsPassagelist(
+	// 나라에 해당하는 뉴스기사 가져오기(반환시 내림차순 리스트 반환)
+	@GetMapping("/get-news-passage-list-by-country")
+	public ResponseEntity<List<GetNewsPassage>> getNewsPassageListByCountry(
+			@RequestParam("country")
+			@NotBlank(message = MessageCode.NEWS_ARTICLE_COUNTRY_NOT_BLANK)
+			@Pattern(regexp = "^(kr|jp|uk|us)$", message = MessageCode.NEWS_ARTICLE_COUNTRY_PATTERN_INVALID)
+			String country
+	){
+		
+		// 뉴스 기사 리스트(내림차순) 가져오기
+		List<GetNewsPassage> news_passage_list = news_service.getNewsPassageListByCountry(country);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(news_passage_list);
+		
+	}
+	
+	// 나라와 난이도에 해당하는 뉴스기사 가져오기(반환시 내림차순 리스트 반환)
+	@GetMapping("/get-news-passage-list-by-country-and-level")
+	public ResponseEntity<List<GetNewsPassage>> getNewsPassagelistByCountryAndLevel(
 			@RequestParam("country")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_COUNTRY_NOT_BLANK)
 			@Pattern(regexp = "^(kr|jp|uk|us)$", message = MessageCode.NEWS_ARTICLE_COUNTRY_PATTERN_INVALID)
@@ -42,7 +58,7 @@ public class NewsController {
 	){
 		
 		// 뉴스 기사 리스트(내림차순) 가져오기
-		List<GetNewsPassage> news_passage_list = news_service.getNewsPassagelist(country, level);
+		List<GetNewsPassage> news_passage_list = news_service.getNewsPassagelistByCountryAndLevel(country, level);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(news_passage_list);		
 		

@@ -3,6 +3,7 @@ package com.readforce.service;
 import java.util.Collections;
 import java.util.Optional;
 
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,6 +15,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.readforce.dto.OAuth2UserDto;
 import com.readforce.dto.OAuthAttributesDto;
@@ -26,6 +29,7 @@ import com.readforce.exception.DuplicateException;
 import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.repository.MemberRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -34,6 +38,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 	
 	private final MemberService member_service;
 	private final MemberRepository member_repository;
+	private final StringRedisTemplate redis_template;
 	
 	@Override
 	@Transactional
@@ -45,6 +50,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 		
 		// 현재 로그인 진행 중인 서비스를 구분(google, naver, kakao)
 		String registration_id = userRequest.getClientRegistration().getRegistrationId();
+		
 		// OAuth2 로그인 진행 시 키가 되는 필드값
 		String user_name_attribute_name = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 		
@@ -55,27 +61,46 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 		String social_email = o_auth_attributes_dto.getEmail();
 		
 		// 소셜 계정 연동 시나리오(사용자가 이미 로그인 상태인지 확인)
-		Authentication existing_auth = SecurityContextHolder.getContext().getAuthentication();
-		if(existing_auth != null && existing_auth.isAuthenticated() && !"anonymousUser".equals(existing_auth.getPrincipal())) {
+		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		
+		if(attributes == null) {
 			
-			String signed_in_user_email = existing_auth.getName();
+			throw new OAuth2AuthenticationException("Request attriutes is null, cannot check state.");
 			
-			try {
+		}
+		
+		HttpServletRequest request = attributes.getRequest();
+		
+		String state = request.getParameter("state");
+		
+		if(state != null) {
+			
+			String email = redis_template.opsForValue().get(Prefix.SOCIAL_LINK_STATE.getName() + state);
+			
+			if(email != null) {
 				
-				member_service.linkSocialAccount(signed_in_user_email, provider, provider_id, social_email);
+				// Redis 삭제
+				redis_template.delete(Prefix.SOCIAL_LINK_STATE.getName() + state);
 				
-			} catch(DuplicateException exception){
+				try {
+					
+					member_service.linkSocialAccount(email, provider, provider_id, social_email);
+					
+				} catch(DuplicateException exception){
+					
+					throw new OAuth2AuthenticationException(exception.getMessage());
+					
+				}
 				
-				throw new OAuth2AuthenticationException(exception.getMessage());
+				// 연동된 사용자의 정보로 계속 진행
+				
+				Member linked_member = member_repository.findByEmailAndStatus(email, Status.ACTIVE)
+						.orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL)); 
+				
+				return createOAuth2UserDto(linked_member, o_auth_attributes_dto, false, registration_id);
+
 				
 			}
-			
-			// 연동된 사용자의 정보로 계속 진행
-			
-			Member linked_member = member_repository.findByEmailAndStatus(signed_in_user_email, Status.ACTIVE)
-					.orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND_WITH_EMAIL)); 
-			
-			return createOAuth2UserDto(linked_member, o_auth_attributes_dto, false, registration_id);
 			
 		}
 		
