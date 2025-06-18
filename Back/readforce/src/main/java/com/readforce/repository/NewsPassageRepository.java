@@ -19,4 +19,7 @@ public interface NewsPassageRepository extends JpaRepository<NewsPassage, Long>{
 			@Param("level") String level
 	);
 
+	@Query("SELECT np FROM NewsPassage np WHERE np.country = :country ORDER BY np.created_date DESC")
+	List<GetNewsPassage> findByCountryOrderByCreatedDate(@Param("country") String country);
+
 }
