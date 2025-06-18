@@ -27,32 +27,30 @@ const categorizeArticle = (text) => {
 
 const NewsList = ({ country = 'kr', onSolve = () => {} }) => {
   const [articles, setArticles] = useState([]);
-  const [level, setLevel] = useState('');
+  const [level, setLevel] = useState('all');
   const [sort, setSort] = useState('latest');
   const [category, setCategory] = useState('');
 
   useEffect(() => {
-    if (!level) return; // level이 없으면 요청 안 보냄
+    const params = { country };
+    if (['초급', '중급', '고급'].includes(level)) {
+      params.level = level;
+    }
 
-    axios.get("/news/get-news-passage-list", {
-      params: {
-        country: "kr",
-        level: level
-      }
-    })
-    .then(res => {
-      console.log("응답 데이터 확인 👉", res.data);
-      const enriched = res.data.map(article => ({
-        ...article,
-        category: categorizeArticle(article.title + ' ' + article.summary),
-      }));
-      setArticles(enriched);
-    })
-    .catch(err => console.error('뉴스 로딩 실패', err));
+    axios.get("/news/get-news-passage-list", { params })
+      .then(res => {
+        console.log("응답 데이터 확인 👉", res.data);
+        const enriched = res.data.map(article => ({
+          ...article,
+          category: categorizeArticle(article.title + ' ' + (article.content || '')),
+        }));
+        setArticles(enriched);
+      })
+      .catch(err => console.error('뉴스 로딩 실패', err));
   }, [country, level]);
 
   const filtered = articles.filter((a) => {
-    const levelMatch = level ? a.difficulty === level : true;
+    const levelMatch = level === 'all' || a.level === level;
     const categoryMatch = category ? a.category === category : true;
     return levelMatch && categoryMatch;
   });
@@ -98,7 +96,7 @@ const NewsList = ({ country = 'kr', onSolve = () => {} }) => {
         {paginated.length === 0 ? (
           <p className="no-articles">조건에 맞는 기사가 없습니다.</p>
         ) : (
-          paginated.map((item) => <NewsCard key={item.id} article={item} />)
+          paginated.map((item) => <NewsCard key={item.new_passage_no} article={item} />)
         )}
       </div>
 
