@@ -38,7 +38,6 @@ public class NewsPassage {
 	@Column(nullable = false)
 	private String title;
 	
-	@Lob
 	@Column(nullable = false, columnDefinition = "text")
 	private String content;
 	
