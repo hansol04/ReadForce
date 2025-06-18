@@ -255,3 +255,62 @@
 .settings-button:hover {
   transform: scale(1.2);
 }
+
+@media (max-width: 600px) {
+  .mypage-container {
+    padding: 24px 16px;
+  }
+
+  .top-section,
+  .mypage-main {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .left-top,
+  .right-top {
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .line-chart-container {
+    max-width: 100%;
+  }
+
+  .lang-select {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .stats-section,
+  .calendar-section {
+    min-width: 100%;
+    padding: 16px;
+  }
+
+  .summary-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .summary-title,
+  .summary-value {
+    flex: none;
+    text-align: left;
+  }
+
+  .history-section ul,
+  .wrong-section ul {
+    font-size: 14px;
+  }
+
+  .wrong-section button {
+    margin-top: 6px;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .settings-button {
+    margin-top: 8px;
+  }
+}

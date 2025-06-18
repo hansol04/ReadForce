@@ -32,8 +32,6 @@ import com.readforce.repository.MemberRepository;
 import com.readforce.repository.NeedAdminCheckFailedDeletionLogRepository;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -257,7 +255,7 @@ public class MemberService{
 
 	// 소셜 회원가입
 	@Transactional
-	public String socialSignUp(@Valid MemberDto.SocialSignUp social_sign_up) {
+	public void socialSignUp(@Valid MemberDto.SocialSignUp social_sign_up) {
 		
 		// Redis에서 소셜 정보 JSON 가져오기
 		String social_info_json = redis_template.opsForValue().get(Prefix.SOCIAL_SIGN_UP.getName() + social_sign_up.getTemporal_token());
@@ -305,8 +303,6 @@ public class MemberService{
 		
 		// 토큰 삭제
 		redis_template.delete(Prefix.SOCIAL_SIGN_UP.getName() + social_sign_up.getTemporal_token());
-		
-		return email;
 		
 	}
 

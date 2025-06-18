@@ -1,14 +1,19 @@
+/* 전체 앱 레이아웃 */
 .app-wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* 브라우저 높이 기준으로 전체 공간 확보 */
+  min-height: 100vh;
 }
 
 main {
-  flex: 1; /* 남은 공간을 채우고, 푸터는 아래로 밀림 */
-  padding: 2rem; /* 필요 시 */
+  flex: 1;
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
+/* 사용자 메뉴 드롭다운 */
 .user-menu-wrapper {
   position: relative;
 }
@@ -42,4 +47,17 @@ main {
 
 .user-dropdown div:hover {
   background-color: #f0f0f0;
+}
+
+/* 모든 페이지에서 사용 가능한 내부 컨테이너 */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0px 20px;
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 24px 16px;
+  }
 }

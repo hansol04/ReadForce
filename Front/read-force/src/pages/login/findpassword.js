@@ -1,3 +1,4 @@
+// ✅ 공통 레이아웃 .page-container 반영됨
 import React, { useState } from 'react';
 import './findpassword.css';
 
@@ -30,6 +31,7 @@ export default function FindPassword() {
   };
 
   return (
+    <div className="page-container">
     <div className="findpassword-wrapper">
       <h2 className="findpassword-title">비밀번호 찾기</h2>
       <form onSubmit={handleSubmit} className="findpassword-form">
@@ -45,6 +47,7 @@ export default function FindPassword() {
         <button type="submit">비밀번호 재설정 링크 전송</button>
       </form>
       {message && <p className="findpassword-message">{message}</p>}
+    </div>
     </div>
   );
 }

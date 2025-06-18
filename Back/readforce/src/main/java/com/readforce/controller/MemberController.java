@@ -250,21 +250,8 @@ public class MemberController {
 	public ResponseEntity<Map<String, String>> socialSignUp(@Valid @RequestBody MemberDto.SocialSignUp social_sign_up){
 		
 		// 소셜 회원가입
-		String email = member_service.socialSignUp(social_sign_up);
-		
-		// 회원 조회
-    	GetMemberObject get_member_dto = member_service.getMemberObjectByEmail(email);
-		
-		// 출석 체크
-		attendance_service.recordAttendance(email);
-		
-		final UserDetails user_details = auth_service.loadUserByUsername(email);
-		final String jwt = jwt_util.generateAcessToken(user_details);
-		final String refresh_token = jwt_util.generateRefreshToken(user_details);
-		
-		// 리프레쉬 토큰 저장
-    	auth_service.storeRefreshToken(user_details.getUsername(), refresh_token);
-		
+		member_service.socialSignUp(social_sign_up);
+				
 		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
 				MessageCode.MESSAGE_CODE, MessageCode.SIGN_UP_SUCCESS
 		));

@@ -25,7 +25,7 @@ import QuizPage from './pages/quiz/QuizPage';
 import ReadingPage from './pages/quiz/ReadingPage';
 import ChallengePage from "./pages/challenge/challengepage";
 import NewsList from './components/News/NewsList';
-import ArticleQuestion from './components/News/ArticleQuestion';
+import ArticleQuestionPage from './components/News/ArticleQuestionPage';
 
 function App() {
   return (
@@ -56,7 +56,7 @@ function App() {
           <Route path="/test-start" element={<ReadTest />} />
           <Route path="/adminpage" element={<AdminPage />} />
           <Route path="/literature/classic" element={<ClassicPage />} />
-          <Route path="/question/:id" element={<ArticleQuestion />} />
+          <Route path="/question/:id" element={<ArticleQuestionPage />} />
        </Route>
       </Routes>
     </Router>

@@ -86,3 +86,28 @@
 .signup-page .email:hover {
   background-color: #ddd;
 }
+
+@media (max-width: 480px) {
+  .signup-page {
+    padding: 1.2rem 1rem;
+    margin: 1rem auto;
+  }
+
+  .signup-title {
+    font-size: 18px;
+  }
+
+  .signup-card {
+    font-size: 14px;
+    padding: 0.7rem 0.9rem;
+  }
+
+  .signup-card img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .signup-card .arrow {
+    font-size: 16px;
+  }
+}

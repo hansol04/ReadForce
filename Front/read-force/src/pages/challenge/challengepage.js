@@ -1,9 +1,10 @@
+// ✅ 공통 레이아웃 .page-container 반영됨
 import React from 'react';
 import './challengepage.css';
 
 const ChallengePage = () => {
   return (
-    <div className="challenge-wrapper">
+    <div className="page-container">
       <h2 className="title">“ 오늘 <span className="highlight">812명</span>이 도전했어요! ”</h2>
 
       <div className="top-container">

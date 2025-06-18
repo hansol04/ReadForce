@@ -73,6 +73,7 @@ const SignupWithEmail = () => {
   };
 
   return (
+    <div className="page-container">
     <div className="signup-wrapper">
       <h2 className="signup-title">E-Mail 입력</h2>
       <form className="signup-form" onSubmit={handleSubmit}>
@@ -111,6 +112,7 @@ const SignupWithEmail = () => {
           onClose={() => setModal({ open: false, title: '', message: '' })}
         />
       )}
+    </div>
     </div>
   );
 };

@@ -1,3 +1,4 @@
+// ✅ 공통 레이아웃 .page-container 반영됨
 import './header.css';
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
@@ -64,7 +65,7 @@ const Header = () => {
 
   return (
     <header className="header">
-      <div className="container header-inner">
+      <div className="page-container header-inner">
         <div className="header-left">
           <h1 className="title">
             <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>

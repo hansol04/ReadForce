@@ -52,6 +52,8 @@ public class SecurityConfig {
 					            "/email/verify-verification-code-sign-up",
 					            "/email/send-password-reset-link",
 					            "/auth/get-tokens",
+								"/news/get-news-passage-list",
+								"/news/get-news-quiz-object",
 					            "/oauth2/**"
 						).permitAll()
 						.anyRequest().authenticated()

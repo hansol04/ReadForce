@@ -39,28 +39,23 @@ public class NewsQuiz {
 	@JoinColumn(name = "news_passage_no", insertable = false, updatable = false)
 	private NewsPassage news_passage;
 	
-	@Lob
 	@Column(name = "question_text", nullable = false, columnDefinition = "text")
 	private String question_text;
 	
-	@Lob
 	@Column(nullable = false, columnDefinition = "text")
 	private String choice1;
 	
-	@Lob
 	@Column(nullable = false, columnDefinition = "text")
 	private String choice2;
 	
-	@Lob
 	@Column(nullable = false, columnDefinition = "text")
 	private String choice3;
 	
-	@Lob
 	@Column(nullable = false, columnDefinition = "text")
 	private String choice4;
 	
 	@Column(name = "correct_answer_index", nullable = false)
-	private Long correct_answer_index;
+	private Integer correct_answer_index;
 	
 	@Lob
 	@Column(nullable = false, columnDefinition = "text")
