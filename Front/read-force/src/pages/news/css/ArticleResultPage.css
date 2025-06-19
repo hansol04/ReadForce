@@ -1,0 +1,47 @@
+.result-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
+.result-card {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  padding: 2rem 3rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.result-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.highlight {
+  color: #0d9488;
+  font-weight: bold;
+}
+
+.button-group {
+  margin-top: 1.5rem;
+}
+
+.button-group button {
+  margin: 0 0.5rem;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.button-group button:first-child {
+  background-color: #0d9488;
+  color: white;
+}
+
+.button-group button:last-child {
+  background-color: #f3f4f6;
+  color: #333;
+}
