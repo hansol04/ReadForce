@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import UniversalFilterBar from './UniversalFilterBar';
 import UniversalCard from './UniversalCard';
 import './css/UniversalList.css';
@@ -17,33 +17,34 @@ const categorizeArticle = (text) => {
     counts[category] = keywords.reduce((acc, word) => acc + (content.includes(word) ? 1 : 0), 0);
   }
   const topCategory = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
-  return topCategory[1] > 0 ? topCategory[0] : '기타';
+  return topCategory[1] > 0 ? topCategory[0] : 'ETC';
 };
 
-const UniversalList = ({ items = [], onSolve = () => {} }) => {
-  const [level, setLevel] = useState('all');
-  const [sort, setSort] = useState('latest');
-  const [category, setCategory] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-
+const UniversalList = ({
+  items = [],
+  level, setLevel,
+  category, setCategory,
+  order_by, setOrderBy
+}) => {
   const enriched = items.map(article => ({
     ...article,
     category: categorizeArticle(article.title + ' ' + article.summary),
   }));
 
   const filtered = enriched.filter((a) => {
-    const levelMatch = level === 'all' || a.difficulty === level;
-    const categoryMatch = category ? a.category === category : true;
+    const levelMatch = level === '' || a.difficulty === level;
+    const categoryMatch = category === '' || category === a.category;
     return levelMatch && categoryMatch;
   });
 
   const sorted = [...filtered].sort((a, b) =>
-    sort === 'latest'
+    order_by === 'latest'
       ? new Date(b.publishedAt) - new Date(a.publishedAt)
       : new Date(a.publishedAt) - new Date(b.publishedAt)
   );
 
   const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = React.useState(1);
   const totalPages = Math.ceil(sorted.length / itemsPerPage);
   const pageGroupSize = 5;
   const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
@@ -64,10 +65,10 @@ const UniversalList = ({ items = [], onSolve = () => {} }) => {
       <UniversalFilterBar
         level={level}
         setLevel={setLevel}
-        sort={sort}
-        setSort={setSort}
         category={category}
         setCategory={setCategory}
+        order_by={order_by}          
+        setOrderBy={setOrderBy}      
       />
 
       <div className="news-list">
@@ -75,7 +76,7 @@ const UniversalList = ({ items = [], onSolve = () => {} }) => {
           <p className="no-articles">조건에 맞는 기사가 없습니다.</p>
         ) : (
           paginated.map((item) => (
-            <UniversalCard key={item.id || item.new_passage_no} article={item} onSolve={onSolve} />
+            <UniversalCard key={item.id || item.new_passage_no} article={item} />
           ))
         )}
       </div>

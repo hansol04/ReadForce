@@ -1,21 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import { useQuizHandler } from '../../hooks/useQuizHandler';
 import UniversalList from '../../components/universal/UniversalList';
-import { fetchNewsList } from '../../api/newsApi';
+import {
+  fetchNewsListByLanguage,
+  fetchNewsListByLanguageAndLevel,
+  fetchNewsListByLanguageAndLevelAndCategory
+} from '../../api/newsApi';
 
 const KoreaPage = () => {
-  const { handleSolve } = useQuizHandler('navigate', '한국어');
   const [newsItems, setNewsItems] = useState([]);
 
+  const [language] = useState('KOREAN'); 
+  const [level, setLevel] = useState('');
+  const [category, setCategory] = useState('');
+  const [order_by, setOrderBy] = useState('DESC');
+
   useEffect(() => {
-    fetchNewsList({ language: '한국어', level: 'all' })
-      .then(data => setNewsItems(data))
-      .catch(err => console.error('뉴스 데이터 실패', err));
-  }, []);
+    const fetchData = async () => {
+      try {
+        let data = [];
+
+        if (!level && !category) {
+          data = await fetchNewsListByLanguage({ language, order_by });
+        } else if (level && !category) {
+          data = await fetchNewsListByLanguageAndLevel({ language, level, order_by });
+        } else if (level && category) {
+          data = await fetchNewsListByLanguageAndLevelAndCategory({ language, level, category, order_by });
+        }
+
+        setNewsItems(data);
+      } catch (err) {
+        console.error('뉴스 목록 불러오기 실패:', err);
+      }
+    };
+
+    fetchData();
+  }, [language, level, category, order_by]);
 
   return (
     <div className="page-container">
-      <UniversalList items={newsItems} onSolve={handleSolve} />
+      <UniversalList
+        items={newsItems}
+        language={language}
+        level={level}
+        setLevel={setLevel}
+        category={category}
+        setCategory={setCategory}
+        order_by={order_by}
+        setOrderBy={setOrderBy}
+      />
     </div>
   );
 };
