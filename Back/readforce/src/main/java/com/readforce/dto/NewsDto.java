@@ -53,7 +53,8 @@ public class NewsDto {
 
 		private Long news_no;
 
-	}
+	}	
 	
+	public record NewsResult(String title, String content) {}
 	
 }

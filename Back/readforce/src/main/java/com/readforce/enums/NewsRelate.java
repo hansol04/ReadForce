@@ -1,6 +1,6 @@
 package com.readforce.enums;
 
-public enum News {
+public enum NewsRelate {
 	
 	;
 	

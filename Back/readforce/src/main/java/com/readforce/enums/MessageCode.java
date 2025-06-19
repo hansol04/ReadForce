@@ -31,6 +31,7 @@ public final class MessageCode {
 	public static final String NEWS_ARTICLE_ORDER_BY_INVALID = "PA0007";
 	public static final String VALUE_INVALID = "PA0008";
 	public static final String NEWS_ARTICLE_CATEGORY_INVALID = "PA0008";
+	public static final String GEMINI_RESPONSE_PATTERN_INVALID = "PA0009";
 	
 	
 	// 입력값 크기/범위 불일치
@@ -69,6 +70,7 @@ public final class MessageCode {
 	public static final String TEMPORAL_TOKEN_AUTHENTICATION_FAIL = "FA0007";
 	public static final String JSON_MAPPING_FAIL = "FA0008";
 	public static final String JSON_PROCESSING_FAIL = "FA0009";
+	public static final String GEMINI_REQUEST_FAIL = "FA0010";
 	
 	
 	// 데이터 없음
@@ -103,6 +105,7 @@ public final class MessageCode {
 	public static final String SOCIAL_EMAIL_ALREADY_USE_BY_OTHER_MEMBER = "SP0012";
 	public static final String IP_ADDRESS_REQUEST_LIMIT_EXCEEDED = "SP0013";
 	public static final String EMAIL_REQUEST_LIMIT_EXCEEDED = "SP0014";
+	
 
 	
 
