@@ -32,9 +32,7 @@ const NewsList = ({ country = 'kr', onSolve = () => {} }) => {
   const [category, setCategory] = useState('');
 
   useEffect(() => {
-
     //if (!level) return; // level이 없으면 요청 안 보냄
-
   //   axios.get("/news/get-news-passage-list", {
   //     params: {
   //       country: "kr",

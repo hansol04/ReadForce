@@ -1,10 +1,13 @@
 package com.readforce.controller;
 
+import java.time.Duration;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -117,6 +120,29 @@ public class AuthController {
 		}
     	
     	return ResponseEntity.status(HttpStatus.OK).body(tokens);
+    	
+    }
+    
+    // 소셜 계정 연동 토큰 받아오기
+    @PostMapping("/get-social-account-link-token")
+    public ResponseEntity<Map<String, String>> getSocialAccountLinkToken(@AuthenticationPrincipal UserDetails user_details){
+    	
+    	// 이메일 조회
+    	String email = user_details.getUsername();
+    	
+    	// 임시 토큰 발급
+    	String state = UUID.randomUUID().toString();
+    	
+    	// Redis에 저장
+    	redis_template.opsForValue().set(
+    			Prefix.SOCIAL_LINK_STATE.getName() + state, 
+    			email,
+    			Duration.ofMinutes(5)
+    	);
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+    			Name.STATE.toString(), state    			
+    	));   	
     	
     }
 	
