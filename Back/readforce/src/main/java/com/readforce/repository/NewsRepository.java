@@ -64,6 +64,8 @@ public interface NewsRepository extends JpaRepository<News, Long>{
 			@Param("level") String level,
 			@Param("category") String category
 	);
+
+	
 	
 	
 

@@ -16,6 +16,7 @@ import com.readforce.enums.MessageCode;
 import com.readforce.exception.AuthenticationException;
 import com.readforce.exception.DuplicateException;
 import com.readforce.exception.FileException;
+import com.readforce.exception.GeminiException;
 import com.readforce.exception.InvalidJwtSecretKeyException;
 import com.readforce.exception.JsonException;
 import com.readforce.exception.NewsException;
@@ -37,6 +38,15 @@ public class GlobalExceptionHandler {
     	log.error("JwtException occurred : {}", exception.getMessage(), exception);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
     
+    }
+    
+    // Gemini 관련 에러
+    @ExceptionHandler(GeminiException.class)
+    public ResponseEntity<Map<String, String>> handleGeminiException(GeminiException exception){
+    	
+    	log.error("GeminiException occured : {}", exception.getMessage(), exception);
+    	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
+    	
     }
     
     // 뉴스 관련 에러

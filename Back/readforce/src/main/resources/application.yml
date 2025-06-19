@@ -103,4 +103,8 @@ rate-limiting:
     per-minute: 1
   email-verification:
     max-requests: 3
-    per-hour: 1 
+    per-hour: 1
+gemini:
+  api:
+    key: ${GEMINI_API_KEY}
+    url: ${GEMINI_API_URL}
