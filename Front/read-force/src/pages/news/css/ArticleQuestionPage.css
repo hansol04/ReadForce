@@ -1,0 +1,129 @@
+.article-question-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+
+.article-box {
+  flex: 1;
+  height: 500px; /* ✅ 원하는 고정 높이 (조절 가능) */
+  overflow-y: auto; /* ✅ 넘치면 스크롤 */
+  background-color: white;     
+  border: 1px solid #e0e0e0; 
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.article-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.article-meta {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.article-content {
+  font-size: 15px;
+  color: #333;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.quiz-box {
+  width: 40%;
+  height: 400px;
+  min-width: 260px;
+  padding: 1.5rem;
+  background-color: white;     
+  border: 1px solid #e0e0e0; 
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.quiz-title {
+  font-size: 17px;
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+}
+
+.quiz-question {
+  font-size: 15px;
+  margin-bottom: 1rem;
+}
+
+.quiz-option {
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: white;
+  cursor: pointer;
+  text-align: left;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.quiz-option:hover {
+  background-color: #e6f4f1;
+  border-color: #0d9488;
+}
+
+.quiz-option.correct {
+  background-color: #c2f0e9;
+  border-color: #0d9488;
+  font-weight: bold;
+}
+
+.quiz-answer {
+  margin-top: 1rem;
+  font-size: 14px;
+  color: #333;
+}
+
+.quiz-explanation {
+  margin-top: 0.5rem;
+  font-size: 13px;
+  color: #555;
+}
+
+.submit-button {
+  padding: 12px 16px;
+  background-color: #0d9488;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #0f766e;
+}
+
+.submit-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .article-question-layout { /* 기존 .article-question-container → 수정 */
+    flex-direction: column;
+  }
+
+  .article-box,
+  .quiz-box {
+    max-width: 100%;
+  }
+}
+
