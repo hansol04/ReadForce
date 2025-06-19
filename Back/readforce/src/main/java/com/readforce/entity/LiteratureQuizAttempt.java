@@ -47,6 +47,7 @@ public class LiteratureQuizAttempt {
 	private Integer selected_option_index;
 	
 	@CreatedDate
+	@Column(name = "created_date")
 	private LocalDateTime created_date;
 	
 }

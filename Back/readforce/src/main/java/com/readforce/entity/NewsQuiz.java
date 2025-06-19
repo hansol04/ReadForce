@@ -29,6 +29,7 @@ public class NewsQuiz {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "news_quiz_no")
 	private Long news_quiz_no;
 	
 	@Column(name = "question_text", nullable = false, columnDefinition = "text")
@@ -56,6 +57,7 @@ public class NewsQuiz {
 	private Double score;
 	
 	@CreatedDate
+	@Column(name = "created_date")
 	private LocalDateTime created_date;
 	
 	@Column(name = "news_no", nullable = false)

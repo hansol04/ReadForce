@@ -26,6 +26,7 @@ public class Literature {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "literature_no")
 	private Long literature_no;
 	
 	@Column(nullable = false)
@@ -35,6 +36,7 @@ public class Literature {
 	private String type;
 	
 	@CreatedDate
+	@Column(name = "created_date")
 	private LocalDateTime created_date;	
 	
 }

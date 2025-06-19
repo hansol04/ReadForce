@@ -80,6 +80,12 @@ public final class MessageCode {
 	public static final String ATTENDANCE_DATE_NOT_FOUND = "NF0006";
 	public static final String MEMBER_NOT_FOUND = "NF0007";
 	public static final String WITHDRAW_NOT_FOUND = "NF0008";
+	public static final String BEGINNER_NEWS_NOT_FOUND = "NF0009";
+	public static final String INTERMEDIATE_NEWS_NOT_FOUND = "NF0010";
+	public static final String ADVANCED_NEWS_NOT_FOUND = "NF0011";
+	public static final String BEGINNER_NEWS_QUIZ_NOT_FOUND = "NF0012";
+	public static final String INTERMEDIATE_NEWS_QUIZ_NOT_FOUND = "NF0013";
+	public static final String ADVANCED_NEWS_QUIZ_NOT_FOUND = "NF0014";
 	
 	
 	// 특정 상황
