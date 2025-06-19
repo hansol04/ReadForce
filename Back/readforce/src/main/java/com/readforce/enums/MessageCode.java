@@ -17,6 +17,8 @@ public final class MessageCode {
 	public static final String NEWS_ARTICLE_LANGUAGE_NOT_BLANK = "NO0010";
 	public static final String NEWS_ARTICLE_LEVEL_NOT_BLANK = "NO0011";
 	public static final String NEWS_NO_NOT_NULL = "NO0012";
+	public static final String NEWS_ARTICLE_ORDER_BY_NOT_BLANK = "NO0013";
+	public static final String NEWS_ARTICLE_CATEGORY_NOT_BLANK = "NO0014";
 
 	
 	// 입력값 형식 불일치
@@ -26,6 +28,9 @@ public final class MessageCode {
 	public static final String FILE_TYPE_INVALID = "PA0004";
 	public static final String NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID = "PA0005";
 	public static final String NEWS_ARTICLE_LEVEL_PATTERN_INVALID = "PA0006";
+	public static final String NEWS_ARTICLE_ORDER_BY_INVALID = "PA0007";
+	public static final String VALUE_INVALID = "PA0008";
+	public static final String NEWS_ARTICLE_CATEGORY_INVALID = "PA0008";
 	
 	
 	// 입력값 크기/범위 불일치
