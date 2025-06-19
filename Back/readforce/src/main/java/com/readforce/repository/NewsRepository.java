@@ -13,7 +13,7 @@ import com.readforce.entity.News;
 
 @Repository
 public interface NewsRepository extends JpaRepository<News, Long>{
-	
+
 	@Query(value = "SELECT * FROM news WHERE language = :language AND level = 'beginner' ORDER BY RAND() LIMIT 1", nativeQuery = true)
 	Optional<GetNews> findByLanguageAndBeginnerRandom(
 			@Param("language") String language
@@ -28,7 +28,7 @@ public interface NewsRepository extends JpaRepository<News, Long>{
 	List<GetNews> findByLanguageAndAdvancedRandom(
 			@Param("language") String language
 	);
-	
+
 	@Query("SELECT n FROM News n WHERE n.language = :language ORDER BY n.created_date ASC")
 	List<GetNews> findByLanguageOrderByCreatedDateAsc(
 			@Param("language") String language
@@ -41,31 +41,33 @@ public interface NewsRepository extends JpaRepository<News, Long>{
 
 	@Query("SELECT n FROM News n WHERE n.language = :language AND n.level = :level ORDER BY n.created_date ASC")
 	List<GetNews> findByLanguageAndLevelOrderByCreatedDateAsc(
-			@Param("language") String language, 
+			@Param("language") String language,
 			@Param("level") String level
 	);
-	
+
 	@Query("SELECT n FROM News n WHERE n.language = :language AND n.level = :level ORDER BY n.created_date DESC")
 	List<GetNews> findByLanguageAndLevelOrderByCreatedDateDesc(
-			@Param("language") String language, 
+			@Param("language") String language,
 			@Param("level") String level
 	);
 
 	@Query("SELECT n FROM News n WHERE n.language = :language AND n.level = :level AND n.category = :category ORDER BY n.created_date ASC")
 	List<GetNews> findByLanguageAndLevelAndCategoryOrderByCreatedDateAsc(
-			@Param("language") String language, 
+			@Param("language") String language,
 			@Param("level") String level,
 			@Param("category") String category
 	);
-	
+
 	@Query("SELECT n FROM News n WHERE n.language = :language AND n.level = :level AND n.category = :category ORDER BY n.created_date DESC")
 	List<GetNews> findByLanguageAndLevelAndCategoryOrderByCreatedDateDesc(
-			@Param("language") String language, 
+			@Param("language") String language,
 			@Param("level") String level,
 			@Param("category") String category
 	);
-	
-	
+
+
+
+
 
 
 }
