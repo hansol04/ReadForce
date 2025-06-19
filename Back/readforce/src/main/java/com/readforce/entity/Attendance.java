@@ -29,6 +29,7 @@ public class Attendance {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "attendance_no")
 	private Long attendance_no;
 	
 	@Column(nullable = false)
@@ -39,6 +40,7 @@ public class Attendance {
 	private Member member;
 	
 	@CreatedDate
+	@Column(name = "created_date")
 	private LocalDateTime created_date;
 	
 }

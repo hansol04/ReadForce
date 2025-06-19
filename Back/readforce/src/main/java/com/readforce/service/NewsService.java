@@ -1,5 +1,7 @@
 package com.readforce.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +15,6 @@ import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.repository.NewsQuizRepository;
 import com.readforce.repository.NewsRepository;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,9 +28,21 @@ public class NewsService {
 	@Transactional(readOnly = true)
 	public List<GetNews> getNewsListByLanguage(String language, String order_by) {
 		
-		List<GetNews> news_list = news_repository.findByLanguageOrderByCreatedDate(language, order_by);
+		List<GetNews> news_list = new ArrayList<>();
 		
-		if(news_list == null) {
+		switch(order_by) {
+			
+			case "ASC":
+				news_list = news_repository.findByLanguageOrderByCreatedDateAsc(language);
+				break;
+			
+			case "DESC":
+				news_list = news_repository.findByLanguageOrderByCreatedDateDesc(language);
+				break;
+		
+		}
+				
+		if(news_list.isEmpty()) {
 			
 			throw new ResourceNotFoundException(MessageCode.NEWS_NOT_FOUND);
 			
@@ -43,9 +56,21 @@ public class NewsService {
 	@Transactional(readOnly = true)
 	public List<GetNews> getNewsListByLanguageAndLevel(String language, String level, String order_by) {
 
-		List<GetNews> news_list = news_repository.findByLanguageAndLevelOrderByCreatedDate(language, level, order_by);
+		List<GetNews> news_list = new ArrayList<>();
 		
-		if(news_list == null) {
+		switch(order_by) {
+		
+			case "ASC":
+				news_list = news_repository.findByLanguageAndLevelOrderByCreatedDateAsc(language, level);
+				break;
+				
+			case "DESC":
+				news_list = news_repository.findByLanguageAndLevelOrderByCreatedDateDesc(language, level);
+				break;
+				
+		}
+				
+		if(news_list.isEmpty()) {
 			
 			throw new ResourceNotFoundException(MessageCode.NEWS_NOT_FOUND);
 			
@@ -63,14 +88,21 @@ public class NewsService {
 			String category,
 			String order_by) {
 
-		List<GetNews> news_list = news_repository.findByLanguageAndLevelAndCategoryOrderByCreatedDate(
-				language, 
-				level, 
-				category, 
-				order_by
-		);
+		List<GetNews> news_list = new ArrayList<>();
 		
-		if(news_list == null) {
+		switch(order_by) {
+		
+			case "ASC":
+				news_list = news_repository.findByLanguageAndLevelAndCategoryOrderByCreatedDateAsc(language, level, category);
+				break;
+			
+			case "DESC":
+				news_list = news_repository.findByLanguageAndLevelAndCategoryOrderByCreatedDateDesc(language, level, category);
+				break;
+				
+		}
+
+		if(news_list.isEmpty()) {
 			
 			throw new ResourceNotFoundException(MessageCode.NEWS_NOT_FOUND);
 			
@@ -92,17 +124,61 @@ public class NewsService {
 	}
 
 	// 난이도에 해당하는 테스트 문제 가져오기
-	public List<Map<GetNews, GetNewsQuiz>> getProficiencyTestQuizList(String language) {
+	@Transactional(readOnly = true)
+	public Map<GetNews, GetNewsQuiz> getProficiencyTestQuizMap(String language) {
+		
+		Map<GetNews, GetNewsQuiz> proficiency_test_quiz = new HashMap<>();
 		
 		// 초급 뉴스 가져오기
-				
+		GetNews beginner_news = news_repository.findByLanguageAndBeginnerRandom(language)
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.BEGINNER_NEWS_NOT_FOUND));
+		
+		// 초급 뉴스 문제 가져오기
+		GetNewsQuiz beginner_news_quiz = news_quiz_repository.findByNewsNo(beginner_news.getNew_no())
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.BEGINNER_NEWS_QUIZ_NOT_FOUND));
+		
+		// Map에 저장
+		proficiency_test_quiz.put(beginner_news, beginner_news_quiz);
+		
 		// 중급 뉴스 가져오기
+		List<GetNews> intermediate_news_list = news_repository.findByLanguageAndIntermediateRandom(language);
 		
+		if(intermediate_news_list.isEmpty() || intermediate_news_list.size() < 2) {
+			
+			throw new ResourceNotFoundException(MessageCode.INTERMEDIATE_NEWS_NOT_FOUND);
+			
+		}
 		
-				
+		// 중급 뉴스 문제 가져오기
+		for(GetNews intermediate_news : intermediate_news_list) {
+			
+			GetNewsQuiz intermediate_news_quiz = news_quiz_repository.findByNewsNo(intermediate_news.getNew_no())
+					.orElseThrow(() -> new ResourceNotFoundException(MessageCode.INTERMEDIATE_NEWS_QUIZ_NOT_FOUND));
+			
+			proficiency_test_quiz.put(intermediate_news, intermediate_news_quiz);
+
+		}
+
 		// 고급 뉴스 가져오기
+		List<GetNews> advanced_news_list = news_repository.findByLanguageAndAdvancedRandom(language);
 		
-		return null;
+		if(advanced_news_list.isEmpty() == advanced_news_list.size() < 2) {
+			
+			throw new ResourceNotFoundException(MessageCode.ADVANCED_NEWS_NOT_FOUND);
+			
+		}
+		
+		// 고급 뉴스 문제 가져오기
+		for(GetNews advanced_news : advanced_news_list) {
+			
+			GetNewsQuiz advanced_news_quiz = news_quiz_repository.findByNewsNo(advanced_news.getNew_no())
+					.orElseThrow(() -> new ResourceNotFoundException(MessageCode.ADVANCED_NEWS_QUIZ_NOT_FOUND));
+
+			proficiency_test_quiz.put(advanced_news, advanced_news_quiz);
+			
+		}
+ 		
+		return proficiency_test_quiz;
 	}
 
 }

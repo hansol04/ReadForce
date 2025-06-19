@@ -1,8 +1,8 @@
 package com.readforce.controller;
 
-import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,8 +29,8 @@ public class ProficiencyTestController {
 	private final NewsService news_service;
 
 	// 테스트 지문, 문제 가져오기(뉴스(영어, 일본어, 한국어), 초급1문제, 중급2문제, 고급2문제, 랜덤)
-	@GetMapping("/get-proficiency-test-quiz-list")
-	public ResponseEntity<List<Map<GetNews, GetNewsQuiz>>> getProficiencyTestQuizList(
+	@GetMapping("/get-proficiency-test-quiz-map")
+	public ResponseEntity<Map<GetNews, GetNewsQuiz>> getProficiencyTestQuizMap(
 			@RequestParam("language")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_LANGUAGE_NOT_BLANK)
 			@ValidEnum(enumClass = News.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
@@ -38,9 +38,9 @@ public class ProficiencyTestController {
 	){
 		
 		// 난이도에 해당하는 테스트 문제 리스트 가져오기
-		List<Map<GetNews, GetNewsQuiz>> test_list = news_service.getProficiencyTestQuizList(language);
+		Map<GetNews, GetNewsQuiz> proficiency_test_quiz = news_service.getProficiencyTestQuizMap(language);
 		
-		return null;
+		return ResponseEntity.status(HttpStatus.OK).body(proficiency_test_quiz);
 	}
 	
 	

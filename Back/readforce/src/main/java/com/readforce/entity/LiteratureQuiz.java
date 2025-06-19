@@ -30,6 +30,7 @@ public class LiteratureQuiz {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "literature_quiz_no")
 	private Long literature_quiz_no;
 	
 	@Column(name = "question_text", nullable = false, columnDefinition = "text")
@@ -57,6 +58,7 @@ public class LiteratureQuiz {
 	private Double score;
 	
 	@CreatedDate
+	@Column(name = "created_date")
 	private LocalDateTime created_date;
 	
 	@Column(name = "literature_no", nullable = false)
