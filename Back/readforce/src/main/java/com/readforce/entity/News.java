@@ -44,7 +44,6 @@ public class News {
 	private String content;
 	
 	@CreatedDate
-	@Column(name = "created_date")
 	private LocalDateTime created_date;
 	
 }
