@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.readforce.dto.NewsDto.GetNews;
 import com.readforce.dto.NewsDto.GetNewsQuiz;
 import com.readforce.enums.MessageCode;
+import com.readforce.enums.News;
 import com.readforce.service.NewsService;
+import com.readforce.validation.ValidEnum;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -28,41 +29,78 @@ public class NewsController {
 
 	private final NewsService news_service;
 	
-	// 나라에 해당하는 뉴스기사 가져오기(반환시 내림차순 리스트 반환)
+	// 언어에 해당하는 뉴스기사 가져오기(내림차순/오름차순)
 	@GetMapping("/get-news-list-by-language")
 	public ResponseEntity<List<GetNews>> getNewsListByLanguage(
 			@RequestParam("language")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_LANGUAGE_NOT_BLANK)
-			@Pattern(regexp = "^(kr|jp|en)$", message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
-			String language
+			@ValidEnum(enumClass = News.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
+			String language,
+			@RequestParam("order_by")
+			@NotBlank(message = MessageCode.NEWS_ARTICLE_ORDER_BY_NOT_BLANK)
+			@ValidEnum(enumClass = News.OrderBy.class, message = MessageCode.NEWS_ARTICLE_ORDER_BY_INVALID)
+			String order_by
 	){
 		
-		// 뉴스 기사 리스트(내림차순) 가져오기
-		List<GetNews> news_list = news_service.getNewsListByLanguage(language);
+		// 뉴스 기사 리스트 가져오기
+		List<GetNews> news_list = news_service.getNewsListByLanguage(language, order_by);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(news_list);
 		
 	}
 	
-	// 나라와 난이도에 해당하는 뉴스기사 가져오기(반환시 내림차순 리스트 반환)
+	// 언어와 난이도에 해당하는 뉴스기사 가져오기(내림차순/오름차순)
 	@GetMapping("/get-news-list-by-language-and-level")
 	public ResponseEntity<List<GetNews>> getNewsListByLanguageAndLevel(
 			@RequestParam("language")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_LANGUAGE_NOT_BLANK)
-			@Pattern(regexp = "^(한국어|일본어|영어)$", message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
+			@ValidEnum(enumClass = News.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
 			String language,
 			@RequestParam("level")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_LEVEL_NOT_BLANK)
-			@Pattern(regexp = "^(초급|중급|고급)$", message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
-			String level
+			@ValidEnum(enumClass = News.Level.class, message = MessageCode.NEWS_ARTICLE_LEVEL_PATTERN_INVALID)
+			String level,
+			@RequestParam("order_by")
+			@NotBlank(message = MessageCode.NEWS_ARTICLE_ORDER_BY_NOT_BLANK)
+			@ValidEnum(enumClass = News.OrderBy.class, message = MessageCode.NEWS_ARTICLE_ORDER_BY_INVALID)
+			String order_by
 	){
 		
-		// 뉴스 기사 리스트(내림차순) 가져오기
-		List<GetNews> news_list = news_service.getNewsListByLanguageAndLevel(language, level);
+		// 뉴스 기사 리스트 가져오기
+		List<GetNews> news_list = news_service.getNewsListByLanguageAndLevel(language, level, order_by);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(news_list); 
 		
 	}
+	
+	// 언어와 난이도, 카테고리에 해당하는 뉴스기사 가져오기(내림차순/오름차순)
+	@GetMapping("/get-news-list-by-language-and-level-and-category")
+	public ResponseEntity<List<GetNews>> getNewsListByLanguageAndLevelAndCategory(
+			@RequestParam("language")
+			@NotBlank(message = MessageCode.NEWS_ARTICLE_LANGUAGE_NOT_BLANK)
+			@ValidEnum(enumClass = News.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
+			String language,
+			@RequestParam("level")
+			@NotBlank(message = MessageCode.NEWS_ARTICLE_LEVEL_NOT_BLANK)
+			@ValidEnum(enumClass = News.Level.class, message = MessageCode.NEWS_ARTICLE_LEVEL_PATTERN_INVALID)
+			String level,
+			@RequestParam("category")
+			@NotBlank(message = MessageCode.NEWS_ARTICLE_CATEGORY_NOT_BLANK)
+			@ValidEnum(enumClass = News.Category.class, message = MessageCode.NEWS_ARTICLE_CATEGORY_INVALID)
+			String category,
+			@RequestParam("order_by")
+			@NotBlank(message = MessageCode.NEWS_ARTICLE_ORDER_BY_NOT_BLANK)
+			@ValidEnum(enumClass = News.OrderBy.class, message = MessageCode.NEWS_ARTICLE_ORDER_BY_INVALID)
+			String order_by
+	){
+		
+		// 뉴스 기사 리스트 가져오기
+		List<GetNews> news_list = news_service.getNewsListByLanguageAndLevelAndCategory(language, level, category, order_by);
+
+		return ResponseEntity.status(HttpStatus.OK).body(news_list);
+		
+	}
+	
 	
 	// 뉴스 기사 문제 가져오기
 	@GetMapping("/get-news-quiz-object")

@@ -12,14 +12,27 @@ import com.readforce.entity.News;
 
 @Repository
 public interface NewsRepository extends JpaRepository<News, Long>{
-
-	@Query("SELECT n FROM News n WHERE n.language = :language ORDER BY created_date DESC")
-	List<GetNews> findByLanguageOrderByCreatedDateDesc(@Param("language") String language);
-
-	@Query("SELECT n FROM News n WHERE n.language = :language AND n.level = :level ORDER BY created_date DESC")
-	List<GetNews> findByLanguageAndLevelOrderByCreatedDateDesc(
+	
+	@Query("SELECT n FROM News n WHERE n.language = :language ORDER BY created_date :order_by")
+	List<GetNews> findByLanguageOrderByCreatedDate(
 			@Param("language") String language, 
-			@Param("level") String level
+			@Param("order_by") String order_by		
 	);
+
+	@Query("SELECT n FROM News n WHERE n.language = :language AND n.level = :level ORDER BY created_date :order_by")
+	List<GetNews> findByLanguageAndLevelOrderByCreatedDate(
+			@Param("language") String language, 
+			@Param("level") String level, 
+			@Param("order_by") String order_by
+	);
+
+	@Query("SELECT n FROM News n WHERE n.language = :language AND n.level = :level AND n.category ORDER BY created_date :order_by")
+	List<GetNews> findByLanguageAndLevelAndCategoryOrderByCreatedDate(
+			@Param("language") String language, 
+			@Param("level") String level, 
+			@Param("category") String category,
+			@Param("order_by") String order_by
+	);
+
 
 }

@@ -106,7 +106,7 @@ public class MemberController {
     	
     }
     
-    // 일반 로그아웃
+    // 로그아웃
     @DeleteMapping("/sign-out")
     public ResponseEntity<Map<String, String>>signOut(@AuthenticationPrincipal UserDetails user_details){
     	
