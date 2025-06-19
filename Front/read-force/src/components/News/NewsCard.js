@@ -18,9 +18,7 @@ const NewsCard = React.memo (({ article }) => {
           <p className="news-category"># {article.category}</p>
         </div>
         
-      <Link to={`/question/${article.id}`} className="news-button">
-        문제 풀기
-      </Link>
+      <Link to={`/question/${article.id}`} className="news-button">문제 풀기</Link>
       </div>
     </div>
   );
