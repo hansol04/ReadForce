@@ -57,6 +57,7 @@ function App() {
           <Route path="/test-start" element={<ReadTest />} />
           <Route path="/adminpage" element={<AdminPage />} />
           <Route path="/literature/classic" element={<ClassicPage />} />
+          <Route path="/news" element={<NewsList />} />
           <Route path="/question/:id" element={<ArticleQuestionPage />} />
           <Route path="/question-result" element={<ArticleResultPage />} />
        </Route>

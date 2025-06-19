@@ -1,14 +1,21 @@
-// ✅ 공통 레이아웃 .page-container 반영됨
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuizHandler } from '../../hooks/useQuizHandler';
-import NewsList from '../../components/news/NewsList';
+import UniversalList from '../../components/universal/UniversalList';
+import { fetchNewsList } from '../../api/newsApi';
 
 const KoreaPage = () => {
-  const { handleSolve } = useQuizHandler('navigate', 'kr');
+  const { handleSolve } = useQuizHandler('navigate', '한국어');
+  const [newsItems, setNewsItems] = useState([]);
+
+  useEffect(() => {
+    fetchNewsList({ language: '한국어', level: 'all' })
+      .then(data => setNewsItems(data))
+      .catch(err => console.error('뉴스 데이터 실패', err));
+  }, []);
 
   return (
     <div className="page-container">
-      <NewsList country="kr" onSolve={handleSolve} />
+      <UniversalList items={newsItems} onSolve={handleSolve} />
     </div>
   );
 };

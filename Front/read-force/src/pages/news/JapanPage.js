@@ -4,11 +4,12 @@ import { useQuizHandler } from '../../hooks/useQuizHandler';
 import NewsList from '../../components/news/NewsList';
 
 const JapanPage = () => {
-  const { handleSolve } = useQuizHandler('navigate', 'jp');
+  const { handleSolve } = useQuizHandler('navigate', '일어');
 
   return (
     <div className="page-container">
-      <NewsList country="jp" onSolve={handleSolve} />
+      <h2>일어페이지</h2>
+      <NewsList language="일어" onSolve={handleSolve} />
     </div>
   );
 };

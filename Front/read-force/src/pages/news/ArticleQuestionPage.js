@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './css/ArticleQuestionPage.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const dummyArticle = {
   id: 1,
@@ -17,47 +17,54 @@ const dummyArticle = {
 const ArticleQuestionPage = () => {
   const [selected, setSelected] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleSubmit = () => {
+  const article = location.state?.article || dummyArticle;
+  const language = location.state?.language || '한국어';
+
+   const handleSubmit = () => {
     if (selected) {
-      navigate('/question-result'); // 👉 결과 페이지로 이동
+      navigate('/question-result', {
+        state: {
+          isCorrect: selected === article.answer,
+          explanation: article.explanation,
+          language: language,
+        }
+      });
     }
   };
 
   return (
-    <div>
-      <div className="page-container article-question-layout">
-        {/* 왼쪽 지문 */}
-        <div className="article-box">
-          <h3 className="article-title">{dummyArticle.title}</h3>
-          <p className="article-summary">{dummyArticle.summary}</p>
-          <p className="article-content">{dummyArticle.content}</p>
+    <div className="page-container article-question-layout">
+      <div className="article-box">
+        <h3 className="article-title">{article.title}</h3>
+        <p className="article-summary">{article.summary}</p>
+        <p className="article-content">{article.content}</p>
+      </div>
+
+      <div className="quiz-box">
+        <h4 className="quiz-title">💡 문제</h4>
+        <p className="quiz-question">{article.question}</p>
+        <div className="quiz-options">
+          {article.options.map((opt, idx) => (
+            <button
+              key={idx}
+              className={`quiz-option ${selected === opt ? 'selected' : ''}`}
+              onClick={() => setSelected(opt)}
+            >
+              {String.fromCharCode(65 + idx)}. {opt}
+            </button>
+          ))}
         </div>
 
-        {/* 오른쪽 문제 + 선택지 */}
-        <div className="quiz-box">
-          <h4 className="quiz-title">문제 1-1</h4>
-          <p className="quiz-question">{dummyArticle.question}</p>
-          <div className="quiz-options">
-            {dummyArticle.options.map((opt, idx) => (
-              <button
-                key={idx}
-                className={`quiz-option ${selected === opt ? 'selected' : ''}`}
-                onClick={() => setSelected(opt)}
-              >
-                {String.fromCharCode(65 + idx)}. {opt}
-              </button>
-            ))}
-          </div>
-
-          <div className="quiz-button-container">
-            <button className="submit-button" disabled={!selected} onClick={handleSubmit} > 정답 제출 </button>
-          </div>
+        <div className="quiz-button-container">
+          <button className="submit-button" disabled={!selected} onClick={handleSubmit}>
+            정답 제출
+          </button>
         </div>
       </div>
     </div>
   );
-
 };
 
 export default ArticleQuestionPage;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import FilterBar from './FilterBar';
-import LiteratureCard from './LiteratureCard'; // 문학 작품 하나를 표시하는 카드 컴포넌트
+import UniversalFilterBar from '../universal/UniversalFilterBar';
+import LiteratureCard from './LiteratureCard'; 
 
 const ClassicList = ({ onSolve }) => {
   const [literatureList, setLiteratureList] = useState([]);
@@ -53,7 +53,7 @@ const ClassicList = ({ onSolve }) => {
 
   return (
     <div>
-      <FilterBar level={level} setLevel={setLevel} sort={sort} setSort={setSort} />
+      <UniversalFilterBar level={level} setLevel={setLevel} sort={sort} setSort={setSort} />
 
       {sorted.map((item, i) => (
         <LiteratureCard key={i} data={item} onSolve={onSolve} />
