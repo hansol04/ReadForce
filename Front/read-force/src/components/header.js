@@ -29,40 +29,30 @@ const Header = () => {
   const handleLogout = async () => {
     const token = localStorage.getItem("token");
 
-    try {
-      if (provider === "KAKAO") {
-        const response = await fetch("/member/kakao-sign-out", {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          localStorage.clear();
-          window.location.href = data.KAKAO_LOGOUT_URL;
-          return;
-        } else {
-          alert("카카오 로그아웃에 실패했습니다.");
-        }
-      } else {
-        await fetch("/member/sign-out", {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      }
-    } catch (error) {
-      console.error("로그아웃 중 오류 발생:", error);
-    }
+    try {const res = await fetch("/member/sign-out", {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const result = await res.json();
+    const kakaoLogoutUrl = result.KAKAO_SIGN_OUT_URL;
 
     localStorage.clear();
     setShowUserMenu(false);
-    navigate("/");
-  };
 
+    if (kakaoLogoutUrl) {
+      window.location.href = kakaoLogoutUrl;
+    } else {
+      navigate("/");
+    }
+  } catch (error) {
+    console.error("로그아웃 중 오류 발생:", error);
+    localStorage.clear();
+    setShowUserMenu(false);
+    navigate("/");
+  }
+};
   return (
     <header className="header">
       <div className="page-container header-inner">

@@ -126,6 +126,7 @@ public class MemberController {
     	// 카카오 소셜 계정
     	if("kakao".equals(provider)) {
     		
+    		log.warn("providerasdasdasdsdad");
     		String kakao_sign_out_url = custom_fronted_kakao_logout_url
     				+ kakao_client_id
     				+ "&logout_redirect_uri="
