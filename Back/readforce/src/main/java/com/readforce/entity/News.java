@@ -11,7 +11,6 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,14 +22,17 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewsPassage {
+public class News {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long new_passage_no;
+	private Long new_no;
 	
 	@Column(nullable = false)
-	private String country;
+	private String language;
+	
+	@Column(nullable = false)
+	private String category;
 	
 	@Column(nullable = false)
 	private String level;
@@ -38,11 +40,11 @@ public class NewsPassage {
 	@Column(nullable = false)
 	private String title;
 	
-	@Lob
 	@Column(nullable = false, columnDefinition = "text")
 	private String content;
 	
 	@CreatedDate
+	@Column(name = "created_date")
 	private LocalDateTime created_date;
 	
 }

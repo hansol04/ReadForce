@@ -67,18 +67,24 @@ public class FileService {
 		
 		// 빈 값 확인
 		if(multipart_file.isEmpty()) {
+			
 			throw new FileException(MessageCode.FILE_NOT_NULL);
+			
 		}
 		
 		// 사이즈 확인
 		if(multipart_file.getSize() > max_size) {
+			
 			throw new FileException(MessageCode.FILE_SIZE_INVALID);
+			
 		}
 		
 		// 타입 확인
 		String mime_type = multipart_file.getContentType();
 		if(mime_type == null || !type_list.contains(mime_type)) {
+			
 			throw new FileException(MessageCode.FILE_TYPE_INVALID);
+			
 		}
 		
 	}
@@ -125,9 +131,13 @@ public class FileService {
 				throw new ResourceNotFoundException(MessageCode.FILE_NOT_FOUND); 
 			}
 		} catch (MalformedURLException exception) {
+			
 			throw new ResourceNotFoundException(MessageCode.FILE_NOT_FOUND);
+			
 		} catch (Exception exception) {
+			
 			throw new ResourceNotFoundException(MessageCode.FILE_NOT_FOUND);
+			
 		}
 		
 	}
