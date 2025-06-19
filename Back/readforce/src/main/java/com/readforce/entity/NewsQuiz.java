@@ -13,7 +13,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -59,12 +58,12 @@ public class NewsQuiz {
 	@CreatedDate
 	private LocalDateTime created_date;
 	
-	@Column(nullable = false)
-	private Long news_passage_no;
+	@Column(name = "news_no", nullable = false)
+	private Long news_no;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "news_passage_no", insertable = false, updatable = false)
-	private News news_passage;
+	@JoinColumn(name = "news_no", insertable = false, updatable = false)
+	private News news;
 	
 	
 }
