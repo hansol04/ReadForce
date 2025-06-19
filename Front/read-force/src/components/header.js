@@ -10,6 +10,7 @@ const Header = () => {
   const [nickname, setNickname] = useState('');
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const navigate = useNavigate();
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const isLoggedIn = !!localStorage.getItem("token");
   const provider = localStorage.getItem("provider"); // ✅ 추가
@@ -74,9 +75,9 @@ const Header = () => {
               <div className="nav-item">기사 콘텐츠</div>
               {hoveredMenu === 'article' && (
                 <div className="mega-menu">
-                  <Link to="/korea">한국기사</Link>
-                  <Link to="/japan">일본기사</Link>
-                  <Link to="/usa">미국기사</Link>
+                  <Link to="/korea">한국어</Link>
+                  <Link to="/japan">일어</Link>
+                  <Link to="/usa">영어</Link>
                 </div>
               )}
             </div>
@@ -89,10 +90,8 @@ const Header = () => {
               <div className="nav-item">문학 작품</div>
               {hoveredMenu === 'literature' && (
                 <div className="mega-menu">
-                  <Link to="/classic">고전소설</Link>
-                  <Link to="/poetry">시/한시</Link>
-                  <Link to="/fairy">동화/우화</Link>
-                  <Link to="/folk">민담/설화</Link>
+                  <Link to="/classic">소설</Link>
+                  <Link to="/fairy">동화</Link>
                 </div>
               )}
             </div>
@@ -102,6 +101,7 @@ const Header = () => {
           </nav>
         </div>
 
+      <div className="hamburger" onClick={() => setShowMobileMenu(prev => !prev)}>☰</div>
         <div className="header-right auth-buttons">
           <div className="lang-selector">
             <button
@@ -154,6 +154,42 @@ const Header = () => {
           )}
         </div>
       </div>
+
+      {showMobileMenu && (
+      <div className="mobile-menu">
+        <div className="mobile-menu-section">
+          <div className="mobile-menu-title">기사 콘텐츠</div>
+          <Link to="/korea">한국어</Link>
+          <Link to="/japan">일어</Link>
+          <Link to="/usa">영어</Link>
+        </div>
+
+        <div className="mobile-menu-section">
+          <div className="mobile-menu-title">문학 작품</div>
+          <Link to="/classic">소설</Link>
+          <Link to="/fairy">동화</Link>
+        </div>
+
+        <div className="mobile-menu-section">
+          <Link to="/challenge">문해력 도전</Link>
+        </div>
+
+        <div className="mobile-menu-section">
+          {isLoggedIn ? (
+            <>
+              <Link to="/mypage">마이페이지</Link>
+              <div onClick={handleLogout}>로그아웃</div>
+            </>
+          ) : (
+            <>
+              <Link to="/login">로그인</Link>
+              <Link to="/signup/signupchoice">회원가입</Link>
+            </>
+          )}
+        </div>
+      </div>
+    )}
+
     </header>
   );
 };

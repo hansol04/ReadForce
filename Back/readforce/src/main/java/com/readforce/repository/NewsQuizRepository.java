@@ -12,8 +12,8 @@ import com.readforce.entity.NewsQuiz;
 
 @Repository
 public interface NewsQuizRepository extends JpaRepository<NewsQuiz, Long>{
-
-	@Query("SELECT nq FROM NewsQuiz nq WHERE nq.news_passage_no = :news_passage_no")
-	Optional<GetNewsQuiz> findByNewsPassageNo(@Param("news_passage_no") Long news_passage_no);
+	
+	@Query("SELECT nq FROM NewsQuiz nq WHERE nq.news_no = :news_no")
+	Optional<GetNewsQuiz> findByNewsNo(@Param("news_no") Long news_no);
 
 }

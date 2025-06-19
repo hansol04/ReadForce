@@ -25,7 +25,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class news_quiz_attempt {
+public class NewsQuizAttempt {
 
 	@EmbeddedId
 	private NewsQuizAttemptId news_quiz_attempt_id;
