@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.readforce.dto.NewsDto.GetNews;
 import com.readforce.dto.NewsDto.GetNewsQuiz;
 import com.readforce.enums.MessageCode;
-import com.readforce.enums.News;
+import com.readforce.enums.NewsRelate;
 import com.readforce.service.NewsService;
 import com.readforce.validation.ValidEnum;
 
@@ -33,7 +33,7 @@ public class ProficiencyTestController {
 	public ResponseEntity<Map<GetNews, GetNewsQuiz>> getProficiencyTestQuizMap(
 			@RequestParam("language")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_LANGUAGE_NOT_BLANK)
-			@ValidEnum(enumClass = News.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
+			@ValidEnum(enumClass = NewsRelate.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
 			String language
 	){
 		

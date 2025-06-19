@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.readforce.dto.NewsDto.GetNews;
 import com.readforce.dto.NewsDto.GetNewsQuiz;
 import com.readforce.enums.MessageCode;
-import com.readforce.enums.News;
+import com.readforce.enums.NewsRelate;
 import com.readforce.service.NewsService;
 import com.readforce.validation.ValidEnum;
 
@@ -34,11 +34,11 @@ public class NewsController {
 	public ResponseEntity<List<GetNews>> getNewsListByLanguage(
 			@RequestParam("language")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_LANGUAGE_NOT_BLANK)
-			@ValidEnum(enumClass = News.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
+			@ValidEnum(enumClass = NewsRelate.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
 			String language,
 			@RequestParam("order_by")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_ORDER_BY_NOT_BLANK)
-			@ValidEnum(enumClass = News.OrderBy.class, message = MessageCode.NEWS_ARTICLE_ORDER_BY_INVALID)
+			@ValidEnum(enumClass = NewsRelate.OrderBy.class, message = MessageCode.NEWS_ARTICLE_ORDER_BY_INVALID)
 			String order_by
 	){
 		
@@ -54,15 +54,15 @@ public class NewsController {
 	public ResponseEntity<List<GetNews>> getNewsListByLanguageAndLevel(
 			@RequestParam("language")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_LANGUAGE_NOT_BLANK)
-			@ValidEnum(enumClass = News.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
+			@ValidEnum(enumClass = NewsRelate.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
 			String language,
 			@RequestParam("level")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_LEVEL_NOT_BLANK)
-			@ValidEnum(enumClass = News.Level.class, message = MessageCode.NEWS_ARTICLE_LEVEL_PATTERN_INVALID)
+			@ValidEnum(enumClass = NewsRelate.Level.class, message = MessageCode.NEWS_ARTICLE_LEVEL_PATTERN_INVALID)
 			String level,
 			@RequestParam("order_by")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_ORDER_BY_NOT_BLANK)
-			@ValidEnum(enumClass = News.OrderBy.class, message = MessageCode.NEWS_ARTICLE_ORDER_BY_INVALID)
+			@ValidEnum(enumClass = NewsRelate.OrderBy.class, message = MessageCode.NEWS_ARTICLE_ORDER_BY_INVALID)
 			String order_by
 	){
 		
@@ -78,19 +78,19 @@ public class NewsController {
 	public ResponseEntity<List<GetNews>> getNewsListByLanguageAndLevelAndCategory(
 			@RequestParam("language")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_LANGUAGE_NOT_BLANK)
-			@ValidEnum(enumClass = News.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
+			@ValidEnum(enumClass = NewsRelate.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
 			String language,
 			@RequestParam("level")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_LEVEL_NOT_BLANK)
-			@ValidEnum(enumClass = News.Level.class, message = MessageCode.NEWS_ARTICLE_LEVEL_PATTERN_INVALID)
+			@ValidEnum(enumClass = NewsRelate.Level.class, message = MessageCode.NEWS_ARTICLE_LEVEL_PATTERN_INVALID)
 			String level,
 			@RequestParam("category")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_CATEGORY_NOT_BLANK)
-			@ValidEnum(enumClass = News.Category.class, message = MessageCode.NEWS_ARTICLE_CATEGORY_INVALID)
+			@ValidEnum(enumClass = NewsRelate.Category.class, message = MessageCode.NEWS_ARTICLE_CATEGORY_INVALID)
 			String category,
 			@RequestParam("order_by")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_ORDER_BY_NOT_BLANK)
-			@ValidEnum(enumClass = News.OrderBy.class, message = MessageCode.NEWS_ARTICLE_ORDER_BY_INVALID)
+			@ValidEnum(enumClass = NewsRelate.OrderBy.class, message = MessageCode.NEWS_ARTICLE_ORDER_BY_INVALID)
 			String order_by
 	){
 		
