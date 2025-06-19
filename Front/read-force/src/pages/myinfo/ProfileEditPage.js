@@ -9,11 +9,9 @@ const ProfileEditPage = () => {
   const [nickname, setNickname] = useState('');
   const [nicknameMessage, setNicknameMessage] = useState('');
   const [isNicknameValid, setIsNicknameValid] = useState(null);
-
   const [birthday, setBirthday] = useState('');
   const [birthdayMessage, setBirthdayMessage] = useState('');
   const [isBirthdayValid, setIsBirthdayValid] = useState(null);
-
   const [imageUrl, setImageUrl] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -139,16 +137,16 @@ const ProfileEditPage = () => {
     }
   };
 
-  const openSocialPopup = (provider) => {
-    const width = 500;
-    const height = 600;
-    const left = window.screenX + (window.innerWidth - width) / 2;
-    const top = window.screenY + (window.innerHeight - height) / 2;
-    window.open(
-      `http://localhost:8080/oauth2/authorization/${provider}`,
-      '_blank',
-      `width=${width},height=${height},left=${left},top=${top}`
-    );
+  const openSocialRedirect = async (provider) => {
+    try {
+      const res = await axiosInstance.post('/auth/get-social-account-link-token');
+      const state = res.data.STATE;
+      const redirectUri = `http://localhost:8080/oauth2/authorization/${provider}?state=${state}`;
+      console.log(state);
+      window.location.href = redirectUri;
+    } catch (err) {
+      alert('SNS 연동 요청 실패');
+    }
   };
 
   return (
@@ -186,7 +184,6 @@ const ProfileEditPage = () => {
           </div>
         </div>
 
-        {/* 닉네임 */}
         <div className="form-group">
           <label>닉네임</label>
           <div className="input-with-message">
@@ -213,7 +210,6 @@ const ProfileEditPage = () => {
           </div>
         </div>
 
-        {/* 생일 */}
         <div className="form-group">
           <label>생년월일</label>
           <div className="input-with-message">
@@ -234,16 +230,17 @@ const ProfileEditPage = () => {
             )}
           </div>
         </div>
+
         <div className="form-group">
           <label>SNS 계정 연동</label>
           <div className="social-login">
-            <button type="button" className="social-btn" onClick={() => openSocialPopup('kakao')}>
+            <button type="button" className="social-btn" onClick={() => openSocialRedirect('kakao')}>
               <img src={kakaoIcon} alt="카카오" />
             </button>
-            <button type="button" className="social-btn" onClick={() => openSocialPopup('naver')}>
+            <button type="button" className="social-btn" onClick={() => openSocialRedirect('naver')}>
               <img src={naverIcon} alt="네이버" />
             </button>
-            <button type="button" className="social-btn" onClick={() => openSocialPopup('google')}>
+            <button type="button" className="social-btn" onClick={() => openSocialRedirect('google')}>
               <img src={googleIcon} alt="구글" />
             </button>
           </div>

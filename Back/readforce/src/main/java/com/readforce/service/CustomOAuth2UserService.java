@@ -31,7 +31,9 @@ import com.readforce.repository.MemberRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>{
@@ -63,6 +65,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 		// 소셜 계정 연동 시나리오(사용자가 이미 로그인 상태인지 확인)
 		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		
+		
+		
 		if(attributes == null) {
 			
 			throw new OAuth2AuthenticationException("Request attriutes is null, cannot check state.");
@@ -75,9 +79,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 		
 		if(state != null) {
 			
+			log.warn(state);
+			
 			String email = redis_template.opsForValue().get(Prefix.SOCIAL_LINK_STATE.getName() + state);
 			
 			if(email != null) {
+				
+				
 				
 				// Redis 삭제
 				redis_template.delete(Prefix.SOCIAL_LINK_STATE.getName() + state);
