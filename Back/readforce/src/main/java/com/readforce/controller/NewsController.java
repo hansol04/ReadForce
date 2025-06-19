@@ -26,8 +26,8 @@ import lombok.RequiredArgsConstructor;
 @Validated
 public class NewsController {
 
-	private final NewsService news_service;
-	
+//	private final NewsService news_service;
+//	
 //	// 나라에 해당하는 뉴스기사 가져오기(반환시 내림차순 리스트 반환)
 //	@GetMapping("/get-news-passage-list-by-country")
 //	public ResponseEntity<List<GetNewsPassage>> getNewsPassageListByCountry(
@@ -78,5 +78,5 @@ public class NewsController {
 //		return ResponseEntity.status(HttpStatus.OK).body(news_quiz_object);
 //		
 //	}
-//	
+	
 }
