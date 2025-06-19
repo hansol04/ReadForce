@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,12 +26,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewsQuiz {
-
+public class LiteratureQuiz {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "news_quiz_no")
-	private Long news_quiz_no;
+	@Column(name = "literature_quiz_no")
+	private Long literature_quiz_no;
 	
 	@Column(name = "question_text", nullable = false, columnDefinition = "text")
 	private String question_text;
@@ -60,12 +61,17 @@ public class NewsQuiz {
 	@Column(name = "created_date")
 	private LocalDateTime created_date;
 	
-	@Column(name = "news_no", nullable = false)
-	private Long news_no;
+	@Column(name = "literature_no", nullable = false)
+	private Long literature_no;
+	
+	@Column(name = "literature_paragraph_no", nullable = false)
+	private Long literature_paragraph_no;	
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "news_no", insertable = false, updatable = false)
-	private News news;
-	
+	@JoinColumns({
+		@JoinColumn(name = "literature_no", referencedColumnName = "literature_no", insertable = false, updatable = false),
+		@JoinColumn(name = "literature_paragraph_no", referencedColumnName = "literature_paragraph_no", insertable = false, updatable = false)		
+	})
+	private LiteratureParagraph literature_paragraph;
 	
 }
