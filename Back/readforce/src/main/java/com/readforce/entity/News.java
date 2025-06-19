@@ -23,28 +23,28 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class News {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long new_no;
-	
+
 	@Column(nullable = false)
 	private String language;
-	
+
 	@Column(nullable = false)
 	private String category;
-	
+
 	@Column(nullable = false)
 	private String level;
-	
+
 	@Column(nullable = false)
 	private String title;
-	
+
 	@Column(nullable = false, columnDefinition = "text")
 	private String content;
-	
+
 	@CreatedDate
 	@Column(name = "created_date")
 	private LocalDateTime created_date;
-	
+
 }
