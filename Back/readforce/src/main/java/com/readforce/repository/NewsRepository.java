@@ -29,44 +29,47 @@ public interface NewsRepository extends JpaRepository<News, Long>{
 	List<GetNews> findByLanguageAndAdvancedRandom(
 			@Param("language") String language
 	);
+	
+	@Query(value = "SELECT * FROM news WHERE language = :language ORDER BY created_date ASC", nativeQuery = true)
 
-	@Query("SELECT n FROM News n WHERE n.language = :language ORDER BY n.created_date ASC")
 	List<GetNews> findByLanguageOrderByCreatedDateAsc(
 			@Param("language") String language
 	);
 
-	@Query("SELECT n FROM News n WHERE n.language = :language ORDER BY n.created_date DESC")
+	@Query(value = "SELECT * FROM news WHERE language = :language ORDER BY created_date DESC", nativeQuery = true)
 	List<GetNews> findByLanguageOrderByCreatedDateDesc(
 			@Param("language") String language
 	);
 
-	@Query("SELECT n FROM News n WHERE n.language = :language AND n.level = :level ORDER BY n.created_date ASC")
+	@Query(value = "SELECT * FROM news WHERE language = :language AND level = :level ORDER BY created_date ASC", nativeQuery = true)
 	List<GetNews> findByLanguageAndLevelOrderByCreatedDateAsc(
 			@Param("language") String language,
 			@Param("level") String level
 	);
+	
+	@Query(value = "SELECT * FROM news WHERE language = :language AND level = :level ORDER BY created_date DESC", nativeQuery = true)
 
-	@Query("SELECT n FROM News n WHERE n.language = :language AND n.level = :level ORDER BY n.created_date DESC")
 	List<GetNews> findByLanguageAndLevelOrderByCreatedDateDesc(
 			@Param("language") String language,
 			@Param("level") String level
 	);
 
-	@Query("SELECT n FROM News n WHERE n.language = :language AND n.level = :level AND n.category = :category ORDER BY n.created_date ASC")
+	@Query(value = "SELECT * FROM news WHERE language = :language AND level = :level AND category = :category ORDER BY created_date ASC", nativeQuery = true)
 	List<GetNews> findByLanguageAndLevelAndCategoryOrderByCreatedDateAsc(
 			@Param("language") String language,
 			@Param("level") String level,
 			@Param("category") String category
 	);
 
-	@Query("SELECT n FROM News n WHERE n.language = :language AND n.level = :level AND n.category = :category ORDER BY n.created_date DESC")
+	@Query(value = "SELECT * FROM news WHERE language = :language AND level = :level AND category = :category ORDER BY created_date DESC", nativeQuery = true)
+
 	List<GetNews> findByLanguageAndLevelAndCategoryOrderByCreatedDateDesc(
 			@Param("language") String language,
 			@Param("level") String level,
 			@Param("category") String category
 	);
 
-	@Query("SELECT n FROM News n WHERE NOT EXISTS(SELECT nq FROM NewsQuiz nq WHERE nq.news = n)")
+	@Query(value = "SELECT * FROM news WHERE news_no NOT IN (SELECT news_no FROM news_quiz)", nativeQuery = true)
 	List<News> findUnquizzedNews();
 
 
