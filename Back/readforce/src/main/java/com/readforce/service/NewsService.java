@@ -1,9 +1,7 @@
 package com.readforce.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,14 +9,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.readforce.dto.NewsDto;
 import com.readforce.dto.NewsDto.GetNews;
 import com.readforce.dto.NewsDto.GetNewsQuiz;
+import com.readforce.dto.NewsDto.ProficiencyTestItem;
+import com.readforce.dto.NewsDto.SaveMemberSolvedNewsQuiz;
 import com.readforce.entity.News;
 import com.readforce.entity.NewsQuiz;
+import com.readforce.entity.NewsQuizAttempt;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.NewsRelate;
 import com.readforce.exception.ResourceNotFoundException;
+import com.readforce.repository.NewsQuizAttemptRepository;
 import com.readforce.repository.NewsQuizRepository;
 import com.readforce.repository.NewsRepository;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +33,7 @@ public class NewsService {
 	private final NewsRepository news_repository;
 	private final NewsQuizRepository news_quiz_repository;
 	private final GeminiService gemini_service;
+	private final NewsQuizAttemptRepository news_quiz_attempt_repository;
 
 	// News -> GetNews 변환
 	private GetNews transformEntity(News news) {
@@ -190,9 +194,9 @@ public class NewsService {
 
 	// 난이도에 해당하는 테스트 문제 가져오기
 	@Transactional(readOnly = true)
-	public Map<GetNews, GetNewsQuiz> getProficiencyTestQuizMap(String language) {
+	public List<ProficiencyTestItem> getProficiencyTestQuizMap(String language) {
 
-		Map<GetNews, GetNewsQuiz> proficiency_test_quiz = new HashMap<>();
+		List<ProficiencyTestItem> proficiency_test_quiz_list = new ArrayList<>();
 
 		// 초급 뉴스 가져오기
 		News beginner_news = news_repository.findByLanguageAndBeginnerRandom(language)
@@ -202,8 +206,8 @@ public class NewsService {
 		NewsQuiz beginner_news_quiz = news_quiz_repository.findByNewsNo(beginner_news.getNews_no())
 				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.BEGINNER_NEWS_QUIZ_NOT_FOUND));
 
-		// Map에 저장
-		proficiency_test_quiz.put(transformEntity(beginner_news), transformEntity(beginner_news_quiz));
+		// List에 저장
+		proficiency_test_quiz_list.add(new ProficiencyTestItem(transformEntity(beginner_news), transformEntity(beginner_news_quiz)));
 
 		// 중급 뉴스 가져오기
 		List<News> intermediate_news_list = news_repository.findByLanguageAndIntermediateRandom(language);
@@ -220,7 +224,7 @@ public class NewsService {
 			NewsQuiz intermediate_news_quiz = news_quiz_repository.findByNewsNo(intermediate_news.getNews_no())
 					.orElseThrow(() -> new ResourceNotFoundException(MessageCode.INTERMEDIATE_NEWS_QUIZ_NOT_FOUND));
 
-			proficiency_test_quiz.put(transformEntity(intermediate_news), transformEntity(intermediate_news_quiz));
+			proficiency_test_quiz_list.add(new ProficiencyTestItem(transformEntity(intermediate_news), transformEntity(intermediate_news_quiz)));
 
 		}
 
@@ -239,11 +243,11 @@ public class NewsService {
 			NewsQuiz advanced_news_quiz = news_quiz_repository.findByNewsNo(advanced_news.getNews_no())
 					.orElseThrow(() -> new ResourceNotFoundException(MessageCode.ADVANCED_NEWS_QUIZ_NOT_FOUND));
 
-			proficiency_test_quiz.put(transformEntity(advanced_news), transformEntity(advanced_news_quiz));
+			proficiency_test_quiz_list.add(new ProficiencyTestItem(transformEntity(advanced_news), transformEntity(advanced_news_quiz)));
 
 		}
 
-		return proficiency_test_quiz;
+		return proficiency_test_quiz_list;
 	}
 
 	// Gemini 창작 뉴스 생성
@@ -332,6 +336,28 @@ public class NewsService {
 		
 		log.info("최종 퀴즈 생성 갯수: {}", count);
 
+	}
+
+	// 사용자가 푼 뉴스 문제 저장
+	@Transactional
+	public void saveMemberSolvedNewsQuiz(@Valid SaveMemberSolvedNewsQuiz save_member_solved_news_quiz) {
+		
+		// 사용자가 정답을 입력했는지 확인
+		NewsQuiz news_quiz = news_quiz_repository.findById(save_member_solved_news_quiz.getNews_quiz_no())
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.NEWS_QUIZ_NOT_FOUND));
+		
+		boolean is_correct = false;
+		
+		if(news_quiz.getCorrect_answer_index() == save_member_solved_news_quiz.getSelected_option_index()) {
+			
+			is_correct = true;
+			
+		}
+		
+		// 사용자가 푼 뉴스 문제 엔티티 생성
+		NewsQuizAttempt news_quiz_attempt = new NewsQuizAttempt();
+
+		
 	}
 
 

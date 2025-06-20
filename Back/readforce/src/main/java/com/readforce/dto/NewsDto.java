@@ -1,5 +1,8 @@
 package com.readforce.dto;
 
+import com.readforce.enums.MessageCode;
+
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,6 +57,34 @@ public class NewsDto {
 		private Long news_no;
 
 	}	
+	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class SaveMemberSolvedNewsQuiz{
+		
+		@NotNull(message = MessageCode.NEWS_QUIZ_NO_NOT_NULL)
+		private Long news_quiz_no;
+
+		@NotNull(message = MessageCode.SELECTED_OPTION_INDEX_NOT_NULL)
+		private Integer selected_option_index;
+		
+	}
+	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class ProficiencyTestItem{
+		
+		private GetNews get_news;
+		
+		private GetNewsQuiz get_news_quiz;
+		
+	}
+	
+	
 	
 	public record NewsResult(String title, String content) {}
 	
