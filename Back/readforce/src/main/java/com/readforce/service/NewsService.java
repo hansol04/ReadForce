@@ -141,7 +141,7 @@ public class NewsService {
 				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.BEGINNER_NEWS_NOT_FOUND));
 
 		// 초급 뉴스 문제 가져오기
-		GetNewsQuiz beginner_news_quiz = news_quiz_repository.findByNewsNo(beginner_news.getNew_no())
+		GetNewsQuiz beginner_news_quiz = news_quiz_repository.findByNewsNo(beginner_news.getNews_no())
 				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.BEGINNER_NEWS_QUIZ_NOT_FOUND));
 
 		// Map에 저장
@@ -159,7 +159,7 @@ public class NewsService {
 		// 중급 뉴스 문제 가져오기
 		for(GetNews intermediate_news : intermediate_news_list) {
 
-			GetNewsQuiz intermediate_news_quiz = news_quiz_repository.findByNewsNo(intermediate_news.getNew_no())
+			GetNewsQuiz intermediate_news_quiz = news_quiz_repository.findByNewsNo(intermediate_news.getNews_no())
 					.orElseThrow(() -> new ResourceNotFoundException(MessageCode.INTERMEDIATE_NEWS_QUIZ_NOT_FOUND));
 
 			proficiency_test_quiz.put(intermediate_news, intermediate_news_quiz);
@@ -178,7 +178,7 @@ public class NewsService {
 		// 고급 뉴스 문제 가져오기
 		for(GetNews advanced_news : advanced_news_list) {
 
-			GetNewsQuiz advanced_news_quiz = news_quiz_repository.findByNewsNo(advanced_news.getNew_no())
+			GetNewsQuiz advanced_news_quiz = news_quiz_repository.findByNewsNo(advanced_news.getNews_no())
 					.orElseThrow(() -> new ResourceNotFoundException(MessageCode.ADVANCED_NEWS_QUIZ_NOT_FOUND));
 
 			proficiency_test_quiz.put(advanced_news, advanced_news_quiz);
