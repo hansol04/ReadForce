@@ -1,22 +1,26 @@
 package com.readforce.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.readforce.dto.NewsDto.GetNews;
 import com.readforce.dto.NewsDto.GetNewsQuiz;
+import com.readforce.dto.NewsDto.SaveMemberSolvedNewsQuiz;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.NewsRelate;
 import com.readforce.service.NewsService;
 import com.readforce.validation.ValidEnum;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -116,5 +120,17 @@ public class NewsController {
 		return ResponseEntity.status(HttpStatus.OK).body(news_quiz);
 		
 	}
+	
+	// 사용자가 풀은 뉴스 기사 문제 저장하기
+	@PostMapping("/save-member-solved-news-quiz")
+	public ResponseEntity<Map<String, String>> saveMemberSolvedNewsQuiz(@Valid SaveMemberSolvedNewsQuiz save_member_solved_news_quiz){
+		
+		// 뉴스 기사 문제 저장
+		news_service.saveMemberSolvedNewsQuiz(save_member_solved_news_quiz);
+		
+		return null;
+		
+	}
+	
 	
 }
