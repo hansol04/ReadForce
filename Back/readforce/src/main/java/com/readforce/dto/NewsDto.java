@@ -13,7 +13,7 @@ public class NewsDto {
 	@AllArgsConstructor
 	public static class GetNews{
 		
-		private Long new_no;
+		private Long news_no;
 
 		private String language;
 
