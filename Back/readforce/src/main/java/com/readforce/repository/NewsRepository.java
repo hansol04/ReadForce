@@ -65,6 +65,9 @@ public interface NewsRepository extends JpaRepository<News, Long>{
 			@Param("category") String category
 	);
 
+	@Query("SELECT n FROM News n WHERE NOT EXISTS(SELECT nq FROM NewsQuiz nq WHERE nq.news = n)")
+	List<News> findUnquizzedNews();
+
 	
 	
 	

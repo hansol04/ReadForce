@@ -12,6 +12,7 @@ import com.readforce.dto.NewsDto;
 import com.readforce.dto.NewsDto.GetNews;
 import com.readforce.dto.NewsDto.GetNewsQuiz;
 import com.readforce.entity.News;
+import com.readforce.entity.NewsQuiz;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.NewsRelate;
 import com.readforce.exception.ResourceNotFoundException;
@@ -238,27 +239,41 @@ public class NewsService {
 		
 	}
 
-	// 뉴스 퀴즈 생성
+	// 뉴스 퀴즈 생성(뉴스에 해당하는 문제가 없을 시 생성)
 	public void generateCreativeNewsQuizByGemini() {
 		
 		log.info("Gemini 뉴스 퀴즈 생성 시작");
 		
 		// 뉴스에 해당하는 뉴스 퀴즈가 없는 뉴스 가져오기
-//		List<News> unquizzed_news = news_repository.findUnquizzedNews();
-//		
-//		int count = 0;
-//		
-//		for(News news : unquizzed_news) {
-//			
-//			
-//			
-//			
-//			
-//		}
+		List<News> unquizzed_news_list = news_repository.findUnquizzedNews();
 		
+		int count = 0;
 		
+		for(News unquizzed_news : unquizzed_news_list) {
+			
+			try {
+				
+				log.info("뉴스 퀴즈 생성 시도: {}", unquizzed_news.getTitle());
+				Thread.sleep(9000);
+				
+				NewsQuiz generated_news_quiz = gemini_service.generateCreativeNewsQuiz(unquizzed_news);
+				
+				// DB 저장
+				news_quiz_repository.save(generated_news_quiz);
+				
+				log.info("뉴스 퀴즈 저장 완료: {}", generated_news_quiz.getQuestion_text());
+				
+				count++;
+				
+			} catch(Exception exception) {
+				
+				log.warn("뉴스 퀴즈 생성 실패: {}", exception.getMessage());
+				
+			}
+			
+		}
 		
-		
+		log.info("최종 퀴즈 생성 갯수: {}", count);
 		
 	}
 	
