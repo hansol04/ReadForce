@@ -14,55 +14,51 @@ import com.readforce.entity.News;
 @Repository
 public interface NewsRepository extends JpaRepository<News, Long>{
 
-	@Query(value = "SELECT * FROM news WHERE language = :language AND level = 'BEGINNER' ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
-
+	@Query(value = "SELECT new_no, language, category, level, title, content FROM news WHERE language = :language AND level = 'beginner' ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
 	Optional<GetNews> findByLanguageAndBeginnerRandom(
 			@Param("language") String language
 	);
 
-	@Query(value = "SELECT * FROM news WHERE language = :language AND level = 'INTERMEDIATE' ORDER BY RANDOM() LIMIT 2", nativeQuery = true)
+	@Query(value = "SELECT new_no, language, category, level, title, content FROM news WHERE language = :language AND level = 'intermediate' ORDER BY RANDOM() LIMIT 2", nativeQuery = true)
 	List<GetNews> findByLanguageAndIntermediateRandom(
 			@Param("language") String language
 	);
 
-	@Query(value = "SELECT * FROM news WHERE language = :language AND level = 'ADVANCED' ORDER BY RANDOM() LIMIT 2", nativeQuery = true)
+	@Query(value = "SELECT new_no, language, category, level, title, content FROM news WHERE language = :language AND level = 'advanced' ORDER BY RANDOM() LIMIT 2", nativeQuery = true)
 	List<GetNews> findByLanguageAndAdvancedRandom(
 			@Param("language") String language
 	);
 	
-	@Query(value = "SELECT * FROM news WHERE language = :language ORDER BY created_date ASC", nativeQuery = true)
-
+	@Query(value = "SELECT new_no, language, category, level, title, content FROM news WHERE language = :language ORDER BY created_date ASC", nativeQuery = true)
 	List<GetNews> findByLanguageOrderByCreatedDateAsc(
 			@Param("language") String language
 	);
 
-	@Query(value = "SELECT * FROM news WHERE language = :language ORDER BY created_date DESC", nativeQuery = true)
+	@Query(value = "SELECT new_no, language, category, level, title, content FROM news WHERE language = :language ORDER BY created_date DESC", nativeQuery = true)
 	List<GetNews> findByLanguageOrderByCreatedDateDesc(
 			@Param("language") String language
 	);
 
-	@Query(value = "SELECT * FROM news WHERE language = :language AND level = :level ORDER BY created_date ASC", nativeQuery = true)
+	@Query(value = "SELECT new_no, language, category, level, title, content FROM news WHERE language = :language AND level = :level ORDER BY created_date ASC", nativeQuery = true)
 	List<GetNews> findByLanguageAndLevelOrderByCreatedDateAsc(
 			@Param("language") String language,
 			@Param("level") String level
 	);
 	
-	@Query(value = "SELECT * FROM news WHERE language = :language AND level = :level ORDER BY created_date DESC", nativeQuery = true)
-
+	@Query(value = "SELECT new_no, language, category, level, title, content FROM news WHERE language = :language AND level = :level ORDER BY created_date DESC", nativeQuery = true)
 	List<GetNews> findByLanguageAndLevelOrderByCreatedDateDesc(
 			@Param("language") String language,
 			@Param("level") String level
 	);
 
-	@Query(value = "SELECT * FROM news WHERE language = :language AND level = :level AND category = :category ORDER BY created_date ASC", nativeQuery = true)
+	@Query(value = "SELECT new_no, language, category, level, title, content FROM news WHERE language = :language AND level = :level AND category = :category ORDER BY created_date ASC", nativeQuery = true)
 	List<GetNews> findByLanguageAndLevelAndCategoryOrderByCreatedDateAsc(
 			@Param("language") String language,
 			@Param("level") String level,
 			@Param("category") String category
 	);
 
-	@Query(value = "SELECT * FROM news WHERE language = :language AND level = :level AND category = :category ORDER BY created_date DESC", nativeQuery = true)
-
+	@Query(value = "SELECT new_no, language, category, level, title, content FROM news WHERE language = :language AND level = :level AND category = :category ORDER BY created_date DESC", nativeQuery = true)
 	List<GetNews> findByLanguageAndLevelAndCategoryOrderByCreatedDateDesc(
 			@Param("language") String language,
 			@Param("level") String level,

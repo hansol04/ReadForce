@@ -36,7 +36,7 @@ public interface MemberRepository extends JpaRepository<Member, String>{
 
 	Optional<Member> findByEmailAndStatus(String email, Status active);
 
-	@Query(value = "SELECT * FROM member", nativeQuery = true)
+	@Query(value = "SELECT email, nickname, provider, birthday FROM member", nativeQuery = true)
 	List<GetMemberObject> getAllMemberList();
 
 	

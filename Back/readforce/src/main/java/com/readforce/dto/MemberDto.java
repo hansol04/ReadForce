@@ -2,11 +2,9 @@ package com.readforce.dto;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.readforce.enums.MessageCode;
 import com.readforce.validation.ValidBirthday;
 
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -165,8 +163,11 @@ public class MemberDto {
 	public static class GetMemberObject{
 		
 		private String email;
+		
 		private String nickname;
+		
 		private String provider;
+		
 		private LocalDate birthday;
 		
 	}
