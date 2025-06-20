@@ -67,18 +67,18 @@
 }
 
 .news-badge.초급 {
-  background-color: #C9E9E6;
-  color: #727272;
+  background-color: #d1eceb;
+  color: #222;
 }
 
 .news-badge.중급 {
-  background-color: #7AC1C3;
-  color: #676767;
+  background-color: #73bfb8;
+  color: #fff;
 }
 
 .news-badge.고급 {
-  background-color: #4b9fa0;
-  color : white;
+  background-color: #3e8e8c;
+  color: #fff;
 }
 
 .news-category {

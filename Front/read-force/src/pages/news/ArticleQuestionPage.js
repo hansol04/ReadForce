@@ -1,60 +1,70 @@
-import React, { useState } from "react";
-import "../challenge/readtest.css";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import './css/ArticleQuestionPage.css';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-const ReadTest = () => {
+const dummyArticle = {
+  id: 1,
+  title: '후 대통령, 트럼프 첫 통화...무슨 얘기 나눴나',
+  summary: 'CBS노컷뉴스 이한형 기자 | 2025-06-06 23:52',
+  content: `2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.`,
+  sourceUrl: '#',
+  question: '이재명 대통령과 도널드 트럼프 미국 대통령은 언제 처음으로 통화를 했나요? 이재명 대통령과 도널드 트럼프 미국 대통령은 언제 처음으로 통화를 했나요?',
+  options: ['2025년 6월 6일', '2025년 6월 7일', '2025년 6월 5일', '2025년 6월 8일'],
+  answer: '2025년 6월 6일',
+  explanation: '기사에 따르면, 이재명 대통령은 6월 6일 오후 10시부터 약 20분간 트럼프 대통령과 첫 통화를 가졌다고 명시되어 있습니다.',
+};
+
+const ArticleQuestionPage = () => {
+  const [selected, setSelected] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // ✅ 백엔드 enum과 정확히 일치하는 값으로 설정
-  const [language, setLanguage] = useState("KOREAN");
+  const article = location.state?.article || dummyArticle;
+  const language = location.state?.language || '한국어';
 
-  const handleStart = () => {
-    navigate("/test/1", { state: { language } }); // ✅ 전달값도 그대로
+   const handleSubmit = () => {
+    if (selected) {
+      navigate('/question-result', {
+        state: {
+          isCorrect: selected === article.answer,
+          explanation: article.explanation,
+          language: language,
+        }
+      });
+    }
   };
 
   return (
-    <div className="readtest-wrapper">
-      <h2 className="readtest-title">당신의 문해력은 어느 정도일까요?</h2>
-
-      <div className="readtest-card">
-        <h3>
-          <strong>
-            <a style={{ textDecoration: 'none', color: 'inherit' }}>
-              리드 <span style={{ color: "#439395" }}>포스</span>
-            </a>
-          </strong>는 뉴스 기반 문해력 테스트 플랫폼입니다.
-        </h3>
-        <p><strong><i>AI</i></strong>가 뉴스를 요약하고, 우리는 문제를 풀며 <strong>문해력</strong>을 기릅니다.</p>
-        <p>세상을 <strong>읽는 힘</strong>, 지금부터 시작하세요.</p>
+    <div className="page-container article-question-layout">
+      <div className="article-box">
+        <h3 className="article-title">{article.title}</h3>
+        <p className="article-summary">{article.summary}</p>
+        <p className="article-content">{article.content}</p>
       </div>
 
-      {/* 언어 선택 버튼 */}
-      <div className="language-buttons">
-        <button
-          className={language === "KOREAN" ? "lang-btn active" : "lang-btn"}
-          onClick={() => setLanguage("KOREAN")}
-        >
-          한국어
-        </button>
-        <button
-          className={language === "ENGLISH" ? "lang-btn active" : "lang-btn"}
-          onClick={() => setLanguage("ENGLISH")}
-        >
-          English
-        </button>
-        <button
-          className={language === "JAPANESE" ? "lang-btn active" : "lang-btn"}
-          onClick={() => setLanguage("JAPANESE")}
-        >
-          日本語
-        </button>
-      </div>
+      <div className="quiz-box">
+        <h4 className="quiz-title">💡 문제</h4>
+        <p className="quiz-question">{article.question}</p>
+        <div className="quiz-options">
+          {article.options.map((opt, idx) => (
+            <button
+              key={idx}
+              className={`quiz-option ${selected === opt ? 'selected' : ''}`}
+              onClick={() => setSelected(opt)}
+            >
+              {String.fromCharCode(65 + idx)}. {opt}
+            </button>
+          ))}
+        </div>
 
-      <button className="readtest-btn" onClick={handleStart}>
-        문해력 테스트 시작하기
-      </button>
+        <div className="quiz-button-container">
+          <button className="submit-button" disabled={!selected} onClick={handleSubmit}>
+            정답 제출
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default ReadTest;
+export default ArticleQuestionPage;

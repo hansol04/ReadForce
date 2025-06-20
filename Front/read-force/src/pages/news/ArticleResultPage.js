@@ -1,20 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './css/ArticleResultPage.css';
-import { useNavigate } from 'react-router-dom';
 
 const ArticleResultPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [showExplanation, setShowExplanation] = useState(false);
+
+  // location.state에서 데이터 받아오기 (예: isCorrect, explanation)
+  const isCorrect = location.state?.isCorrect;
+  const explanation = location.state?.explanation || '해설이 제공되지 않았습니다.';
+
+  const resultMessage = isCorrect ? '정답입니다!' : '오답입니다.';
+  const resultEmoji = isCorrect ? '🎉' : '❌';
+  const resultSubText = isCorrect
+  ? '👏 대단해요! 문맥을 잘 파악하셨네요.'
+  : '😢 조금만 더 집중해볼까요? 누구나 틀릴 수 있어요!';
 
   return (
     <div className="result-wrapper">
       <div className="result-card">
-        <h2>🎉 당신의 문해력은 <span className="highlight">중급</span>입니다!</h2>
-        <p>9문제 중 6문제를 맞았어요</p>
-        <p>전체 응시자 중<br />상위 34%에 해당해요!</p>
+        <h2>{resultEmoji} {resultMessage}</h2>
+        <p className="result-subtext">{resultSubText}</p>
         <div className="button-group">
-          <button onClick={() => navigate('/challenge')}>해설보기</button>
+          <button onClick={() => setShowExplanation(!showExplanation)}>해설보기</button>
           <button onClick={() => navigate(-1)}>다시 도전하기</button>
+          <button onClick={() => navigate('/news')}>닫기</button>
         </div>
+
+        {showExplanation && (
+          <div className="explanation-box">
+            <h3>📝 해설</h3>
+            <p>{explanation}</p>
+          </div>
+        )}
       </div>
     </div>
   );

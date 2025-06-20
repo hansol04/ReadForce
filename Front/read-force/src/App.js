@@ -18,7 +18,6 @@ import Oauth2redirect from './pages/login/oauth2redirect';
 import Authcallback from './pages/login/authcallback';
 import ProfileEditPage from './pages/myinfo/ProfileEditPage';
 import ChangePasswordPage from './pages/myinfo/ChangePasswordPage';
-import ClassicPage from './pages/literature/ClassicPage';
 import ReadTest from './pages/challenge/readtest';
 import AdminPage from './pages/adminpages/adminpage';
 import QuizPage from './pages/quiz/QuizPage';
@@ -55,10 +54,9 @@ function App() {
           <Route path="/social-sign-up" element={<Socialsignup />} />
           <Route path="/profile-edit" element={<ProfileEditPage />} />
           <Route path="/change-password" element={<ChangePasswordPage />} />
-          <Route path="/literature/classic" element={<ClassicPage />} />
           <Route path="/test-start" element={<ReadTest />} />
           <Route path="/adminpage" element={<AdminPage />} />
-          <Route path="/literature/classic" element={<ClassicPage />} />
+          <Route path="/news" element={<NewsList />} />
           <Route path="/question/:id" element={<ArticleQuestionPage />} />
           <Route path="/question-result" element={<ArticleResultPage />} /> 
           <Route path="/test-question" element={<TestQuestionPage />} />
