@@ -8,7 +8,4 @@ import com.readforce.entity.Literature;
 @Repository
 public interface LiteratureRepository extends JpaRepository<Literature, Long> {
 
-	
-	
-
 }

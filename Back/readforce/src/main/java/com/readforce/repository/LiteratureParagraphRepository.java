@@ -7,44 +7,43 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.readforce.dto.LiteratureDto.GetLiteratureParagraph;
 import com.readforce.entity.LiteratureParagraph;
 import com.readforce.id.LiteratureParagraphId;
 
 @Repository
 public interface LiteratureParagraphRepository extends JpaRepository<LiteratureParagraph, LiteratureParagraphId>{
 
-	@Query(value = "SELECT literature_paragraph_no, literature_no, category, level, content FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) ORDER BY created_date ASC", nativeQuery = true)
-	List<GetLiteratureParagraph> getLiteratureParagraphListByTypeOrderByAsc(
+	@Query(value = "SELECT * FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) ORDER BY created_date ASC", nativeQuery = true)
+	List<LiteratureParagraph> getLiteratureParagraphListByTypeOrderByAsc(
 			@Param("type") String type
 	);
 
-	@Query(value = "SELECT literature_paragraph_no, literature_no, category, level, content FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) ORDER BY created_date DESC", nativeQuery = true)
-	List<GetLiteratureParagraph> getLiteratureParagraphListByTypeOrderByDesc(
+	@Query(value = "SELECT * FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) ORDER BY created_date DESC", nativeQuery = true)
+	List<LiteratureParagraph> getLiteratureParagraphListByTypeOrderByDesc(
 			@Param("type") String type
 	);
 
-	@Query(value = "SELECT literature_paragraph_no, literature_no, category, level, content FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) AND level = :level ORDER BY created_date ASC", nativeQuery = true)
-	List<GetLiteratureParagraph> getLiteratureParagraphListByTypeAndLevelOrderByAsc(
+	@Query(value = "SELECT * FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) AND level = :level ORDER BY created_date ASC", nativeQuery = true)
+	List<LiteratureParagraph> getLiteratureParagraphListByTypeAndLevelOrderByAsc(
 			@Param("type") String type, 
 			@Param("level") String level
 	);
 
-	@Query(value = "SELECT literature_paragraph_no, literature_no, category, level, content FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) AND level = :level ORDER BY created_date DESC", nativeQuery = true)
-	List<GetLiteratureParagraph> getLiteratureParagraphListByTypeAndLevelOrderByDesc(
+	@Query(value = "SELECT * FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) AND level = :level ORDER BY created_date DESC", nativeQuery = true)
+	List<LiteratureParagraph> getLiteratureParagraphListByTypeAndLevelOrderByDesc(
 			@Param("type") String type, 
 			@Param("level") String level
 	);
 
-	@Query(value = "SELECT literature_paragraph_no, literature_no, category, level, content FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) AND level = :level AND category = :category ORDER BY created_date ASC", nativeQuery = true)
-	List<GetLiteratureParagraph> getLiteratureParagraphListByTypeAndLevelAndCategoryOrderByAsc(
+	@Query(value = "SELECT * FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) AND level = :level AND category = :category ORDER BY created_date ASC", nativeQuery = true)
+	List<LiteratureParagraph> getLiteratureParagraphListByTypeAndLevelAndCategoryOrderByAsc(
 			@Param("type") String type,
 			@Param("level") String level,
 			@Param("category") String category
 	);
 	
-	@Query(value = "SELECT literature_paragraph_no, literature_no, category, level, content FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) AND level = :level AND category = :category ORDER BY created_date DESC", nativeQuery = true)
-	List<GetLiteratureParagraph> getLiteratureParagraphListByTypeAndLevelAndCategoryOrderByDesc(
+	@Query(value = "SELECT * FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) AND level = :level AND category = :category ORDER BY created_date DESC", nativeQuery = true)
+	List<LiteratureParagraph> getLiteratureParagraphListByTypeAndLevelAndCategoryOrderByDesc(
 			@Param("type") String type,
 			@Param("level") String level,
 			@Param("category") String category

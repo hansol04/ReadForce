@@ -4,6 +4,7 @@ package com.readforce.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -352,7 +353,7 @@ public class MemberService{
 	@Transactional(readOnly = true)
 	public List<GetMemberObject> getAllMemberList() {
 		
-		List<GetMemberObject> member_list = member_repository.getAllMemberList();
+		List<Member> member_list = member_repository.getAllMemberList();
 		
 		if(member_list.isEmpty()) {
 			
@@ -360,7 +361,22 @@ public class MemberService{
 			
 		}
 		
-		return member_list;
+		List<GetMemberObject> get_member_list = new ArrayList<>();
+		
+		for(Member member : member_list) {
+			
+			GetMemberObject get_member_object = new GetMemberObject();
+			get_member_object.setBirthday(member.getBirthday());
+			get_member_object.setEmail(member.getEmail());
+			get_member_object.setNickname(member.getNickname());
+			get_member_object.setProvider(member.getSocial_provider());
+			
+			get_member_list.add(get_member_object);
+			
+		}
+		
+		
+		return get_member_list;
 	}
 
 	// 관리자 - 계정 활성화

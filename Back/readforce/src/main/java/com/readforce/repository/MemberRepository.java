@@ -1,7 +1,6 @@
 package com.readforce.repository;
 
 import java.time.LocalDateTime;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -10,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.readforce.dto.MemberDto.GetMemberObject;
 import com.readforce.entity.Member;
 import com.readforce.enums.Status;
 
@@ -36,8 +34,8 @@ public interface MemberRepository extends JpaRepository<Member, String>{
 
 	Optional<Member> findByEmailAndStatus(String email, Status active);
 
-	@Query(value = "SELECT email, nickname, provider, birthday FROM member", nativeQuery = true)
-	List<GetMemberObject> getAllMemberList();
+	@Query(value = "SELECT * FROM member", nativeQuery = true)
+	List<Member> getAllMemberList();
 
 	
 }
