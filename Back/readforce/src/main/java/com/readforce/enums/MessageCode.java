@@ -23,6 +23,7 @@ public final class MessageCode {
 	public static final String NEWS_QUIZ_LANGUAGE_NOT_BLANK = "NO0016";
 	public static final String NEWS_QUIZ_LEVEL_NOT_BLANK = "NO0017";
 	public static final String NEWS_ARTICLE_NOT_NULL = "NO0018";
+	public static final String LITERATURE_TYPE_NOT_BLANK = "NO0019";
 
 	
 	// 입력값 형식 불일치
@@ -36,6 +37,7 @@ public final class MessageCode {
 	public static final String VALUE_INVALID = "PA0008";
 	public static final String NEWS_ARTICLE_CATEGORY_INVALID = "PA0008";
 	public static final String GEMINI_RESPONSE_PATTERN_INVALID = "PA0009";
+	public static final String LITERATURE_TYPE_PATTERN_INVALID = "PA0010";
 	
 	
 	// 입력값 크기/범위 불일치

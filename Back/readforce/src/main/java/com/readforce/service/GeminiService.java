@@ -28,13 +28,11 @@ import com.readforce.dto.NewsDto.NewsResult;
 import com.readforce.entity.News;
 import com.readforce.entity.NewsQuiz;
 import com.readforce.enums.MessageCode;
-import com.readforce.enums.NewsRelate;
 import com.readforce.enums.NewsRelate.Category;
 import com.readforce.enums.NewsRelate.Language;
 import com.readforce.enums.NewsRelate.Level;
 import com.readforce.exception.GeminiException;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
