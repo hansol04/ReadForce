@@ -227,7 +227,7 @@ public class NewsService {
 		// 고급 뉴스 가져오기
 		List<News> advanced_news_list = news_repository.findByLanguageAndAdvancedRandom(language);
 
-		if(advanced_news_list.isEmpty() == advanced_news_list.size() < 2) {
+		if(advanced_news_list.isEmpty() || advanced_news_list.size() < 2) {
 
 			throw new ResourceNotFoundException(MessageCode.ADVANCED_NEWS_NOT_FOUND);
 
