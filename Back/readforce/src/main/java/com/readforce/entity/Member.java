@@ -48,10 +48,11 @@ public class Member {
 	private String profile_image_url;
 	
 	@CreatedDate
-	@Column(updatable = false)
+	@Column(name = "created_date", updatable = false)
 	private LocalDateTime create_date;
 	
 	@LastModifiedDate
+	@Column(name = "last_modified_date")
 	private LocalDateTime last_modified_date;
 	
 	@Column(name = "withdraw_date", nullable = true)

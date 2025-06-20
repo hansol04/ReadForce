@@ -106,7 +106,7 @@ public class MemberController {
     	
     }
     
-    // 일반 로그아웃
+    // 로그아웃
     @DeleteMapping("/sign-out")
     public ResponseEntity<Map<String, String>>signOut(@AuthenticationPrincipal UserDetails user_details){
     	
@@ -126,7 +126,6 @@ public class MemberController {
     	// 카카오 소셜 계정
     	if("kakao".equals(provider)) {
     		
-    		log.warn("providerasdasdasdsdad");
     		String kakao_sign_out_url = custom_fronted_kakao_logout_url
     				+ kakao_client_id
     				+ "&logout_redirect_uri="
@@ -336,3 +335,4 @@ public class MemberController {
 	
 
 }
+
