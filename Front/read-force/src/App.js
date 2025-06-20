@@ -23,7 +23,7 @@ import AdminPage from './pages/adminpages/adminpage';
 import QuizPage from './pages/quiz/QuizPage';
 import ReadingPage from './pages/quiz/ReadingPage';
 import ChallengePage from "./pages/challenge/challengepage";
-// import NewsList from './components/News/NewsList';
+import NewsList from './components/News/NewsList';
 import ArticleQuestionPage from './pages/news/ArticleQuestionPage';
 import ArticleResultPage from './pages/news/ArticleResultPage';
 import TestQuestionPage from './pages/challenge/testquestionpage';

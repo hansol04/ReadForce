@@ -14,18 +14,18 @@ import com.readforce.entity.News;
 @Repository
 public interface NewsRepository extends JpaRepository<News, Long>{
 
-	@Query(value = "SELECT * FROM news WHERE language = :language AND level = 'beginner' ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+	@Query(value = "SELECT * FROM news WHERE language = :language AND level = 'BEGINNER' ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
 
 	Optional<GetNews> findByLanguageAndBeginnerRandom(
 			@Param("language") String language
 	);
 
-	@Query(value = "SELECT * FROM news WHERE language = :language AND level = 'intermediate' ORDER BY RANDOM() LIMIT 2", nativeQuery = true)
+	@Query(value = "SELECT * FROM news WHERE language = :language AND level = 'INTERMEDIATE' ORDER BY RANDOM() LIMIT 2", nativeQuery = true)
 	List<GetNews> findByLanguageAndIntermediateRandom(
 			@Param("language") String language
 	);
 
-	@Query(value = "SELECT * FROM news WHERE language = :language AND level = 'advanced' ORDER BY RANDOM() LIMIT 2", nativeQuery = true)
+	@Query(value = "SELECT * FROM news WHERE language = :language AND level = 'ADVANCED' ORDER BY RANDOM() LIMIT 2", nativeQuery = true)
 	List<GetNews> findByLanguageAndAdvancedRandom(
 			@Param("language") String language
 	);
