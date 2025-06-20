@@ -104,7 +104,12 @@ public class LiteratureController {
 	
 	
 	// 문학 문제 가져오기
-
+//	@GetMapping("/get-literature-quiz-object")
+//	public ResponseEntity<List<GetLiteratureParagraph>> getLiteratureQuizObject(
+//			@Request("literature_paragraph_no")
+//			@NotNull(message = MessageCode.literature)
+//	)
+//	
 	
 	
 	

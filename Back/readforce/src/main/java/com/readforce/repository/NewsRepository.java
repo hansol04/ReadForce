@@ -14,52 +14,52 @@ import com.readforce.entity.News;
 @Repository
 public interface NewsRepository extends JpaRepository<News, Long>{
 	
-	@Query(value = "SELECT news_no, language, category, level, title, content FROM news WHERE language = :language AND level = 'beginner' ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
-	Optional<GetNews> findByLanguageAndBeginnerRandom(
+	@Query(value = "SELECT * FROM news WHERE language = :language AND level = 'BEGINNER' ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+	Optional<News> findByLanguageAndBeginnerRandom(
 			@Param("language") String language
 	);
 
-	@Query(value = "SELECT news_no, language, category, level, title, content FROM news WHERE language = :language AND level = 'intermediate' ORDER BY RANDOM() LIMIT 2", nativeQuery = true)
-	List<GetNews> findByLanguageAndIntermediateRandom(
+	@Query(value = "SELECT * FROM news WHERE language = :language AND level = 'INTERMEDIATE' ORDER BY RANDOM() LIMIT 2", nativeQuery = true)
+	List<News> findByLanguageAndIntermediateRandom(
 			@Param("language") String language
 	);
 
-	@Query(value = "SELECT news_no, language, category, level, title, content FROM news WHERE language = :language AND level = 'advanced' ORDER BY RANDOM() LIMIT 2", nativeQuery = true)
-	List<GetNews> findByLanguageAndAdvancedRandom(
+	@Query(value = "SELECT * FROM news WHERE language = :language AND level = 'ADVANCED' ORDER BY RANDOM() LIMIT 2", nativeQuery = true)
+	List<News> findByLanguageAndAdvancedRandom(
 			@Param("language") String language
 	);
 	
-	@Query(value = "SELECT news_no, language, category, level, title, content FROM news WHERE language = :language ORDER BY created_date ASC", nativeQuery = true)
-	List<GetNews> findByLanguageOrderByCreatedDateAsc(
+	@Query(value = "SELECT * FROM news WHERE language = :language ORDER BY created_date ASC", nativeQuery = true)
+	List<News> findByLanguageOrderByCreatedDateAsc(
 			@Param("language") String language
 	);
 
-	@Query(value = "SELECT news_no, language, category, level, title, content FROM news WHERE language = :language ORDER BY created_date DESC", nativeQuery = true)
-	List<GetNews> findByLanguageOrderByCreatedDateDesc(
+	@Query(value = "SELECT * FROM news WHERE language = :language ORDER BY created_date DESC", nativeQuery = true)
+	List<News> findByLanguageOrderByCreatedDateDesc(
 			@Param("language") String language
 	);
 
-	@Query(value = "SELECT news_no, language, category, level, title, content FROM news WHERE language = :language AND level = :level ORDER BY created_date ASC", nativeQuery = true)
-	List<GetNews> findByLanguageAndLevelOrderByCreatedDateAsc(
+	@Query(value = "SELECT * FROM news WHERE language = :language AND level = :level ORDER BY created_date ASC", nativeQuery = true)
+	List<News> findByLanguageAndLevelOrderByCreatedDateAsc(
 			@Param("language") String language,
 			@Param("level") String level
 	);
 	
-	@Query(value = "SELECT news_no, language, category, level, title, content FROM news WHERE language = :language AND level = :level ORDER BY created_date DESC", nativeQuery = true)
-	List<GetNews> findByLanguageAndLevelOrderByCreatedDateDesc(
+	@Query(value = "SELECT * FROM news WHERE language = :language AND level = :level ORDER BY created_date DESC", nativeQuery = true)
+	List<News> findByLanguageAndLevelOrderByCreatedDateDesc(
 			@Param("language") String language,
 			@Param("level") String level
 	);
 
-	@Query(value = "SELECT news_no, language, category, level, title, content FROM news WHERE language = :language AND level = :level AND category = :category ORDER BY created_date ASC", nativeQuery = true)
-	List<GetNews> findByLanguageAndLevelAndCategoryOrderByCreatedDateAsc(
+	@Query(value = "SELECT * FROM news WHERE language = :language AND level = :level AND category = :category ORDER BY created_date ASC", nativeQuery = true)
+	List<News> findByLanguageAndLevelAndCategoryOrderByCreatedDateAsc(
 			@Param("language") String language,
 			@Param("level") String level,
 			@Param("category") String category
 	);
 	
-	@Query(value = "SELECT news_no, language, category, level, title, content FROM news WHERE language = :language AND level = :level AND category = :category ORDER BY created_date DESC", nativeQuery = true)
-	List<GetNews> findByLanguageAndLevelAndCategoryOrderByCreatedDateDesc(
+	@Query(value = "SELECT * FROM news WHERE language = :language AND level = :level AND category = :category ORDER BY created_date DESC", nativeQuery = true)
+	List<News> findByLanguageAndLevelAndCategoryOrderByCreatedDateDesc(
 			@Param("language") String language,
 			@Param("level") String level,
 			@Param("category") String category

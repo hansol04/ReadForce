@@ -31,11 +31,45 @@ public class NewsService {
 	private final NewsQuizRepository news_quiz_repository;
 	private final GeminiService gemini_service;
 
+	// News -> GetNews 변환
+	private GetNews transformEntity(News news) {
+		
+		GetNews get_news = new GetNews();
+		get_news.setCategory(news.getCategory());
+		get_news.setContent(news.getContent());
+		get_news.setLanguage(news.getLanguage());
+		get_news.setLevel(news.getLevel());
+		get_news.setNews_no(news.getNews_no());
+		get_news.setTitle(news.getTitle());
+		
+		return get_news;
+		
+	}
+	
+	// NewsQuiz -> GetNewsQuiz 변환
+	private GetNewsQuiz transformEntity(NewsQuiz news_quiz) {
+		
+		GetNewsQuiz get_news_quiz = new GetNewsQuiz();
+		get_news_quiz.setQuestion_text(news_quiz.getQuestion_text());
+		get_news_quiz.setChoice1(news_quiz.getChoice1());
+		get_news_quiz.setChoice2(news_quiz.getChoice2());
+		get_news_quiz.setChoice3(news_quiz.getChoice3());
+		get_news_quiz.setChoice4(news_quiz.getChoice4());
+		get_news_quiz.setCorrect_answer_index(news_quiz.getCorrect_answer_index());
+		get_news_quiz.setExplanation(news_quiz.getExplanation());
+		get_news_quiz.setNews_no(news_quiz.getNews_no());
+		get_news_quiz.setNews_quiz_no(news_quiz.getNews_quiz_no());
+		get_news_quiz.setScore(news_quiz.getScore());
+		
+		return get_news_quiz;
+		
+	}
+	
 	// 언어에 해당하는 뉴스기사 가져오기(반환시 내림차순 리스트 반환)
 	@Transactional(readOnly = true)
 	public List<GetNews> getNewsListByLanguage(String language, String order_by) {
 
-		List<GetNews> news_list = new ArrayList<>();
+		List<News> news_list = new ArrayList<>();
 
 		switch(order_by) {
 
@@ -54,8 +88,16 @@ public class NewsService {
 			throw new ResourceNotFoundException(MessageCode.NEWS_NOT_FOUND);
 
 		}
+		
+		List<GetNews> get_news_list = new ArrayList<>();
+		
+		for(News news : news_list) {
+			
+			get_news_list.add(transformEntity(news));
+			
+		}
 
-		return news_list;
+		return get_news_list;
 
 	}
 
@@ -63,7 +105,7 @@ public class NewsService {
 	@Transactional(readOnly = true)
 	public List<GetNews> getNewsListByLanguageAndLevel(String language, String level, String order_by) {
 
-		List<GetNews> news_list = new ArrayList<>();
+		List<News> news_list = new ArrayList<>();
 
 		switch(order_by) {
 
@@ -83,7 +125,15 @@ public class NewsService {
 
 		}
 
-		return news_list;
+		List<GetNews> get_news_list = new ArrayList<>();
+		
+		for(News news : news_list) {
+			
+			get_news_list.add(transformEntity(news));
+			
+		}
+
+		return get_news_list;
 
 	}
 
@@ -95,7 +145,7 @@ public class NewsService {
 			String category,
 			String order_by) {
 
-		List<GetNews> news_list = new ArrayList<>();
+		List<News> news_list = new ArrayList<>();
 
 		switch(order_by) {
 
@@ -115,18 +165,26 @@ public class NewsService {
 
 		}
 
-		return news_list;
+		List<GetNews> get_news_list = new ArrayList<>();
+		
+		for(News news : news_list) {
+			
+			get_news_list.add(transformEntity(news));
+			
+		}
+
+		return get_news_list;
 	}
 
 	// 뉴스 기사 문제 가져오기
 	@Transactional(readOnly = true)
 	public GetNewsQuiz getNewsQuizObject(Long news_no) {
 
-		GetNewsQuiz news_quiz = news_quiz_repository.findByNewsNo(news_no)
+		NewsQuiz news_quiz = news_quiz_repository.findByNewsNo(news_no)
 				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.NEWS_QUIZ_NOT_FOUND));
 
 
-		return news_quiz;
+		return transformEntity(news_quiz);
 
 	}
 
@@ -137,18 +195,18 @@ public class NewsService {
 		Map<GetNews, GetNewsQuiz> proficiency_test_quiz = new HashMap<>();
 
 		// 초급 뉴스 가져오기
-		GetNews beginner_news = news_repository.findByLanguageAndBeginnerRandom(language)
+		News beginner_news = news_repository.findByLanguageAndBeginnerRandom(language)
 				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.BEGINNER_NEWS_NOT_FOUND));
 
 		// 초급 뉴스 문제 가져오기
-		GetNewsQuiz beginner_news_quiz = news_quiz_repository.findByNewsNo(beginner_news.getNews_no())
+		NewsQuiz beginner_news_quiz = news_quiz_repository.findByNewsNo(beginner_news.getNews_no())
 				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.BEGINNER_NEWS_QUIZ_NOT_FOUND));
 
 		// Map에 저장
-		proficiency_test_quiz.put(beginner_news, beginner_news_quiz);
+		proficiency_test_quiz.put(transformEntity(beginner_news), transformEntity(beginner_news_quiz));
 
 		// 중급 뉴스 가져오기
-		List<GetNews> intermediate_news_list = news_repository.findByLanguageAndIntermediateRandom(language);
+		List<News> intermediate_news_list = news_repository.findByLanguageAndIntermediateRandom(language);
 
 		if(intermediate_news_list.isEmpty() || intermediate_news_list.size() < 2) {
 
@@ -157,17 +215,17 @@ public class NewsService {
 		}
 
 		// 중급 뉴스 문제 가져오기
-		for(GetNews intermediate_news : intermediate_news_list) {
+		for(News intermediate_news : intermediate_news_list) {
 
-			GetNewsQuiz intermediate_news_quiz = news_quiz_repository.findByNewsNo(intermediate_news.getNews_no())
+			NewsQuiz intermediate_news_quiz = news_quiz_repository.findByNewsNo(intermediate_news.getNews_no())
 					.orElseThrow(() -> new ResourceNotFoundException(MessageCode.INTERMEDIATE_NEWS_QUIZ_NOT_FOUND));
 
-			proficiency_test_quiz.put(intermediate_news, intermediate_news_quiz);
+			proficiency_test_quiz.put(transformEntity(intermediate_news), transformEntity(intermediate_news_quiz));
 
 		}
 
 		// 고급 뉴스 가져오기
-		List<GetNews> advanced_news_list = news_repository.findByLanguageAndAdvancedRandom(language);
+		List<News> advanced_news_list = news_repository.findByLanguageAndAdvancedRandom(language);
 
 		if(advanced_news_list.isEmpty() == advanced_news_list.size() < 2) {
 
@@ -176,12 +234,12 @@ public class NewsService {
 		}
 
 		// 고급 뉴스 문제 가져오기
-		for(GetNews advanced_news : advanced_news_list) {
+		for(News advanced_news : advanced_news_list) {
 
-			GetNewsQuiz advanced_news_quiz = news_quiz_repository.findByNewsNo(advanced_news.getNews_no())
+			NewsQuiz advanced_news_quiz = news_quiz_repository.findByNewsNo(advanced_news.getNews_no())
 					.orElseThrow(() -> new ResourceNotFoundException(MessageCode.ADVANCED_NEWS_QUIZ_NOT_FOUND));
 
-			proficiency_test_quiz.put(advanced_news, advanced_news_quiz);
+			proficiency_test_quiz.put(transformEntity(advanced_news), transformEntity(advanced_news_quiz));
 
 		}
 
