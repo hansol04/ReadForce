@@ -8,6 +8,14 @@ public enum LiteratureRelate {
 		
 		NOVEL, FAIRYTALE
 		
-	}
+	};
+	
+	public static enum category {
+		
+		MYSTERY, HISTORY, CLASSIC, MODERN, CHILDREN
+		
+	};
+	
+	
 	
 }
