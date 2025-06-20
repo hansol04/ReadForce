@@ -110,7 +110,7 @@ const ProfileEditPage = () => {
         localStorage.setItem('nickname', modifyResponse.data.NICK_NAME);
       }
       alert('회원정보가 수정되었습니다.');
-      window.location.reload();
+      window.location.href = '/';
     } catch {
       alert('회원정보 수정 실패');
     }
