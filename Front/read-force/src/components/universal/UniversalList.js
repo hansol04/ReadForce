@@ -76,7 +76,7 @@ const UniversalList = ({
           <p className="no-articles">조건에 맞는 기사가 없습니다.</p>
         ) : (
           paginated.map((item) => (
-            <UniversalCard key={item.id || item.new_passage_no} article={item} />
+            <UniversalCard key={item.id || item.new_passage_no} data={item} />
           ))
         )}
       </div>
