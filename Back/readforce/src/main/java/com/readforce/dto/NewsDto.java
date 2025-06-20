@@ -11,7 +11,7 @@ public class NewsDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public class GetNews{
+	public static class GetNews{
 		
 		private Long new_no;
 
@@ -31,7 +31,7 @@ public class NewsDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public class GetNewsQuiz{
+	public static class GetNewsQuiz{
 
 		private Long news_quiz_no;
 

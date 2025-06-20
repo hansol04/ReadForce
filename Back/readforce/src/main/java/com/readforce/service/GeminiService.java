@@ -1,5 +1,12 @@
 package com.readforce.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,23 +18,28 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.readforce.dto.NewsDto;
 import com.readforce.dto.NewsDto.NewsResult;
+import com.readforce.entity.News;
+import com.readforce.entity.NewsQuiz;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.NewsRelate.Category;
 import com.readforce.enums.NewsRelate.Language;
 import com.readforce.enums.NewsRelate.Level;
 import com.readforce.exception.GeminiException;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 
 @Service
 @RequiredArgsConstructor
+@Validated
 public class GeminiService {
 	
 	private final RestTemplate rest_template;
@@ -41,11 +53,14 @@ public class GeminiService {
 	
 	// 창작 뉴스 생성
 	public NewsResult generateCreativeNews(Language language, Level level, Category category) {
-
+		
+		// 프롬프트 생성
 		String news_prompt = buildNewsPrompt(language, level, category);
 		
+		// Gemini 요청
 		String raw_text = callGeminiApi(news_prompt);
 		
+		// response 변환 및 반환		
 		return splitTitleAndBody(raw_text);
 	}
 
@@ -190,6 +205,158 @@ public class GeminiService {
 				.replaceAll("_([^_]+)_", "$1")
 				.trim();
 		
+	}
+
+	
+	// 뉴스 퀴즈 생성
+	public NewsQuiz generateCreativeNewsQuiz(
+			@NotNull(message = MessageCode.NEWS_ARTICLE_NOT_NULL)
+			News unquizzed_news
+	) {
+		
+		// 프롬프트 생성
+		String news_quiz_prompt = buildNewsQuizPrompt(
+				unquizzed_news.getContent(), 
+				unquizzed_news.getLanguage(), 
+				unquizzed_news.getLevel()
+		);
+		
+		// Gemini 요청
+		String raw_text = callGeminiApi(news_quiz_prompt);
+		
+		// response 변환 및 반환
+		return parseNewsQuizResponse(raw_text, unquizzed_news);
+
+	}
+
+	// Gemini response 변환
+	private NewsQuiz parseNewsQuizResponse(String raw_text, News unquizzed_news) {
+
+		String text = raw_text.replace("\r\n", "\n").trim();
+		
+		// 지문
+		String question_line = extractQuestionLine(text)
+				.map(line -> line.replaceAll("(?i)(문제|問題|question|Q)[\\s:：\\-]*", "").trim())
+				.orElseThrow(() -> new GeminiException(MessageCode.NEWS_QUIZ_LINE_MISSING));
+		
+		List<String> choice_list = new ArrayList<>();
+		
+		// 선택지
+		Matcher option_matcher = Pattern.compile("(?m)^([A-Da-d]|[①-④]|\\d+)[.\\)]\\s*(.+)$").matcher(text);
+		while(option_matcher.find()) {
+			
+			choice_list.add(option_matcher.group(2).trim());
+			
+		}
+		if(choice_list.size() < 4) {
+			
+			throw new GeminiException(MessageCode.NEWS_QUIZ_OPTION_MISSING);
+			
+		}
+		
+		// 정답
+		Matcher answer_matcher = Pattern.compile("(?i)(정답|Answer|正解):\\s*\\[?([A-D])\\]?", Pattern.CASE_INSENSITIVE).matcher(text);
+		if(!answer_matcher.find()) {
+			
+			throw new GeminiException(MessageCode.NEWS_QUIZ_ANSWER_MISSING);
+			
+		}
+		int correct_answer_index = "ABCD".indexOf(answer_matcher.group(2).toUpperCase());
+		
+		// 해설
+		Matcher explanation_matcher = Pattern.compile("(?i)(해설|Explanation|解説):\\s*(.+)", Pattern.CASE_INSENSITIVE).matcher(text);
+		String explanation = explanation_matcher.find() ? explanation_matcher.group(2).trim() : "";
+		
+		// 점수
+		double score = switch(unquizzed_news.getLevel()) {
+		
+			case "BEGINNER" -> 2.5;
+			
+			case "ADVANCED" -> 7.5;
+			
+			default -> 5.0;
+		
+		};
+		
+		// NewsQuiz 엔티티 생성
+		NewsQuiz generated_news_quiz = new NewsQuiz();
+		generated_news_quiz.setNews(unquizzed_news);
+		generated_news_quiz.setQuestion_text(question_line);
+		generated_news_quiz.setChoice1(choice_list.get(0));
+		generated_news_quiz.setChoice2(choice_list.get(1));
+		generated_news_quiz.setChoice3(choice_list.get(2));
+		generated_news_quiz.setChoice4(choice_list.get(3));
+		generated_news_quiz.setCorrect_answer_index(correct_answer_index);
+		generated_news_quiz.setExplanation(explanation);
+		generated_news_quiz.setScore(score);
+		
+		return generated_news_quiz;
+	
+	}
+
+	// 문제 라인 추출
+	private Optional<String> extractQuestionLine(String text) {
+
+		return Arrays.stream(text.split("\n"))
+				.map(String::trim)
+				.filter(line -> line.matches("(?i)(문제|問題|question|Q)[\\s:：\\-]*.*") || line.endsWith("?"))
+				.findFirst();
+
+	}
+
+	// 뉴스 퀴즈 프롬프트 생성
+	private String buildNewsQuizPrompt(String content, String language, String level) {
+		
+		return switch(language) {
+		
+			case "KOREAN" -> """
+					아래 기사 내용을 기반으로 %s 난이도의 4지선다형 퀴즈를 1개 만들어주세요.
+	                반드시 한국어로만 작성해주세요. 영어가 포함되면 무효입니다.
+	                다음 형식을 엄격히 지켜주세요:
+	
+	                문제: <질문 내용>
+	                A. 보기 A
+	                B. 보기 B
+	                C. 보기 C
+	                D. 보기 D
+	                정답: <A-D>
+	                해설: <정답의 이유>
+	
+	                기사:
+			""".formatted(level) + "\n" + content;
+			
+			case "JAPANESE" -> """
+					以下の記事を基に、難易度「%s」の4択クイズを1問作成してください。
+		            必ず日本語で回答し、英語を含めないでください。次の形式を厳守してください：
+		
+		            問題: <質問内容>
+		            A. 選択肢A
+		            B. 選択肢B
+		            C. 選択肢C
+		            D. 選択肢D
+		            正解: <A-D>
+		            解説: <正解の理由>
+		
+		            記事:		
+			""".formatted(level) + "\n" + content;
+			
+			default -> """
+					Based on the article below, generate exactly one %s multiple choice question (MCQ) with 4 distinct options. 
+		            Please respond in English only. Use this format:
+		
+		            Question: <your question here>
+		            A. Option A
+		            B. Option B
+		            C. Option C
+		            D. Option D
+		            Answer: [A-D]
+		            Explanation: <brief explanation>
+		
+		            Article:
+			""".formatted(level) + "\n" + content;
+			
+		};
+	
 	}
 	
 	
