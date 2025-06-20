@@ -40,6 +40,8 @@ public class ProficiencyTestController {
 		// 난이도에 해당하는 테스트 문제 리스트 가져오기
 		Map<GetNews, GetNewsQuiz> proficiency_test_quiz = news_service.getProficiencyTestQuizMap(language);
 		
+		System.out.println(proficiency_test_quiz);
+		
 		return ResponseEntity.status(HttpStatus.OK).body(proficiency_test_quiz);
 	}
 	

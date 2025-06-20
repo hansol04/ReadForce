@@ -17,13 +17,13 @@ const TestQuestionPage = () => {
   useEffect(() => {
     api.get(`/proficiency_test/get-proficiency-test-quiz-map?language=${language}`)
       .then(res => {
-        const parsed = Object.entries(res.data).map(([articleStr, quiz]) => {
-          try {
-            return { article: JSON.parse(articleStr), quiz };
-          } catch {
-            return null;
-          }
-        }).filter(Boolean);
+        const parsed = Object.entries(res.data).map(([key, quiz]) => {
+          console.log(quiz.news);
+          return {
+            article: quiz.news ?? {}, // ✅ 지문을 직접 가져옴
+            quiz
+          };
+        });
         setQuestions(parsed);
       })
       .catch(() => alert("문제를 불러오지 못했습니다."));
@@ -34,7 +34,9 @@ const TestQuestionPage = () => {
   const { article, quiz } = questions[currentIdx];
 
   const handleSubmit = () => {
-    if (selected === quiz.answer) setScore(prev => prev + 1);
+    if (selected === quiz.correct_answer_index) {
+      setScore(prev => prev + 1);
+    }
     setShowNext(true);
   };
 
@@ -49,30 +51,32 @@ const TestQuestionPage = () => {
   };
 
   return (
-    <div className="test-question-wrapper">
-      <div className="article-section">
-        <h3>{article.title}</h3>
-        <p>{article.summary}</p>
-        <p>{article.content}</p>
+    <div className="article-question-layout">
+      <div className="article-box">
+        <h3 className="article-title">{article.title || '제목 없음'}</h3>
+        <p className="article-content">{article.content || '내용 없음'}</p>
       </div>
-      <div className="quiz-section">
-        <h4>문제 {currentIdx + 1}</h4>
-        <p>{quiz.question}</p>
-        {quiz.options.map((opt, idx) => (
+
+      <div className="quiz-box">
+        <h4 className="quiz-title">문제 {currentIdx + 1}</h4>
+        <p className="quiz-question">{quiz.question_text}</p>
+        {[quiz.choice1, quiz.choice2, quiz.choice3, quiz.choice4].map((opt, idx) => (
           <button
             key={idx}
-            className={`quiz-option ${selected === opt ? 'selected' : ''}`}
-            onClick={() => setSelected(opt)}
+            className={`quiz-option ${selected === idx ? 'selected' : ''}`}
+            onClick={() => setSelected(idx)}
             disabled={showNext}
           >
             {String.fromCharCode(65 + idx)}. {opt}
           </button>
         ))}
-        <div className="quiz-actions">
+        <div className="quiz-button-container">
           {!showNext ? (
-            <button disabled={!selected} onClick={handleSubmit}>정답 제출</button>
+            <button className="submit-button" disabled={selected === null} onClick={handleSubmit}>
+              정답 제출
+            </button>
           ) : (
-            <button onClick={handleNext}>
+            <button className="submit-button" onClick={handleNext}>
               {currentIdx + 1 === questions.length ? '결과 보기' : '다음 문제'}
             </button>
           )}

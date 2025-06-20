@@ -18,6 +18,7 @@ import com.readforce.service.LiteratureService;
 import com.readforce.validation.ValidEnum;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -106,10 +107,18 @@ public class LiteratureController {
 	// 문학 문제 가져오기
 //	@GetMapping("/get-literature-quiz-object")
 //	public ResponseEntity<List<GetLiteratureParagraph>> getLiteratureQuizObject(
-//			@Request("literature_paragraph_no")
-//			@NotNull(message = MessageCode.literature)
-//	)
-//	
+//			@RequestParam("literature_paragraph_no")
+//			@NotNull(message = MessageCode.LITERATURE_PARAGRAPH_NO_NOT_NULL)
+//			Long literature_paragraph_no,
+//			@RequestParam("literature_no")
+//			@NotNull(message = MessageCode.LITERATURE_NO_NOT_NULL)
+//			Long literature_no
+//	){
+//		
+//		
+//		
+//	}
+	
 	
 	
 	
