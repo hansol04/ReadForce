@@ -24,6 +24,8 @@ public final class MessageCode {
 	public static final String NEWS_QUIZ_LEVEL_NOT_BLANK = "NO0017";
 	public static final String NEWS_ARTICLE_NOT_NULL = "NO0018";
 	public static final String LITERATURE_TYPE_NOT_BLANK = "NO0019";
+	public static final String LITERATURE_LEVEL_NOT_BLANK = "NO0020";
+	public static final String LITERATURE_CATEGORY_NOT_BLANK = "NO0021";
 
 	
 	// 입력값 형식 불일치
@@ -38,6 +40,8 @@ public final class MessageCode {
 	public static final String NEWS_ARTICLE_CATEGORY_INVALID = "PA0008";
 	public static final String GEMINI_RESPONSE_PATTERN_INVALID = "PA0009";
 	public static final String LITERATURE_TYPE_PATTERN_INVALID = "PA0010";
+	public static final String LITERATURE_LEVEL_PATTERN_INVALID = "PA0011";
+	public static final String LITERATURE_CATEGORY_PATTERN_INVALID = "PA0012";
 	
 	
 	// 입력값 크기/범위 불일치
@@ -96,6 +100,7 @@ public final class MessageCode {
 	public static final String BEGINNER_NEWS_QUIZ_NOT_FOUND = "NF0012";
 	public static final String INTERMEDIATE_NEWS_QUIZ_NOT_FOUND = "NF0013";
 	public static final String ADVANCED_NEWS_QUIZ_NOT_FOUND = "NF0014";
+	public static final String LITERATURE_NOT_FOUND = "NF0015";
 	
 	
 	// 특정 상황
