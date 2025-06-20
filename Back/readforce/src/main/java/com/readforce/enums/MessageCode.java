@@ -19,6 +19,10 @@ public final class MessageCode {
 	public static final String NEWS_NO_NOT_NULL = "NO0012";
 	public static final String NEWS_ARTICLE_ORDER_BY_NOT_BLANK = "NO0013";
 	public static final String NEWS_ARTICLE_CATEGORY_NOT_BLANK = "NO0014";
+	public static final String NEWS_QUIZ_CONTENT_NOT_BLANK = "NO0015";
+	public static final String NEWS_QUIZ_LANGUAGE_NOT_BLANK = "NO0016";
+	public static final String NEWS_QUIZ_LEVEL_NOT_BLANK = "NO0017";
+	public static final String NEWS_ARTICLE_NOT_NULL = "NO0018";
 
 	
 	// 입력값 형식 불일치
@@ -59,6 +63,8 @@ public final class MessageCode {
 	public static final String GET_TOKENS_SUCCESS = "SU0013";
 	public static final String MEMBER_DEACTIVATE_SUCCESS = "SU0014";
 	public static final String MEMBER_ACTIVATE_SUCCESS = "SU0015";
+	public static final String GENERATE_CREATIVE_NEWS_SUCCESS = "SU0016";
+	public static final String GENERATE_CREATIVE_NEWS_QUIZ_SUCCESS = "SU0017";
 
 	// 실패
 	public static final String VERIFICATION_CODE_SEND_FAIL = "FA0001";
@@ -105,7 +111,9 @@ public final class MessageCode {
 	public static final String SOCIAL_EMAIL_ALREADY_USE_BY_OTHER_MEMBER = "SP0012";
 	public static final String IP_ADDRESS_REQUEST_LIMIT_EXCEEDED = "SP0013";
 	public static final String EMAIL_REQUEST_LIMIT_EXCEEDED = "SP0014";
-	
+	public static final String NEWS_QUIZ_LINE_MISSING = "SP0015";
+	public static final String NEWS_QUIZ_OPTION_MISSING = "SP0016";
+	public static final String NEWS_QUIZ_ANSWER_MISSING = "SP0017";
 
 	
 
