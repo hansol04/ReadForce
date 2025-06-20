@@ -1,14 +1,17 @@
 import "./main.css";
 import React, { useState, useEffect } from "react";
 import mainImage from "../assets/image/mainimage.png";
+import slide2Image from "../assets/image/slide2.png";
 import { useNavigate } from "react-router-dom";
 
 const Main = () => {
   const [slideIndex, setSlideIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const navigate = useNavigate();
 
   const slides = [
     {
+      image: mainImage,
       title: (
         <>
           문해<span style={{ color: "#439395" }}>력</span>,<br />
@@ -17,46 +20,83 @@ const Main = () => {
       ),
       description: "한국·일본·미국 뉴스로 나의 문해력을 테스트 해보세요!",
       buttonText: "문해력 테스트 시작하기",
+      buttonLink: "/test-start",
     },
     {
+      image: slide2Image,
       title: (
         <>
           AI 추천 콘텐츠와 함께<br />
           문해력을 성장시키세요
         </>
       ),
-      description: "당신을 위한 맞춤 뉴스와 문제를 제공합니다.",
-      buttonText: "AI 추천 콘텐츠 보기",
+      description: "국내 베스트셀러 1위 //누적 30만부 돌파!!",
+      buttonText: "책 구매하러가기",
+      buttonLink: "https://www.kyobobook.co.kr/",
     },
   ];
 
   useEffect(() => {
+    if (isPaused) return;
     const interval = setInterval(() => {
-      setSlideIndex((prevIndex) => (prevIndex + 1) % slides.length);
+      setSlideIndex((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [slides.length]);
+  }, [slides.length, isPaused]);
+
+  const currentSlide = slides[slideIndex];
+
+  const handleButtonClick = () => {
+    if (currentSlide.buttonLink) {
+      if (currentSlide.buttonLink.startsWith("http")) {
+        window.open(currentSlide.buttonLink, "_blank");
+      } else {
+        navigate(currentSlide.buttonLink);
+      }
+    }
+  };
+
+  const goToPrev = () => {
+    setSlideIndex((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const goToNext = () => {
+    setSlideIndex((prev) => (prev + 1) % slides.length);
+  };
+
+  const togglePause = () => {
+    setIsPaused((prev) => !prev);
+  };
 
   return (
     <div>
-      <section className="hero">
-        <div className="page-container">
-          <div className="hero-content">
+      <section className="hero-fullwidth">
+        <div className="hero-overlay">
+          <div className="hero-inner">
             <div className="hero-text">
-              <h2>{slides[slideIndex].title}</h2>
-              <p>{slides[slideIndex].description}</p>
-              <button onClick={() => navigate("/test-start")}>
-                {slides[slideIndex].buttonText}
-              </button>
+              <h2>{currentSlide.title}</h2>
+              <p>{currentSlide.description}</p>
+              {currentSlide.buttonText && (
+                <button onClick={handleButtonClick}>
+                  {currentSlide.buttonText}
+                </button>
+              )}
             </div>
-            <div className="main-hero-image">
-              <img src={mainImage} alt="문해력 일러스트" />
+            <div className="hero-image">
+              <img src={currentSlide.image} alt="슬라이드 이미지" />
             </div>
+          </div>
+
+          <button className="slide-arrow left" onClick={goToPrev}>⮜</button>
+          <button className="slide-arrow right" onClick={goToNext}>⮞</button>
+          <div className="slide-ui">
+            <button onClick={togglePause}>{isPaused ? "▶" : "⏸"}</button>
+            <span>{String(slideIndex + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}</span>
           </div>
         </div>
       </section>
 
-      {/* 기존 통계, 기사 영역 유지 */}
+      {/* 통계 영역 */}
       <section className="stats-section">
         <div className="page-container stat-container">
           <div className="stat-box top5">
@@ -80,10 +120,22 @@ const Main = () => {
           <div className="stat-box today-stats">
             <h3>오늘의 통계</h3>
             <div className="grid-2x2">
-              <div><div className="number">3,288 명</div><div className="label">오늘의 응시자 수</div></div>
-              <div><div className="number">72 %</div><div className="label">응답 정답률</div></div>
-              <div><div className="number">15 %</div><div className="label">제출한 학습률</div></div>
-              <div><div className="number">68</div><div className="label">틀린 문항 수</div></div>
+              <div>
+                <div className="number">3,288 명</div>
+                <div className="label">오늘의 응시자 수</div>
+              </div>
+              <div>
+                <div className="number">72 %</div>
+                <div className="label">응답 정답률</div>
+              </div>
+              <div>
+                <div className="number">15 %</div>
+                <div className="label">제출한 학습률</div>
+              </div>
+              <div>
+                <div className="number">68</div>
+                <div className="label">틀린 문항 수</div>
+              </div>
             </div>
           </div>
 
