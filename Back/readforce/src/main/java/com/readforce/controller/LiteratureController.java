@@ -117,8 +117,9 @@ public class LiteratureController {
 	){
 		
 		// 문학 문제 가져오기
+		GetLiteratureQuiz get_literature_quiz = literature_service.getLiteratureQuizObject(literature_paragraph_no, literature_no);
 		
-		return null;
+		return ResponseEntity.status(HttpStatus.OK).body(get_literature_quiz);
 		
 	}
 	

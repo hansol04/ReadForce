@@ -7,10 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.readforce.dto.LiteratureDto.GetLiteratureParagraph;
+import com.readforce.dto.LiteratureDto.GetLiteratureQuiz;
 import com.readforce.entity.LiteratureParagraph;
+import com.readforce.entity.LiteratureQuiz;
 import com.readforce.enums.MessageCode;
 import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.repository.LiteratureParagraphRepository;
+import com.readforce.repository.LiteratureQuizRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class LiteratureService {
 	
 	private final LiteratureParagraphRepository literature_paragraph_repository;
+	private final LiteratureQuizRepository literature_quiz_repository;
 	
 	// LiteratureParagraph -> GetLiteratureParagraph 변환
 	private GetLiteratureParagraph transformEntity(LiteratureParagraph literature_paragraph) {
@@ -148,6 +152,28 @@ public class LiteratureService {
 		
 		return get_literature_paragraph_list;
 		
+	}
+
+	// 문학 문제 가져오기
+	@Transactional(readOnly = true)
+	public GetLiteratureQuiz getLiteratureQuizObject(Long literature_paragraph_no, Long literature_no) {
+
+		LiteratureQuiz literature_quiz = literature_quiz_repository.findByLiteratureParagraphNoAndLiteratureNo(literature_paragraph_no, literature_no);
+		
+		GetLiteratureQuiz get_literature_quiz = new GetLiteratureQuiz();
+		get_literature_quiz.setLiterature_no(literature_quiz.getLiterature_no());
+		get_literature_quiz.setQuestion_text(literature_quiz.getQuestion_text());
+		get_literature_quiz.setChoice1(literature_quiz.getChoice1());
+		get_literature_quiz.setChoice2(literature_quiz.getChoice2());
+		get_literature_quiz.setChoice3(literature_quiz.getChoice3());
+		get_literature_quiz.setChoice4(literature_quiz.getChoice4());
+		get_literature_quiz.setCorrect_answer_index(literature_quiz.getCorrect_answer_index());
+		get_literature_quiz.setExplanation(literature_quiz.getExplanation());
+		get_literature_quiz.setLiterature_paragraph_no(literature_quiz.getLiterature_paragraph_no());
+		get_literature_quiz.setLiterature_quiz_no(literature_quiz.getLiterature_quiz_no());
+		get_literature_quiz.setScore(literature_quiz.getScore());
+		
+		return get_literature_quiz;
 	}
 	
 	
