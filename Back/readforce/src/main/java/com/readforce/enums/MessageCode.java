@@ -28,6 +28,8 @@ public final class MessageCode {
 	public static final String LITERATURE_CATEGORY_NOT_BLANK = "NO0021";
 	public static final String LITERATURE_PARAGRAPH_NO_NOT_NULL = "NO0022";
 	public static final String LITERATURE_NO_NOT_NULL = "NO0023";
+	public static final String NEWS_QUIZ_NO_NOT_NULL = "NO0024";
+	public static final String SELECTED_OPTION_INDEX_NOT_NULL = "NO0025";
 
 	
 	// 입력값 형식 불일치

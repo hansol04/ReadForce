@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.readforce.dto.LiteratureDto.GetLiteratureParagraph;
+import com.readforce.dto.LiteratureDto.GetLiteratureQuiz;
 import com.readforce.enums.LiteratureRelate;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.NewsRelate;
@@ -105,19 +106,22 @@ public class LiteratureController {
 	
 	
 	// 문학 문제 가져오기
-//	@GetMapping("/get-literature-quiz-object")
-//	public ResponseEntity<List<GetLiteratureParagraph>> getLiteratureQuizObject(
-//			@RequestParam("literature_paragraph_no")
-//			@NotNull(message = MessageCode.LITERATURE_PARAGRAPH_NO_NOT_NULL)
-//			Long literature_paragraph_no,
-//			@RequestParam("literature_no")
-//			@NotNull(message = MessageCode.LITERATURE_NO_NOT_NULL)
-//			Long literature_no
-//	){
-//		
-//		
-//		
-//	}
+	@GetMapping("/get-literature-quiz-object")
+	public ResponseEntity<GetLiteratureQuiz> getLiteratureQuizObject(
+			@RequestParam("literature_paragraph_no")
+			@NotNull(message = MessageCode.LITERATURE_PARAGRAPH_NO_NOT_NULL)
+			Long literature_paragraph_no,
+			@RequestParam("literature_no")
+			@NotNull(message = MessageCode.LITERATURE_NO_NOT_NULL)
+			Long literature_no
+	){
+		
+		// 문학 문제 가져오기
+		GetLiteratureQuiz get_literature_quiz = literature_service.getLiteratureQuizObject(literature_paragraph_no, literature_no);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(get_literature_quiz);
+		
+	}
 	
 	
 	

@@ -330,9 +330,9 @@ public class MemberController {
 		return ResponseEntity.status(HttpStatus.OK).body(getAttendanceDateList);
 	}
 	
+	// 
 	
 	
 	
 
 }
-
