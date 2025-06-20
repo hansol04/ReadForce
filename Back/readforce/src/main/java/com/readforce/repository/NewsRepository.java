@@ -41,36 +41,32 @@ public interface NewsRepository extends JpaRepository<News, Long>{
 
 	@Query(value = "SELECT news_no, language, category, level, title, content FROM news WHERE language = :language AND level = :level ORDER BY created_date ASC", nativeQuery = true)
 	List<GetNews> findByLanguageAndLevelOrderByCreatedDateAsc(
-			@Param("language") String language, 
+			@Param("language") String language,
 			@Param("level") String level
 	);
 	
 	@Query(value = "SELECT news_no, language, category, level, title, content FROM news WHERE language = :language AND level = :level ORDER BY created_date DESC", nativeQuery = true)
 	List<GetNews> findByLanguageAndLevelOrderByCreatedDateDesc(
-			@Param("language") String language, 
+			@Param("language") String language,
 			@Param("level") String level
 	);
 
 	@Query(value = "SELECT news_no, language, category, level, title, content FROM news WHERE language = :language AND level = :level AND category = :category ORDER BY created_date ASC", nativeQuery = true)
 	List<GetNews> findByLanguageAndLevelAndCategoryOrderByCreatedDateAsc(
-			@Param("language") String language, 
+			@Param("language") String language,
 			@Param("level") String level,
 			@Param("category") String category
 	);
 	
 	@Query(value = "SELECT news_no, language, category, level, title, content FROM news WHERE language = :language AND level = :level AND category = :category ORDER BY created_date DESC", nativeQuery = true)
 	List<GetNews> findByLanguageAndLevelAndCategoryOrderByCreatedDateDesc(
-			@Param("language") String language, 
+			@Param("language") String language,
 			@Param("level") String level,
 			@Param("category") String category
 	);
 
 	@Query(value = "SELECT * FROM news WHERE news_no NOT IN (SELECT news_no FROM news_quiz)", nativeQuery = true)
 	List<News> findUnquizzedNews();
-
-	
-	
-	
 
 
 }
