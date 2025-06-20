@@ -27,7 +27,7 @@ public class News {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "news_no")
-	private Long new_no;
+	private Long news_no;
 
 	@Column(nullable = false)
 	private String language;
