@@ -40,5 +40,8 @@ public interface PointRepository extends JpaRepository<Point, String>{
 	@Query(value = "SELECT * FROM point ORDER BY fairytale DESC LIMIT 50", nativeQuery = true)
 	List<Point> findAllWithFairytale();
 
+	@Query(value = "SELECT * FROM point ORDER BY created_date DESC", nativeQuery = true)
+	List<Point> findAllOrderByCreatedDateDesc();
+
 
 }
