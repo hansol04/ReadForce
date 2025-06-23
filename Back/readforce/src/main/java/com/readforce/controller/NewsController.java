@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -142,7 +143,24 @@ public class NewsController {
 	}
 	
 	// 사용자가 풀은 뉴스 기사 문제 삭제하기
-	
+	@DeleteMapping("/delete-member-solved-news-quiz")
+	public ResponseEntity<Map<String, String>> deleteMemberSolvedNewsQuiz(
+			@RequestParam("news_quiz_no")
+			@NotNull(message = MessageCode.NEWS_QUIZ_NO_NOT_NULL)
+			Long news_quiz_no,
+			@AuthenticationPrincipal UserDetails user_details
+	){
+		
+		String email = user_details.getUsername();
+		
+		// 뉴스 기사 문제 삭제
+		news_service.deleteMemberSolvedNewsQuiz(email, news_quiz_no);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.DELETE_NEWS_QUIZ_ATTEMPT_SUCCESS				
+		));
+		
+	}
 	
 	
 	

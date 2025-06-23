@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../api/axiosInstance';
-import defaultProfileImage from '../../assets/image/default-profile.png';
+import kakaoIcon from '../../assets/image/kakao.png';
+import naverIcon from '../../assets/image/naver.png';
+import googleIcon from '../../assets/image/google.png';
 import './EditProfilePage.css';
 
 const ProfileEditPage = () => {
@@ -10,36 +12,27 @@ const ProfileEditPage = () => {
   const [birthday, setBirthday] = useState('');
   const [birthdayMessage, setBirthdayMessage] = useState('');
   const [isBirthdayValid, setIsBirthdayValid] = useState(null);
-
-  const [preview, setPreview] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-  const [serverProfileImageUrl, setServerProfileImageUrl] = useState(defaultProfileImage);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    const fetchProfileImage = async () => {
-      try {
-        const res = await axiosInstance.get('/member/get-profile-image', {
-          responseType: 'blob',
-        });
-        const isImage = res.data.type.startsWith('image/');
-        if (isImage) {
-          const imageUrl = URL.createObjectURL(res.data);
-          setServerProfileImageUrl(imageUrl);
-        } else {
-          console.warn('서버 응답이 이미지가 아님');
-          setServerProfileImageUrl(defaultProfileImage);
-        }
-      } catch (error) {
-        console.log('프로필 이미지 없음 또는 오류 → 기본 이미지 사용');
-        setServerProfileImageUrl(defaultProfileImage);
-      }
-    };
     fetchProfileImage();
   }, []);
 
+  const fetchProfileImage = async () => {
+    try {
+      const res = await axiosInstance.get('/member/get-profile-image', {
+        responseType: 'blob',
+      });
+      const url = URL.createObjectURL(res.data);
+      setImageUrl(url);
+    } catch (err) {
+      console.error('기본 이미지 불러오기 실패:', err);
+    }
+  };
+
   const checkNicknameDuplicate = async (nickname) => {
-    if (!nickname || nickname.length < 2) return false;
     try {
       const res = await axiosInstance.get(`/member/nickname-check?nickname=${nickname}`);
       return res.status === 200;
@@ -49,22 +42,30 @@ const ProfileEditPage = () => {
   };
 
   const validateNickname = async (value) => {
-    const onlyKorean = /^[\uAC00-\uD7A3]+$/.test(value);
-    const onlyEnglish = /^[a-zA-Z]+$/.test(value);
-    if ((onlyKorean && value.length <= 8) || (onlyEnglish && value.length <= 20)) {
-      const isAvailable = await checkNicknameDuplicate(value);
-      setNicknameMessage(isAvailable ? '사용 가능한 닉네임입니다.' : '이미 존재하는 닉네임입니다.');
-      setIsNicknameValid(isAvailable);
-    } else {
-      setNicknameMessage('한글 8자, 영문 20자 이하로 입력해주세요');
+    setNicknameMessage('');
+    const nicknameRegex = /^[a-zA-Z가-힣0-9]{2,12}$/;
+    if (!nicknameRegex.test(value)) {
+      setNicknameMessage('한글/영문/숫자 조합 2~12자만 사용 가능합니다.');
       setIsNicknameValid(false);
+      return;
     }
+    const isAvailable = await checkNicknameDuplicate(value);
+    setNicknameMessage(
+      isAvailable ? '사용 가능한 닉네임입니다.' : '이미 존재하는 닉네임입니다.'
+    );
+    setIsNicknameValid(isAvailable);
   };
 
   const validateBirthday = (value) => {
-    const regex = /^\d{4}-\d{2}-\d{2}$/;
-    setBirthdayMessage(regex.test(value) ? '' : 'YYYY-MM-DD 형식으로 입력해주세요');
-    setIsBirthdayValid(regex.test(value));
+    setBirthdayMessage('');
+    const birthdayRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (birthdayRegex.test(value)) {
+      setBirthdayMessage('생년월일 입력 완료');
+      setIsBirthdayValid(true);
+    } else {
+      setBirthdayMessage('생년월일 8자리를 입력해주세요 (예: 19971104)');
+      setIsBirthdayValid(false);
+    }
   };
 
   const handleBirthdayChange = (value) => {
@@ -83,22 +84,18 @@ const ProfileEditPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const updates = [];
-
     const infoPayload = {};
+
     if (nickname && isNicknameValid) infoPayload.nickname = nickname;
     if (birthday && isBirthdayValid) infoPayload.birthday = birthday;
+
     if (Object.keys(infoPayload).length > 0) {
       updates.push(axiosInstance.patch('/member/modify-info', infoPayload));
     }
 
-    if (preview) {
-      try {
-        await axiosInstance.delete('/member/delete-profile-image');
-      } catch (err) {
-        console.warn('서버 이미지 삭제 실패', err);
-      }
+    if (selectedFile) {
       const formData = new FormData();
-      formData.append('profile_image_file', preview);
+      formData.append('profile_image_file', selectedFile);
       updates.push(
         axiosInstance.post('/member/upload-profile-image', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
@@ -107,9 +104,13 @@ const ProfileEditPage = () => {
     }
 
     try {
-      await Promise.all(updates);
+      const responses = await Promise.all(updates);
+      const modifyResponse = responses.find((res) => res?.data?.NICK_NAME);
+      if (modifyResponse) {
+        localStorage.setItem('nickname', modifyResponse.data.NICK_NAME);
+      }
       alert('회원정보가 수정되었습니다.');
-      window.location.reload();
+      window.location.href = '/';
     } catch {
       alert('회원정보 수정 실패');
     }
@@ -126,14 +127,25 @@ const ProfileEditPage = () => {
     }
   };
 
-  const removeImage = async () => {
-    setPreview(null);
-    setPreviewUrl(null);
-    setServerProfileImageUrl(defaultProfileImage);
+  const handleImageDelete = async () => {
     try {
       await axiosInstance.delete('/member/delete-profile-image');
+      await fetchProfileImage();
+      setSelectedFile(null);
+    } catch {
+      alert('이미지 삭제 실패');
+    }
+  };
+
+  const openSocialRedirect = async (provider) => {
+    try {
+      const res = await axiosInstance.post('/auth/get-social-account-link-token');
+      const state = res.data.STATE;
+      const redirectUri = `http://localhost:8080/oauth2/authorization/${provider}?state=${state}`;
+      console.log(state);
+      window.location.href = redirectUri;
     } catch (err) {
-      console.warn('서버 이미지 삭제 실패', err);
+      alert('SNS 연동 요청 실패');
     }
   };
 
@@ -144,29 +156,31 @@ const ProfileEditPage = () => {
         <div className="form-group">
           <label>회원 이미지</label>
           <div className="profile-image-box">
-            <img
-              src={previewUrl || serverProfileImageUrl || defaultProfileImage}
-              alt="프로필 이미지"
-              className="profile-image"
-              onError={(e) => (e.target.src = defaultProfileImage)}
-            />
-
-            <div className="image-control-row">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    setPreview(file);
-                    setPreviewUrl(URL.createObjectURL(file));
+            {imageUrl && (
+              <img src={imageUrl} alt="프로필 이미지" className="profile-image" />
+            )}
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/gif"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  if (file.size > 5 * 1024 * 1024) {
+                    alert('이미지 용량은 5MB 이하여야 합니다.');
+                    return;
                   }
-                }}
-              />
-              <button type="button" className="remove-image-button" onClick={removeImage}>
-                이미지 제거
-              </button>
-            </div>
+                  setSelectedFile(file);
+                  setImageUrl(URL.createObjectURL(file));
+                }
+              }}
+            />
+            <button
+              type="button"
+              className="remove-image-button"
+              onClick={handleImageDelete}
+            >
+              이미지 삭제
+            </button>
           </div>
         </div>
 
@@ -179,15 +193,20 @@ const ProfileEditPage = () => {
               onChange={async (e) => {
                 const value = e.target.value;
                 setNickname(value);
-                await validateNickname(value);
+                setNicknameMessage('');
+                if (value.length >= 2) {
+                  await validateNickname(value);
+                } else {
+                  setNicknameMessage('2자 이상 입력해주세요');
+                  setIsNicknameValid(false);
+                }
               }}
             />
-            <div className="message-row">
-              <span className="inline-hint">한글 8자, 영문 20자 이하로 입력해주세요</span>
-              <span className="validation-message" style={{ color: isNicknameValid ? 'green' : 'red' }}>
+            {nicknameMessage && (
+              <span className={`validation-message ${isNicknameValid ? 'valid' : 'invalid'}`}>
                 {nicknameMessage}
               </span>
-            </div>
+            )}
           </div>
         </div>
 
@@ -198,14 +217,32 @@ const ProfileEditPage = () => {
               type="text"
               placeholder="예: 1997-11-04"
               value={birthday}
-              onChange={(e) => handleBirthdayChange(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                setBirthdayMessage('');
+                handleBirthdayChange(value);
+              }}
             />
-            <div className="message-row">
-              <span className="inline-hint">YYYY-MM-DD 형식으로 입력해주세요</span>
-              <span className="validation-message" style={{ color: isBirthdayValid ? 'green' : 'red' }}>
+            {birthdayMessage && (
+              <span className={`validation-message ${isBirthdayValid ? 'valid' : 'invalid'}`}>
                 {birthdayMessage}
               </span>
-            </div>
+            )}
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label>SNS 계정 연동</label>
+          <div className="social-login">
+            <button type="button" className="social-btn" onClick={() => openSocialRedirect('kakao')}>
+              <img src={kakaoIcon} alt="카카오" />
+            </button>
+            <button type="button" className="social-btn" onClick={() => openSocialRedirect('naver')}>
+              <img src={naverIcon} alt="네이버" />
+            </button>
+            <button type="button" className="social-btn" onClick={() => openSocialRedirect('google')}>
+              <img src={googleIcon} alt="구글" />
+            </button>
           </div>
         </div>
 

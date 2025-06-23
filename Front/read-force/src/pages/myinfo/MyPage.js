@@ -15,6 +15,7 @@ const MyPage = () => {
   const isLoggedIn = !!localStorage.getItem("token");
   const [showModal, setShowModal] = useState(false);
   const [attendanceDates, setAttendanceDates] = useState([]);
+  const [profileImageUrl, setProfileImageUrl] = useState(null);
   const [summary, setSummary] = useState({
     total: 0,
     monthlyRate: 0,
@@ -44,7 +45,30 @@ const MyPage = () => {
   };
 
   useEffect(() => {
-    fetchWithAuth('/member/attendance-dates')
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetch('/member/get-profile-image', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+  
+        if (!response.ok) throw new Error('이미지 로딩 실패');
+  
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        setProfileImageUrl(url);
+      } catch (error) {
+        console.error('프로필 이미지 불러오기 실패:', error);
+      }
+    };
+  
+    if (isLoggedIn) fetchProfileImage();
+  }, [isLoggedIn]);
+  
+  useEffect(() => {
+    fetchWithAuth('/member/get-attendance-date-list')
       .then(res => res.json())
       .then(data => {
         let dates = [];
@@ -157,7 +181,7 @@ const MyPage = () => {
     <div className="mypage-container">
       <div className="top-section">
         <div className="left-top">
-          <img src="https://via.placeholder.com/80" alt="프로필" className="profile-img" />
+          <img src={profileImageUrl} alt="프로필" className="profile-img" />
           <div>
             <h3>{nickname} 님</h3>
             <span className="badge">{user.level}</span>

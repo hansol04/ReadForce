@@ -371,6 +371,21 @@ public class NewsService {
 		
 	}
 
+	// 사용자가 풀은 뉴스 기사 문제 삭제
+	@Transactional
+	public void deleteMemberSolvedNewsQuiz(String email, Long news_quiz_no) {
+
+		// 복합키 생성
+		NewsQuizAttemptId news_quiz_attempt_id = new NewsQuizAttemptId();
+		news_quiz_attempt_id.setEmail(email);
+		news_quiz_attempt_id.setNews_quiz_no(news_quiz_no);
+		
+		// 삭제
+		news_quiz_attempt_repository.deleteById(news_quiz_attempt_id);
+
+	}
+
+
 
 
 
