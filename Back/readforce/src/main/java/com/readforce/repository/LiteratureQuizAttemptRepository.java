@@ -35,5 +35,10 @@ public interface LiteratureQuizAttemptRepository extends JpaRepository<Literatur
 			@Param("email") String email
 	);
 
+//	@Query(value = "SELECT " +
+//				   " t.literature_quiz_no, " + 
+//				   " lq.question_text, " +
+//				   " t.incorrect_count"
+//			)
 
 }

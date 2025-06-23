@@ -35,6 +35,28 @@ public interface NewsQuizAttemptRepository extends JpaRepository<NewsQuizAttempt
 			@Param("email") String email
 	);
 
+	@Query(value = "SELECT " +
+				   " t.news_quiz_no, " + 
+				   " nq.question_text, " + 
+				   " (CAST(t.incorrect_count AS FLOAT) / total.total_count * 100) AS percentage " +
+				   "FROM " +
+				   " (SELECT new_quiz_no, COUNT(*) as incorrect_count " +
+				   " FROM news_quiz_attempt " +
+				   " WHERE is_correct = false " + 
+				   " GROUP BY news_quiz_no) AS t " + 
+				   "JOIN " + 
+				   " (SELECT news_quiz_no, COUNT(*) as total_count" + 
+				   " FROM news_quiz_attempt " +
+				   " GROUP BY news_quiz_no) AS total ON t.news_quiz_no = total.news_quiz_no " +
+				   "JOIN " +
+				   " news_quiz nq ON t.news_quiz_no = nq.news_quiz_no " +
+				   "ORDER BY " +
+				   " t.incorrect_count DESC " +
+				   "LIMIT 5", 
+				   nativeQuery = true
+	)
+	List<Object[]> findTop5MostIncorrectQuizList();
+
 
 
 }

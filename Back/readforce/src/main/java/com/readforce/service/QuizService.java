@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.readforce.dto.MemberDto.MemberAttemptedQuiz;
 import com.readforce.dto.MemberDto.MemberIncorrectQuiz;
+import com.readforce.dto.QuizDto.GetQuiz;
 import com.readforce.entity.LiteratureQuiz;
 import com.readforce.entity.LiteratureQuizAttempt;
 import com.readforce.entity.NewsQuiz;
@@ -250,6 +251,26 @@ public class QuizService {
 		
 		return combined_literature_quiz_list;
 
+	}
+
+
+	// 가장 많이 틀린 문제 가져오기(5개)
+	@Transactional(readOnly = true)
+	public List<GetQuiz> getMostIncorrectedQuiz() {
+
+		// 뉴스
+		List<Object[]> news_quiz_attempt_list = news_quiz_attempt_repository.findTop5MostIncorrectQuizList();
+		
+		if(news_quiz_attempt_list.isEmpty()) {
+			
+			throw new ResourceNotFoundException(MessageCode.NEWS_NOT_FOUND);
+			
+		}
+		
+		
+		
+		
+		return null;
 	}
 
 
