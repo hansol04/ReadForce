@@ -25,21 +25,25 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.readforce.dto.NewsDto;
 import com.readforce.dto.NewsDto.NewsResult;
+import com.readforce.entity.LiteratureParagraph;
+import com.readforce.entity.LiteratureQuiz;
 import com.readforce.entity.News;
 import com.readforce.entity.NewsQuiz;
+import com.readforce.enums.Level;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.NewsRelate.Category;
 import com.readforce.enums.NewsRelate.Language;
-import com.readforce.enums.NewsRelate.Level;
 import com.readforce.exception.GeminiException;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class GeminiService {
 	
 	private final RestTemplate rest_template;
@@ -58,10 +62,10 @@ public class GeminiService {
 		String news_prompt = buildNewsPrompt(language, level, category);
 		
 		// Gemini 요청
-		String raw_text = callGeminiApi(news_prompt);
+		String gemini_response = callGeminiApi(news_prompt);
 		
 		// response 변환 및 반환		
-		return splitTitleAndBody(raw_text);
+		return splitTitleAndBody(gemini_response);
 	}
 
 	// 뉴스 프롬프트 생성
@@ -181,15 +185,15 @@ public class GeminiService {
 	}
 	
 	// 타이틀과 바디 분리
-	private NewsDto.NewsResult splitTitleAndBody(String raw_text){
+	private NewsDto.NewsResult splitTitleAndBody(String gemini_response){
 		
-		String clean = sanitizeMarkdown(raw_text);
+		String clean = sanitizeMarkdown(gemini_response);
 		
 		String[] lines = clean.split("\\n", 2);
 		
 		String title = lines.length > 0 ? lines[0].trim() : "제목 없음";
 		
-		String body = lines.length > 1 ? lines[0].trim() : "";
+		String body = lines.length > 1 ? lines[1].trim() : "";
 		
 		return new NewsDto.NewsResult(title, body);
 		
@@ -208,7 +212,7 @@ public class GeminiService {
 	}
 
 	
-	// 뉴스 퀴즈 생성
+	// 뉴스 문제 생성
 	public NewsQuiz generateCreativeNewsQuiz(
 			@NotNull(message = MessageCode.NEWS_ARTICLE_NOT_NULL)
 			News unquizzed_news
@@ -222,17 +226,17 @@ public class GeminiService {
 		);
 		
 		// Gemini 요청
-		String raw_text = callGeminiApi(news_quiz_prompt);
+		String gemini_response = callGeminiApi(news_quiz_prompt);
 		
 		// response 변환 및 반환
-		return parseNewsQuizResponse(raw_text, unquizzed_news);
+		return parseNewsQuizResponse(gemini_response, unquizzed_news);
 
 	}
 
-	// Gemini response 변환
-	private NewsQuiz parseNewsQuizResponse(String raw_text, News unquizzed_news) {
+	// Gemini response 변환(뉴스 퀴즈)
+	private NewsQuiz parseNewsQuizResponse(String gemini_response, News unquizzed_news) {
 
-		String text = raw_text.replace("\r\n", "\n").trim();
+		String text = gemini_response.replace("\r\n", "\n").trim();
 		
 		// 지문
 		String question_line = extractQuestionLine(text)
@@ -280,7 +284,6 @@ public class GeminiService {
 		
 		// NewsQuiz 엔티티 생성
 		NewsQuiz generated_news_quiz = new NewsQuiz();
-		generated_news_quiz.setNews(unquizzed_news);
 		generated_news_quiz.setQuestion_text(question_line);
 		generated_news_quiz.setChoice1(choice_list.get(0));
 		generated_news_quiz.setChoice2(choice_list.get(1));
@@ -289,6 +292,7 @@ public class GeminiService {
 		generated_news_quiz.setCorrect_answer_index(correct_answer_index);
 		generated_news_quiz.setExplanation(explanation);
 		generated_news_quiz.setScore(score);
+		generated_news_quiz.setNews_no(unquizzed_news.getNews_no());
 		
 		return generated_news_quiz;
 	
@@ -304,7 +308,7 @@ public class GeminiService {
 
 	}
 
-	// 뉴스 퀴즈 프롬프트 생성
+	// 뉴스 문제 프롬프트 생성
 	private String buildNewsQuizPrompt(String content, String language, String level) {
 		
 		return switch(language) {
@@ -356,6 +360,105 @@ public class GeminiService {
 			""".formatted(level) + "\n" + content;
 			
 		};
+	
+	}
+
+	// 문학 문제 생성
+	public LiteratureQuiz generateCreativeLiteratureQuiz(LiteratureParagraph literature_paragraph) {
+		
+		// 문학 문제 프롬프트 생성
+		String literature_quiz_prompt = buildLiteratureQuizPrompt(literature_paragraph.getContent(), literature_paragraph.getLevel(), literature_paragraph.getLiterature().getType());
+		
+		// Gemini API 요청
+		String gemini_response = callGeminiApi(literature_quiz_prompt);
+		
+		// 변환 후 반환
+		return parseLiteratureQuizResponse(gemini_response, literature_paragraph);
+		
+	}
+
+	// Gemini response 변환(문학 퀴즈)
+	private LiteratureQuiz parseLiteratureQuizResponse(String gemini_response, LiteratureParagraph literature_paragraph) {
+	
+		String text = gemini_response.replace("\r\n", "\n").trim();
+		
+		// 지문
+		String question_line = extractQuestionLine(text)
+				.map(line -> line.replaceAll("(?i)(문제|問題|question|Q)[\\s:：\\-]*", "").trim())
+				.orElseThrow(() -> new GeminiException(MessageCode.NEWS_QUIZ_LINE_MISSING));
+		
+		List<String> choice_list = new ArrayList<>();
+		
+		// 선택지
+		Matcher option_matcher = Pattern.compile("(?m)^([A-Da-d]|[①-④]|\\d+)[.\\)]\\s*(.+)$").matcher(text);
+		while(option_matcher.find()) {
+			
+			choice_list.add(option_matcher.group(2).trim());
+			
+		}
+		if(choice_list.size() < 4) {
+			
+			throw new GeminiException(MessageCode.NEWS_QUIZ_OPTION_MISSING);
+			
+		}
+		
+		// 정답
+		Matcher answer_matcher = Pattern.compile("(?i)(정답|Answer|正解):\\s*\\[?([A-D])\\]?", Pattern.CASE_INSENSITIVE).matcher(text);
+		if(!answer_matcher.find()) {
+			
+			throw new GeminiException(MessageCode.NEWS_QUIZ_ANSWER_MISSING);
+			
+		}
+		int correct_answer_index = "ABCD".indexOf(answer_matcher.group(2).toUpperCase());
+		
+		// 해설
+		Matcher explanation_matcher = Pattern.compile("(?i)(해설|Explanation|解説):\\s*(.+)", Pattern.CASE_INSENSITIVE).matcher(text);
+		String explanation = explanation_matcher.find() ? explanation_matcher.group(2).trim() : "";
+		
+		// 점수
+		double score = switch(literature_paragraph.getLevel()) {
+		
+			case "BEGINNER" -> 2.5;
+			
+			case "ADVANCED" -> 7.5;
+			
+			default -> 5.0;
+		
+		};
+		
+		LiteratureQuiz literature_quiz = new LiteratureQuiz();
+		literature_quiz.setQuestion_text(question_line);
+		literature_quiz.setChoice1(choice_list.get(0));
+		literature_quiz.setChoice2(choice_list.get(1));
+		literature_quiz.setChoice3(choice_list.get(2));
+		literature_quiz.setChoice4(choice_list.get(3));
+		literature_quiz.setCorrect_answer_index(correct_answer_index);
+		literature_quiz.setExplanation(explanation);
+		literature_quiz.setScore(score);
+		literature_quiz.setLiterature_paragraph_no(literature_paragraph.getLiterature_paragraph_id().getLiterature_paragraph_no());
+		literature_quiz.setLiterature_no(literature_paragraph.getLiterature_paragraph_id().getLiterature_no());
+	
+		return literature_quiz;
+		
+	}
+
+	// 문학 문제 프롬프트 생성
+	private String buildLiteratureQuizPrompt(String content, String level, String type) {
+
+		return """
+				아래 문학 작품 단락을 바탕으로 %s 난이도의 독해 퀴즈를 1개 만들어주세요.
+                기사나 보도 형식이 아닌 문학 작품으로서 접근해주세요. 다음 형식을 반드시 지켜주세요:
+
+                문제: <질문>
+                A. 보기 A
+                B. 보기 B
+                C. 보기 C
+                D. 보기 D
+                정답: <A-D>
+                해설: <간단한 설명>
+
+                단락:
+		""".formatted(level) + "\n" + content;
 	
 	}
 	

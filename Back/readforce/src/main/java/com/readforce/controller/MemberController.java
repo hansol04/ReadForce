@@ -32,6 +32,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.readforce.dto.MemberDto;
 import com.readforce.dto.MemberDto.GetMemberObject;
+import com.readforce.dto.MemberDto.MemberAttemptedQuiz;
+import com.readforce.dto.MemberDto.MemberIncorrectQuiz;
+import com.readforce.dto.MemberDto.UpdatePoint;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.Name;
 import com.readforce.exception.AuthenticationException;
@@ -39,6 +42,8 @@ import com.readforce.service.AttendanceService;
 import com.readforce.service.AuthService;
 import com.readforce.service.FileService;
 import com.readforce.service.MemberService;
+import com.readforce.service.PointService;
+import com.readforce.service.QuizService;
 import com.readforce.util.JwtUtil;
 
 import jakarta.validation.Valid;
@@ -63,6 +68,8 @@ public class MemberController {
 	private final FileService file_service;
 	private final AttendanceService attendance_service;
 	private final PasswordEncoder password_encoder;
+	private final QuizService quiz_service;
+	private final PointService point_service;
 	
 	@Value("${custom.fronted.kakao-logout-url}")
 	private String custom_fronted_kakao_logout_url;
@@ -164,15 +171,18 @@ public class MemberController {
     ){
     	
     	member_service.nicknameCheck(nickname);
+    	
     	return ResponseEntity.status(HttpStatus.OK).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.NICKNAME_CAN_USE));
     	
     }
     
-    // 회원 가입
+    // 일반 회원 가입
     @PostMapping("/sign-up")
     public ResponseEntity<Map<String, String>> signUp(@Valid @RequestBody MemberDto.SignUp sign_up){
     	
+    	// 일반 회원 가입
     	member_service.signUp(sign_up);
+    	
     	return ResponseEntity.status(HttpStatus.OK).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.SIGN_UP_SUCCESS));
 
     }
@@ -330,7 +340,52 @@ public class MemberController {
 		return ResponseEntity.status(HttpStatus.OK).body(getAttendanceDateList);
 	}
 	
-	// 
+	// 사용자가 푼 최근 문제 10개 가져오기
+	@GetMapping("/get-member-solved-quiz-list-10")
+	public ResponseEntity<List<MemberAttemptedQuiz>> getMemberSolvedQuizList10(@AuthenticationPrincipal UserDetails user_details){
+		
+		String email = user_details.getUsername();
+		
+		// 사용자가 푼 최근 문제 10개 가져오기
+		List<MemberAttemptedQuiz> member_attempted_quiz_list = quiz_service.getMemberSolvedQuizList10(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(member_attempted_quiz_list);
+		
+	}
+	
+	// 틀린 문제 가져오기(최신순)
+	@GetMapping("/get-member-incorrect-quiz-list")
+	public ResponseEntity<List<MemberIncorrectQuiz>> getMemberIncorrectQuizList(@AuthenticationPrincipal UserDetails user_details){
+		
+		String email = user_details.getUsername();
+		
+		// 틀린 문제 가져오기
+		List<MemberIncorrectQuiz> member_uncorrect_quiz_list = quiz_service.getMemberIncorrectQuizList(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(member_uncorrect_quiz_list);
+		
+		
+	}
+	
+	// 점수 수정하기
+	@PatchMapping("/update-point")
+	public ResponseEntity<Map<String, String>> updatePoint(
+			@Valid
+			@RequestBody UpdatePoint update_point,
+			@AuthenticationPrincipal UserDetails user_details
+	){
+		
+		String email = user_details.getUsername();
+		
+		// 점수 수정
+		point_service.updatePoint(email, update_point);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.UPDATE_POINT_SUCCESS
+		));
+		
+		
+	}
 	
 	
 	

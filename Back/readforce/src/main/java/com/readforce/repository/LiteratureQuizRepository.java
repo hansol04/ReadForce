@@ -1,6 +1,9 @@
 package com.readforce.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -14,5 +17,18 @@ public interface LiteratureQuizRepository extends JpaRepository<LiteratureQuiz, 
 	LiteratureQuiz findByLiteratureParagraphNoAndLiteratureNo(
 			@Param("literature_paragraph_no") Long literature_paragraph_no, 
 			@Param("literature_no") Long literature_no);
+
+	@Query("SELECT lq.literature_quiz_no FROM LiteratureQuiz lq JOIN lq.literature_paragraph lp WHERE lp.level = :level")
+	List<Long> findLiteratureQuizNoByLevel(
+			@Param("level") String level
+	);
+
+	@Modifying
+	@Query(value = "DELETE FROM literature_quiz WHERE literature_paragraph_no = :literature_paragraph_no AND literature_no = :literature_no", nativeQuery = true)
+	void deleteByLiteratureParagraphNoAndLiteratureNo(
+			@Param("literature_paragraph_no") Long literature_paragraph_no, 
+			@Param("literature_no") Long literature_no
+	);
+
 
 }

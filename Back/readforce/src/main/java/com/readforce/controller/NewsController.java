@@ -5,9 +5,12 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.readforce.dto.NewsDto.GetNews;
 import com.readforce.dto.NewsDto.GetNewsQuiz;
 import com.readforce.dto.NewsDto.SaveMemberSolvedNewsQuiz;
+import com.readforce.enums.Level;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.NewsRelate;
 import com.readforce.service.NewsService;
@@ -62,7 +66,7 @@ public class NewsController {
 			String language,
 			@RequestParam("level")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_LEVEL_NOT_BLANK)
-			@ValidEnum(enumClass = NewsRelate.Level.class, message = MessageCode.NEWS_ARTICLE_LEVEL_PATTERN_INVALID)
+			@ValidEnum(enumClass = Level.class, message = MessageCode.NEWS_ARTICLE_LEVEL_PATTERN_INVALID)
 			String level,
 			@RequestParam("order_by")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_ORDER_BY_NOT_BLANK)
@@ -86,7 +90,7 @@ public class NewsController {
 			String language,
 			@RequestParam("level")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_LEVEL_NOT_BLANK)
-			@ValidEnum(enumClass = NewsRelate.Level.class, message = MessageCode.NEWS_ARTICLE_LEVEL_PATTERN_INVALID)
+			@ValidEnum(enumClass = Level.class, message = MessageCode.NEWS_ARTICLE_LEVEL_PATTERN_INVALID)
 			String level,
 			@RequestParam("category")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_CATEGORY_NOT_BLANK)
@@ -123,14 +127,24 @@ public class NewsController {
 	
 	// 사용자가 풀은 뉴스 기사 문제 저장하기
 	@PostMapping("/save-member-solved-news-quiz")
-	public ResponseEntity<Map<String, String>> saveMemberSolvedNewsQuiz(@Valid SaveMemberSolvedNewsQuiz save_member_solved_news_quiz){
+	public ResponseEntity<Map<String, String>> saveMemberSolvedNewsQuiz(
+			@Valid @RequestBody SaveMemberSolvedNewsQuiz save_member_solved_news_quiz,
+			@AuthenticationPrincipal UserDetails user_details
+	){
+		
+		String email = user_details.getUsername();
 		
 		// 뉴스 기사 문제 저장
-		news_service.saveMemberSolvedNewsQuiz(save_member_solved_news_quiz);
+		news_service.saveMemberSolvedNewsQuiz(save_member_solved_news_quiz, email);
 		
-		return null;
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.SAVE_MEMBER_SOLVED_NEWS_QUIZ));
 		
 	}
+	
+	// 사용자가 풀은 뉴스 기사 문제 삭제하기
+	
+	
+	
 	
 	
 }

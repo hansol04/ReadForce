@@ -14,14 +14,15 @@ import com.readforce.dto.NewsDto.SaveMemberSolvedNewsQuiz;
 import com.readforce.entity.News;
 import com.readforce.entity.NewsQuiz;
 import com.readforce.entity.NewsQuizAttempt;
+import com.readforce.enums.Level;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.NewsRelate;
 import com.readforce.exception.ResourceNotFoundException;
+import com.readforce.id.NewsQuizAttemptId;
 import com.readforce.repository.NewsQuizAttemptRepository;
 import com.readforce.repository.NewsQuizRepository;
 import com.readforce.repository.NewsRepository;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -260,7 +261,7 @@ public class NewsService {
 
 		for(NewsRelate.Language language : NewsRelate.Language.values()) {
 
-			for(NewsRelate.Level level : NewsRelate.Level.values()) {
+			for(Level level : Level.values()) {
 
 				for(NewsRelate.Category category : NewsRelate.Category.values()) {
 
@@ -301,10 +302,11 @@ public class NewsService {
 
 	}
 
-	// 뉴스 퀴즈 생성(뉴스에 해당하는 문제가 없을 시 생성)
+	// 뉴스 문제 생성(뉴스에 해당하는 문제가 없을 시 생성)
+	@Transactional
 	public void generateCreativeNewsQuizByGemini() {
 
-		log.info("Gemini 뉴스 퀴즈 생성 시작");
+		log.info("Gemini 뉴스 문제 생성 시작");
 
 		List<News> unquizzed_news_list = news_repository.findUnquizzedNews();
 		
@@ -314,7 +316,7 @@ public class NewsService {
 			
 			try {
 				
-				log.info("뉴스 퀴즈 생성 시도: {}", unquizzed_news.getTitle());
+				log.info("뉴스 문제 생성 시도: {}", unquizzed_news.getTitle());
 				Thread.sleep(9000);
 				
 				NewsQuiz generated_news_quiz = gemini_service.generateCreativeNewsQuiz(unquizzed_news);
@@ -322,25 +324,25 @@ public class NewsService {
 				// DB 저장
 				news_quiz_repository.save(generated_news_quiz);
 				
-				log.info("뉴스 퀴즈 저장 완료: {}", generated_news_quiz.getQuestion_text());
+				log.info("뉴스 문제 저장 완료: {}", generated_news_quiz.getQuestion_text());
 				
 				count++;
 				
 			} catch(Exception exception) {
 				
-				log.warn("뉴스 퀴즈 생성 실패: {}", exception.getMessage());
+				log.warn("뉴스 문제 생성 실패: {}", exception.getMessage());
 				
 			}
 			
 		}
 		
-		log.info("최종 퀴즈 생성 갯수: {}", count);
+		log.info("최종 뉴스 문제 생성 갯수: {}", count);
 
 	}
 
 	// 사용자가 푼 뉴스 문제 저장
 	@Transactional
-	public void saveMemberSolvedNewsQuiz(@Valid SaveMemberSolvedNewsQuiz save_member_solved_news_quiz) {
+	public void saveMemberSolvedNewsQuiz(SaveMemberSolvedNewsQuiz save_member_solved_news_quiz, String email) {
 		
 		// 사용자가 정답을 입력했는지 확인
 		NewsQuiz news_quiz = news_quiz_repository.findById(save_member_solved_news_quiz.getNews_quiz_no())
@@ -354,21 +356,20 @@ public class NewsService {
 			
 		}
 		
+		// 복합키 생성
+		NewsQuizAttemptId news_quiz_attempt_id = new NewsQuizAttemptId();
+		news_quiz_attempt_id.setEmail(email);
+		news_quiz_attempt_id.setNews_quiz_no(save_member_solved_news_quiz.getNews_quiz_no());
+		
 		// 사용자가 푼 뉴스 문제 엔티티 생성
 		NewsQuizAttempt news_quiz_attempt = new NewsQuizAttempt();
-
+		news_quiz_attempt.setNews_quiz_attempt_id(news_quiz_attempt_id);
+		news_quiz_attempt.setIs_correct(is_correct);
+		news_quiz_attempt.setSelected_option_index(save_member_solved_news_quiz.getSelected_option_index());
+		
+		news_quiz_attempt_repository.save(news_quiz_attempt);
 		
 	}
-
-
-
-
-
-
-
-
-
-
 
 
 

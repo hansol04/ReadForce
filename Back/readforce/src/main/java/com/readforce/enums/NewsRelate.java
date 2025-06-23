@@ -8,14 +8,7 @@ public enum NewsRelate {
 		
 		KOREAN, JAPANESE, ENGLISH
 		
-	}
-	
-	public static enum Level{
-		
-		BEGINNER, INTERMEDIATE, ADVANCED
-		
-	}
-	
+	}	
 	
 	public static enum Category{
 		
