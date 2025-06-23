@@ -22,10 +22,10 @@ public interface MemberRepository extends JpaRepository<Member, String>{
 			@Param("social_provider_id") String social_provider_id
 	);
 
-	@Query(value = "SELECT * FROM member WHERE status = :status AND withdraw_date < :thirthy_days_ago", nativeQuery = true)
+	@Query(value = "SELECT * FROM member WHERE status = :status AND withdraw_date < :thirty_days_ago", nativeQuery = true)
 	List<Member> findAllByStatusAndWithdrawDateBefore(
 			@Param("status") Status status, 
-			@Param("thirthy_days_ago") LocalDateTime thirthy_days_ago
+			@Param("thirty_days_ago") LocalDateTime thirty_days_ago
 	);
 
 	Optional<Member> findByEmail(String email);
@@ -33,9 +33,6 @@ public interface MemberRepository extends JpaRepository<Member, String>{
 	Optional<Member> findByNickname(String nickname);
 
 	Optional<Member> findByEmailAndStatus(String email, Status active);
-
-	@Query(value = "SELECT * FROM member", nativeQuery = true)
-	List<Member> getAllMemberList();
 
 	
 }

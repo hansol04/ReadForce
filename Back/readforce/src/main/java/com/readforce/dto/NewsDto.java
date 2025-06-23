@@ -1,5 +1,7 @@
 package com.readforce.dto;
 
+import java.time.LocalDateTime;
+
 import com.readforce.enums.MessageCode;
 
 import jakarta.validation.constraints.NotNull;
@@ -81,6 +83,72 @@ public class NewsDto {
 		private GetNews get_news;
 		
 		private GetNewsQuiz get_news_quiz;
+		
+	}
+	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class MemberSolvedNewsQuiz{
+
+		private Long news_quiz_no;
+		
+		private Boolean is_correct;
+
+		private Integer selected_option_index;
+		
+	}
+	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class NewsByAdmin{
+
+		private Long news_no;
+
+		private String language;
+
+		private String category;
+
+		private String level;
+
+		private String title;
+
+		private String content;
+
+		private LocalDateTime created_date;
+		
+	}
+	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class NewsQuizByAdmin{
+
+		private Long news_quiz_no;
+
+		private String question_text;
+
+		private String choice1;
+
+		private String choice2;
+
+		private String choice3;
+
+		private String choice4;
+
+		private Integer correct_answer_index;
+
+		private String explanation;
+
+		private Double score;
+
+		private LocalDateTime created_date;
+
+		private Long news_no;
 		
 	}
 	

@@ -4,7 +4,6 @@ package com.readforce.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +21,7 @@ import com.readforce.dto.MemberDto.GetMemberObject;
 import com.readforce.dto.OAuthAttributesDto;
 import com.readforce.entity.Member;
 import com.readforce.entity.NeedAdminCheckFailedDeletionLog;
+import com.readforce.entity.Point;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.Prefix;
 import com.readforce.enums.Status;
@@ -29,8 +29,12 @@ import com.readforce.exception.AuthenticationException;
 import com.readforce.exception.DuplicateException;
 import com.readforce.exception.JsonException;
 import com.readforce.exception.ResourceNotFoundException;
+import com.readforce.repository.AttendanceRepository;
+import com.readforce.repository.LiteratureQuizAttemptRepository;
 import com.readforce.repository.MemberRepository;
 import com.readforce.repository.NeedAdminCheckFailedDeletionLogRepository;
+import com.readforce.repository.NewsQuizAttemptRepository;
+import com.readforce.repository.PointRepository;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +51,11 @@ public class MemberService{
 	private final StringRedisTemplate redis_template;
 	private final FileService file_service;
 	private final NeedAdminCheckFailedDeletionLogRepository need_admin_check_failed_deletion_log_repository;
-
+	private final PointRepository point_repository;
+	private final AttendanceRepository attendance_repository;
+	private final NewsQuizAttemptRepository news_quiz_attempt_repository;
+	private final LiteratureQuizAttemptRepository literature_quiz_attempt_repository;
+	
 	@Value("${file.image.profile.upload-dir}")
 	private String profile_image_upload_dir;
 
@@ -107,6 +115,8 @@ public class MemberService{
 		// 파일 삭제 시도 후 실패시 로그만 생성
 		for(Member member : pending_deletion_member_list) {
 			
+			String email = member.getEmail();
+			
 			// 프로필 이미지가 비어있으면 성공 리스트에 추가
 			if(member.getProfile_image_url() == null || member.getProfile_image_url().isEmpty()) {
 				continue;
@@ -116,6 +126,18 @@ public class MemberService{
 				
 				// 파일 삭제 시도
 				file_service.deleteFile(member.getProfile_image_url(), profile_image_upload_dir);
+				
+				// 출석 삭제
+				attendance_repository.deletebyEmail(email);
+				
+				// 점수 삭제
+				point_repository.deleteByEmail(email);
+				
+				// 뉴스 문제 풀이 기록 삭제
+				news_quiz_attempt_repository.deleteByEmail(email);
+				
+				// 문학 문제 풀이 기록 삭제
+				literature_quiz_attempt_repository.deleteByEmail(email);
 				
 			} catch(Exception exception) {
 				
@@ -138,7 +160,7 @@ public class MemberService{
 	}
 	
 
-	// 회원 가입
+	// 일반 회원 가입
 	@Transactional
 	public void signUp(MemberDto.SignUp sign_up) {
 		
@@ -164,6 +186,12 @@ public class MemberService{
 		member.setBirthday(sign_up.getBirthday());
 		
 		member_repository.save(member);
+		
+		// 점수 테이블 생성
+		Point point = new Point();
+		point.setEmail(sign_up.getEmail());
+		
+		point_repository.save(point);
 		
 		// 토큰 삭제
 		redis_template.delete(Prefix.COMPLETE_EMAIL_VERIFY + sign_up.getEmail());
@@ -300,6 +328,12 @@ public class MemberService{
 		// 새로운 회원 추가
 		member_repository.save(new_member);
 		
+		// 점수 테이블 생성
+		Point point = new Point();
+		point.setEmail(email);
+		
+		point_repository.save(point);
+		
 		// 토큰 삭제
 		redis_template.delete(Prefix.SOCIAL_SIGN_UP.getName() + social_sign_up.getTemporal_token());
 		
@@ -347,46 +381,6 @@ public class MemberService{
 		
 	}
 
-	// 관리자 - 모든 회원 조회
-	@Transactional(readOnly = true)
-	public List<GetMemberObject> getAllMemberList() {
-		
-		List<Member> member_list = member_repository.getAllMemberList();
-		
-		if(member_list.isEmpty()) {
-			
-			throw new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND);
-			
-		}
-		
-		List<GetMemberObject> get_member_list = new ArrayList<>();
-		
-		for(Member member : member_list) {
-			
-			GetMemberObject get_member_object = new GetMemberObject();
-			get_member_object.setBirthday(member.getBirthday());
-			get_member_object.setEmail(member.getEmail());
-			get_member_object.setNickname(member.getNickname());
-			get_member_object.setProvider(member.getSocial_provider());
-			
-			get_member_list.add(get_member_object);
-			
-		}
-		
-		
-		return get_member_list;
-	}
-
-	// 관리자 - 계정 활성화
-	@Transactional
-	public void activateMember(String email) {
-		
-		Member member = member_repository.findByEmailAndStatus(email, Status.PENDING_DELETION)
-				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.WITHDRAW_NOT_FOUND));
-		
-		member.setStatus(Status.ACTIVE);
-		
-	}
 	
 	
 	

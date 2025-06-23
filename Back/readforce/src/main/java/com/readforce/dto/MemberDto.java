@@ -1,11 +1,15 @@
 package com.readforce.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.readforce.enums.MessageCode;
+import com.readforce.enums.Role;
+import com.readforce.enums.Status;
 import com.readforce.validation.ValidBirthday;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -84,7 +88,7 @@ public class MemberDto {
 		private LocalDate birthday;
 		
 	}
-	
+
 	// 비밀번호 재설정(링크)
 	@Getter
 	@Setter
@@ -95,7 +99,7 @@ public class MemberDto {
 		@NotBlank(message = MessageCode.TOKEN_NOT_BLANK)
 		private String temporal_token;
 		
-		@NotBlank(message = MessageCode.BIRTHDAY_NOT_NULL)
+		@NotNull(message = MessageCode.BIRTHDAY_NOT_NULL)
 		@ValidBirthday
 		private LocalDate birthday;
 		
@@ -172,8 +176,150 @@ public class MemberDto {
 		
 	}
 	
-	
+	// 사용자가 푼 문제 가져오기
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class MemberAttemptedQuiz{
+		
+		private String question_text;
+		
+		private LocalDateTime created_date;
+		
+		private String classification;
+		
+	}
 
+	// 사용자가 푼 문제 중 틀린문제 가져오기
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class MemberIncorrectQuiz{
+		
+		private String question_text;
+		
+		private String classification;
+		
+		private Long quiz_no;
+		
+		private LocalDateTime created_date;
+		
+	}
+	
+	// 관리자 - 회원 정보 불러오기
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class MemberObjectByAdmin{
+		
+		private String email;
+
+		private String nickname;
+
+		private LocalDate birthday;
+
+		private String profile_image_url;
+
+		private LocalDateTime create_date;
+
+		private LocalDateTime last_modified_date;
+
+		private LocalDateTime withdraw_date;
+
+		private Status status;
+
+		private Role role;
+
+		private String social_provider;
+
+		private String social_provider_id;
+
+	}
+	
+	// 관리자 - 회원 정보 수정
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class ModifyByAdmin{
+		
+		@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+		@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+		private String email;
+
+		@Size(min = 2, max = 12, message = MessageCode.NICKNAME_SIZE_INVALID)
+		@Pattern(regexp = "^[a-zA-Z가-힣\\d]{2,20}$", message = MessageCode.NICKNAME_PATTERN_INVALID)
+		private String nickname;
+
+		@ValidBirthday
+		private LocalDate birthday;
+
+		private Status status;
+		
+		private Role role;
+		
+	}
+	
+	// 관리자 - 회원 가입
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class SignUpByAdmin{
+		
+		@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+		@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+		private String email;
+		
+		@NotBlank(message = MessageCode.PASSWORD_NOT_BLANK)
+		@Size(min = 8, max = 20, message = MessageCode.PASSWORD_SIZE_INVALID)
+		@Pattern(
+		        regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()-_=+]).*$"
+		        , message = MessageCode.PASSWORD_PATTERN_INVALID
+		)
+		private String password;
+		
+		@NotBlank(message = MessageCode.NICKNAME_NOT_BLANK)
+		@Size(min = 2, max = 12, message = MessageCode.NICKNAME_SIZE_INVALID)
+		@Pattern(regexp = "^[a-zA-Z가-힣\\d]{2,20}$", message = MessageCode.NICKNAME_PATTERN_INVALID)
+		private String nickname;
+		
+		@NotNull(message = MessageCode.BIRTHDAY_NOT_NULL)
+		@ValidBirthday
+		private LocalDate birthday;
+		
+		private Role role;
+		
+	}
+	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class UpdatePoint{
+		
+		@Min(value = 0, message = MessageCode.TOTAL_POINT_MUST_BE_POSITIVE_NUMBER)
+		private Long total = 0L;
+
+		@Min(value = 0, message = MessageCode.KOREAN_NEWS_POINT_MUST_BE_POSITIVE_NUMBER)
+		private Long korean_news = 0L;
+
+		@Min(value = 0, message = MessageCode.ENGILISH_NEWS_POINT_MUST_BE_POSITIVE_NUMBER)
+		private Long english_news = 0L;
+
+		@Min(value = 0, message = MessageCode.JAPANESE_NEWS_POINT_MUST_BE_POSITIVE_NUMBER)
+		private Long japanese_news = 0L;
+
+		@Min(value = 0, message = MessageCode.NOVEL_POINT_MUST_BE_POSITIVE_NUMBER)
+		private Long novel = 0L;
+
+		@Min(value = 0, message = MessageCode.FAIRYTALE_POINT_MUST_BE_POSITIVE_NUMBER)
+		private Long fairytale = 0L;
+		
+	}
 	
 	
 }

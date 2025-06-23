@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.readforce.enums.MessageCode;
 import com.readforce.exception.AuthenticationException;
+import com.readforce.exception.ChallengeException;
 import com.readforce.exception.DuplicateException;
 import com.readforce.exception.FileException;
 import com.readforce.exception.GeminiException;
 import com.readforce.exception.InvalidJwtSecretKeyException;
 import com.readforce.exception.JsonException;
+import com.readforce.exception.ValueException;
 import com.readforce.exception.NewsException;
 import com.readforce.exception.NotMatchException;
 import com.readforce.exception.RateLimitExceededException;
@@ -38,6 +40,24 @@ public class GlobalExceptionHandler {
     	log.error("JwtException occurred : {}", exception.getMessage(), exception);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
     
+    }
+    
+    // 도전 관련 에러
+    @ExceptionHandler(ChallengeException.class)
+    public ResponseEntity<Map<String, String>> handleChallengeException(ChallengeException exception){
+    	
+    	log.error("ChallengeException occurred : {}", exception.getMessage(), exception);
+    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
+    	
+    }
+    
+    // 값 입력 에러
+    @ExceptionHandler(ValueException.class)
+    public ResponseEntity<Map<String, String>> ValueException(ValueException exception){
+    	
+    	log.error("MissingValueException occured : {}", exception.getMessage(), exception);
+    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
+    	
     }
     
     // Gemini 관련 에러
@@ -102,9 +122,7 @@ public class GlobalExceptionHandler {
     	return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.DATA_INTEGRITY_VIOLATION));
     	
     }
-    
-    
-    
+
 	// 유효성 검사 에러
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException exception){
@@ -177,4 +195,5 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
 		
 	}
+	
 }
