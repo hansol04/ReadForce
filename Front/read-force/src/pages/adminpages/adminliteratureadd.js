@@ -44,11 +44,8 @@ const AdminLiteratureAdd = () => {
           onChange={(e) => setType(e.target.value)}
           style={{ padding: "8px" }}
         >
-          <option value="MYSTERY">미스터리</option>
-          <option value="HISTORY">역사</option>
-          <option value="CLASSIC">고전문학</option>
-          <option value="MODERN">현대문학</option>
-          <option value="CHILDREN">영유아</option>
+          <option value="NOVEL">소설</option>
+          <option value="FAIRYTALE">동화</option>
         </select>
       </div>
       <div style={{ marginTop: "20px" }}>

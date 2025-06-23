@@ -88,7 +88,7 @@ public class LiteratureDto {
 		private String title;
 		
 		@NotBlank(message = MessageCode.LITERATURE_TYPE_NOT_BLANK)
-		@ValidEnum(enumClass = LiteratureRelate.class, message = MessageCode.LITERATURE_TYPE_PATTERN_INVALID)
+		@ValidEnum(enumClass = LiteratureRelate.type.class, message = MessageCode.LITERATURE_TYPE_PATTERN_INVALID)
 		private String type;
 
 	}
