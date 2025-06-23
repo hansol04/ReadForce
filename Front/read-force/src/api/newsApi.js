@@ -1,4 +1,5 @@
 import api from './axiosInstance';
+import debounce from 'lodash/debounce';
 
 // ENUM 변환 매핑
 const levelMap = {
@@ -39,6 +40,8 @@ export const fetchNewsListByLanguage = async ({ language, order_by }) => {
   }
 };
 
+export const debouncedFetchNewsListByLanguage = debounce(fetchNewsListByLanguage, 300);
+
 // 2. 언어 + 난이도
 export const fetchNewsListByLanguageAndLevel = async ({ language, level, order_by }) => {
   try {
@@ -55,6 +58,8 @@ export const fetchNewsListByLanguageAndLevel = async ({ language, level, order_b
     return [];
   }
 };
+
+export const debouncedFetchNewsListByLanguageAndLevel = debounce(fetchNewsListByLanguageAndLevel, 300);
 
 // 3. 언어 + 난이도 + 카테고리
 export const fetchNewsListByLanguageAndLevelAndCategory = async ({ language, level, category, order_by }) => {
@@ -73,3 +78,5 @@ export const fetchNewsListByLanguageAndLevelAndCategory = async ({ language, lev
     return [];
   }
 };
+
+export const debouncedFetchNewsListByLanguageAndLevelAndCategory = debounce(fetchNewsListByLanguageAndLevelAndCategory, 300);

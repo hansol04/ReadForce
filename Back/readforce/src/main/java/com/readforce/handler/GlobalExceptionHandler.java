@@ -23,6 +23,7 @@ import com.readforce.exception.JsonException;
 import com.readforce.exception.ValueException;
 import com.readforce.exception.NewsException;
 import com.readforce.exception.NotMatchException;
+import com.readforce.exception.RankingException;
 import com.readforce.exception.RateLimitExceededException;
 import com.readforce.exception.ResourceNotFoundException;
 
@@ -40,6 +41,15 @@ public class GlobalExceptionHandler {
     	log.error("JwtException occurred : {}", exception.getMessage(), exception);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
     
+    }
+    
+    // 랭킹 관련 에러
+    @ExceptionHandler(RankingException.class)
+    public ResponseEntity<Map<String, String>> handleRankingException(RankingException exception){
+    	
+    	log.error("RankingException occurred : {}", exception.getMessage(), exception);
+    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MessageCode.MESSAGE_CODE, exception.getMessage()));
+    	
     }
     
     // 도전 관련 에러

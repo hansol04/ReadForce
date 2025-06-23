@@ -12,26 +12,43 @@ import com.readforce.dto.LiteratureDto.GetLiteratureParagraphByAdmin;
 import com.readforce.dto.LiteratureDto.GetLiteratureQuizByAdmin;
 import com.readforce.dto.LiteratureDto.LiteratureByAdmin;
 import com.readforce.dto.LiteratureDto.LiteratureParagraphByAdmin;
+import com.readforce.dto.MemberDto.GetAttendance;
 import com.readforce.dto.MemberDto.MemberObjectByAdmin;
 import com.readforce.dto.MemberDto.ModifyByAdmin;
 import com.readforce.dto.MemberDto.SignUpByAdmin;
+import com.readforce.dto.NewsDto.AddLiteratureQuizAttempt;
+import com.readforce.dto.NewsDto.AddNewsQuizAttempt;
+import com.readforce.dto.NewsDto.GetLiteratureQuizAttemptListByEmail;
+import com.readforce.dto.NewsDto.GetNewsQuizAttemptByEmail;
 import com.readforce.dto.NewsDto.NewsByAdmin;
 import com.readforce.dto.NewsDto.NewsQuizByAdmin;
+import com.readforce.dto.PointDto;
+import com.readforce.dto.PointDto.GetPoint;
+import com.readforce.entity.Attendance;
 import com.readforce.entity.Literature;
 import com.readforce.entity.LiteratureParagraph;
 import com.readforce.entity.LiteratureQuiz;
+import com.readforce.entity.LiteratureQuizAttempt;
 import com.readforce.entity.Member;
 import com.readforce.entity.News;
 import com.readforce.entity.NewsQuiz;
+import com.readforce.entity.NewsQuizAttempt;
+import com.readforce.entity.Point;
 import com.readforce.enums.MessageCode;
 import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.id.LiteratureParagraphId;
+import com.readforce.id.LiteratureQuizAttemptId;
+import com.readforce.id.NewsQuizAttemptId;
+import com.readforce.repository.AttendanceRepository;
 import com.readforce.repository.LiteratureParagraphRepository;
+import com.readforce.repository.LiteratureQuizAttemptRepository;
 import com.readforce.repository.LiteratureQuizRepository;
 import com.readforce.repository.LiteratureRepository;
 import com.readforce.repository.MemberRepository;
+import com.readforce.repository.NewsQuizAttemptRepository;
 import com.readforce.repository.NewsQuizRepository;
 import com.readforce.repository.NewsRepository;
+import com.readforce.repository.PointRepository;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -47,13 +64,17 @@ public class AdminService {
 	private final LiteratureRepository literature_repository;
 	private final LiteratureParagraphRepository literature_paragraph_repository;
 	private final LiteratureQuizRepository literature_quiz_repository;
+	private final NewsQuizAttemptRepository news_quiz_attempt_repository;
+	private final LiteratureQuizAttemptRepository literature_quiz_attempt_repository;
+	private final AttendanceRepository attendance_repository;
+	private final PointRepository point_repository;
 
-	// 전체 회원 정보 불러오기
+	// 전체 회원 정보 불러오기(최신순)
 	@Transactional(readOnly = true)
 	public List<MemberObjectByAdmin> getAllMemberList() {
 
 		// 모든 회원 정보 조회
-		List<Member> all_member_list = member_repository.findAll();
+		List<Member> all_member_list = member_repository.findAllOrderByCreatedDateDesc();
 		
 		if(all_member_list.isEmpty()) {
 			
@@ -124,9 +145,17 @@ public class AdminService {
 		
 	}
 	
+	// 회원 삭제
+	@Transactional
+	public void deleteMemberByEmail(String email) {
+		
+		member_repository.deleteByEmail(email);
+		
+	}
+
 	// 회원 가입
 	@Transactional
-	public void addMember(@Valid SignUpByAdmin sign_up_by_admin) {
+	public void addMember(SignUpByAdmin sign_up_by_admin) {
 		
 		Member member = new Member();
 		member.setEmail(sign_up_by_admin.getEmail());
@@ -139,11 +168,11 @@ public class AdminService {
 		
 	}
 
-	// 전체 뉴스 가져오기
+	// 전체 뉴스 가져오기(뉴스 번호순)
 	@Transactional(readOnly = true)
 	public List<NewsByAdmin> getAllNewsList() {
 		
-		List<News> news_list = news_repository.findAll();
+		List<News> news_list = news_repository.findAllOrderBy();
 		
 		if(news_list.isEmpty()) {
 			
@@ -197,7 +226,7 @@ public class AdminService {
 	@Transactional(readOnly = true)
 	public List<NewsQuizByAdmin> getAllNewsQuizList() {
 
-		List<NewsQuiz> news_quiz_list = news_quiz_repository.findAll();
+		List<NewsQuiz> news_quiz_list = news_quiz_repository.findAllOrderByNewsQuizNoDesc();
 		
 		if(news_quiz_list.isEmpty()) {
 			
@@ -242,11 +271,11 @@ public class AdminService {
 	
 	}
 
-	// 전체 문학 가져오기
+	// 전체 문학 가져오기(문학 번호순)
 	@Transactional(readOnly = true)
 	public List<GetLiteratureByAdmin> getAllLiteratureList() {
 
-		List<Literature> literature_list = literature_repository.findAll();
+		List<Literature> literature_list = literature_repository.findAllOrderByLiteratureNoDesc();
 		
 		if(literature_list.isEmpty()) {
 			
@@ -349,11 +378,11 @@ public class AdminService {
 		
 	}
 
-	// 전체 문학 문단 리스트 가져오기
+	// 전체 문학 문단 리스트 가져오기(문학 문단 번호순)
 	@Transactional(readOnly = true)
 	public List<GetLiteratureParagraphByAdmin> getAllLiteratureParagraphList() {
 		
-		List<LiteratureParagraph> literature_paragraph_list = literature_paragraph_repository.findAll();
+		List<LiteratureParagraph> literature_paragraph_list = literature_paragraph_repository.findAllOrderByLiteratureParagraphNoDesc();
 		
 		if(literature_paragraph_list.isEmpty()) {
 			
@@ -398,11 +427,11 @@ public class AdminService {
 		
 	}
 	
-	// 전체 문학 퀴즈 가져오기
+	// 전체 문학 퀴즈 가져오기(문학 문제 번호 순)
 	@Transactional(readOnly = true)
 	public List<GetLiteratureQuizByAdmin> getAllLiteratureQuizList() {
 
-		List<LiteratureQuiz> literature_quiz_list = literature_quiz_repository.findAll();
+		List<LiteratureQuiz> literature_quiz_list = literature_quiz_repository.findAllOrderByLiteratureQuizNoDesc();
 		
 		if(literature_quiz_list.isEmpty()) {
 			
@@ -444,6 +473,304 @@ public class AdminService {
 		
 	}
 
+	// 사용자가 풀은 뉴스 문제 저장
+	@Transactional
+	public void saveMemberSolvedNewsQuiz(AddNewsQuizAttempt add_news_quiz_attempt) {
+		
+		// 사용자가 정답을 입력했는지 확인
+		NewsQuiz news_quiz = news_quiz_repository.findById(add_news_quiz_attempt.getNews_quiz_no())
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.NEWS_QUIZ_NOT_FOUND));
+		
+		boolean is_correct = false;
+		
+		if(news_quiz.getCorrect_answer_index() == add_news_quiz_attempt.getSelected_option_index()) {
+			
+			is_correct = true;
+			
+		}
+		
+		// 복합키 생성
+		NewsQuizAttemptId news_quiz_attempt_id = new NewsQuizAttemptId();
+		news_quiz_attempt_id.setEmail(add_news_quiz_attempt.getEmail());
+		news_quiz_attempt_id.setNews_quiz_no(add_news_quiz_attempt.getNews_quiz_no());
+		
+		// 엔티티 생성
+		NewsQuizAttempt news_quiz_attempt = new NewsQuizAttempt();
+		news_quiz_attempt.setNews_quiz_attempt_id(news_quiz_attempt_id);
+		news_quiz_attempt.setIs_correct(is_correct);
+		news_quiz_attempt.setSelected_option_index(add_news_quiz_attempt.getSelected_option_index());
+		
+		// 저장
+		news_quiz_attempt_repository.save(news_quiz_attempt);
+		
+	}
+
+	// 뉴스 기사 문제 기록 삭제
+	@Transactional
+	public void deleteNewsQuizAttempt(String email, Long news_quiz_no) {
+
+		// 복합키 생성
+		NewsQuizAttemptId news_quiz_attempt_id = new NewsQuizAttemptId();
+		news_quiz_attempt_id.setEmail(email);
+		news_quiz_attempt_id.setNews_quiz_no(news_quiz_no);
+		
+		news_quiz_attempt_repository.deleteByEmail(email);
+		
+	}
+
+	// 이메일에 해당하는 뉴스 퀴즈 풀이 기록 가져오기(최신순)
+	@Transactional(readOnly = true)
+	public List<GetNewsQuizAttemptByEmail> getNewsQuizAttempListtByEmail(String email) {
+		
+		List<NewsQuizAttempt> news_quiz_attempt_list = news_quiz_attempt_repository.findByEmailOrderByCreatedDateDesc(email);
+		
+		if(news_quiz_attempt_list.isEmpty()) {
+			
+			throw new ResourceNotFoundException(MessageCode.NEWS_QUIZ_ATTEMPT_NOT_FOUND);
+			
+		}
+		
+		List<GetNewsQuizAttemptByEmail> get_news_quiz_attempt_by_email_list = new ArrayList<>();
+		
+		for(NewsQuizAttempt news_quiz_attempt : news_quiz_attempt_list) {
+			
+			GetNewsQuizAttemptByEmail get_news_quiz_attempt_by_email = new GetNewsQuizAttemptByEmail();
+			get_news_quiz_attempt_by_email.setEmail(news_quiz_attempt.getNews_quiz_attempt_id().getEmail());
+			get_news_quiz_attempt_by_email.setNews_quiz_no(news_quiz_attempt.getNews_quiz_attempt_id().getNews_quiz_no());
+			get_news_quiz_attempt_by_email.setIs_correct(news_quiz_attempt.getIs_correct());
+			get_news_quiz_attempt_by_email.setSelected_option_index(news_quiz_attempt.getSelected_option_index());
+			get_news_quiz_attempt_by_email.setCreated_date(news_quiz_attempt.getCreated_date());
+			
+			get_news_quiz_attempt_by_email_list.add(get_news_quiz_attempt_by_email);			
+			
+		}
+		
+		return get_news_quiz_attempt_by_email_list;
+
+	}
+
+	// 이메일에 해당하는 문학 퀴즈 풀이 기록 가져오기(최신순)
+	public List<GetLiteratureQuizAttemptListByEmail> getLiteratureQuizAttemptListByEmail(String email) {
+
+		List<LiteratureQuizAttempt> literature_quiz_attempt_list = 
+				literature_quiz_attempt_repository.findByEmailOrderByCreatedDateDesc(email);
+		
+		if(literature_quiz_attempt_list.isEmpty()) {
+			
+			throw new ResourceNotFoundException(MessageCode.LITERATURE_QUIZ_ATTEMPT_NOT_FOUND);
+			
+		}
+		
+		List<GetLiteratureQuizAttemptListByEmail> get_literature_quiz_attempt_list = new ArrayList<>();
+		
+		for(LiteratureQuizAttempt literature_quiz_attempt : literature_quiz_attempt_list) {
+			
+			GetLiteratureQuizAttemptListByEmail get_literature_quiz_attempt = new GetLiteratureQuizAttemptListByEmail();
+			get_literature_quiz_attempt.setEmail(literature_quiz_attempt.getLiterature_quiz_attempt_id().getEmail());
+			get_literature_quiz_attempt.setLiterature_quiz_no(literature_quiz_attempt.getLiterature_quiz_attempt_id().getLiterature_quiz_no());
+			get_literature_quiz_attempt.setIs_correct(literature_quiz_attempt.getIs_correct());
+			get_literature_quiz_attempt.setSelected_option_index(literature_quiz_attempt.getSelected_option_index());
+			get_literature_quiz_attempt.setCreated_date(literature_quiz_attempt.getCreated_date());
+		
+			get_literature_quiz_attempt_list.add(get_literature_quiz_attempt);
+			
+		}
+		
+		return get_literature_quiz_attempt_list;
+		
+	}
+
+	// 문학 퀴즈 풀이 기록 추가
+	@Transactional
+	public void addLiteratureQuizAttempt(AddLiteratureQuizAttempt add_literature_quiz_attempt) {
+		
+		// 복합키 생성
+		LiteratureQuizAttemptId literature_quiz_attempt_id = new LiteratureQuizAttemptId();
+		literature_quiz_attempt_id.setEmail(add_literature_quiz_attempt.getEmail());
+		literature_quiz_attempt_id.setLiterature_quiz_no(add_literature_quiz_attempt.getLiterature_quiz_no());
+		
+		// 엔티티 생성
+		LiteratureQuizAttempt literature_quiz_attempt = new LiteratureQuizAttempt();
+		literature_quiz_attempt.setLiterature_quiz_attempt_id(literature_quiz_attempt_id);
+		literature_quiz_attempt.setIs_correct(add_literature_quiz_attempt.getIs_correct());
+		literature_quiz_attempt.setSelected_option_index(add_literature_quiz_attempt.getSelected_option_index());
+		
+		// 추가
+		literature_quiz_attempt_repository.save(literature_quiz_attempt);
+		
+	}
+
+	// 문학 퀴즈 풀이 기록 삭제
+	@Transactional
+	public void deleteLiteratureQuizAttempt(String email, Long literature_quiz_no) {
+		
+		// 복합키 생성
+		LiteratureQuizAttemptId literature_quiz_attempt_id = new LiteratureQuizAttemptId();
+		literature_quiz_attempt_id.setEmail(email);
+		literature_quiz_attempt_id.setLiterature_quiz_no(literature_quiz_no);
+		
+		// 삭제
+		literature_quiz_attempt_repository.deleteById(literature_quiz_attempt_id);
+		
+	}
+
+	// 출석 추가
+	@Transactional
+	public void addAttendance(String email) {
+
+		// 엔티티 생성
+		Attendance attendance = new Attendance();
+		attendance.setEmail(email);
+		
+		attendance_repository.save(attendance);
+
+	}
+
+	// 이메일에 해당하는 출석 불러오기(최신순)
+	@Transactional(readOnly = true)
+	public List<GetAttendance> getAttendanceListByEmail(String email) {
+		
+		List<Attendance> attendance_list = attendance_repository.findByEmailOrderByCreatedDateDesc(email);
+		
+		if(attendance_list.isEmpty()) {
+			
+			throw new ResourceNotFoundException(MessageCode.ATTENDANCE_DATE_NOT_FOUND);
+			
+		}
+		
+		List<GetAttendance> get_attendance_list = new ArrayList<>();
+		
+		for(Attendance attendance : attendance_list) {
+			
+			GetAttendance get_attendance = new GetAttendance();
+			get_attendance.setEmail(attendance.getEmail());
+			get_attendance.setAttendance_no(attendance.getAttendance_no());
+			get_attendance.setCreated_date(attendance.getCreated_date());
+			
+			get_attendance_list.add(get_attendance);
+			
+		}
+		
+		return get_attendance_list;
+		
+	}
+
+	// 출석 삭제
+	@Transactional
+	public void deleteAttendance(Long attendance_no) {
+
+		attendance_repository.deleteById(attendance_no);
+		
+	}
+
+	// 점수 추가
+	@Transactional
+	public void updatePoint(PointDto.UpdatePoint update_point) {
+
+		// 포인트 조회
+		Point point = point_repository.findByEmail(update_point.getEmail())
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.POINT_NOT_FOUND));
+				
+		
+		// 총 점수 수정
+		if(update_point.getTotal() != null) {
+			
+			point.setTotal(update_point.getTotal());
+			
+		}
+		
+		// 한국어 뉴스 점수 수정
+		if(update_point.getKorean_news() != null) {
+			
+			point.setKorean_news(update_point.getKorean_news());
+			
+		}
+		
+		// 영어 뉴스 점수 수정
+		if(update_point.getEnglish_news() != null) {
+			
+			point.setEnglish_news(update_point.getEnglish_news());
+			
+		}
+		
+		// 일본어 뉴스 점수 수정
+		if(update_point.getJapanese_news() != null) {
+			
+			point.setJapanese_news(update_point.getJapanese_news());
+			
+		}
+		
+		// 소설 점수 수정
+		if(update_point.getNovel() != null) {
+		
+			point.setNovel(update_point.getNovel());
+			
+		}
+		
+		// 동화 점수 수정
+		if(update_point.getFairytale() != null) {
+			
+			point.setFairytale(update_point.getFairytale());
+			
+		}
+		
+	}
+
+	// 점수 추가
+	@Transactional
+	public void addPoint(@Valid PointDto.AddPoint add_point) {
+
+		Point point = new Point();
+		point.setEmail(add_point.getEmail());
+		
+		point_repository.save(point);
+		
+	}
+
+	// 점수 삭제
+	@Transactional
+	public void deletePoint(String email) {
+
+		point_repository.deleteByEmail(email);
+		
+	}
+
+	// 전체 점수 불러오기(최신순)
+	@Transactional(readOnly = true)
+	public List<GetPoint> getAllPointList() {
+
+		List<Point> point_list = point_repository.findAllOrderByCreatedDateDesc();
+		
+		if(point_list.isEmpty()) {
+			
+			throw new ResourceNotFoundException(MessageCode.POINT_NOT_FOUND);
+			
+		}
+		
+		List<GetPoint> get_point_list = new ArrayList<>();
+		
+		for(Point point : point_list) {
+			
+			GetPoint get_point = new GetPoint();
+			get_point.setEmail(point.getEmail());
+			get_point.setTotal(point.getTotal());
+			get_point.setKorean_news(point.getKorean_news());
+			get_point.setEnglish_news(point.getEnglish_news());
+			get_point.setJapanese_news(point.getJapanese_news());
+			get_point.setNovel(point.getNovel());
+			get_point.setFairytale(point.getFairytale());
+			get_point.setCreated_date(point.getCreated_date());
+			get_point.setLast_modified_date(point.getLast_modified_date());
+			
+			get_point_list.add(get_point);
+			
+		}
+		
+		return get_point_list;
+		
+	}
+
+	
 
 
 	

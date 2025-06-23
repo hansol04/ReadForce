@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -148,5 +149,26 @@ public class LiteratureController {
 	}
 	
 	// 사용자가 풀은 문학 문제 삭제하기
+	@DeleteMapping("/delete-member-solved-literature-quiz")
+	public ResponseEntity<Map<String, String>> deleteMemberSolvedLiteratureQuiz(
+			@RequestParam("literature_quiz_no")
+			@NotNull(message = MessageCode.LITERATURE_QUIZ_NO_NOT_NULL)
+			Long literature_quiz_no,
+			@AuthenticationPrincipal UserDetails user_details
+	){
+		
+		String email = user_details.getUsername();
+		
+		// 사용자가 풀은 문학 문제 삭제하기
+		literature_service.deleteMemberSolvedLiteratureQuiz(email, literature_quiz_no);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.DELETE_LITERATURE_QUIZ_ATTEMPT_SUCCESS
+		));
+		
+	}
+	
+	
+	
 	
 }

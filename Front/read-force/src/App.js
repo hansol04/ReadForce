@@ -23,7 +23,7 @@ import AdminPage from './pages/adminpages/adminpage';
 import QuizPage from './pages/quiz/QuizPage';
 import ReadingPage from './pages/quiz/ReadingPage';
 import ChallengePage from "./pages/challenge/challengepage";
-import NewsList from './components/News/NewsList';
+// import NewsList from './components/News/NewsList';
 import ArticleQuestionPage from './pages/news/ArticleQuestionPage';
 import ArticleResultPage from './pages/news/ArticleResultPage';
 import AdminNews from './pages/adminpages/adminnews';
@@ -32,7 +32,10 @@ import AdminNewsQuizList from './pages/adminpages/adminnewsquizlist';
 import AdminLiterature from './pages/adminpages/adminliterature';
 import AdminLiteratureDetail from './pages/adminpages/adminliteraturedetail';
 import AdminLiteratureAdd from './pages/adminpages/adminliteratureadd';
-
+import TestQuestionPage from './pages/challenge/testquestionpage';
+import TestResultPage from './pages/challenge/testresultpage';
+import TestReviewPage from './pages/challenge/testreviewpage';
+import RankingPage from './pages/challenge/RankingPage';
 function App() {
   return (
     <Router>
@@ -60,7 +63,6 @@ function App() {
           <Route path="/change-password" element={<ChangePasswordPage />} />
           <Route path="/test-start" element={<ReadTest />} />
           <Route path="/adminpage" element={<AdminPage />} />
-          <Route path="/news" element={<NewsList />} />
           <Route path="/question/:id" element={<ArticleQuestionPage />} />
           <Route path="/question-result" element={<ArticleResultPage />} />
           <Route path="/adminpage/adminnews" element={<AdminNews />} />
@@ -69,7 +71,11 @@ function App() {
           <Route path="/adminpage/adminliterature" element={<AdminLiterature />} />
           <Route path="/adminpage/adminliterature/:literatureNo" element={<AdminLiteratureDetail />} />
           <Route path="/adminpage/adminliterature/adminliteratureadd" element={<AdminLiteratureAdd />} />
-
+          <Route path="/question-result" element={<ArticleResultPage />} />
+          <Route path="/test-question" element={<TestQuestionPage />} />
+          <Route path="/test-result" element={<TestResultPage />} />
+          <Route path="/test-review" element={<TestReviewPage />} />
+          <Route path="/ranking" element={<RankingPage />} />
         </Route>
       </Routes>
     </Router>

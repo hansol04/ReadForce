@@ -30,5 +30,8 @@ public interface LiteratureQuizRepository extends JpaRepository<LiteratureQuiz, 
 			@Param("literature_no") Long literature_no
 	);
 
+	@Query(value = "SELECT * FROM literature_quiz ORDER BY literature_quiz_no DESC", nativeQuery = true)
+	List<LiteratureQuiz> findAllOrderByLiteratureQuizNoDesc();
+
 
 }
