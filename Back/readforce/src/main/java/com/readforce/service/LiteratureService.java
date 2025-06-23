@@ -43,6 +43,7 @@ public class LiteratureService {
 		get_literature_paragraph.setLevel(literature_paragraph.getLevel());
 		get_literature_paragraph.setLiterature_no(literature_paragraph.getLiterature_paragraph_id().getLiterature_no());
 		get_literature_paragraph.setLiterature_paragraph_no(literature_paragraph.getLiterature_paragraph_id().getLiterature_paragraph_no());
+		get_literature_paragraph.setTitle(literature_paragraph.getLiterature().getTitle());
 		
 		return get_literature_paragraph;
 		
