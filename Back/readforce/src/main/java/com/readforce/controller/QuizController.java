@@ -27,7 +27,7 @@ public class QuizController {
 	@GetMapping("/get-most-incorrected-quiz")
 	public ResponseEntity<GetQuiz> getMostIncorrectedQuiz(){
 		
-		// List<GetQuiz> get_quiz_list = quiz_service.getMostIncorrectedQuiz();
+		List<GetQuiz> get_quiz_list = quiz_service.getMostIncorrectedQuiz();
 		
 		return null;
 		
