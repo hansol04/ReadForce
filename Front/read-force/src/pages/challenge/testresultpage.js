@@ -11,11 +11,11 @@ const TestResultPage = () => {
   const getLiteracyLevel = (questions, answers) => {
     if (!questions || !answers || questions.length !== answers.length) return '초급';
 
-    let correct = { beginner: 0, intermediate: 0, advanced: 0 };
+    const correct = { beginner: 0, intermediate: 0, advanced: 0 };
 
     questions.forEach((q, idx) => {
       const isCorrect = answers[idx] === q.quiz.correct_answer_index;
-      const level = (q.article.level || '').toLowerCase(); 
+      const level = (q.article.level || '').toLowerCase();
 
       console.log(`문제 ${idx + 1} - Level: ${level}, 정답 여부: ${isCorrect}`);
 
@@ -36,7 +36,8 @@ const TestResultPage = () => {
       (beginner === 1 && intermediate === 2) ||
       (beginner === 1 && intermediate === 1 && advanced === 1) ||
       (beginner === 1 && advanced === 2)
-    ) return '중급';
+    )
+      return '중급';
 
     return '초급';
   };
@@ -51,7 +52,9 @@ const TestResultPage = () => {
   return (
     <div className="test-result-wrapper">
       <div className="test-result-card">
-        <h2>🎉 당신의 문해력은 <span className="highlight">{level}</span>입니다!</h2>
+        <h2>
+          🎉 당신의 문해력은 <span className="highlight">{level}</span>입니다!
+        </h2>
         <p>{total}문제 중 {score}문제를 맞았습니다.</p>
         <p>상위 {100 - percent}%에 해당합니다.</p>
         <div className="test-result-actions">

@@ -11,11 +11,11 @@
     width: 100%;
     max-width: 500px;
     padding: 2rem 3rem;
-    text-align: center;
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    text-align: center;
   }
   
   .test-result-card h2 {
