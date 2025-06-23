@@ -165,3 +165,23 @@
   font-size: 13px;
   cursor: pointer;
 }
+.top5-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ranking-more-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: #0f766e;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.ranking-more-btn:hover {
+  transform: scale(1.2);
+  color: #0d9488;
+}
