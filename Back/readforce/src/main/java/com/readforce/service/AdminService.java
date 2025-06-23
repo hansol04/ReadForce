@@ -382,7 +382,7 @@ public class AdminService {
 	@Transactional(readOnly = true)
 	public List<GetLiteratureParagraphByAdmin> getAllLiteratureParagraphList() {
 		
-		List<LiteratureParagraph> literature_paragraph_list = literature_paragraph_repository.findAllOrderByLiteratureParagraphNoDesc();
+		List<LiteratureParagraph> literature_paragraph_list = literature_paragraph_repository.findAllOrderByLiteratureParagraphNoAsc();
 		
 		if(literature_paragraph_list.isEmpty()) {
 			
