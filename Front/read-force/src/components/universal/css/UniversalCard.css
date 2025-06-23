@@ -20,7 +20,7 @@
   margin-bottom: 8px;
 }
 
-.news-summary {
+.news-content {
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.5;
@@ -111,7 +111,7 @@
     font-size: 16px;
   }
 
-  .news-summary {
+  .news-content {
     font-size: 14px;
     max-height: calc(1.5em * 4); /* 4줄까지 보이게 */
     max-width: 100%; /* 너비 제한 해제 */

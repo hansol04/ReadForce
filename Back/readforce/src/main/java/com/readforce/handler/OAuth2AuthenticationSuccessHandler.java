@@ -119,7 +119,7 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
         	redis_template.opsForValue().set(
         			Prefix.TEMPORAL_TOKEN.getName() + temporal_token, 
         			new ObjectMapper().writeValueAsString(token_map),
-        			Duration.ofMinutes(1)
+        			Duration.ofMinutes(3)
         	);
         	
         	// 리프레쉬 토큰 저장

@@ -4,12 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 const ReadTest = () => {
   const navigate = useNavigate();
-
-  // 선택된 언어 상태
-  const [language, setLanguage] = useState("한국어");
+  const [language, setLanguage] = useState("KOREAN"); // ✅ 백엔드 enum에 맞춰 초기값 변경
 
   const handleStart = () => {
-    navigate("/test/1");
+    navigate("/test-question", { state: { language } }); // ✅ 페이지 연결 변경
   };
 
   return (
@@ -18,33 +16,36 @@ const ReadTest = () => {
 
       <div className="readtest-card">
         <h3>
-          <strong><a style={{ textDecoration: 'none', color: 'inherit' }}>리드 <span style={{ color: "#439395" }}>포스</span></a></strong>는 뉴스 기반 문해력 테스트 플랫폼입니다.
+          <strong>
+          <span style={{ textDecoration: 'none', color: 'inherit' }}>
+                 리드 <span style={{ color: "#439395" }}>포스</span>
+        </span>
+
+          </strong>
+          는 뉴스 기반 문해력 테스트 플랫폼입니다.
         </h3>
         <p>
           <strong><i>AI</i></strong>가 뉴스를 요약하고, 우리는 문제를 풀며 <strong>문해력</strong>을 기릅니다.
         </p>
-        <p>
-          세상을 <strong>읽는 힘</strong>, 지금부터 시작하세요.
-        </p>
+        <p>세상을 <strong>읽는 힘</strong>, 지금부터 시작하세요.</p>
       </div>
 
-      {/* 언어 선택 버튼 */}
       <div className="language-buttons">
         <button
-          className={language === "한국어" ? "lang-btn active" : "lang-btn"}
-          onClick={() => setLanguage("한국어")}
+          className={language === "KOREAN" ? "lang-btn active" : "lang-btn"}
+          onClick={() => setLanguage("KOREAN")}
         >
           한국어
         </button>
         <button
-          className={language === "English" ? "lang-btn active" : "lang-btn"}
-          onClick={() => setLanguage("English")}
+          className={language === "ENGLISH" ? "lang-btn active" : "lang-btn"}
+          onClick={() => setLanguage("ENGLISH")}
         >
           English
         </button>
         <button
-          className={language === "日本語" ? "lang-btn active" : "lang-btn"}
-          onClick={() => setLanguage("日本語")}
+          className={language === "JAPANESE" ? "lang-btn active" : "lang-btn"}
+          onClick={() => setLanguage("JAPANESE")}
         >
           日本語
         </button>
