@@ -3,11 +3,11 @@ import api from '../../api/axiosInstance'; // Assuming you have an axios instanc
 import './RankingPage.css'; // For styling the ranking page
 
 const categories = [
-  { label: '소설', classification: 'LITERATURE', type: 'NOVEL', language: null, scoreKey: 'novel' },
-  { label: '동화', classification: 'LITERATURE', type: 'FAIRYTALE', language: null, scoreKey: 'fairytale' },
-  { label: '뉴스(영어)', classification: 'NEWS', type: null, language: 'ENGLISH', scoreKey: 'english_news' },
-  { label: '뉴스(일본어)', classification: 'NEWS', type: null, language: 'JAPANESE', scoreKey: 'japanese_news' },
-  { label: '뉴스(한국어)', classification: 'NEWS', type: null, language: 'KOREAN', scoreKey: 'korean_news' },
+  { label: '소설', classification: 'LITERATURE', type: 'NOVEL', language: '', scoreKey: 'novel' },
+  { label: '동화', classification: 'LITERATURE', type: 'FAIRYTALE', language: '', scoreKey: 'fairytale' },
+  { label: '뉴스(영어)', classification: 'NEWS', type: '', language: 'ENGLISH', scoreKey: 'english_news' },
+  { label: '뉴스(일본어)', classification: 'NEWS', type: '', language: 'JAPANESE', scoreKey: 'japanese_news' },
+  { label: '뉴스(한국어)', classification: 'NEWS', type: '', language: 'KOREAN', scoreKey: 'korean_news' },
 ];
 
 const RankingPage = () => {
@@ -30,21 +30,21 @@ const RankingPage = () => {
       params.append('classification', classification);
 
       // Append 'type' only if it's relevant for LITERATURE classification
-      if (classification === 'LITERATURE' && type) {
+      if (classification === 'LITERATURE' && type!=='') {
         params.append('type', type);
       } else {
         // For NEWS classification, or if type is not applicable, send an empty string
         // Your backend currently expects a 'type' parameter even if empty for NEWS
-        params.append('type', null);
+        params.append('type', '');
       }
 
       // Append 'language' only if it's relevant for NEWS classification
-      if (classification === 'NEWS' && language) {
+      if (classification === 'NEWS' && language!=='') {
         params.append('language', language);
       } else {
         // For LITERATURE classification, or if language is not applicable, send an empty string
         // Your backend currently expects a 'language' parameter even if empty for LITERATURE
-        params.append('language', null);
+        params.append('language', '');
       }
 
  console.log(params.toString());
