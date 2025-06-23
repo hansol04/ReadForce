@@ -1,5 +1,7 @@
 package com.readforce.dto;
 
+import java.time.LocalDateTime;
+
 import com.readforce.enums.MessageCode;
 
 import jakarta.validation.constraints.Email;
@@ -73,6 +75,32 @@ public class PointDto {
 
 		@Min(value = 0, message = MessageCode.FAIRYTALE_POINT_MUST_BE_POSITIVE_NUMBER)
 		private Long fairytale = 0L;
+		
+	}
+	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class GetPoint{
+
+		private String email;
+
+		private Long total = 0L;
+
+		private Long korean_news = 0L;
+
+		private Long english_news = 0L;
+
+		private Long japanese_news = 0L;
+
+		private Long novel = 0L;
+
+		private Long fairytale = 0L;
+
+		private LocalDateTime created_date;
+
+		private LocalDateTime last_modified_date;
 		
 	}
 	

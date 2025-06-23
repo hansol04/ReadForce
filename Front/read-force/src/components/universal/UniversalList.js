@@ -3,51 +3,25 @@ import UniversalFilterBar from './UniversalFilterBar';
 import UniversalCard from './UniversalCard';
 import './css/UniversalList.css';
 
-const categorizeArticle = (text) => {
-  const content = text.toLowerCase();
-  const categories = {
-    '정치': ['정치', '정부', '대통령', '의회', '선거', '국회'],
-    '경제': ['경제', '금리', '무역', '환율', '증시', '소비자', '투자', '체결'],
-    '사회': ['사회', '범죄', '교육', '복지', '노동', '인권', '잠수함'],
-    '생활/문화': ['생활', '문화', '연예', '음식', '관광', '건강', '패션', '축구', '뮤지컬'],
-    'IT/과학': ['it', '과학', '기술', 'ai', '로봇', '인터넷', '우주'],
-  };
-  const counts = {};
-  for (const [category, keywords] of Object.entries(categories)) {
-    counts[category] = keywords.reduce((acc, word) => acc + (content.includes(word) ? 1 : 0), 0);
-  }
-  const topCategory = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
-  return topCategory[1] > 0 ? topCategory[0] : 'ETC';
-};
+const UniversalList = ({
+  items = [],
+  level, setLevel,
+  category, setCategory,
+  order_by, setOrderBy
+}) => {
 
-  const UniversalList = ({
-    items = [],
-    level, setLevel,
-    category, setCategory,
-    order_by, setOrderBy
-  }) => {
-  const enriched = items.map(article => ({
-    ...article,
-    category: categorizeArticle((article.title || '') + ' ' + (article.content || '')),
-  }));
-
-  console.log('level:', level);
-console.log('category:', category);
-console.log('items sample:', items[0]);
-console.log('enriched sample:', enriched[0]);
-
-   const filtered = items.filter(a => {
-    const levelMatch = level === '' || a.level === level;
-    const categoryMatch = category === '' || a.category === category;
-    return levelMatch && categoryMatch;
+  const filteredItems = items.filter((item) => {
+    const matchLevel = level ? item.level === level : true;
+    const matchCategory = category ? item.category === category.toUpperCase() : true;
+    return matchLevel && matchCategory;
   });
-  
-  const sorted = [...filtered].sort((a, b) =>
+
+  const sorted = [...filteredItems].sort((a, b) =>
     order_by === 'latest'
       ? new Date(b.publishedAt) - new Date(a.publishedAt)
       : new Date(a.publishedAt) - new Date(b.publishedAt)
   );
-  
+
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = React.useState(1);
   const totalPages = Math.ceil(sorted.length / itemsPerPage);
@@ -72,8 +46,8 @@ console.log('enriched sample:', enriched[0]);
         setLevel={setLevel}
         category={category}
         setCategory={setCategory}
-        order_by={order_by}          
-        setOrderBy={setOrderBy}      
+        order_by={order_by}
+        setOrderBy={setOrderBy}
       />
 
       <div className="news-list">
