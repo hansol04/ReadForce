@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.readforce.dto.MemberDto.MemberAttemptedQuiz;
 import com.readforce.dto.MemberDto.MemberIncorrectQuiz;
 import com.readforce.dto.QuizDto.GetQuiz;
+import com.readforce.dto.QuizDto.IncorrectQuiz;
 import com.readforce.entity.LiteratureQuiz;
 import com.readforce.entity.LiteratureQuizAttempt;
 import com.readforce.entity.NewsQuiz;
@@ -254,23 +255,76 @@ public class QuizService {
 	}
 
 
-	// 가장 많이 틀린 문제 가져오기(5개)
+	// 가장 많이 틀린 문제 가져오기(뉴스 + 문학)(5개)
 	@Transactional(readOnly = true)
 	public List<GetQuiz> getMostIncorrectedQuiz() {
 
-		// 뉴스
-		List<Object[]> news_quiz_attempt_list = news_quiz_attempt_repository.findTop5MostIncorrectQuizList();
+		// 뉴스 오답 통계 조회
+		List<Object[]> news_result_list = news_quiz_attempt_repository.findIncorrectNewsQuizStatus();
 		
-		if(news_quiz_attempt_list.isEmpty()) {
+		// 문학 오답 통계 조회
+		List<Object[]> literature_result_list = literature_quiz_attempt_repository.findIncorrectLiteratureQuizStatus();
+		
+		List<IncorrectQuiz> combined_list = new ArrayList<>();
+		
+		// 뉴스 통합
+		news_result_list.forEach(result -> 
+			combined_list.add(new IncorrectQuiz(
+					((Number) result[0]).longValue(),
+					(String) result[1],
+					Classification.NEWS.toString(),
+					((Number) result[2]).longValue(),
+					((Number) result[3]).longValue()
+			))
+		);
+		
+		// 문학 통합
+		literature_result_list.forEach(result -> 
+			combined_list.add(new IncorrectQuiz(
+				((Number) result[0]).longValue(),
+				(String) result[1],
+				Classification.LITERATURE.toString(),
+				((Number) result[2]).longValue(),
+				((Number) result[3]).longValue()
+			))
+		);
+		
+		if(combined_list.isEmpty()) {
 			
-			throw new ResourceNotFoundException(MessageCode.NEWS_NOT_FOUND);
+			return Collections.emptyList();
 			
 		}
 		
+		// 통합된 리스트를 "틀린 횟수"를 기준으로 내림차순 정렬 후 5개 선택
+		List<IncorrectQuiz> top5_incorrect_quiz_list = 
+				combined_list.stream()
+				.sorted(Comparator.comparingLong(IncorrectQuiz::getIncorrect_count).reversed())
+				.limit(5)
+				.collect(Collectors.toList());
 		
+		// 최종적으로 반환할 DTO 리스트로 변환		
+		return top5_incorrect_quiz_list.stream()
+				.map(data -> {
+					
+					GetQuiz get_quiz = new GetQuiz();
+					get_quiz.setQuestion_text(data.getQuestion_text());
+					
+					// 오답률 계산
+					int percentage = (int) ((double) data.getIncorrect_count() / data.getTotal_count() * 100);
+					get_quiz.setPercentage(percentage);
+					
+					// 분류에 따라 적절한 퀴즈 번호 설정
+					if(Classification.NEWS.toString().equals(data.getClassification())) {
+						get_quiz.setNews_quiz_no(data.getQuiz_no());					
+					} else {
+						get_quiz.setLiterature_quiz_no(data.getQuiz_no());
+					}
+					
+					return get_quiz;
+					
+				})
+				.collect(Collectors.toList());
 		
-		
-		return null;
 	}
 
 

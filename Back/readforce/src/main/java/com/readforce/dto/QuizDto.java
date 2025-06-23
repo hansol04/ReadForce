@@ -22,5 +22,23 @@ public class QuizDto {
 		private Long literature_quiz_no;		
 		
 	}
+	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class IncorrectQuiz{
+		
+		long quiz_no;
+		
+		String question_text;
+		
+		String classification;
+		
+		long incorrect_count;
+		
+		long total_count;		
+		
+	}
 
 }
