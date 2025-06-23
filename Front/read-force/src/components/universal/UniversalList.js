@@ -17,37 +17,49 @@ const categorizeArticle = (text) => {
     counts[category] = keywords.reduce((acc, word) => acc + (content.includes(word) ? 1 : 0), 0);
   }
   const topCategory = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
-  return topCategory[1] > 0 ? topCategory[0] : 'ETC';
+  return topCategory[1] > 0 ? topCategory[0] : '기타';
 };
 
-  const UniversalList = ({
-    items = [],
-    level, setLevel,
-    category, setCategory,
-    order_by, setOrderBy
-  }) => {
+const categoryEnumMap = {
+  '정치': 'POLITICS',
+  '경제': 'ECONOMY',
+  '사회': 'SOCIETY',
+  '생활/문화': 'CULTURE',
+  'IT/과학': 'SCIENCE',
+  '기타': 'ETC'
+};
+
+const UniversalList = ({
+  items = [],
+  level, setLevel,
+  category, setCategory,
+  order_by, setOrderBy
+}) => {
+
+  	console.log('===== 카테고리 디버깅 시작 =====');
+      items.forEach((item, index) => {
+        console.log(`[${index}] title:`, item.title);
+        console.log(`[${index}] category:`, item.category);
+      });
+      console.log('현재 선택된 category 필터:', category);
+        
   const enriched = items.map(article => ({
     ...article,
-    category: categorizeArticle((article.title || '') + ' ' + (article.content || '')),
+    autoCategory: categorizeArticle((article.title || '') + ' ' + (article.content || '')),
   }));
 
-  console.log('level:', level);
-console.log('category:', category);
-console.log('items sample:', items[0]);
-console.log('enriched sample:', enriched[0]);
+  const filteredItems = items.filter((item) => {
+  const matchLevel = level ? item.level === level : true;
+  const matchCategory = category ? item.category === category.toUpperCase() : true;
+  return matchLevel && matchCategory;
+});
 
-   const filtered = items.filter(a => {
-    const levelMatch = level === '' || a.level === level;
-    const categoryMatch = category === '' || a.category === category;
-    return levelMatch && categoryMatch;
-  });
-  
-  const sorted = [...filtered].sort((a, b) =>
+  const sorted = [...filteredItems].sort((a, b) =>
     order_by === 'latest'
       ? new Date(b.publishedAt) - new Date(a.publishedAt)
       : new Date(a.publishedAt) - new Date(b.publishedAt)
   );
-  
+
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = React.useState(1);
   const totalPages = Math.ceil(sorted.length / itemsPerPage);
@@ -72,8 +84,8 @@ console.log('enriched sample:', enriched[0]);
         setLevel={setLevel}
         category={category}
         setCategory={setCategory}
-        order_by={order_by}          
-        setOrderBy={setOrderBy}      
+        order_by={order_by}
+        setOrderBy={setOrderBy}
       />
 
       <div className="news-list">

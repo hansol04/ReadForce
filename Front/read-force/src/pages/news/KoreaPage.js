@@ -1,40 +1,69 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import UniversalList from '../../components/universal/UniversalList';
-import { fetchNewsListByLanguage, fetchNewsListByLanguageAndLevel, fetchNewsListByLanguageAndLevelAndCategory } from '../../api/newsApi';
+import {
+  fetchNewsListByLanguage,
+  fetchNewsListByLanguageAndLevel,
+  fetchNewsListByLanguageAndLevelAndCategory
+} from '../../api/newsApi';
 import debounce from 'lodash/debounce';
 
-  const levelMap = {
-    BEGINNER: '초급',
-    INTERMEDIATE: '중급',
-    ADVANCED: '고급',
-  };
+const levelMap = {
+  BEGINNER: '초급',
+  INTERMEDIATE: '중급',
+  ADVANCED: '고급',
+};
 
-  const categoryMap = {
-    POLITICS:'정치',
-    ECONOMY:'경제',
-    SOCIETY:'사회',
-    CULTURE:'생활/문화',
-    SCIENCE:'IT/과학',
-    ETC:'기타',
-  };
-      
-  const KoreaPage = () => {
-    const [newsItems, setNewsItems] = useState([]);
-    const [language] = useState('KOREAN');
-    const [level, setLevel] = useState('');
-    const [category, setCategory] = useState('');
-    const [order_by, setOrderBy] = useState('DESC');
+const reverseLevelMap = {
+  '초급': 'BEGINNER',
+  '중급': 'INTERMEDIATE',
+  '고급': 'ADVANCED',
+};
 
-    const fetchNews = useCallback(async (params) => {
-    const apiLevel = levelMap[params.level] || '';
-    const apiCategory = categoryMap[params.category] || '';
+const categoryMap = {
+  POLITICS: '정치',
+  ECONOMY: '경제',
+  SOCIETY: '사회',
+  CULTURE: '생활/문화',
+  SCIENCE: 'IT/과학',
+  ETC: '기타',
+};
+
+const reverseCategoryMap = {
+  '정치': 'POLITICS',
+  '경제': 'ECONOMY',
+  '사회': 'SOCIETY',
+  '생활/문화': 'CULTURE',
+  'IT/과학': 'SCIENCE',
+  '기타': 'ETC',
+};
+
+const KoreaPage = () => {
+  const [newsItems, setNewsItems] = useState([]);
+  const [language] = useState('KOREAN');
+  const [level, setLevel] = useState('');
+  const [category, setCategory] = useState('');
+  const [order_by, setOrderBy] = useState('latest');
+
+  const fetchNews = useCallback(async (params) => {
     try {
       if (!params.level && !params.category) {
-        return await fetchNewsListByLanguage({ language: params.language, order_by: params.order_by });
+        return await fetchNewsListByLanguage({
+          language: params.language,
+          order_by: params.order_by
+        });
       } else if (params.level && !params.category) {
-        return await fetchNewsListByLanguageAndLevel({ language: params.language, level: apiLevel, order_by: params.order_by });
+        return await fetchNewsListByLanguageAndLevel({
+          language: params.language,
+          level: params.level,
+          order_by: params.order_by
+        });
       } else if (params.level && params.category) {
-        return await fetchNewsListByLanguageAndLevelAndCategory({ language: params.language, level: apiLevel, category: apiCategory, order_by: params.order_by });
+        return await fetchNewsListByLanguageAndLevelAndCategory({
+          language: params.language,
+          level: params.level,
+          category: params.category,
+          order_by: params.order_by
+        });
       }
     } catch (err) {
       console.error('뉴스 목록 불러오기 실패:', err);
@@ -47,16 +76,23 @@ import debounce from 'lodash/debounce';
     setNewsItems(data);
   }, 300), [fetchNews]);
 
-    const fetchData = useCallback(() => {
-      debouncedFetch({ language, level, category, order_by });
-    }, [debouncedFetch, language, level, category, order_by]);
+  const fetchData = useCallback(() => {
+    const apiLevel = reverseLevelMap[level] || '';
+    const apiCategory = reverseCategoryMap[category] || '';
+    debouncedFetch({
+      language,
+      level: apiLevel,
+      category: apiCategory,
+      order_by
+    });
+  }, [debouncedFetch, language, level, category, order_by]);
 
-    useEffect(() => {
-      fetchData();
-      return () => {
-        debouncedFetch.cancel();
-      };
-    }, [fetchData, debouncedFetch]);
+  useEffect(() => {
+    fetchData();
+    return () => {
+      debouncedFetch.cancel();
+    };
+  }, [fetchData, debouncedFetch]);
 
   return (
     <div className="page-container">
