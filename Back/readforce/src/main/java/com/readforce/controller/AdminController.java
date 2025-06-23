@@ -32,11 +32,10 @@ import com.readforce.dto.NewsDto.GetNewsQuizAttemptByEmail;
 import com.readforce.dto.NewsDto.NewsByAdmin;
 import com.readforce.dto.NewsDto.NewsQuizByAdmin;
 import com.readforce.dto.PointDto;
+import com.readforce.dto.PointDto.GetPoint;
 import com.readforce.enums.MessageCode;
 import com.readforce.service.AdminService;
-import com.readforce.service.AttendanceService;
 import com.readforce.service.LiteratureService;
-import com.readforce.service.MemberService;
 import com.readforce.service.NewsService;
 
 import jakarta.validation.Valid;
@@ -51,14 +50,12 @@ import lombok.RequiredArgsConstructor;
 @Validated
 public class AdminController {
 	
-	private final MemberService member_service;
-	private final AttendanceService attendance_service;
 	private final NewsService news_service;
 	private final LiteratureService literature_service;
 	private final AdminService admin_service;
 
 	// 회원 -------------------------------------------------------------------------
-	// 전체 회원 목록 조회
+	// 전체 회원 목록 조회(최신순)
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/get-all-member-list")
 	public ResponseEntity<List<MemberObjectByAdmin>> getAllMemberList(){
@@ -132,7 +129,7 @@ public class AdminController {
 		
 	}
 
-	// 전체 뉴스 불러오기
+	// 전체 뉴스 불러오기(뉴스 번호순)
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/get-all-news-list")
 	public ResponseEntity<List<NewsByAdmin>> getAllNewsList(){
@@ -174,7 +171,7 @@ public class AdminController {
 		
 	}
 	
-	// 전체 뉴스 문제 불러오기
+	// 전체 뉴스 문제 불러오기(뉴스 문제 번호순)
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/get-all-news-quiz-list")
 	public ResponseEntity<List<NewsQuizByAdmin>> getAllNewsQuizList(){
@@ -219,7 +216,7 @@ public class AdminController {
 		
 	}
 	
-	// 전체 문학 불러오기
+	// 전체 문학 불러오기(문학 번호 순)
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/get-all-literature-list")
 	public ResponseEntity<List<GetLiteratureByAdmin>> getAllLiteratureList(){
@@ -264,7 +261,7 @@ public class AdminController {
 		
 	}
 	
-	// 전체 문학 문단 불러오기
+	// 전체 문학 문단 불러오기(문학 문단 번호순)
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/get-all-literature-paragraph-list")
 	public ResponseEntity<List<GetLiteratureParagraphByAdmin>> getAllLiteratureParagraphList(){
@@ -308,7 +305,7 @@ public class AdminController {
 				
 	}
 	
-	// 전체 문학 문제 불러오기
+	// 전체 문학 문제 불러오기(문학 문제 번호 순)
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/get-all-literature-quiz-list")
 	public ResponseEntity<List<GetLiteratureQuizByAdmin>> getAllLiteratureQuizList(){
@@ -337,7 +334,7 @@ public class AdminController {
 	}
 	
 	// 뉴스 퀴즈 풀이 기록 관리 ------------------------------------------
-	// 이메일에 해당하는 뉴스 퀴즈 풀이 기록 가져오기
+	// 이메일에 해당하는 뉴스 퀴즈 풀이 기록 가져오기(최신순)
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/get-news-quiz-attempt-list-by-email")
 	public ResponseEntity<List<GetNewsQuizAttemptByEmail>> getNewsQuizAttempListtByEmail(
@@ -395,7 +392,7 @@ public class AdminController {
 	
 	
 	// 문학 퀴즈 풀이 기록 관리 ------------------------------------------------
-	// 이메일에 해당하는 문학 퀴즈 풀이 기록 가져오기
+	// 이메일에 해당하는 문학 퀴즈 풀이 기록 가져오기(최신순)
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/get-literature-quiz-attempt-list-by-email")
 	public ResponseEntity<List<GetLiteratureQuizAttemptListByEmail>> getLiteratureQuizAttemptListByEmail(
@@ -451,7 +448,7 @@ public class AdminController {
 	}
 	
 	// 출석 관리 ---------------------------------
-	// 이메일에 해당하는 출석 불러오기
+	// 이메일에 해당하는 출석 불러오기(최신순)
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/get-attendance-list-by-email")
 	public ResponseEntity<List<GetAttendance>> getAttendanceListByEmail(
@@ -503,6 +500,17 @@ public class AdminController {
 	}
 	
 	// 점수 관리 --------------------------------------
+	// 전체 점수 불러오기(최신순)
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/get-all-point-list")
+	public ResponseEntity<List<GetPoint>> getAllPointList(){
+		
+		List<GetPoint> get_point_list = admin_service.getAllPointList();
+		
+		return ResponseEntity.status(HttpStatus.OK).body(get_point_list);
+		
+	}
+	
 	// 점수 추가
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/add-point")

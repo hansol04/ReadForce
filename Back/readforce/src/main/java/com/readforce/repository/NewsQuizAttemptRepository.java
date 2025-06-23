@@ -30,8 +30,8 @@ public interface NewsQuizAttemptRepository extends JpaRepository<NewsQuizAttempt
 			@Param("email") String email
 	);
 
-	@Query(value = "SELECT * FROM news_quiz_attempt WHERE email = :email", nativeQuery = true)
-	List<NewsQuizAttempt> findByEmail(
+	@Query(value = "SELECT * FROM news_quiz_attempt WHERE email = :email ORDER BY created_date DESC", nativeQuery = true)
+	List<NewsQuizAttempt> findByEmailOrderByCreatedDateDesc(
 			@Param("email") String email
 	);
 

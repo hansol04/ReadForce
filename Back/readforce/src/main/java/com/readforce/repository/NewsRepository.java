@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.readforce.entity.News;
-import com.readforce.entity.NewsQuizAttempt;
 
 @Repository
 public interface NewsRepository extends JpaRepository<News, Long>{
@@ -67,6 +66,9 @@ public interface NewsRepository extends JpaRepository<News, Long>{
 
 	@Query(value = "SELECT * FROM news WHERE news_no NOT IN (SELECT news_no FROM news_quiz)", nativeQuery = true)
 	List<News> findUnquizzedNews();
+
+	@Query(value = "SELECT * FROM news ORDER BY news_no DESC", nativeQuery = true)
+	List<News> findAllOrderBy();
 
 
 

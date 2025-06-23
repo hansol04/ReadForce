@@ -30,9 +30,10 @@ public interface LiteratureQuizAttemptRepository extends JpaRepository<Literatur
 			@Param("email") String email
 	);
 
-	@Query(value = "SELECT * FROM literature_quiz_attempt WHERE email = :email", nativeQuery = true)
-	List<LiteratureQuizAttempt> findByEmail(
+	@Query(value = "SELECT * FROM literature_quiz_attempt WHERE email = :email ORDER BY created_date DESC", nativeQuery = true)
+	List<LiteratureQuizAttempt> findByEmailOrderByCreatedDateDesc(
 			@Param("email") String email
 	);
+
 
 }

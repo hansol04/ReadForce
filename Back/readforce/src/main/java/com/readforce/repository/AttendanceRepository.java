@@ -34,8 +34,8 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long>{
 			@Param("email") String email
 	);
 
-	@Query(value = "SELECT * FROM attendance WHERE email = :email", nativeQuery = true)
-	List<Attendance> findByEmail(
+	@Query(value = "SELECT * FROM attendance WHERE email = :email ORDER BY created_date DESC", nativeQuery = true)
+	List<Attendance> findByEmailOrderByCreatedDateDesc(
 			@Param("email") String email
 	);
 

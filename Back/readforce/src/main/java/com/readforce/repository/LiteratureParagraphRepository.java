@@ -61,5 +61,8 @@ public interface LiteratureParagraphRepository extends JpaRepository<LiteratureP
 	Long findLastLiteratureParagraphNoByLiteratureNo(
 			@Param("literature_no") Long literature_no
 	);
+
+	@Query(value = "SELECT * FROM literature_paragraph ORDER BY literature_paragraph_no DESC", nativeQuery = true)
+	List<LiteratureParagraph> findAllOrderByLiteratureParagraphNoDesc();
 	
 }
