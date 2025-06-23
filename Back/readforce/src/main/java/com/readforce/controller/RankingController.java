@@ -36,7 +36,7 @@ public class RankingController {
 	@GetMapping("/get-ranking-by-classification-and-type-or-language")
 	public ResponseEntity<?> getRankingByClassificationAndTypeOrLanguage(
 			@RequestParam("classification")
-			@NotBlank(message = MessageCode.CLASSIFICATION_NOT_NULL)
+			@NotBlank(message = MessageCode.CLASSIFICATION_NOT_BLANK)
 			@ValidEnum(enumClass = Classification.class, message = MessageCode.CLASSIFICATION_PATTERN_INVALID)
 			String classification,
 			@RequestParam(value = "type", required = false)
