@@ -30,6 +30,11 @@ public interface NewsQuizAttemptRepository extends JpaRepository<NewsQuizAttempt
 			@Param("email") String email
 	);
 
+	@Query(value = "SELECT * FROM news_quiz_attempt WHERE email = :email", nativeQuery = true)
+	List<NewsQuizAttempt> findByEmail(
+			@Param("email") String email
+	);
+
 
 
 }

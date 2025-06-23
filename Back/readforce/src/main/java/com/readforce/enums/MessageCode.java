@@ -37,6 +37,7 @@ public final class MessageCode {
 	public static final String LITERATURE_PARAGRAPH_CONTENT_NOT_BLANK = "NO0030";
 	public static final String LITERATURE_PARAGRAPH_CATEGORY_NOT_BLANK = "NO0031";
 	public static final String LEVEL_NOT_BLANK = "NO0032";
+	public static final String ATTENDANCE_NO_NOT_NULL = "NO0033";
 	
 
 	
@@ -98,6 +99,15 @@ public final class MessageCode {
 	public static final String DELETE_LITERATURE_PARAGRAPH_AND_LITERATURE_QUIZ_SUCCESS = "SU0025";
 	public static final String DELETE_LITERATURE_QUIZ_SUCCESS = "SU0026";
 	public static final String UPDATE_POINT_SUCCESS = "SU0027";
+	public static final String DELETE_NEWS_QUIZ_ATTEMPT_SUCCESS = "SU0028";
+	public static final String DELETE_LITERATURE_QUIZ_ATTEMPT_SUCCESS = "SU0029";
+	public static final String ADD_NEWS_QUIZ_ATTEMPT_SUCCESS = "SU0030";
+	public static final String ADD_LITERATURE_QUIZ_ATTEMPT_SUCCESS = "SU0031";
+	public static final String ADD_ATTENDANCE_SUCCESS = "SU0032";
+	public static final String DELETE_MEMBER_SUCCESS = "SU0033";
+	public static final String DELETE_ATTENDANCE_SUCCESS = "SU0034";
+	public static final String ADD_POINT_SUCCESS = "SU0035";
+	public static final String DELETE_POINT_SUCCESS = "SU0036";
 	
 
 	// 실패
@@ -112,6 +122,8 @@ public final class MessageCode {
 	public static final String JSON_PROCESSING_FAIL = "FA0009";
 	public static final String GEMINI_REQUEST_FAIL = "FA0010";
 	public static final String GET_CHALLENGE_QUIZ_FAIL = "FA0011";
+	public static final String GET_RANKING_LIST_FAIL = "FA0012";
+	
 	
 	
 	// 데이터 없음

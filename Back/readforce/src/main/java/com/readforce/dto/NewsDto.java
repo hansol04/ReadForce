@@ -2,6 +2,7 @@ package com.readforce.dto;
 
 import java.time.LocalDateTime;
 
+import com.readforce.entity.NewsQuiz;
 import com.readforce.enums.MessageCode;
 
 import jakarta.validation.constraints.NotNull;
@@ -152,7 +153,80 @@ public class NewsDto {
 		
 	}
 	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class AddNewsQuizAttempt{
+		
+		private String email;
+		
+		private Long news_quiz_no;
+
+		private NewsQuiz news_quiz;
+
+		private Boolean is_correct;
+
+		private Integer selected_option_index;
+
+	}
 	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class GetNewsQuizAttemptByEmail{
+		
+		private String email;
+		
+		private Long news_quiz_no;
+
+		private Boolean is_correct;
+
+		private Integer selected_option_index;
+
+		private LocalDateTime created_date;
+		
+	}
+	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class GetLiteratureQuizAttemptListByEmail{
+		
+		private String email;
+		
+		private Long literature_quiz_no;
+
+		private Boolean is_correct;
+
+		private Integer selected_option_index;
+
+		private LocalDateTime created_date;
+		
+	}
+	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class AddLiteratureQuizAttempt{
+		
+		private String email;
+		
+		private Long literature_quiz_no;
+
+		private Boolean is_correct;
+
+		private Integer selected_option_index;
+		
+	}
+	
+	
+
+	
+
 	
 	public record NewsResult(String title, String content) {}
 	

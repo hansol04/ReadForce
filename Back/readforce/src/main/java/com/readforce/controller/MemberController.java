@@ -360,9 +360,9 @@ public class MemberController {
 		String email = user_details.getUsername();
 		
 		// 틀린 문제 가져오기
-		List<MemberIncorrectQuiz> member_uncorrect_quiz_list = quiz_service.getMemberIncorrectQuizList(email);
+		List<MemberIncorrectQuiz> member_incorrect_quiz_list = quiz_service.getMemberIncorrectQuizList(email);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(member_uncorrect_quiz_list);
+		return ResponseEntity.status(HttpStatus.OK).body(member_incorrect_quiz_list);
 		
 		
 	}
@@ -386,6 +386,7 @@ public class MemberController {
 		
 		
 	}
+
 	
 	
 	

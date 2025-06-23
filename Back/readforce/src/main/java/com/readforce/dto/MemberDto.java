@@ -321,5 +321,19 @@ public class MemberDto {
 		
 	}
 	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class GetAttendance{
+		
+		private Long attendance_no;
+
+		private String email;
+
+		private LocalDateTime created_date;
+		
+	}
+	
 	
 }
