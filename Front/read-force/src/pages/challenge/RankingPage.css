@@ -1,0 +1,104 @@
+/* 전체 페이지 레이아웃 */
+.ranking-page {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: #f0fdfa;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  /* 상단 제목 */
+  .ranking-page h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 24px;
+    color: #0f172a;
+  }
+  
+  /* 카테고리 버튼 영역 */
+  .category-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .category-buttons button {
+    padding: 0.6rem 1.2rem;
+    font-size: 14px;
+    background-color: #f1f5f9;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    color: #334155;
+  }
+  
+  .category-buttons button:hover {
+    background-color: #e0f2f1;
+  }
+  
+  .category-buttons button.active {
+    background-color: #0d9488;
+    color: white;
+    font-weight: bold;
+    border-color: #0f766e;
+  }
+  
+  /* 랭킹 리스트 */
+  .ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* 각 랭커 항목 */
+  .ranking-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  
+  /* 순위 텍스트 */
+  .rank {
+    font-size: 16px;
+    font-weight: bold;
+    color: #0f766e;
+    min-width: 48px;
+  }
+  
+  /* 닉네임 */
+  .nickname {
+    flex: 1;
+    font-size: 15px;
+    color: #334155;
+    padding-left: 1rem;
+  }
+  
+  /* 점수 */
+  .score {
+    font-size: 15px;
+    color: #475569;
+  }
+  
+  /* 반응형 */
+  @media (max-width: 600px) {
+    .ranking-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.3rem;
+    }
+  
+    .nickname {
+      padding-left: 0;
+    }
+  }
+  
