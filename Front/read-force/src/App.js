@@ -23,7 +23,6 @@ import AdminPage from './pages/adminpages/adminpage';
 import QuizPage from './pages/quiz/QuizPage';
 import ReadingPage from './pages/quiz/ReadingPage';
 import ChallengePage from "./pages/challenge/challengepage";
-import NewsList from './components/News/NewsList';
 import ArticleQuestionPage from './pages/news/ArticleQuestionPage';
 import ArticleResultPage from './pages/news/ArticleResultPage';
 import TestQuestionPage from './pages/challenge/testquestionpage';
@@ -56,7 +55,6 @@ function App() {
           <Route path="/change-password" element={<ChangePasswordPage />} />
           <Route path="/test-start" element={<ReadTest />} />
           <Route path="/adminpage" element={<AdminPage />} />
-          <Route path="/news" element={<NewsList />} />
           <Route path="/question/:id" element={<ArticleQuestionPage />} />
           <Route path="/question-result" element={<ArticleResultPage />} /> 
           <Route path="/test-question" element={<TestQuestionPage />} />

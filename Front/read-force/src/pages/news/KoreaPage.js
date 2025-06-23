@@ -7,25 +7,10 @@ import {
 } from '../../api/newsApi';
 import debounce from 'lodash/debounce';
 
-const levelMap = {
-  BEGINNER: '초급',
-  INTERMEDIATE: '중급',
-  ADVANCED: '고급',
-};
-
 const reverseLevelMap = {
   '초급': 'BEGINNER',
   '중급': 'INTERMEDIATE',
   '고급': 'ADVANCED',
-};
-
-const categoryMap = {
-  POLITICS: '정치',
-  ECONOMY: '경제',
-  SOCIETY: '사회',
-  CULTURE: '생활/문화',
-  SCIENCE: 'IT/과학',
-  ETC: '기타',
 };
 
 const reverseCategoryMap = {
