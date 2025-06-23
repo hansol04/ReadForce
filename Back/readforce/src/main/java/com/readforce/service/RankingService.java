@@ -126,7 +126,7 @@ public class RankingService {
 		}
 		
 		// 문학 소설 탑 50명 회원 반환
-		if(classification.equals(Classification.LITERATURE.toString()) && language.equals(LiteratureRelate.type.NOVEL.toString())) {
+		if(classification.equals(Classification.LITERATURE.toString()) && type.equals(LiteratureRelate.type.NOVEL.toString())) {
 			
 			List<Point> point_list = point_repository.findAllWithNovel();
 			
@@ -156,7 +156,7 @@ public class RankingService {
 		}
 		
 		// 문학 동화 탑 50명 회원 반환
-		if(classification.equals(Classification.LITERATURE.toString()) && language.equals(LiteratureRelate.type.FAIRYTALE.toString())) {
+		if(classification.equals(Classification.LITERATURE.toString()) && type.equals(LiteratureRelate.type.FAIRYTALE.toString())) {
 			
 			List<Point> point_list = point_repository.findAllWithFairytale();
 			
