@@ -11,7 +11,7 @@ const fetchWithAuth = async (url, options = {}) => {
   });
 
   if (res.status === 401 && refreshToken) {
-    const refreshRes = await fetch(`/member/reissue-refresh-token?refresh_token=${refreshToken}`, {
+    const refreshRes = await fetch(`/auth/reissue-refresh-token?refresh_token=${refreshToken}`, {
       method: 'POST',
     });
 
