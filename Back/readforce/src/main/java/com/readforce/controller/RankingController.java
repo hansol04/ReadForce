@@ -39,14 +39,16 @@ public class RankingController {
 			@NotBlank(message = MessageCode.CLASSIFICATION_NOT_NULL)
 			@ValidEnum(enumClass = Classification.class, message = MessageCode.CLASSIFICATION_PATTERN_INVALID)
 			String classification,
-			@RequestParam("type")
+			@RequestParam(value = "type", required = false)
 			@ValidEnum(enumClass = LiteratureRelate.type.class, message = MessageCode.LITERATURE_TYPE_PATTERN_INVALID)
 			String type,
-			@RequestParam("language")
+			@RequestParam(value = "language", required = false)
 			@ValidEnum(enumClass = NewsRelate.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
 			String language,			
 			@AuthenticationPrincipal UserDetails user_details
 	){
+		
+		log.warn("classification : " + classification + "type : " + type + "language : " + language);
 		
 		List<?> ranking_list = ranking_service.getRankingByClassificationAndTypeOrLanguage(classification, type, language);
 
