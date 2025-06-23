@@ -35,10 +35,24 @@ public interface LiteratureQuizAttemptRepository extends JpaRepository<Literatur
 			@Param("email") String email
 	);
 
-//	@Query(value = "SELECT " +
-//				   " t.literature_quiz_no, " + 
-//				   " lq.question_text, " +
-//				   " t.incorrect_count"
-//			)
-
+	@Query(value = "SELECT " +
+				   " t.literature_quiz_no, " + 
+				   " lq.question_text, " +
+				   " t.incorrect_count, " +
+				   " total.total_count " +
+				   "FROM " +
+				   " (SELECT literature_quiz_no, COUNT(*) as incorrect_count " +
+				   " FROM literature_quiz_attempt " +
+				   " WHERE is_correct = false " +
+				   " GROUP BY literature_quiz_no) AS t " +
+				   "JOIN " + 
+				   " (SELECT literature_quiz_no, COUNT(*) as total_count " +
+				   " FROM literature_quiz_attempt " +
+				   " GROUP BY literature_quiz_no) AS total ON t.literature_quiz_no = total.literature_quiz_no " +
+				   "JOIN " +
+				   " literature_quiz lq ON t.literature_quiz_no = lq.literature_quiz_no ",
+				   nativeQuery = true
+	)
+	List<Object[]> findIncorrectLiteratureQuizStatus();
+	
 }
