@@ -367,6 +367,10 @@ public class AdminService {
 		literature_paragraph_id.setLiterature_no(literature_paragraph_by_admin.getLiterature_no());
 		literature_paragraph_id.setLiterature_paragraph_no(last_literature_paragraph_no + 1);
 		
+		// 문학 엔티티 조회 - 김기찬이 추가.
+		Literature literature = literature_repository.findById(literature_paragraph_by_admin.getLiterature_no())
+		        .orElseThrow(() -> new ResourceNotFoundException(MessageCode.LITERATURE_NOT_FOUND));
+		
 		// 문학 문단 엔티티 생성
 		LiteratureParagraph literature_paragraph = new LiteratureParagraph();
 		literature_paragraph.setLiterature_paragraph_id(literature_paragraph_id);
@@ -374,9 +378,41 @@ public class AdminService {
 		literature_paragraph.setContent(literature_paragraph_by_admin.getContent());
 		literature_paragraph.setLevel(literature_paragraph_by_admin.getLevel());
 		
-		literature_paragraph_repository.save(literature_paragraph);
+		// 문학 연결 - 김기찬이 추가.
+	    literature_paragraph.setLiterature(literature);
 		
+		literature_paragraph_repository.save(literature_paragraph);
 	}
+//	// 문학 문단 추가 - 김기찬이 수정해보았씁니당.
+//	@Transactional
+//	public void addLiteratureParagraph(LiteratureParagraphByAdmin dto) {
+//
+//	    // 1. 마지막 문단 번호 조회
+//	    Long lastParagraphNo = literature_paragraph_repository.findLastLiteratureParagraphNoByLiteratureNo(dto.getLiterature_no());
+//	    if (lastParagraphNo == null) lastParagraphNo = 0L;
+//
+//	    // 2. 복합키 생성
+//	    LiteratureParagraphId id = new LiteratureParagraphId();
+//	    id.setLiterature_no(dto.getLiterature_no());
+//	    id.setLiterature_paragraph_no(lastParagraphNo + 1);
+//
+//	    // 3. 문학 엔티티 조회
+//	    Literature literature = literature_repository.findById(dto.getLiterature_no())
+//	        .orElseThrow(() -> new RuntimeException("해당 문학을 찾을 수 없습니다."));
+//
+//	    // 4. 문단 엔티티 생성
+//	    LiteratureParagraph paragraph = new LiteratureParagraph();
+//	    paragraph.setLiterature_paragraph_id(id);
+//	    paragraph.setCategory(dto.getCategory());
+//	    paragraph.setContent(dto.getContent());
+//	    paragraph.setLevel(dto.getLevel());
+//
+//	    // 5. 문학 연결
+//	    paragraph.setLiterature(literature);
+//
+//	    // 6. 저장
+//	    literature_paragraph_repository.save(paragraph);
+//	}
 
 	// 전체 문학 문단 리스트 가져오기(문학 문단 번호순)
 	@Transactional(readOnly = true)

@@ -91,7 +91,11 @@ const AdminLiteratureDetail = () => {
                     <h2>{literature.title}</h2>
                 </div>
                 <div style={BUTTON_LIST}>
-                    <button style={BUTTON_STYLE}>문단 추가</button>
+                    <button
+                        style={BUTTON_STYLE}
+                        onClick={() => navigate(`/adminpage/adminliterature/${literatureNo}/add-paragraph`)}>
+                        문단 추가
+                    </button>
                 </div>
             </div>
             <p><strong>유형:</strong> {literature.type}</p>
@@ -101,13 +105,6 @@ const AdminLiteratureDetail = () => {
             {paragraphs.length === 0 ? (
                 <p>문단이 없습니다.</p>
             ) : (
-                // <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
-                //     {paragraphs.map(p => (
-                //         <li key={p.literature_paragraph_no} style={{ marginBottom: "12px" }}>
-                //             <div>{p.content}</div>
-                //         </li>
-                //     ))}
-                // </ul>
                 <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
                     {paragraphs.map(p => (
                         <li
@@ -115,8 +112,6 @@ const AdminLiteratureDetail = () => {
                             style={{
                                 marginBottom: "16px",
                                 padding: "12px",
-                                // border: "1px solid #ccc",
-                                // borderRadius: "8px",
                                 position: "relative"
                             }}
                         >
@@ -130,13 +125,13 @@ const AdminLiteratureDetail = () => {
                                 <div>
                                     <button
                                         onClick={() => handleDeleteParagraph(p.literature_paragraph_no)}
-                                    style={{
-                                        backgroundColor: "white",
-                                        color: "red",
-                                        border: "none",
-                                        fontSize: "12px",
-                                        cursor: "pointer"
-                                    }}
+                                        style={{
+                                            backgroundColor: "white",
+                                            color: "red",
+                                            border: "none",
+                                            fontSize: "12px",
+                                            cursor: "pointer"
+                                        }}
                                     >
                                         삭제
                                     </button>
