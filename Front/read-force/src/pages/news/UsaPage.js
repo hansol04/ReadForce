@@ -9,7 +9,7 @@ import {
 const UsaPage = () => {
   const [newsItems, setNewsItems] = useState([]);
 
-  const [language] = useState('JAPANESE'); 
+  const [language] = useState('ENGLISH'); 
   const [level, setLevel] = useState('');
   const [category, setCategory] = useState('');
   const [order_by, setOrderBy] = useState('DESC');

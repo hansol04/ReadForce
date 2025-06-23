@@ -13,7 +13,7 @@ const categoryMap = {
   SOCIETY: '사회',
   CULTURE: '생활/문화',
   SCIENCE: 'IT/과학',
-  ETC: '기타',
+  ETC: '기타'
 };
 
 const UniversalCard = React.memo(({ data, onSolve }) => {

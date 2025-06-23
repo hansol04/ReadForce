@@ -24,8 +24,6 @@ const orderByMap = {
   'ASC': 'ASC',
 };
 
-
-
 // 1. 언어만 있을 때
 export const fetchNewsListByLanguage = async ({ language, order_by }) => {
   try {
