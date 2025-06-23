@@ -1,84 +1,158 @@
 .test-result-layout {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 2rem;
-  }
-  
-  .result-header {
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    color: #0f766e;
-  }
-  
-  .result-box {
-    background-color: white;
-    border: 1px solid #e0e0e0;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
-  }
-  
-  .result-status {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    color: #0f766e;
-  }
-  
-  .result-status.wrong {
-    color: #dc2626;
-  }
-  
-  .result-question {
-    font-size: 16px;
-    margin-bottom: 1rem;
-    color: #333;
-  }
-  
-  .result-answer {
-    font-size: 15px;
-    color: #0d9488;
-    margin-bottom: 0.5rem;
-  }
-  
-  .result-explanation {
-    font-size: 14px;
-    color: #555;
-    background-color: #f8fafc;
-    border-left: 4px solid #0d9488;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #f9fafb;
+}
+
+.result-header {
+  text-align: center;
+  font-size: 26px;
+  font-weight: bold;
+  color: #0f766e;
+}
+
+.result-box {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s;
+}
+
+.result-status {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #0f766e;
+}
+
+.result-status.wrong {
+  color: #dc2626;
+}
+
+.result-question {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.result-answer {
+  font-size: 15px;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  background-color: #ecfdf5;
+  color: #065f46;
+  border-left: 4px solid #10b981;
+}
+
+.result-answer.wrong {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border-left: 4px solid #ef4444;
+}
+
+.result-explanation {
+  font-size: 14px;
+  color: #374151;
+  background-color: #f1f5f9;
+  border-left: 4px solid #3b82f6;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.next-button {
+  margin-top: 2rem;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #0d9488;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.next-button:hover {
+  background-color: #0f766e;
+}
+
+.omr-grid {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.omr-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.omr-number {
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  font-weight: bold;
+  color: #0f766e;
+  cursor: pointer;
+}
+
+.omr-choice {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #d1d5db;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 28px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: white;
+  color: #333;
+  transition: 0.2s;
+}
+
+.omr-choice.selected {
+  background-color: #0d9488;
+  color: white;
+  font-weight: bold;
+  border: 2px solid #0f766e;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+  .test-result-layout {
     padding: 1rem;
-    border-radius: 8px;
   }
-  
-  .next-button {
-    margin-top: 2rem;
-    padding: 12px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    background-color: #0d9488;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    width: 100%;
+
+  .result-header {
+    font-size: 22px;
   }
-  
-  .next-button:hover {
-    background-color: #0f766e;
+
+  .result-box {
+    padding: 1rem;
   }
-  
-  @media (max-width: 768px) {
-    .test-result-layout {
-      padding: 1rem;
-    }
-  
-    .result-header {
-      font-size: 20px;
-    }
+
+  .result-question {
+    font-size: 15px;
   }
-  
+
+  .result-answer {
+    font-size: 14px;
+  }
+
+  .result-explanation {
+    font-size: 13px;
+  }
+}
