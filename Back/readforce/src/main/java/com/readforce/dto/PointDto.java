@@ -2,11 +2,16 @@ package com.readforce.dto;
 
 import java.time.LocalDateTime;
 
+import com.readforce.enums.Classification;
+import com.readforce.enums.LiteratureRelate;
 import com.readforce.enums.MessageCode;
+import com.readforce.enums.NewsRelate;
+import com.readforce.validation.ValidEnum;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -101,6 +106,27 @@ public class PointDto {
 		private LocalDateTime created_date;
 
 		private LocalDateTime last_modified_date;
+		
+	}
+	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class SaveChallengePoint{
+		
+		@NotBlank(message = MessageCode.CLASSIFICATION_NOT_BLANK)
+		@ValidEnum(enumClass = Classification.class, message = MessageCode.CLASSIFICATION_PATTERN_INVALID)
+		private String classification;
+		
+		@ValidEnum(enumClass = NewsRelate.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_NOT_BLANK)
+		private String language;
+
+		@ValidEnum(enumClass = LiteratureRelate.type.class, message = MessageCode.LITERATURE_TYPE_NOT_BLANK)
+		private String type;
+
+		@NotNull(message = MessageCode.POINT_NOT_NULL)
+		private Double point;
 		
 	}
 	

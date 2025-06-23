@@ -302,22 +302,22 @@ public class MemberDto {
 	public static class UpdatePoint{
 		
 		@Min(value = 0, message = MessageCode.TOTAL_POINT_MUST_BE_POSITIVE_NUMBER)
-		private Long total = 0L;
+		private Double total = 0.0;
 
 		@Min(value = 0, message = MessageCode.KOREAN_NEWS_POINT_MUST_BE_POSITIVE_NUMBER)
-		private Long korean_news = 0L;
+		private Double korean_news = 0.0;
 
 		@Min(value = 0, message = MessageCode.ENGILISH_NEWS_POINT_MUST_BE_POSITIVE_NUMBER)
-		private Long english_news = 0L;
+		private Double english_news = 0.0;
 
 		@Min(value = 0, message = MessageCode.JAPANESE_NEWS_POINT_MUST_BE_POSITIVE_NUMBER)
-		private Long japanese_news = 0L;
+		private Double japanese_news = 0.0;
 
 		@Min(value = 0, message = MessageCode.NOVEL_POINT_MUST_BE_POSITIVE_NUMBER)
-		private Long novel = 0L;
+		private Double novel = 0.0;
 
 		@Min(value = 0, message = MessageCode.FAIRYTALE_POINT_MUST_BE_POSITIVE_NUMBER)
-		private Long fairytale = 0L;
+		private Double fairytale = 0.0;
 		
 	}
 	

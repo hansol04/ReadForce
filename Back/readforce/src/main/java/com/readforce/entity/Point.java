@@ -34,22 +34,22 @@ public class Point {
 	private Member member;
 	
 	@Column(nullable = false)
-	private Long total = 0L;
+	private Double total = 0.0;
 	
 	@Column(name = "korean_news", nullable = false)
-	private Long korean_news = 0L;
+	private Double korean_news = 0.0;
 	
 	@Column(name = "english_news", nullable = false)
-	private Long english_news = 0L;
+	private Double english_news = 0.0;
 	
 	@Column(name = "japanese_news", nullable = false)
-	private Long japanese_news = 0L;
+	private Double japanese_news = 0.0;
 	
 	@Column(nullable = false)
-	private Long novel = 0L;
+	private Double novel = 0.0;
 	
 	@Column(nullable = false)
-	private Long fairytale = 0L;
+	private Double fairytale = 0.0;
 	
 	@CreatedDate
 	@Column(name = "created_date", updatable = false)
