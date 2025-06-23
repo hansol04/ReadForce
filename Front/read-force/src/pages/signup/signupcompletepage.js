@@ -23,53 +23,45 @@ const SignupCompletePage = () => {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
-    // 닉네임 중복 검사
-    const checkNicknameDuplicate = async (nickname) => {
-      try {
-        const res = await fetch(`/member/nickname-check?nickname=${nickname}`);
-  
-        if (res.ok) {
-          const data = await res.json();
-          console.log(data.message);
-          return true;
-        } else {
-          const data = await res.json();
-          console.warn(data.message || '닉네임 중복');
-          return false;
-        }
-      } catch (err) {
-        console.error('닉네임 중복 확인 오류:', err);
+  const checkNicknameDuplicate = async (nickname) => {
+    try {
+      const res = await fetch(`/member/nickname-check?nickname=${nickname}`);
+      if (res.ok) {
+        const data = await res.json();
+        console.log(data.message);
+        return true;
+      } else {
+        const data = await res.json();
+        console.warn(data.message || '닉네임 중복');
         return false;
       }
-    };
-  
-    // 닉네임 형식 검사
-    const validateNickname = async (value) => {
-      const onlyKorean = /^[가-힣]+$/.test(value);
-      const onlyEnglish = /^[a-zA-Z]+$/.test(value);
-  
-      if (
-        (onlyKorean && value.length <= 8) ||
-        (onlyEnglish && value.length <= 20)
-      ) {
-        const isAvailable = await checkNicknameDuplicate(value);
-        if (isAvailable) {
-          setNicknameMessage('사용 가능한 닉네임입니다.');
-          setIsNicknameValid(true);
-        } else {
-          setNicknameMessage('이미 존재하는 닉네임입니다.');
-          setIsNicknameValid(false);
-        }
-      } else {
-        setNicknameMessage('한글 8자, 영문 20자 이하로 입력해주세요');
-        setIsNicknameValid(false);
-      }
-    };
-  
-      // 생연월일 형식 검사
+    } catch (err) {
+      console.error('닉네임 중복 확인 오류:', err);
+      return false;
+    }
+  };
+
+  const validateNickname = async (value) => {
+    const nicknameRegex = /^[a-zA-Z가-힣0-9]{2,12}$/;
+
+    if (!nicknameRegex.test(value)) {
+      setNicknameMessage('한글/영문/숫자 조합 2~12자만 사용 가능합니다.');
+      setIsNicknameValid(false);
+      return;
+    }
+
+    const isAvailable = await checkNicknameDuplicate(value);
+    if (isAvailable) {
+      setNicknameMessage('사용 가능한 닉네임입니다.');
+      setIsNicknameValid(true);
+    } else {
+      setNicknameMessage('이미 존재하는 닉네임입니다.');
+      setIsNicknameValid(false);
+    }
+  };
+
   const validateBirthday = (value) => {
     const birthdayRegex = /^\d{4}-\d{2}-\d{2}$/;
-
     if (birthdayRegex.test(value)) {
       setBirthdayMessage('생년월일 입력 완료');
       setIsBirthdayValid(true);
@@ -79,59 +71,53 @@ const SignupCompletePage = () => {
     }
   };
 
-    const handleBirthdayChange = (value) => {            // - 자동 추가  /숫자만 남기기   /  자동으로 YYYY-MM-DD 형태로 변환  /유효성 검사 호출
+  const handleBirthdayChange = (value) => {
+    const numeric = value.replace(/\D/g, '').slice(0, 8);
+    let formatted = numeric;
+    if (numeric.length >= 5) {
+      formatted = `${numeric.slice(0, 4)}-${numeric.slice(4, 6)}`;
+      if (numeric.length >= 7) {
+        formatted += `-${numeric.slice(6, 8)}`;
+      }
+    }
+    setBirthday(formatted);
+    validateBirthday(formatted);
+  };
 
-      const numeric = value.replace(/\D/g, '').slice(0, 8);
+  const validatePassword = (value) => {
+    const lengthValid = value.length >= 8 && value.length <= 16;
+    const hasLetter = /[a-zA-Z]/.test(value);
+    const hasNumber = /[0-9]/.test(value);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
 
-      let formatted = numeric;
-      if (numeric.length >= 5) {
-        formatted = `${numeric.slice(0, 4)}-${numeric.slice(4, 6)}`;
-        if (numeric.length >= 7) {
-          formatted += `-${numeric.slice(6, 8)}`;
-        }
-      }
-      setBirthday(formatted);
-      validateBirthday(formatted);
-    };
-    // 비밀번호 유효성 검사
-    const validatePassword = (value) => {
-      const lengthValid = value.length >= 8 && value.length <= 16;
-      const hasLetter = /[a-zA-Z]/.test(value);
-      const hasNumber = /[0-9]/.test(value);
-      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
-  
-      if (lengthValid && hasLetter && hasNumber && hasSpecialChar) {
-        setPasswordMessage('사용 가능한 비밀번호입니다');
-        setIsPasswordValid(true);
-      } else {
-        setPasswordMessage(
-          '영문/숫자/특수문자를 모두 포함하여 8~16자로 설정해주세요'
-        );
-        setIsPasswordValid(false);
-      }
-    };
-  
-    // 비밀번호 확인
-    const validateConfirmPassword = (value) => {
-      if (value === password) {
-        setConfirmPasswordMessage('비밀번호가 일치합니다');
-        setIsConfirmPasswordValid(true);
-      } else {
-        setConfirmPasswordMessage('비밀번호가 일치하지 않습니다');
-        setIsConfirmPasswordValid(false);
-      }
-    };
+    if (lengthValid && hasLetter && hasNumber && hasSpecialChar) {
+      setPasswordMessage('사용 가능한 비밀번호입니다');
+      setIsPasswordValid(true);
+    } else {
+      setPasswordMessage('영문/숫자/특수문자를 모두 포함하여 8~16자로 설정해주세요');
+      setIsPasswordValid(false);
+    }
+  };
+
+  const validateConfirmPassword = (value) => {
+    if (value === password) {
+      setConfirmPasswordMessage('비밀번호가 일치합니다');
+      setIsConfirmPasswordValid(true);
+    } else {
+      setConfirmPasswordMessage('비밀번호가 일치하지 않습니다');
+      setIsConfirmPasswordValid(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setMessage('');
 
-    // 유효성 검사
     if (!email) {
       const msg = '이메일 인증이 누락되었습니다.';
       setError(msg);
       alert(msg);
-
       return;
     }
 
@@ -142,7 +128,6 @@ const SignupCompletePage = () => {
       return;
     }
 
-    // 생년월일 형식 확인
     const birthdayRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!birthdayRegex.test(birthday)) {
       setError('생년월일은 YYYY-MM-DD 형식이어야 합니다.');
@@ -179,15 +164,20 @@ const SignupCompletePage = () => {
       <form className="signup-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>닉네임</label>
-          <div className='input-with-message'>
-          <input
+          <div className="input-with-message">
+            <input
               type="text"
-              placeholder="한글 8자, 영문 20자 이내로 작성해주세요"
+              placeholder="한글, 영문, 숫자 조합 (2~12자, 특수문자 제외)"
               value={nickname}
               onChange={async (e) => {
                 const value = e.target.value;
                 setNickname(value);
-                await validateNickname(value);
+                if (value.length >= 2) {
+                  await validateNickname(value);
+                } else {
+                  setNicknameMessage('2자 이상 입력해주세요');
+                  setIsNicknameValid(false);
+                }
               }}
               required
             />
@@ -200,11 +190,11 @@ const SignupCompletePage = () => {
             >
               {nicknameMessage}
             </span>
-        </div>
+          </div>
         </div>
         <div className="form-group">
           <label>생년월일</label>
-          <div className='input-with-message'>
+          <div className="input-with-message">
             <input
               type="text"
               placeholder="예: 19971104"
@@ -225,7 +215,7 @@ const SignupCompletePage = () => {
         </div>
         <div className="form-group">
           <label>비밀번호</label>
-          <div className='input-with-message'>
+          <div className="input-with-message">
             <input
               type="password"
               placeholder="8~16자, 영문/숫자/특수문자 포함"
@@ -234,7 +224,8 @@ const SignupCompletePage = () => {
                 const value = e.target.value;
                 setPassword(value);
                 validatePassword(value);
-              }} required
+              }}
+              required
             />
             <span
               className="validation-message"
@@ -246,11 +237,10 @@ const SignupCompletePage = () => {
               {passwordMessage}
             </span>
           </div>
-
         </div>
         <div className="form-group">
           <label>비밀번호 확인</label>
-          <div className='input-with-message'>
+          <div className="input-with-message">
             <input
               type="password"
               value={confirmPassword}
@@ -264,18 +254,13 @@ const SignupCompletePage = () => {
             <span
               className="validation-message"
               style={{
-                color: isConfirmPasswordValid === null
-                  ? 'inherit'
-                  : isConfirmPasswordValid
-                    ? 'green'
-                    : 'red',
+                color: isConfirmPasswordValid === null ? 'inherit' : isConfirmPasswordValid ? 'green' : 'red',
                 fontSize: '0.85rem',
               }}
             >
               {confirmPasswordMessage}
             </span>
           </div>
-
         </div>
         <button className="submit-btn">회원가입 완료</button>
         {error && <p className="error-message">{error}</p>}

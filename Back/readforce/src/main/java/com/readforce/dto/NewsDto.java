@@ -29,7 +29,7 @@ public class NewsDto {
 		private String title;
 
 		private String content;
-		
+
 	}
 	
 	@Getter

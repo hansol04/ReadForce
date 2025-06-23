@@ -13,6 +13,7 @@ const Header = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const isLoggedIn = !!localStorage.getItem("token");
+  const provider = localStorage.getItem("provider"); // ✅ 추가
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -28,42 +29,31 @@ const Header = () => {
 
   const handleLogout = async () => {
     const token = localStorage.getItem("token");
-    const provider = localStorage.getItem("provider");
 
-    try {
-      if (provider === "KAKAO") {
-        const response = await fetch("/member/kakao-sign-out", {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          localStorage.clear();
-          window.location.href = data.KAKAO_LOGOUT_URL;
-          return;
-        } else {
-          alert("카카오 로그아웃에 실패했습니다.");
-        }
-      } else {
-        await fetch("/member/sign-out", {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      }
-    } catch (error) {
-      console.error("로그아웃 중 오류 발생:", error);
-    }
+    try {const res = await fetch("/member/sign-out", {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const result = await res.json();
+    const kakaoLogoutUrl = result.KAKAO_SIGN_OUT_URL;
 
     localStorage.clear();
     setShowUserMenu(false);
-    navigate("/");
-  };
 
+    if (kakaoLogoutUrl) {
+      window.location.href = kakaoLogoutUrl;
+    } else {
+      navigate("/");
+    }
+  } catch (error) {
+    console.error("로그아웃 중 오류 발생:", error);
+    localStorage.clear();
+    setShowUserMenu(false);
+    navigate("/");
+  }
+};
   return (
     <header className="header">
       <div className="page-container header-inner">
@@ -137,10 +127,15 @@ const Header = () => {
               {showUserMenu && (
                 <div className="user-dropdown">
                   <div onClick={() => { setShowUserMenu(false); navigate("/mypage"); }}>마이페이지</div>
-
                   <div onClick={() => { setShowUserMenu(false); navigate("/profile-edit"); }}>회원정보 수정</div>
-                  <div onClick={() => { setShowUserMenu(false); navigate("/change-password"); }}>비밀번호 수정</div>
-                  {/* 관리자 전용 메뉴 */}
+
+                  {/* ✅ 일반 회원만 노출 */}
+                  {(!provider || provider === '') && (
+                    <div onClick={() => { setShowUserMenu(false); navigate("/change-password"); }}>
+                      비밀번호 수정
+                    </div>
+                  )}
+
                   {nickname === "관리자" && (
                     <div onClick={() => { setShowUserMenu(false); navigate("/adminpage"); }}>
                       관리자 페이지

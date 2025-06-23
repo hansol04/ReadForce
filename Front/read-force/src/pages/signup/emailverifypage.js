@@ -38,7 +38,6 @@ const EmailVerifyPage = () => {
   };
 
   return (
-    <div className="page-container">
     <div className="signup-wrapper">
       <h2 className="signup-title">E-mail 인증</h2>
       <form className="signup-form" onSubmit={handleVerify}>
@@ -55,7 +54,6 @@ const EmailVerifyPage = () => {
         <button className="submit-btn">확인</button>
         {error && <p className="error-message">{error}</p>}
       </form>
-    </div>
     </div>
   );
 };
