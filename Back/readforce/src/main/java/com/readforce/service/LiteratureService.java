@@ -253,6 +253,20 @@ public class LiteratureService {
 		
 	}
 
+	// 사용자가 풀은 문학 문제 삭제하기
+	@Transactional
+	public void deleteMemberSolvedLiteratureQuiz(String email, Long literature_quiz_no) {
+
+		// 복합키 생성
+		LiteratureQuizAttemptId literature_quiz_attempt_id = new LiteratureQuizAttemptId();
+		literature_quiz_attempt_id.setEmail(email);
+		literature_quiz_attempt_id.setLiterature_quiz_no(literature_quiz_no);
+		
+		// 삭제
+		literature_quiz_attempt_repository.deleteById(literature_quiz_attempt_id);	
+		
+	}
+
 
 
 	

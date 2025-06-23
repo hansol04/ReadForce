@@ -21,11 +21,17 @@ import com.readforce.dto.LiteratureDto.GetLiteratureParagraphByAdmin;
 import com.readforce.dto.LiteratureDto.GetLiteratureQuizByAdmin;
 import com.readforce.dto.LiteratureDto.LiteratureByAdmin;
 import com.readforce.dto.LiteratureDto.LiteratureParagraphByAdmin;
+import com.readforce.dto.MemberDto.GetAttendance;
 import com.readforce.dto.MemberDto.MemberObjectByAdmin;
 import com.readforce.dto.MemberDto.ModifyByAdmin;
 import com.readforce.dto.MemberDto.SignUpByAdmin;
+import com.readforce.dto.NewsDto.AddLiteratureQuizAttempt;
+import com.readforce.dto.NewsDto.AddNewsQuizAttempt;
+import com.readforce.dto.NewsDto.GetLiteratureQuizAttemptListByEmail;
+import com.readforce.dto.NewsDto.GetNewsQuizAttemptByEmail;
 import com.readforce.dto.NewsDto.NewsByAdmin;
 import com.readforce.dto.NewsDto.NewsQuizByAdmin;
+import com.readforce.dto.PointDto;
 import com.readforce.enums.MessageCode;
 import com.readforce.service.AdminService;
 import com.readforce.service.AttendanceService;
@@ -34,6 +40,8 @@ import com.readforce.service.MemberService;
 import com.readforce.service.NewsService;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
@@ -89,6 +97,24 @@ public class AdminController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
 				MessageCode.MESSAGE_CODE, MessageCode.MEMBER_INFO_MODIFY_SUCCESS
+		));
+		
+	}
+	
+	// 회원 삭제
+	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping("/delete-member-by-email")
+	public ResponseEntity<Map<String, String>> deleteMemberByEmail(
+			@RequestParam("email")
+			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+			String email
+	){
+		
+		admin_service.deleteMemberByEmail(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.DELETE_MEMBER_SUCCESS
 		));
 		
 	}
@@ -311,28 +337,223 @@ public class AdminController {
 	}
 	
 	// 뉴스 퀴즈 풀이 기록 관리 ------------------------------------------
+	// 이메일에 해당하는 뉴스 퀴즈 풀이 기록 가져오기
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/get-news-quiz-attempt-list-by-email")
+	public ResponseEntity<List<GetNewsQuizAttemptByEmail>> getNewsQuizAttempListtByEmail(
+			@RequestParam("email")
+			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+			String email
+	){
+		
+		List<GetNewsQuizAttemptByEmail> get_new_quiz_attempt_by_email_list = admin_service.getNewsQuizAttempListtByEmail(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(get_new_quiz_attempt_by_email_list);
+		
+	}
+	
+	
 	// 뉴스 퀴즈 풀이 기록 추가
-
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping("/add-news-quiz-attempt")
+	public ResponseEntity<Map<String, String>> addNewsQuizAttempt(
+			@Valid
+			@RequestBody AddNewsQuizAttempt add_news_quiz_attempt
+	){
+		
+		// 뉴스 기사 문제 저장
+		admin_service.saveMemberSolvedNewsQuiz(add_news_quiz_attempt);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.ADD_NEWS_QUIZ_ATTEMPT_SUCCESS
+		));
+		
+	}
 	
 	// 뉴스 퀴즈 풀이 기록 삭제
+	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping("/delete-news-quiz-attempt")
+	public ResponseEntity<Map<String, String>> deleteNewsQuizAttempt(
+			@RequestParam("email")
+			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+			String email,
+			@RequestParam("news_quiz_no")
+			@NotNull(message = MessageCode.NEWS_QUIZ_NO_NOT_NULL)
+			Long news_quiz_no
+	){
+		
+		admin_service.deleteNewsQuizAttempt(email, news_quiz_no);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.DELETE_NEWS_QUIZ_ATTEMPT_SUCCESS
+		));
+		
+	}
+	
 	
 	
 	// 문학 퀴즈 풀이 기록 관리 ------------------------------------------------
-	// 문학 퀴즈 풀이 기록 추가
+	// 이메일에 해당하는 문학 퀴즈 풀이 기록 가져오기
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/get-literature-quiz-attempt-list-by-email")
+	public ResponseEntity<List<GetLiteratureQuizAttemptListByEmail>> getLiteratureQuizAttemptListByEmail(
+			@RequestParam("email")
+			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+			String email
+	){
+		
+		List<GetLiteratureQuizAttemptListByEmail> get_literature_quiz_attempt_list_by_email = 
+				admin_service.getLiteratureQuizAttemptListByEmail(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(get_literature_quiz_attempt_list_by_email);
+		
+	}
 	
+	// 문학 퀴즈 풀이 기록 추가
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping("/add-literature-quiz-attempt")
+	public ResponseEntity<Map<String, String>> addLiteratureQuizAttempt(
+			@Valid
+			@RequestBody AddLiteratureQuizAttempt add_literature_quiz_attempt
+	){
+		
+		// 추가
+		admin_service.addLiteratureQuizAttempt(add_literature_quiz_attempt);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.ADD_LITERATURE_QUIZ_ATTEMPT_SUCCESS
+		));
+		
+	}
+
 	// 문학 퀴즈 풀이 기록 삭제
+	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping("/delete-literature-quiz-attempt")
+	public ResponseEntity<Map<String, String>> deleteLiteratureQuizAttempt(
+			@RequestParam("email")
+			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+			String email,
+			@RequestParam("literature_quiz_no")
+			@NotNull(message = MessageCode.LITERATURE_QUIZ_NO_NOT_NULL)
+			Long literature_quiz_no			
+	){
+		
+		admin_service.deleteLiteratureQuizAttempt(email, literature_quiz_no);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.DELETE_LITERATURE_QUIZ_ATTEMPT_SUCCESS
+		));
+		
+	}
 	
 	// 출석 관리 ---------------------------------
+	// 이메일에 해당하는 출석 불러오기
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/get-attendance-list-by-email")
+	public ResponseEntity<List<GetAttendance>> getAttendanceListByEmail(
+			@RequestParam("email")
+			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+			String email
+	){
+		
+		List<GetAttendance> get_attendance_list = admin_service.getAttendanceListByEmail(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(get_attendance_list);
+		
+	}
+	
 	// 출석 추가
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping("/add-attendance")
+	public ResponseEntity<Map<String, String>> addAttendance(
+			@RequestParam("email")
+			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+			String email
+	){
+		
+		admin_service.addAttendance(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.ADD_ATTENDANCE_SUCCESS
+		));
+		
+	}
 	
 	// 출석 삭제
+	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping("/delete-attendance")
+	public ResponseEntity<Map<String, String>> deleteAttendance(
+			@RequestParam("attendance_no")
+			@NotNull(message = MessageCode.ATTENDANCE_NO_NOT_NULL)
+			Long attendance_no
+	){
+		
+		admin_service.deleteAttendance(attendance_no);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.DELETE_ATTENDANCE_SUCCESS
+		));
+		
+	}
 	
 	// 점수 관리 --------------------------------------
 	// 점수 추가
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping("/add-point")
+	public ResponseEntity<Map<String, String>> addPoint(
+			@Valid
+			@RequestBody PointDto.AddPoint add_point
+	){
+		
+		admin_service.addPoint(add_point);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.ADD_POINT_SUCCESS
+		));
+	
+	}
+	
 	
 	// 점수 수정
+	@PreAuthorize("hasRole('ADMIN')")
+	@PatchMapping("/update-point")
+	public ResponseEntity<Map<String, String>> updatePoint(
+			@Valid
+			@RequestBody PointDto.UpdatePoint update_point
+	){
+		
+		admin_service.updatePoint(update_point);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.UPDATE_POINT_SUCCESS
+		));
+		
+	}
 	
 	// 점수 삭제
+	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping("/delete-point")
+	public ResponseEntity<Map<String, String>> deletePoint(
+			@RequestParam("email")
+			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+			String email
+	){
+		
+		admin_service.deletePoint(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				MessageCode.MESSAGE_CODE, MessageCode.DELETE_POINT_SUCCESS
+		));
+		
+	}
+	
 	
 	
 }
