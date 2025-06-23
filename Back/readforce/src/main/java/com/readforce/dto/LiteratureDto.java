@@ -31,6 +31,8 @@ public class LiteratureDto {
 		private String level;
 		
 		private String content;
+		
+		private String title;
 
 	}
 	
