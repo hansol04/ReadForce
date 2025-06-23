@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './testquestionpage.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../../api/axiosInstance';
@@ -13,6 +13,10 @@ const TestQuestionPage = () => {
   const [answers, setAnswers] = useState([]);
   const [submitted, setSubmitted] = useState(false);
 
+  const quizBoxRef = useRef(null);      
+  const omrGridRef = useRef(null);      
+  const articleBoxRef = useRef(null);   
+
   useEffect(() => {
     api
       .get(`/proficiency_test/get-proficiency-test-quiz-list?language=${language}`)
@@ -26,6 +30,12 @@ const TestQuestionPage = () => {
       })
       .catch(() => alert('문제를 불러오지 못했습니다.'));
   }, [language]);
+
+  useEffect(() => {
+    if (quizBoxRef.current) quizBoxRef.current.scrollTop = 0;
+    if (omrGridRef.current) omrGridRef.current.scrollTop = 0;
+    if (articleBoxRef.current) articleBoxRef.current.scrollTop = 0;
+  }, [currentIdx]);
 
   if (questions.length === 0) return <div>문제를 불러오는 중...</div>;
 
@@ -59,28 +69,68 @@ const TestQuestionPage = () => {
 
   return (
     <div className="article-question-layout">
-      <div className="article-box">
+      <div className="article-box" ref={articleBoxRef}>
         <h3 className="article-title">{current.article.title || '제목 없음'}</h3>
         <p className="article-content">{current.article.content || '내용 없음'}</p>
       </div>
 
-      <div className="quiz-box">
-        <h4 className="quiz-title">문제 {currentIdx + 1}</h4>
-        <p className="quiz-question">{current.quiz.question_text}</p>
+      <div className="question-omr-container">
+        <div className="quiz-box" ref={quizBoxRef}>
+          <h4 className="quiz-title">문제 {currentIdx + 1}</h4>
+          <p className="quiz-question">{current.quiz.question_text}</p>
 
-        {[current.quiz.choice1, current.quiz.choice2, current.quiz.choice3, current.quiz.choice4].map((opt, idx) => (
-          <button
-            key={idx}
-            className={`quiz-option ${answers[currentIdx] === idx ? 'selected' : ''}`}
-            onClick={() => handleSelect(idx)}
-            disabled={submitted}
-          >
-            {String.fromCharCode(65 + idx)}. {opt}
-          </button>
-        ))}
+          {[current.quiz.choice1, current.quiz.choice2, current.quiz.choice3, current.quiz.choice4].map((opt, idx) => (
+            <button
+              key={idx}
+              className={`quiz-option ${answers[currentIdx] === idx ? 'selected' : ''}`}
+              onClick={() => handleSelect(idx)}
+              disabled={submitted}
+            >
+              {String.fromCharCode(65 + idx)}. {opt}
+            </button>
+          ))}
+
+          <div className="quiz-button-container">
+            <button onClick={goPrev} disabled={currentIdx === 0}>이전</button>
+            <button onClick={goNext} disabled={currentIdx === questions.length - 1}>다음</button>
+            {currentIdx === questions.length - 1 && !submitted && (
+              <button
+                className="submit-button"
+                onClick={handleSubmitAll}
+                disabled={answers.includes(null)}
+              >
+                정답 제출
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="omr-grid" ref={omrGridRef}>
+          {questions.map((_, qIdx) => (
+            <div key={qIdx} className="omr-row">
+              <span className="omr-number" onClick={() => setCurrentIdx(qIdx)}>
+                {qIdx + 1}
+              </span>
+              {['A', 'B', 'C', 'D'].map((label, cIdx) => (
+                <span
+                  key={cIdx}
+                  className={`omr-choice ${answers[qIdx] === cIdx ? 'selected' : ''}`}
+                  onClick={() => {
+                    if (!submitted) {
+                      const updated = [...answers];
+                      updated[qIdx] = cIdx;
+                      setAnswers(updated);
+                    }
+                    setCurrentIdx(qIdx);
+                  }}
+                >
+                  {label}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
-
-
     </div>
   );
 };
