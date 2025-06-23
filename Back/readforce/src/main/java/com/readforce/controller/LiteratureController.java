@@ -1,23 +1,31 @@
 package com.readforce.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.readforce.dto.LiteratureDto.GetLiteratureParagraph;
 import com.readforce.dto.LiteratureDto.GetLiteratureQuiz;
+import com.readforce.dto.LiteratureDto.SaveMemberSolvedLiteratureQuiz;
+import com.readforce.enums.Level;
 import com.readforce.enums.LiteratureRelate;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.NewsRelate;
 import com.readforce.service.LiteratureService;
 import com.readforce.validation.ValidEnum;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +68,7 @@ public class LiteratureController {
 			String type,
 			@RequestParam("level")
 			@NotBlank(message = MessageCode.LITERATURE_LEVEL_NOT_BLANK)
-			@ValidEnum(enumClass = NewsRelate.Level.class, message = MessageCode.LITERATURE_LEVEL_PATTERN_INVALID)
+			@ValidEnum(enumClass = Level.class, message = MessageCode.LEVEL_PATTERN_INVALID)
 			String level,
 			@RequestParam("order_by")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_ORDER_BY_NOT_BLANK)
@@ -85,7 +93,7 @@ public class LiteratureController {
 			String type,
 			@RequestParam("level")
 			@NotBlank(message = MessageCode.LITERATURE_LEVEL_NOT_BLANK)
-			@ValidEnum(enumClass = NewsRelate.Level.class, message = MessageCode.LITERATURE_LEVEL_PATTERN_INVALID)
+			@ValidEnum(enumClass = Level.class, message = MessageCode.LEVEL_PATTERN_INVALID)
 			String level,
 			@RequestParam("category")
 			@NotBlank(message = MessageCode.LITERATURE_CATEGORY_NOT_BLANK)
@@ -123,7 +131,22 @@ public class LiteratureController {
 		
 	}
 	
+	// 사용자가 풀은 문학 문제 저장하기
+	@PostMapping("/save-member-solved-literature-quiz")
+	public ResponseEntity<Map<String, String>> saveMemberSolvedLiteratureQuiz(
+		@Valid @RequestBody SaveMemberSolvedLiteratureQuiz save_member_solved_literature_quiz,
+		@AuthenticationPrincipal UserDetails user_details
+	){
+		
+		String email = user_details.getUsername();
+		
+		// 문학 문제 저장
+		literature_service.saveMemberSolvedLiteratureQuiz(save_member_solved_literature_quiz, email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(MessageCode.MESSAGE_CODE, MessageCode.SAVE_MEMBER_SOLVED_LITERATURE_QUIZ));
+		
+	}
 	
-	
+	// 사용자가 풀은 문학 문제 삭제하기
 	
 }

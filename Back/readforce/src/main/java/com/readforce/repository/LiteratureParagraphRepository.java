@@ -48,6 +48,18 @@ public interface LiteratureParagraphRepository extends JpaRepository<LiteratureP
 			@Param("level") String level,
 			@Param("category") String category
 	);
-	
+
+	@Query("SELECT lp FROM LiteratureParagraph lp JOIN FETCH lp.literature LEFT JOIN LiteratureQuiz lq ON lq.literature_paragraph = lp WHERE lq.literature_quiz_no IS NULL")
+	List<LiteratureParagraph> findLiteratureParagraphListWithoutLiteratureQuiz();
+
+	@Query(value = "SELECT * FROM literature_paragraph WHERE literature_no = :literature_no", nativeQuery = true)
+	LiteratureParagraph findByLiterature_no(
+			@Param("literature_no") Long literature_no
+	);
+
+	@Query(value = "SELECT MAX(lp.literature_paragraph_no) FROM literature_paragraph lp WHERE lp.literature_no = literature_no", nativeQuery = true)
+	Long findLastLiteratureParagraphNoByLiteratureNo(
+			@Param("literature_no") Long literature_no
+	);
 	
 }

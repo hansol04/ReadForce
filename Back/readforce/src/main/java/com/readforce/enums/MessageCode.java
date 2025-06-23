@@ -30,6 +30,14 @@ public final class MessageCode {
 	public static final String LITERATURE_NO_NOT_NULL = "NO0023";
 	public static final String NEWS_QUIZ_NO_NOT_NULL = "NO0024";
 	public static final String SELECTED_OPTION_INDEX_NOT_NULL = "NO0025";
+	public static final String LITERATURE_QUIZ_NO_NOT_NULL = "NO0026";
+	public static final String CLASSIFICATION_NOT_NULL = "NO0027";
+	public static final String TYPE_AND_LANGUAGE_NOT_BLANK = "NO0028";
+	public static final String LITERATURE_TITLE_NOT_BLANK = "NO0029";
+	public static final String LITERATURE_PARAGRAPH_CONTENT_NOT_BLANK = "NO0030";
+	public static final String LITERATURE_PARAGRAPH_CATEGORY_NOT_BLANK = "NO0031";
+	public static final String LEVEL_NOT_BLANK = "NO0032";
+	
 
 	
 	// 입력값 형식 불일치
@@ -44,8 +52,12 @@ public final class MessageCode {
 	public static final String NEWS_ARTICLE_CATEGORY_INVALID = "PA0008";
 	public static final String GEMINI_RESPONSE_PATTERN_INVALID = "PA0009";
 	public static final String LITERATURE_TYPE_PATTERN_INVALID = "PA0010";
-	public static final String LITERATURE_LEVEL_PATTERN_INVALID = "PA0011";
+	public static final String LEVEL_PATTERN_INVALID = "PA0011";
 	public static final String LITERATURE_CATEGORY_PATTERN_INVALID = "PA0012";
+	public static final String CLASSIFICATION_PATTERN_INVALID = "PA0013";
+	public static final String LITERATURE_PARAGRAPH_CATEGORY_INVALID = "PA0014";
+
+	
 	
 	
 	// 입력값 크기/범위 불일치
@@ -75,6 +87,18 @@ public final class MessageCode {
 	public static final String MEMBER_ACTIVATE_SUCCESS = "SU0015";
 	public static final String GENERATE_CREATIVE_NEWS_SUCCESS = "SU0016";
 	public static final String GENERATE_CREATIVE_NEWS_QUIZ_SUCCESS = "SU0017";
+	public static final String SAVE_MEMBER_SOLVED_NEWS_QUIZ = "SU0018";
+	public static final String SAVE_MEMBER_SOLVED_LITERATURE_QUIZ = "SU0019";
+	public static final String GENERATE_CREATIVE_LITERATURE_QUIZ_SUCCESS = "SU0020";
+	public static final String DELETE_NEWS_AND_NEWS_QUIZ_SUCCESS = "SU0021";
+	public static final String DELETE_NEWS_QUIZ_SUCCESS = "SU0022";
+	public static final String ADD_LITERATURE_SUCCESS = "SU0023";
+	public static final String DELETE_LITERATURE_AND_LITERATURE_PARAGRAPH_AND_LITERATURE_QUIZ_SUCCESS = "SU0024";
+	public static final String ADD_LITERATURE_PARAGRAPH_SUCCESS = "SU0025";
+	public static final String DELETE_LITERATURE_PARAGRAPH_AND_LITERATURE_QUIZ_SUCCESS = "SU0025";
+	public static final String DELETE_LITERATURE_QUIZ_SUCCESS = "SU0026";
+	public static final String UPDATE_POINT_SUCCESS = "SU0027";
+	
 
 	// 실패
 	public static final String VERIFICATION_CODE_SEND_FAIL = "FA0001";
@@ -87,6 +111,7 @@ public final class MessageCode {
 	public static final String JSON_MAPPING_FAIL = "FA0008";
 	public static final String JSON_PROCESSING_FAIL = "FA0009";
 	public static final String GEMINI_REQUEST_FAIL = "FA0010";
+	public static final String GET_CHALLENGE_QUIZ_FAIL = "FA0011";
 	
 	
 	// 데이터 없음
@@ -105,7 +130,11 @@ public final class MessageCode {
 	public static final String INTERMEDIATE_NEWS_QUIZ_NOT_FOUND = "NF0013";
 	public static final String ADVANCED_NEWS_QUIZ_NOT_FOUND = "NF0014";
 	public static final String LITERATURE_NOT_FOUND = "NF0015";
-	
+	public static final String NEWS_QUIZ_ATTEMPT_NOT_FOUND = "NF0016";
+	public static final String LITERATURE_QUIZ_ATTEMPT_NOT_FOUND = "NF0017";
+	public static final String LITERATURE_QUIZ_NOT_FOUND = "NF0018";
+	public static final String LITERATURE_PARAGRAPH_NOT_FOUND = "NF0019";
+	public static final String POINT_NOT_FOUND = "NF0020";	
 	
 	// 특정 상황
 	public static final String DUPLICATE_EMAIL = "SP0001";
@@ -125,7 +154,19 @@ public final class MessageCode {
 	public static final String NEWS_QUIZ_LINE_MISSING = "SP0015";
 	public static final String NEWS_QUIZ_OPTION_MISSING = "SP0016";
 	public static final String NEWS_QUIZ_ANSWER_MISSING = "SP0017";
-
+	public static final String ONLY_ONE_BETWEEN_TYPE_OR_LANGUAGE = "SP0018";
+	public static final String LACK_OF_BEGINNER_LITERATURE_QUIZ = "SP0019";
+	public static final String LACK_OF_INTERMEDIATE_LITERATURE_QUIZ = "SP0020";
+	public static final String LACK_OF_ADVANCED_LITERATURE_QUIZ = "SP0021";
+	public static final String LACK_OF_BEGINNER_NEWS_QUIZ = "SP0022";
+	public static final String LACK_OF_INTERMEDIATE_NEWS_QUIZ = "SP0023";
+	public static final String LACK_OF_ADVANCED_NEWS_QUIZ = "SP0024";
+	public static final String TOTAL_POINT_MUST_BE_POSITIVE_NUMBER = "SP0025";
+	public static final String KOREAN_NEWS_POINT_MUST_BE_POSITIVE_NUMBER = "SP0026";
+	public static final String ENGILISH_NEWS_POINT_MUST_BE_POSITIVE_NUMBER = "SP0027";
+	public static final String JAPANESE_NEWS_POINT_MUST_BE_POSITIVE_NUMBER = "SP0028";
+	public static final String NOVEL_POINT_MUST_BE_POSITIVE_NUMBER = "SP0029";
+	public static final String FAIRYTALE_POINT_MUST_BE_POSITIVE_NUMBER = "SP0030";
 	
 
 	

@@ -1,5 +1,7 @@
 package com.readforce.service;
 
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,21 +10,29 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.readforce.dto.LiteratureDto.GetLiteratureParagraph;
 import com.readforce.dto.LiteratureDto.GetLiteratureQuiz;
+import com.readforce.dto.LiteratureDto.SaveMemberSolvedLiteratureQuiz;
 import com.readforce.entity.LiteratureParagraph;
 import com.readforce.entity.LiteratureQuiz;
+import com.readforce.entity.LiteratureQuizAttempt;
 import com.readforce.enums.MessageCode;
 import com.readforce.exception.ResourceNotFoundException;
+import com.readforce.id.LiteratureQuizAttemptId;
 import com.readforce.repository.LiteratureParagraphRepository;
+import com.readforce.repository.LiteratureQuizAttemptRepository;
 import com.readforce.repository.LiteratureQuizRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class LiteratureService {
 	
 	private final LiteratureParagraphRepository literature_paragraph_repository;
 	private final LiteratureQuizRepository literature_quiz_repository;
+	private final LiteratureQuizAttemptRepository literature_quiz_attempt_repository;
+	private final GeminiService gemini_service;
 	
 	// LiteratureParagraph -> GetLiteratureParagraph 변환
 	private GetLiteratureParagraph transformEntity(LiteratureParagraph literature_paragraph) {
@@ -176,6 +186,75 @@ public class LiteratureService {
 		return get_literature_quiz;
 	}
 	
+	// 문학 문제 생성(문학 문단에 해당하는 문제가 없을 시 생성)
+	public void generatedCreativeLiteratureQuizByGemini() {
+		
+		log.info("Gemini 문학 문제 생성 시작");
+		
+		// 문학 문단에 해당하는 문제가 없는 문학 문단 리스트 조회
+		List<LiteratureParagraph> no_quiz_literature_paragraph_list = literature_paragraph_repository.findLiteratureParagraphListWithoutLiteratureQuiz();
+		
+		int count = 0;
+		
+		for(LiteratureParagraph literature_paragraph : no_quiz_literature_paragraph_list) {
+			
+			try {
+				
+				LiteratureQuiz literature_quiz = gemini_service.generateCreativeLiteratureQuiz(literature_paragraph);
+				
+				literature_quiz_repository.save(literature_quiz);
+				
+				log.info("문학 문제 생성 완료: {}", literature_quiz.getQuestion_text());
+				
+				count++;
+				
+				Thread.sleep(9000);
+				
+			} catch(Exception exception) {
+				
+				log.warn("문학 문제 생성 실패: {}", exception.getMessage());
+				
+			}
+			
+		}
+
+		log.info("최종 문학 문제 생성 갯수: {}", count);
+
+	}
+	
+	// 사용자가 푼 문학 문제 저장
+	@Transactional
+	public void saveMemberSolvedLiteratureQuiz(SaveMemberSolvedLiteratureQuiz save_member_solved_literature_quiz, String email) {
+		
+		// 사용자가 정답을 입력했는지 확인
+		LiteratureQuiz literature_quiz = literature_quiz_repository.findById(save_member_solved_literature_quiz.getLiterature_quiz_no())
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.LITERATURE_QUIZ_NOT_FOUND));
+		
+		boolean is_correct = false;
+		
+		if(save_member_solved_literature_quiz.getSelected_option_index() == literature_quiz.getCorrect_answer_index()) {
+			
+			is_correct = true;
+			
+		}
+		
+		// 복합키 생성
+		LiteratureQuizAttemptId literature_quiz_attempt_id = new LiteratureQuizAttemptId();
+		literature_quiz_attempt_id.setEmail(email);
+		literature_quiz_attempt_id.setLiterature_quiz_no(literature_quiz.getLiterature_quiz_no());
+		
+		// 사용자가 푼 문학 문제 엔티티 생성
+		LiteratureQuizAttempt literature_quiz_attempt = new LiteratureQuizAttempt();
+		literature_quiz_attempt.setLiterature_quiz_attempt_id(literature_quiz_attempt_id);
+		literature_quiz_attempt.setIs_correct(is_correct);
+		literature_quiz_attempt.setSelected_option_index(save_member_solved_literature_quiz.getSelected_option_index());
+		
+		literature_quiz_attempt_repository.save(literature_quiz_attempt);
+		
+	}
+
+
+
 	
 
 }
