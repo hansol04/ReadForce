@@ -23,6 +23,7 @@ import com.readforce.dto.NewsDto.GetNewsQuizAttemptByEmail;
 import com.readforce.dto.NewsDto.NewsByAdmin;
 import com.readforce.dto.NewsDto.NewsQuizByAdmin;
 import com.readforce.dto.PointDto;
+import com.readforce.dto.PointDto.GetPoint;
 import com.readforce.entity.Attendance;
 import com.readforce.entity.Literature;
 import com.readforce.entity.LiteratureParagraph;
@@ -68,12 +69,12 @@ public class AdminService {
 	private final AttendanceRepository attendance_repository;
 	private final PointRepository point_repository;
 
-	// 전체 회원 정보 불러오기
+	// 전체 회원 정보 불러오기(최신순)
 	@Transactional(readOnly = true)
 	public List<MemberObjectByAdmin> getAllMemberList() {
 
 		// 모든 회원 정보 조회
-		List<Member> all_member_list = member_repository.findAll();
+		List<Member> all_member_list = member_repository.findAllOrderByCreatedDateDesc();
 		
 		if(all_member_list.isEmpty()) {
 			
@@ -167,11 +168,11 @@ public class AdminService {
 		
 	}
 
-	// 전체 뉴스 가져오기
+	// 전체 뉴스 가져오기(뉴스 번호순)
 	@Transactional(readOnly = true)
 	public List<NewsByAdmin> getAllNewsList() {
 		
-		List<News> news_list = news_repository.findAll();
+		List<News> news_list = news_repository.findAllOrderBy();
 		
 		if(news_list.isEmpty()) {
 			
@@ -225,7 +226,7 @@ public class AdminService {
 	@Transactional(readOnly = true)
 	public List<NewsQuizByAdmin> getAllNewsQuizList() {
 
-		List<NewsQuiz> news_quiz_list = news_quiz_repository.findAll();
+		List<NewsQuiz> news_quiz_list = news_quiz_repository.findAllOrderByNewsQuizNoDesc();
 		
 		if(news_quiz_list.isEmpty()) {
 			
@@ -270,11 +271,11 @@ public class AdminService {
 	
 	}
 
-	// 전체 문학 가져오기
+	// 전체 문학 가져오기(문학 번호순)
 	@Transactional(readOnly = true)
 	public List<GetLiteratureByAdmin> getAllLiteratureList() {
 
-		List<Literature> literature_list = literature_repository.findAll();
+		List<Literature> literature_list = literature_repository.findAllOrderByLiteratureNoDesc();
 		
 		if(literature_list.isEmpty()) {
 			
@@ -377,11 +378,11 @@ public class AdminService {
 		
 	}
 
-	// 전체 문학 문단 리스트 가져오기
+	// 전체 문학 문단 리스트 가져오기(문학 문단 번호순)
 	@Transactional(readOnly = true)
 	public List<GetLiteratureParagraphByAdmin> getAllLiteratureParagraphList() {
 		
-		List<LiteratureParagraph> literature_paragraph_list = literature_paragraph_repository.findAll();
+		List<LiteratureParagraph> literature_paragraph_list = literature_paragraph_repository.findAllOrderByLiteratureParagraphNoAsc();
 		
 		if(literature_paragraph_list.isEmpty()) {
 			
@@ -426,11 +427,11 @@ public class AdminService {
 		
 	}
 	
-	// 전체 문학 퀴즈 가져오기
+	// 전체 문학 퀴즈 가져오기(문학 문제 번호 순)
 	@Transactional(readOnly = true)
 	public List<GetLiteratureQuizByAdmin> getAllLiteratureQuizList() {
 
-		List<LiteratureQuiz> literature_quiz_list = literature_quiz_repository.findAll();
+		List<LiteratureQuiz> literature_quiz_list = literature_quiz_repository.findAllOrderByLiteratureQuizNoDesc();
 		
 		if(literature_quiz_list.isEmpty()) {
 			
@@ -517,11 +518,11 @@ public class AdminService {
 		
 	}
 
-	// 이메일에 해당하는 뉴스 퀴즈 풀이 기록 가져오기
+	// 이메일에 해당하는 뉴스 퀴즈 풀이 기록 가져오기(최신순)
 	@Transactional(readOnly = true)
 	public List<GetNewsQuizAttemptByEmail> getNewsQuizAttempListtByEmail(String email) {
 		
-		List<NewsQuizAttempt> news_quiz_attempt_list = news_quiz_attempt_repository.findByEmail(email);
+		List<NewsQuizAttempt> news_quiz_attempt_list = news_quiz_attempt_repository.findByEmailOrderByCreatedDateDesc(email);
 		
 		if(news_quiz_attempt_list.isEmpty()) {
 			
@@ -548,11 +549,11 @@ public class AdminService {
 
 	}
 
-	// 이메일에 해당하는 문학 퀴즈 풀이 기록 가져오기
+	// 이메일에 해당하는 문학 퀴즈 풀이 기록 가져오기(최신순)
 	public List<GetLiteratureQuizAttemptListByEmail> getLiteratureQuizAttemptListByEmail(String email) {
 
 		List<LiteratureQuizAttempt> literature_quiz_attempt_list = 
-				literature_quiz_attempt_repository.findByEmail(email);
+				literature_quiz_attempt_repository.findByEmailOrderByCreatedDateDesc(email);
 		
 		if(literature_quiz_attempt_list.isEmpty()) {
 			
@@ -625,11 +626,11 @@ public class AdminService {
 
 	}
 
-	// 이메일에 해당하는 출석 불러오기
+	// 이메일에 해당하는 출석 불러오기(최신순)
 	@Transactional(readOnly = true)
 	public List<GetAttendance> getAttendanceListByEmail(String email) {
 		
-		List<Attendance> attendance_list = attendance_repository.findByEmail(email);
+		List<Attendance> attendance_list = attendance_repository.findByEmailOrderByCreatedDateDesc(email);
 		
 		if(attendance_list.isEmpty()) {
 			
@@ -731,6 +732,41 @@ public class AdminService {
 	public void deletePoint(String email) {
 
 		point_repository.deleteByEmail(email);
+		
+	}
+
+	// 전체 점수 불러오기(최신순)
+	@Transactional(readOnly = true)
+	public List<GetPoint> getAllPointList() {
+
+		List<Point> point_list = point_repository.findAllOrderByCreatedDateDesc();
+		
+		if(point_list.isEmpty()) {
+			
+			throw new ResourceNotFoundException(MessageCode.POINT_NOT_FOUND);
+			
+		}
+		
+		List<GetPoint> get_point_list = new ArrayList<>();
+		
+		for(Point point : point_list) {
+			
+			GetPoint get_point = new GetPoint();
+			get_point.setEmail(point.getEmail());
+			get_point.setTotal(point.getTotal());
+			get_point.setKorean_news(point.getKorean_news());
+			get_point.setEnglish_news(point.getEnglish_news());
+			get_point.setJapanese_news(point.getJapanese_news());
+			get_point.setNovel(point.getNovel());
+			get_point.setFairytale(point.getFairytale());
+			get_point.setCreated_date(point.getCreated_date());
+			get_point.setLast_modified_date(point.getLast_modified_date());
+			
+			get_point_list.add(get_point);
+			
+		}
+		
+		return get_point_list;
 		
 	}
 

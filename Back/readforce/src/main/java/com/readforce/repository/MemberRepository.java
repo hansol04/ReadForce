@@ -41,5 +41,8 @@ public interface MemberRepository extends JpaRepository<Member, String>{
 			@Param("email") String email
 	);
 
+	@Query(value = "SELECT * FROM member ORDER BY created_date DESC", nativeQuery = true)
+	List<Member> findAllOrderByCreatedDateDesc();
+
 	
 }

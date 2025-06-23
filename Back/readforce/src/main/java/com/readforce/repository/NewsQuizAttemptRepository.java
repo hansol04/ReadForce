@@ -30,10 +30,29 @@ public interface NewsQuizAttemptRepository extends JpaRepository<NewsQuizAttempt
 			@Param("email") String email
 	);
 
-	@Query(value = "SELECT * FROM news_quiz_attempt WHERE email = :email", nativeQuery = true)
-	List<NewsQuizAttempt> findByEmail(
+	@Query(value = "SELECT * FROM news_quiz_attempt WHERE email = :email ORDER BY created_date DESC", nativeQuery = true)
+	List<NewsQuizAttempt> findByEmailOrderByCreatedDateDesc(
 			@Param("email") String email
 	);
+
+	@Query(value = "SELECT " +
+				   " t.news_quiz_no, " +
+				   " nq.question_text, " +
+				   " total.total_count " +
+				   "FROM " +
+				   " (SELECT news_quiz_no, COUNT(*) as incorrect_count " + 
+				   " FROM news_quiz_attempt " +
+				   " WHERE is_correct = false " +
+				   " GROUP BY news_quiz_no) AS t " + 
+				   "JOIN " + 
+				   " (SELECT news_quiz_no, COUNT(*) as total_count " +
+				   " FROM news_quiz_attempt " +
+				   " GROUP BY news_quiz_no) AS total ON t.news_quiz_no = total.news_quiz_no " +
+				   "JOIN " + 
+				   " news_quiz nq ON t.news_quiz_no = nq.news_quiz_no ",
+				   nativeQuery = true
+	)
+	List<Object[]> findIncorrectNewsQuizStatus();
 
 
 

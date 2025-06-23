@@ -13,36 +13,36 @@ import com.readforce.id.LiteratureParagraphId;
 @Repository
 public interface LiteratureParagraphRepository extends JpaRepository<LiteratureParagraph, LiteratureParagraphId>{
 
-	@Query(value = "SELECT * FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) ORDER BY created_date ASC", nativeQuery = true)
+	@Query("SELECT lp FROM LiteratureParagraph lp JOIN FETCH lp.literature l WHERE l.type = :type ORDER BY lp.created_date ASC")
 	List<LiteratureParagraph> getLiteratureParagraphListByTypeOrderByAsc(
 			@Param("type") String type
 	);
 
-	@Query(value = "SELECT * FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) ORDER BY created_date DESC", nativeQuery = true)
+	@Query("SELECT lp FROM LiteratureParagraph lp JOIN FETCH lp.literature l WHERE l.type = :type ORDER BY lp.created_date DESC")
 	List<LiteratureParagraph> getLiteratureParagraphListByTypeOrderByDesc(
 			@Param("type") String type
 	);
 
-	@Query(value = "SELECT * FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) AND level = :level ORDER BY created_date ASC", nativeQuery = true)
+	@Query("SELECT lp FROM LiteratureParagraph lp JOIN FETCH lp.literature l WHERE l.type = :type AND lp.level = :level ORDER BY lp.created_date ASC")
 	List<LiteratureParagraph> getLiteratureParagraphListByTypeAndLevelOrderByAsc(
 			@Param("type") String type, 
 			@Param("level") String level
 	);
 
-	@Query(value = "SELECT * FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) AND level = :level ORDER BY created_date DESC", nativeQuery = true)
+	@Query("SELECT lp FROM LiteratureParagraph lp JOIN FETCH lp.literature l WHERE l.type = :type AND lp.level = :level ORDER BY lp.created_date DESC")
 	List<LiteratureParagraph> getLiteratureParagraphListByTypeAndLevelOrderByDesc(
 			@Param("type") String type, 
 			@Param("level") String level
 	);
 
-	@Query(value = "SELECT * FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) AND level = :level AND category = :category ORDER BY created_date ASC", nativeQuery = true)
+	@Query("SELECT lp FROM LiteratureParagraph lp JOIN FETCH lp.literature l WHERE l.type = :type AND lp.level = :level AND lp.category = :category ORDER BY lp.created_date ASC")
 	List<LiteratureParagraph> getLiteratureParagraphListByTypeAndLevelAndCategoryOrderByAsc(
 			@Param("type") String type,
 			@Param("level") String level,
 			@Param("category") String category
 	);
 	
-	@Query(value = "SELECT * FROM literature_paragraph WHERE literature_no IN (SELECT literature_no FROM literature WHERE type = :type) AND level = :level AND category = :category ORDER BY created_date DESC", nativeQuery = true)
+	@Query("SELECT lp FROM LiteratureParagraph lp JOIN FETCH lp.literature l WHERE l.type = :type AND lp.level = :level AND lp.category = :category ORDER BY lp.created_date DESC")
 	List<LiteratureParagraph> getLiteratureParagraphListByTypeAndLevelAndCategoryOrderByDesc(
 			@Param("type") String type,
 			@Param("level") String level,
@@ -61,5 +61,8 @@ public interface LiteratureParagraphRepository extends JpaRepository<LiteratureP
 	Long findLastLiteratureParagraphNoByLiteratureNo(
 			@Param("literature_no") Long literature_no
 	);
+
+	@Query(value = "SELECT * FROM literature_paragraph ORDER BY literature_paragraph_no Asc", nativeQuery = true)
+	List<LiteratureParagraph> findAllOrderByLiteratureParagraphNoAsc();
 	
 }

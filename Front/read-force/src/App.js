@@ -30,6 +30,7 @@ import TestResultPage from './pages/challenge/testresultpage';
 import TestReviewPage from './pages/challenge/testreviewpage';
 import NovelPage from './pages/literature/NovelPage';
 import FairyTalePage from './pages/literature/FairyTalePage';
+import RankingPage from './pages/challenge/RankingPage';
 
 function App() {
   return (
@@ -65,7 +66,7 @@ function App() {
           <Route path="/test-review" element={<TestReviewPage />} />
           <Route path="/literature/novel" element={<NovelPage />} />
           <Route path="/literature/fairytale" element={<FairyTalePage />} />
-          
+          <Route path="/ranking" element={<RankingPage />} />
        </Route>
       </Routes>
     </Router>

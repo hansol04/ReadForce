@@ -1,8 +1,14 @@
-// ✅ 공통 레이아웃 .page-container 반영됨
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './challengepage.css';
 
 const ChallengePage = () => {
+  const navigate = useNavigate();
+
+  const handleRankingClick = () => {
+    navigate('/ranking'); // 원하는 경로로 이동
+  };
+
   return (
     <div className="page-container">
       <h2 className="title">“ 오늘 <span className="highlight">812명</span>이 도전했어요! ”</h2>
@@ -32,7 +38,10 @@ const ChallengePage = () => {
         </div>
 
         <div className="top5-box">
-          <h3>주간 TOP 5</h3>
+          <div className="top5-header">
+            <h3>주간 TOP 5</h3>
+            <button className="ranking-more-btn" onClick={handleRankingClick}>＋</button>
+          </div>
           <ol>
             <li><span className="rank gold">1</span> 김기찬 <span className="point">145p</span></li>
             <li><span className="rank silver">2</span> 김제헌 <span className="point">137p</span></li>

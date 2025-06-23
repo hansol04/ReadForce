@@ -30,4 +30,7 @@ public interface NewsQuizRepository extends JpaRepository<NewsQuiz, Long>{
 			@Param("news_no") Long news_no
 	);
 
+	@Query(value = "SELECT * FROM news_quiz ORDER BY news_quiz_no DESC", nativeQuery = true)
+	List<NewsQuiz> findAllOrderByNewsQuizNoDesc();
+
 }

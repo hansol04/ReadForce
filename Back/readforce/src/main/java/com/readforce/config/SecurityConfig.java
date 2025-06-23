@@ -66,6 +66,7 @@ public class SecurityConfig {
 					            "/auth/get-tokens",
 								"/news/get-news-passage-list",
 								"/news/get-news-quiz-object",
+								"/ranking/get-ranking-by-classification-and-type-or-language",
 					            "/oauth2/**"
 						).permitAll()
 						.anyRequest().authenticated()
