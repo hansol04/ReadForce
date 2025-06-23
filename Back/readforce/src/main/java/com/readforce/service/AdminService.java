@@ -123,7 +123,7 @@ public class AdminService {
 		}
 		
 	}
-
+	
 	// 회원 가입
 	@Transactional
 	public void addMember(@Valid SignUpByAdmin sign_up_by_admin) {

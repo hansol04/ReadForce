@@ -27,6 +27,7 @@ import com.readforce.dto.MemberDto.SignUpByAdmin;
 import com.readforce.dto.NewsDto.NewsByAdmin;
 import com.readforce.dto.NewsDto.NewsQuizByAdmin;
 import com.readforce.enums.MessageCode;
+import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.service.AdminService;
 import com.readforce.service.AttendanceService;
 import com.readforce.service.LiteratureService;
