@@ -20,29 +20,34 @@ const categorizeArticle = (text) => {
   return topCategory[1] > 0 ? topCategory[0] : 'ETC';
 };
 
-const UniversalList = ({
-  items = [],
-  level, setLevel,
-  category, setCategory,
-  order_by, setOrderBy
-}) => {
+  const UniversalList = ({
+    items = [],
+    level, setLevel,
+    category, setCategory,
+    order_by, setOrderBy
+  }) => {
   const enriched = items.map(article => ({
     ...article,
-    category: categorizeArticle(article.title + ' ' + article.summary),
+    category: categorizeArticle((article.title || '') + ' ' + (article.content || '')),
   }));
 
-  const filtered = enriched.filter((a) => {
-    const levelMatch = level === '' || a.difficulty === level;
-    const categoryMatch = category === '' || category === a.category;
+  console.log('level:', level);
+console.log('category:', category);
+console.log('items sample:', items[0]);
+console.log('enriched sample:', enriched[0]);
+
+   const filtered = items.filter(a => {
+    const levelMatch = level === '' || a.level === level;
+    const categoryMatch = category === '' || a.category === category;
     return levelMatch && categoryMatch;
   });
-
+  
   const sorted = [...filtered].sort((a, b) =>
     order_by === 'latest'
       ? new Date(b.publishedAt) - new Date(a.publishedAt)
       : new Date(a.publishedAt) - new Date(b.publishedAt)
   );
-
+  
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = React.useState(1);
   const totalPages = Math.ceil(sorted.length / itemsPerPage);
@@ -75,8 +80,8 @@ const UniversalList = ({
         {paginated.length === 0 ? (
           <p className="no-articles">조건에 맞는 기사가 없습니다.</p>
         ) : (
-          paginated.map((item) => (
-            <UniversalCard key={item.id || item.new_passage_no} data={item} />
+          paginated.map((item, index) => (
+            <UniversalCard key={item.id ?? item.new_passage_no ?? `unique-${index}`} data={item} />
           ))
         )}
       </div>

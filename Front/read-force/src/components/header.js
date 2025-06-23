@@ -97,7 +97,6 @@ const Header = () => {
             </div>
 
             <Link to="/challenge" className="nav-item">문해력 도전</Link>
-            <Link to="/community" className="nav-item">커뮤니티</Link>
           </nav>
         </div>
 

@@ -13,6 +13,13 @@ const UniversalFilterBar = ({ level, setLevel, category, setCategory, order_by, 
     return `${base} ${level === lvl ? 'selected' : ''}`;
   };
 
+  const levelOptions = [
+    { value: '', label: '전체' },  
+    { value: 'BEGINNER', label: '초급' },
+    { value: 'INTERMEDIATE', label: '중급' },
+    { value: 'ADVANCED', label: '고급' },
+  ];
+
   const categoryOptions = [
     { value: '', label: '모두' },
     { value: 'POLITICS', label: '정치' },
@@ -25,11 +32,11 @@ const UniversalFilterBar = ({ level, setLevel, category, setCategory, order_by, 
 
   const selectedCategory = categoryOptions.find((o) => o.value === category) || categoryOptions[0];
 
-  const handleLevelClick = (lvl) => {
-    if (level === lvl) {
+  const handleLevelClick = (value) => {
+    if (level === value) {
       setLevel(''); // 이미 선택된 거 다시 누르면 전체 보기
     } else {
-      setLevel(lvl);
+      setLevel(value);
     }
   };
 
@@ -51,9 +58,16 @@ const UniversalFilterBar = ({ level, setLevel, category, setCategory, order_by, 
       </div>
 
       <div className="filter-center">
-        {['초급', '중급', '고급'].map((lvl) => (
-          <button key={lvl} onClick={() => handleLevelClick(lvl)} className={levelClass(lvl)}>
-            {lvl}
+        {levelOptions.slice(1).map((opt) => (
+          <button
+            key={opt.value}
+            onClick={() => handleLevelClick(opt.value)}
+            className={`level-button ${
+              opt.value === 'BEGINNER' ? 'beginner' :
+              opt.value === 'INTERMEDIATE' ? 'intermediate' : 'advanced'
+            } ${level === opt.value ? 'selected' : ''}`}
+          >
+            {opt.label}
           </button>
         ))}
       </div>
