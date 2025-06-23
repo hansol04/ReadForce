@@ -13,9 +13,9 @@ const TestQuestionPage = () => {
   const [answers, setAnswers] = useState([]);
   const [submitted, setSubmitted] = useState(false);
 
-  const quizBoxRef = useRef(null);      
-  const omrGridRef = useRef(null);      
-  const articleBoxRef = useRef(null);   
+  const quizBoxRef = useRef(null);
+  const omrGridRef = useRef(null);
+  const articleBoxRef = useRef(null);
 
   useEffect(() => {
     api
@@ -89,20 +89,20 @@ const TestQuestionPage = () => {
               {String.fromCharCode(65 + idx)}. {opt}
             </button>
           ))}
+        </div>
 
-          <div className="quiz-button-container">
-            <button onClick={goPrev} disabled={currentIdx === 0}>이전</button>
-            <button onClick={goNext} disabled={currentIdx === questions.length - 1}>다음</button>
-            {currentIdx === questions.length - 1 && !submitted && (
-              <button
-                className="submit-button"
-                onClick={handleSubmitAll}
-                disabled={answers.includes(null)}
-              >
-                정답 제출
-              </button>
-            )}
-          </div>
+        <div className="quiz-controls">
+          <button onClick={goPrev} disabled={currentIdx === 0}>이전</button>
+          <button onClick={goNext} disabled={currentIdx === questions.length - 1}>다음</button>
+          {currentIdx === questions.length - 1 && !submitted && (
+            <button
+              className="submit-button"
+              onClick={handleSubmitAll}
+              disabled={answers.includes(null)}
+            >
+              정답 제출
+            </button>
+          )}
         </div>
 
         <div className="omr-grid" ref={omrGridRef}>

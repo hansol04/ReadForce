@@ -28,7 +28,7 @@ import ArticleQuestionPage from './pages/news/ArticleQuestionPage';
 import ArticleResultPage from './pages/news/ArticleResultPage';
 import TestQuestionPage from './pages/challenge/testquestionpage';
 import TestResultPage from './pages/challenge/testresultpage';
-
+import TestReviewPage from './pages/challenge/testreviewpage';
 function App() {
   return (
     <Router>
@@ -61,6 +61,7 @@ function App() {
           <Route path="/question-result" element={<ArticleResultPage />} /> 
           <Route path="/test-question" element={<TestQuestionPage />} />
           <Route path="/test-result" element={<TestResultPage />} />
+          <Route path="/test-review" element={<TestReviewPage />} />
        </Route>
       </Routes>
     </Router>
