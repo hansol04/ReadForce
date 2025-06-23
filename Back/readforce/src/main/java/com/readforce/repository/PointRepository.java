@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.readforce.entity.Point;
 
 @Repository
-public interface PointRepository extends JpaRepository<Point, Long>{
+public interface PointRepository extends JpaRepository<Point, String>{
 
 	@Query(value = "SELECT * FROM point WHERE email = :email", nativeQuery = true)
 	Optional<Point> findByEmail(
