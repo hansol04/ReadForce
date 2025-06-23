@@ -13,7 +13,13 @@ const categoryMap = {
   SOCIETY: '사회',
   CULTURE: '생활/문화',
   SCIENCE: 'IT/과학',
-  ETC: '기타'
+  ETC: '기타',
+  
+  MYSTERY: '추리',
+  HISTORY: '역사',
+  CLASSIC: '고전',
+  MODERN: '근대',
+  CHILDREN: '동화',
 };
 
 const UniversalCard = React.memo(({ data, onSolve }) => {
@@ -34,7 +40,7 @@ const UniversalCard = React.memo(({ data, onSolve }) => {
           <p className="news-category"># {koreanCategory}</p>
         </div>
 
-        <button onClick={() => onSolve(data)} className="news-button">
+        <button onClick={() => onSolve && onSolve(data)} className="news-button">
           문제 풀기
         </button>
       </div>

@@ -6,6 +6,7 @@ import {
   fetchNewsListByLanguageAndLevelAndCategory
 } from '../../api/newsApi';
 import debounce from 'lodash/debounce';
+import NewsCategory from '../../components/NewsCategory';
 
 const reverseLevelMap = {
   '초급': 'BEGINNER',
@@ -81,16 +82,17 @@ const KoreaPage = () => {
 
   return (
     <div className="page-container">
-      <UniversalList
-        items={newsItems}
-        language={language}
-        level={level}
-        setLevel={setLevel}
-        category={category}
-        setCategory={setCategory}
-        order_by={order_by}
-        setOrderBy={setOrderBy}
-      />
+    <UniversalList
+      items={newsItems}
+      language={language}
+      level={level}
+      setLevel={setLevel}
+      category={category}
+      setCategory={setCategory}
+      order_by={order_by}
+      setOrderBy={setOrderBy}
+      categoryOptions={NewsCategory}
+    />
     </div>
   );
 };

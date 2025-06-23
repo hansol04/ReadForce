@@ -28,6 +28,9 @@ import ArticleResultPage from './pages/news/ArticleResultPage';
 import TestQuestionPage from './pages/challenge/testquestionpage';
 import TestResultPage from './pages/challenge/testresultpage';
 import TestReviewPage from './pages/challenge/testreviewpage';
+import NovelPage from './pages/literature/NovelPage';
+import FairyTalePage from './pages/literature/FairyTalePage';
+
 function App() {
   return (
     <Router>
@@ -60,6 +63,9 @@ function App() {
           <Route path="/test-question" element={<TestQuestionPage />} />
           <Route path="/test-result" element={<TestResultPage />} />
           <Route path="/test-review" element={<TestReviewPage />} />
+          <Route path="/literature/novel" element={<NovelPage />} />
+          <Route path="/literature/fairytale" element={<FairyTalePage />} />
+          
        </Route>
       </Routes>
     </Router>
