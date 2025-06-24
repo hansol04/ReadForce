@@ -79,6 +79,30 @@ const AdminUserInfo = () => {
 
     if (!user) return <div>불러오는 중...</div>;
 
+    // 뉴스 퀴즈 풀이 기록 삭제
+    const handleNewQuizDeleteAttempt = async (email, newsQuizNo) => {
+        const confirmed = window.confirm("정말 삭제하시겠습니까?");
+        if (!confirmed) return;
+
+        try {
+            const res = await fetchWithAuth(`/admin/delete-news-quiz-attempt?email=${email}&news_quiz_no=${newsQuizNo}`, {
+                method: 'DELETE',
+            });
+
+            const data = await res.json();
+            alert(data.message || "삭제 성공!");
+
+        } catch (err) {
+            console.error("삭제 실패", err);
+            alert("삭제 중 오류 발생");
+        }
+    };
+
+    // 문학 퀴즈 풀이 기록 삭제
+    const handleLiteratureQuizDeleteAttempt = async (email, literatureQuizNo) => {
+        
+    }
+
     return (
         <div style={{ padding: "24px" }}>
             <button onClick={() => navigate("/adminpage")} style={backbtn}>뒤로가기</button>
@@ -117,7 +141,16 @@ const AdminUserInfo = () => {
 
             <hr style={{ margin: "24px 0" }} />
 
-            <h3>뉴스 퀴즈 응시 기록</h3>
+            <div style={TITLE_STYLE}>
+                <div>
+                    <h3>뉴스 퀴즈 응시 기록</h3>
+                </div>
+                <div style={BUTTON_LIST}>
+                    <button
+                        style={BUTTON_STYLE}
+                    >뉴스 퀴즈 풀이 기록 추가</button>
+                </div>
+            </div>
             {newsQuizAttempts.length === 0 ? (
                 <p>기록이 없습니다.</p>
             ) : (
@@ -128,6 +161,7 @@ const AdminUserInfo = () => {
                             <th style={thStyle}>선택지</th>
                             <th style={thStyle}>정답 여부</th>
                             <th style={thStyle}>응시일</th>
+                            <th style={thStyle}>관리</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -137,6 +171,13 @@ const AdminUserInfo = () => {
                                 <td style={tdStyle}>{(attempt.selected_option_index ?? 0) + 1}번</td>
                                 <td style={tdStyle}>{attempt.is_correct ? "정답" : "오답"}</td>
                                 <td style={tdStyle}>{new Date(attempt.created_date).toLocaleString()}</td>
+                                <td style={tdStyle}>
+                                    <button
+                                        onClick={() => handleNewQuizDeleteAttempt(attempt.email, attempt.news_quiz_no)}
+                                        style={{ color: "red", border: "none", background: "none", cursor: "pointer" }}
+                                    >삭제
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -145,7 +186,16 @@ const AdminUserInfo = () => {
 
             <hr style={{ margin: "24px 0" }} />
 
-            <h3>문학 퀴즈 응시 기록</h3>
+            <div style={TITLE_STYLE}>
+                <div>
+                    <h3>문학 퀴즈 응시 기록</h3>
+                </div>
+                <div style={BUTTON_LIST}>
+                    <button
+                        style={BUTTON_STYLE}
+                    >문학 퀴즈 풀이 기록 추가</button>
+                </div>
+            </div>
             {literatureQuizAttempts.length === 0 ? (
                 <p>기록이 없습니다.</p>
             ) : (
@@ -156,6 +206,7 @@ const AdminUserInfo = () => {
                             <th style={thStyle}>선택지</th>
                             <th style={thStyle}>정답 여부</th>
                             <th style={thStyle}>응시일</th>
+                            <th style={thStyle}>관리</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -165,6 +216,13 @@ const AdminUserInfo = () => {
                                 <td style={tdStyle}>{(attempt.selected_option_index ?? 0) + 1}번</td>
                                 <td style={tdStyle}>{attempt.is_correct ? "정답" : "오답"}</td>
                                 <td style={tdStyle}>{new Date(attempt.created_date).toLocaleString()}</td>
+                                <td style={tdStyle}>
+                                    <button
+                                        onClick={() => handleLiteratureQuizDeleteAttempt(attempt.email, attempt.news_quiz_no)}
+                                        style={{ color: "red", border: "none", background: "none", cursor: "pointer" }}
+                                    >삭제
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -195,5 +253,27 @@ const tdStyle = {
     border: "1px solid #ddd",
     padding: "8px",
 };
+
+const TITLE_STYLE = {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "16px"
+}
+
+const BUTTON_LIST = {
+    display: "flex",
+    gap: "8px"
+}
+
+const BUTTON_STYLE = {
+    marginBottom: "16px",
+    padding: "8px 16px",
+    backgroundColor: "#007BFF",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer"
+}
 
 export default AdminUserInfo;
