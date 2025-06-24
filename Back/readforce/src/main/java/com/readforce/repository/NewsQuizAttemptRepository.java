@@ -36,21 +36,21 @@ public interface NewsQuizAttemptRepository extends JpaRepository<NewsQuizAttempt
 	);
 
 	@Query(value = "SELECT " +
-				   " t.news_quiz_no, " +
+				   " total.news_quiz_no, " +
 				   " nq.question_text, " +
-				   " t.incorrect_count, " +
+				   " COALESCE(t.incorrect_count, 0) as incorrect_count, " +
 				   " total.total_count " +
 				   "FROM " +
-				   " (SELECT news_quiz_no, COUNT(*) as incorrect_count " + 
+				   " (SELECT news_quiz_no, COUNT(*) as total_count " + 
+				   " FROM news_quiz_attempt " +
+				   " GROUP BY news_quiz_no) AS total " + 
+				   "LEFT JOIN " + 
+				   " (SELECT news_quiz_no, COUNT(*) as incorrect_count " +
 				   " FROM news_quiz_attempt " +
 				   " WHERE is_correct = false " +
-				   " GROUP BY news_quiz_no) AS t " + 
+				   " GROUP BY news_quiz_no) AS t ON total.news_quiz_no = t.news_quiz_no " +
 				   "JOIN " + 
-				   " (SELECT news_quiz_no, COUNT(*) as total_count " +
-				   " FROM news_quiz_attempt " +
-				   " GROUP BY news_quiz_no) AS total ON t.news_quiz_no = total.news_quiz_no " +
-				   "JOIN " + 
-				   " news_quiz nq ON t.news_quiz_no = nq.news_quiz_no ",
+				   " news_quiz nq ON total.news_quiz_no = nq.news_quiz_no ",
 				   nativeQuery = true
 	)
 	List<Object[]> findIncorrectNewsQuizStatus();
