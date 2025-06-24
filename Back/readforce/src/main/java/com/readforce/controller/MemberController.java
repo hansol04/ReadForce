@@ -34,7 +34,6 @@ import com.readforce.dto.MemberDto;
 import com.readforce.dto.MemberDto.GetMemberObject;
 import com.readforce.dto.MemberDto.MemberAttemptedQuiz;
 import com.readforce.dto.MemberDto.MemberIncorrectQuiz;
-import com.readforce.dto.MemberDto.UpdatePoint;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.Name;
 import com.readforce.exception.AuthenticationException;
@@ -42,7 +41,6 @@ import com.readforce.service.AttendanceService;
 import com.readforce.service.AuthService;
 import com.readforce.service.FileService;
 import com.readforce.service.MemberService;
-import com.readforce.service.PointService;
 import com.readforce.service.QuizService;
 import com.readforce.util.JwtUtil;
 
@@ -69,7 +67,6 @@ public class MemberController {
 	private final AttendanceService attendance_service;
 	private final PasswordEncoder password_encoder;
 	private final QuizService quiz_service;
-	private final PointService point_service;
 	
 	@Value("${custom.fronted.kakao-logout-url}")
 	private String custom_fronted_kakao_logout_url;
@@ -363,26 +360,6 @@ public class MemberController {
 		List<MemberIncorrectQuiz> member_incorrect_quiz_list = quiz_service.getMemberIncorrectQuizList(email);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(member_incorrect_quiz_list);
-		
-		
-	}
-	
-	// 점수 수정하기
-	@PatchMapping("/update-point")
-	public ResponseEntity<Map<String, String>> updatePoint(
-			@Valid
-			@RequestBody UpdatePoint update_point,
-			@AuthenticationPrincipal UserDetails user_details
-	){
-		
-		String email = user_details.getUsername();
-		
-		// 점수 수정
-		point_service.updatePoint(email, update_point);
-		
-		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
-				MessageCode.MESSAGE_CODE, MessageCode.UPDATE_POINT_SUCCESS
-		));
 		
 		
 	}

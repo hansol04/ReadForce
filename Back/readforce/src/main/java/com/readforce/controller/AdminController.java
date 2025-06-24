@@ -34,7 +34,6 @@ import com.readforce.dto.NewsDto.NewsQuizByAdmin;
 import com.readforce.dto.PointDto;
 import com.readforce.dto.PointDto.GetPoint;
 import com.readforce.enums.MessageCode;
-import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.service.AdminService;
 import com.readforce.service.LiteratureService;
 import com.readforce.service.NewsService;

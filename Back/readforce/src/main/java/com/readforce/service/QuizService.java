@@ -22,7 +22,6 @@ import com.readforce.enums.Classification;
 import com.readforce.enums.Level;
 import com.readforce.enums.MessageCode;
 import com.readforce.exception.ResourceNotFoundException;
-import com.readforce.exception.ValueException;
 import com.readforce.repository.LiteratureQuizAttemptRepository;
 import com.readforce.repository.LiteratureQuizRepository;
 import com.readforce.repository.NewsQuizAttemptRepository;
@@ -169,38 +168,25 @@ public class QuizService {
 
 	// 뉴스 도전 문제 가져오기
 	@Transactional(readOnly = true)
-	public List<NewsQuiz> getChallengeQuizWithNewsQuiz(String type, String language) {
+	public List<NewsQuiz> getChallengeQuizWithNewsQuiz(String language) {
 		
-		
-		if(type.isBlank() && language.isBlank()) {
-			
-			throw new ValueException(MessageCode.TYPE_AND_LANGUAGE_NOT_BLANK);
-			
-		}
-		
-		if(!type.isBlank() && !language.isBlank()) {
-			
-			throw new ValueException(MessageCode.ONLY_ONE_BETWEEN_TYPE_OR_LANGUAGE);
-			
-		}
-		
-		// 뉴스 초급에 해당하는 뉴스 퀴즈 번호 7개 랜덤으로 가져오기
+		// 뉴스 초급과 언어에 해당하는 뉴스 퀴즈 번호 7개 랜덤으로 가져오기
 		List<Long> beginner_news_quiz_no_list = getRandomQuizIdList(
-				news_quiz_repository.findNewsQuizNoByLevel(Level.BEGINNER.toString()),
+				news_quiz_repository.findNewsQuizNoByLevelAndLanguage(Level.BEGINNER.toString(), language),
 				7,
 				MessageCode.LACK_OF_BEGINNER_NEWS_QUIZ
 		);
 
-		// 뉴스 중급에 해당하는 뉴스 퀴즈 번호 6개 랜덤으로 가져오기
+		// 뉴스 중급과 언어에 해당하는 뉴스 퀴즈 번호 6개 랜덤으로 가져오기
 		List<Long> intermediate_news_quiz_no_list = getRandomQuizIdList(
-				news_quiz_repository.findNewsQuizNoByLevel(Level.INTERMEDIATE.toString()),
+				news_quiz_repository.findNewsQuizNoByLevelAndLanguage(Level.INTERMEDIATE.toString(), language),
 				6,
 				MessageCode.LACK_OF_INTERMEDIATE_NEWS_QUIZ
 		);
 		
-		// 뉴스 고급에 해당하는 뉴스 퀴즈 번호 7개 랜덤으로 가져오기
+		// 뉴스 고급과 언어에 해당하는 뉴스 퀴즈 번호 7개 랜덤으로 가져오기
 		List<Long> advanced_news_quiz_no_list = getRandomQuizIdList(
-				news_quiz_repository.findNewsQuizNoByLevel(Level.ADVANCED.toString()),
+				news_quiz_repository.findNewsQuizNoByLevelAndLanguage(Level.ADVANCED.toString(), language),
 				7,
 				MessageCode.LACK_OF_ADVANCED_NEWS_QUIZ
 		);
@@ -219,25 +205,25 @@ public class QuizService {
 
 	// 문학 도전 문제 가져오기
 	@Transactional(readOnly = true)
-	public List<LiteratureQuiz> getChallengeQuizWithLiteratureQuiz() {
+	public List<LiteratureQuiz> getChallengeQuizWithLiteratureQuiz(String type) {
 		
-		// 문학 초급에 해당하는 문학 퀴즈 번호 7개 랜덤으로 가져오기
+		// 문학 초급과 타입에 해당하는 문학 퀴즈 번호 7개 랜덤으로 가져오기
 		List<Long> beginner_literature_quiz_no_list = getRandomQuizIdList(
-				literature_quiz_repository.findLiteratureQuizNoByLevel(Level.BEGINNER.toString()),
+				literature_quiz_repository.findLiteratureQuizNoByLevelAndType(Level.BEGINNER.toString(), type),
 				7,
 				MessageCode.LACK_OF_BEGINNER_LITERATURE_QUIZ
 		);
 
 		// 문학 중급에 해당하는 문학 퀴즈 번호 6개 랜덤으로 가져오기
 		List<Long> intermediate_literature_quiz_no_list = getRandomQuizIdList(
-				literature_quiz_repository.findLiteratureQuizNoByLevel(Level.INTERMEDIATE.toString()),
+				literature_quiz_repository.findLiteratureQuizNoByLevelAndType(Level.INTERMEDIATE.toString(), type),
 				6,
 				MessageCode.LACK_OF_INTERMEDIATE_LITERATURE_QUIZ
 		);
 		
 		// 문학 고급에 해당하는 문학 퀴즈 번호 7개 랜덤으로 가져오기
 		List<Long> advanced_literature_quiz_no_list = getRandomQuizIdList(
-				literature_quiz_repository.findLiteratureQuizNoByLevel(Level.ADVANCED.toString()),
+				literature_quiz_repository.findLiteratureQuizNoByLevelAndType(Level.ADVANCED.toString(), type),
 				7,
 				MessageCode.LACK_OF_ADVANCED_LITERATURE_QUIZ
 		);
