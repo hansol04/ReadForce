@@ -495,6 +495,10 @@ public class AdminService {
 			
 		}
 		
+		// 회원 조회
+		Member member = member_repository.findByEmail(add_news_quiz_attempt.getEmail())
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND));
+		
 		// 복합키 생성
 		NewsQuizAttemptId news_quiz_attempt_id = new NewsQuizAttemptId();
 		news_quiz_attempt_id.setEmail(add_news_quiz_attempt.getEmail());
@@ -505,6 +509,8 @@ public class AdminService {
 		news_quiz_attempt.setNews_quiz_attempt_id(news_quiz_attempt_id);
 		news_quiz_attempt.setIs_correct(is_correct);
 		news_quiz_attempt.setSelected_option_index(add_news_quiz_attempt.getSelected_option_index());
+		news_quiz_attempt.setNews_quiz(news_quiz);
+		news_quiz_attempt.setMember(member);
 		
 		// 저장
 		news_quiz_attempt_repository.save(news_quiz_attempt);
@@ -603,6 +609,10 @@ public class AdminService {
 			
 		}
 		
+		// 회원 조회
+		Member member = member_repository.findByEmail(add_literature_quiz_attempt.getEmail())
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND));
+		
 		// 복합키 생성
 		LiteratureQuizAttemptId literature_quiz_attempt_id = new LiteratureQuizAttemptId();
 		literature_quiz_attempt_id.setEmail(add_literature_quiz_attempt.getEmail());
@@ -613,6 +623,8 @@ public class AdminService {
 		literature_quiz_attempt.setLiterature_quiz_attempt_id(literature_quiz_attempt_id);
 		literature_quiz_attempt.setIs_correct(is_correct);
 		literature_quiz_attempt.setSelected_option_index(add_literature_quiz_attempt.getSelected_option_index());
+		literature_quiz_attempt.setMember(member);
+		literature_quiz_attempt.setLiterature_quiz(literature_quiz);
 		
 		// 추가
 		literature_quiz_attempt_repository.save(literature_quiz_attempt);
