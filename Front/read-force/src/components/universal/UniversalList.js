@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { useNavigate } from 'react-router-dom';
- origin/develop
 import UniversalFilterBar from './UniversalFilterBar';
 import UniversalCard from './UniversalCard';
 import './css/UniversalList.css';

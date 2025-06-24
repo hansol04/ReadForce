@@ -26,11 +26,8 @@ import ChallengePage from "./pages/challenge/challengepage";
 import AdminPage from './pages/adminpages/adminpage';
 import ChallengeQuizPage from './pages/challenge/challengeQuizPage';
 
-
-
 import QuizPage from './pages/quiz/QuizPage';
 import ReadingPage from './pages/quiz/ReadingPage';
-
 
 import ArticleQuestionPage from './pages/news/ArticleQuestionPage';
 import ArticleResultPage from './pages/news/ArticleResultPage';
@@ -51,7 +48,6 @@ import ChallengeResultPage from './pages/challenge/ChallengeResultPage';
 import NovelPage from './pages/literature/NovelPage';
 import FairyTalePage from './pages/literature/FairyTalePage';
 
-import RankingPage from './pages/challenge/RankingPage';
 import LiteratureQuizPage from './pages/literature/LiteratureQuestionPage'
 
 function App() {
@@ -107,7 +103,6 @@ function App() {
 
           <Route path="/literature/novel" element={<NovelPage />} />
           <Route path="/literature/fairytale" element={<FairyTalePage />} />
-          <Route path="/ranking" element={<RankingPage />} />
           <Route path="/literature-quiz/:quizId" element={<LiteratureQuizPage />} />
         </Route>
       </Routes>
