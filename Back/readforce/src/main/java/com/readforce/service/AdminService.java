@@ -586,13 +586,13 @@ public class AdminService {
 		
 	}
 
-	// 사용자가 풀은 문학 퀴즈 기록 추가
+	// 사용자가 풀은 문학 문제 기록 추가
 	@Transactional
 	public void addLiteratureQuizAttempt(AddLiteratureQuizAttempt add_literature_quiz_attempt) {
 		
 		// 사용자가 정답을 입력했는지 확인
 		LiteratureQuiz literature_quiz = literature_quiz_repository.findById(add_literature_quiz_attempt.getLiterature_quiz_no())
-				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.NEWS_QUIZ_NOT_FOUND));
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.LITERATURE_QUIZ_NOT_FOUND));
 		
 		boolean is_correct = false;
 		
