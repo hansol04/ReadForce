@@ -68,21 +68,21 @@ const TestQuestionPage = () => {
   };
 
   return (
-    <div className="article-question-layout">
-      <div className="article-box" ref={articleBoxRef}>
-        <h3 className="article-title">{current.article.title || '제목 없음'}</h3>
-        <p className="article-content">{current.article.content || '내용 없음'}</p>
+    <div className="TestQuestion-layout">
+      <div className="TestQuestion-article-box" ref={articleBoxRef}>
+        <h3 className="TestQuestion-article-title">{current.article.title || '제목 없음'}</h3>
+        <p className="TestQuestion-article-content">{current.article.content || '내용 없음'}</p>
       </div>
 
-      <div className="question-omr-container">
-        <div className="quiz-box" ref={quizBoxRef}>
-          <h4 className="quiz-title">문제 {currentIdx + 1}</h4>
-          <p className="quiz-question">{current.quiz.question_text}</p>
+      <div className="TestQuestion-right-container">
+        <div className="TestQuestion-quiz-box" ref={quizBoxRef}>
+          <h4 className="TestQuestion-quiz-title">문제 {currentIdx + 1}</h4>
+          <p className="TestQuestion-quiz-question">{current.quiz.question_text}</p>
 
           {[current.quiz.choice1, current.quiz.choice2, current.quiz.choice3, current.quiz.choice4].map((opt, idx) => (
             <button
               key={idx}
-              className={`quiz-option ${answers[currentIdx] === idx ? 'selected' : ''}`}
+              className={`TestQuestion-quiz-option ${answers[currentIdx] === idx ? 'selected' : ''}`}
               onClick={() => handleSelect(idx)}
               disabled={submitted}
             >
@@ -91,12 +91,12 @@ const TestQuestionPage = () => {
           ))}
         </div>
 
-        <div className="quiz-controls">
+        <div className="TestQuestion-controls">
           <button onClick={goPrev} disabled={currentIdx === 0}>이전</button>
           <button onClick={goNext} disabled={currentIdx === questions.length - 1}>다음</button>
           {currentIdx === questions.length - 1 && !submitted && (
             <button
-              className="submit-button"
+              className="TestQuestion-submit"
               onClick={handleSubmitAll}
               disabled={answers.includes(null)}
             >
@@ -105,16 +105,16 @@ const TestQuestionPage = () => {
           )}
         </div>
 
-        <div className="omr-grid" ref={omrGridRef}>
+        <div className="TestQuestion-omr" ref={omrGridRef}>
           {questions.map((_, qIdx) => (
-            <div key={qIdx} className="omr-row">
-              <span className="omr-number" onClick={() => setCurrentIdx(qIdx)}>
+            <div key={qIdx} className="TestQuestion-omr-row">
+              <span className="TestQuestion-omr-number" onClick={() => setCurrentIdx(qIdx)}>
                 {qIdx + 1}
               </span>
               {['A', 'B', 'C', 'D'].map((label, cIdx) => (
                 <span
                   key={cIdx}
-                  className={`omr-choice ${answers[qIdx] === cIdx ? 'selected' : ''}`}
+                  className={`TestQuestion-omr-choice ${answers[qIdx] === cIdx ? 'selected' : ''}`}
                   onClick={() => {
                     if (!submitted) {
                       const updated = [...answers];

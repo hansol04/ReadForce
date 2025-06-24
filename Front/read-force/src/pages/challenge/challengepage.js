@@ -12,17 +12,9 @@ const ChallengePage = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('KOREAN');
   const debounceRef = useRef(null);
 
-  const handleRankingClick = () => {
-    navigate('/ranking');
-  };
-
-  const handleStartChallenge = () => {
-    setShowModal(true);
-  };
-
-  const handleSolveClick = (quizNo) => {
-    navigate(`/question/${quizNo}`);
-  };
+  const handleRankingClick = () => navigate('/ranking');
+  const handleStartChallenge = () => setShowModal(true);
+  const handleSolveClick = (quizNo) => navigate(`/question/${quizNo}`);
 
   useEffect(() => {
     const fetchWrongQuestions = async () => {
@@ -51,32 +43,32 @@ const ChallengePage = () => {
   }, [selectedLanguage]);
 
   return (
-    <div className="page-container">
-      <h2 className="title">
-        “ 오늘 <span className="highlight">812명</span>이 도전했어요! ”
+    <div className="ChallengePage-container">
+      <h2 className="ChallengePage-title">
+        “ 오늘 <span className="ChallengePage-highlight">812명</span>이 도전했어요! ”
       </h2>
 
-      <div className="top-container">
-        <div className="stats-box">
+      <div className="ChallengePage-top-container">
+        <div className="ChallengePage-stats-box">
           <h3>실시간 통계</h3>
-          <div className="grid-4x2">
+          <div className="ChallengePage-grid-4x2">
             <div><div className="label">응시자 수</div><div className="number">20,180</div></div>
             <div><div className="label">총 문제</div><div className="number">100</div></div>
             <div><div className="label">푸는 문제</div><div className="number">23</div></div>
             <div><div className="label">정답률</div><div className="number">74%</div></div>
           </div>
-          <button className="challenge-btn" onClick={handleStartChallenge}>
+          <button className="ChallengePage-btn" onClick={handleStartChallenge}>
             문제 도전하기
           </button>
         </div>
 
-        <div className="top5-box">
-          <div className="top5-header">
+        <div className="ChallengePage-top5-box">
+          <div className="ChallengePage-top5-header">
             <h3>뉴스 주간 TOP 5</h3>
-            <button className="ranking-more-btn" onClick={handleRankingClick}>＋</button>
+            <button className="ChallengePage-ranking-more-btn" onClick={handleRankingClick}>＋</button>
           </div>
 
-          <div className="top5-tabs">
+          <div className="ChallengePage-top5-tabs">
             {['KOREAN', 'JAPANESE', 'ENGLISH'].map((lang) => (
               <button
                 key={lang}
@@ -102,17 +94,17 @@ const ChallengePage = () => {
         </div>
       </div>
 
-      <div className="wrong-section">
-        <div className="wrong-header-row">
+      <div className="ChallengePage-wrong-section">
+        <div className="ChallengePage-wrong-header-row">
           <h3>가장 많이 틀린 문제</h3>
-          <div className="right-label">정답률</div>
+          <div className="ChallengePage-right-label">정답률</div>
           <div></div>
         </div>
 
         {wrongQuestions.map((item, index) => {
           const correctRate = 100 - item.percentage;
           return (
-            <div className="wrong-item" key={item.news_quiz_no ?? item.literature_quiz_no ?? `wrong-${index}`}>
+            <div className="ChallengePage-wrong-item" key={item.news_quiz_no ?? item.literature_quiz_no ?? `wrong-${index}`}>
               <p>{item.question_text}</p>
               <span>{correctRate}%</span>
               <button onClick={() => handleSolveClick(item.news_quiz_no ?? item.literature_quiz_no)}>문제풀기</button>

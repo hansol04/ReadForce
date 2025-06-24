@@ -26,8 +26,6 @@ import ChallengePage from "./pages/challenge/challengepage";
 import AdminPage from './pages/adminpages/adminpage';
 import ChallengeQuizPage from './pages/challenge/challengeQuizPage';
 
-
-
 import ArticleQuestionPage from './pages/news/ArticleQuestionPage';
 import ArticleResultPage from './pages/news/ArticleResultPage';
 
@@ -51,7 +49,8 @@ import ChallengeResultPage from './pages/challenge/ChallengeResultPage';
 import NovelPage from './pages/literature/NovelPage';
 import FairyTalePage from './pages/literature/FairyTalePage';
 
-
+import LiteratureQuizPage from './pages/literature/LiteratureQuestionPage'
+import LiteratureResultPage from './pages/literature/LiteratureResultPage';
 
 function App() {
   return (
@@ -81,7 +80,6 @@ function App() {
 
           <Route path="/challenge/quiz" element={<ChallengeQuizPage />} />
 
-
           <Route path="/question/:id" element={<ArticleQuestionPage />} />
           <Route path="/question-result" element={<ArticleResultPage />} />
 
@@ -103,10 +101,10 @@ function App() {
           <Route path="/ranking" element={<RankingPage />} />
           <Route path="/challenge/result" element={<ChallengeResultPage />} />
 
-
           <Route path="/literature/novel" element={<NovelPage />} />
           <Route path="/literature/fairytale" element={<FairyTalePage />} />
-
+          <Route path="/literature-quiz/:quizId" element={<LiteratureQuizPage />} />
+          <Route path="/literature-result" element={<LiteratureResultPage />} />
         </Route>
       </Routes>
     </Router>

@@ -1,16 +1,16 @@
-.readtest-wrapper {
+.ReadTest-wrapper {
   text-align: center;
   padding: 4rem 2rem;
 }
 
-.readtest-title {
+.ReadTest-title {
   font-size: 1.6rem;
   font-weight: bold;
   color: #444;
   margin-bottom: 2rem;
 }
 
-.readtest-card {
+.ReadTest-card {
   background-color: #d3ece8;
   padding: 2rem;
   border-radius: 15px;
@@ -20,12 +20,12 @@
   line-height: 1.7;
 }
 
-.readtest-card h3 {
+.ReadTest-card h3 {
   font-size: 1.2rem;
   margin-bottom: 1rem;
 }
 
-.readtest-btn {
+.ReadTest-btn {
   background-color: #439395;
   color: #fff;
   padding: 0.9rem 2rem;
@@ -37,18 +37,18 @@
   transition: background-color 0.3s ease;
 }
 
-.readtest-btn:hover {
+.ReadTest-btn:hover {
   background-color: #367c7e;
 }
 
-.language-buttons {
+.ReadTest-language-buttons {
   display: flex;
   justify-content: center;
   gap: 10px;
   margin-bottom: 2rem;
 }
 
-.lang-btn {
+.ReadTest-lang-btn {
   padding: 0.6rem 1.4rem;
   border: 1px solid #ccc;
   background-color: #fff;
@@ -59,11 +59,11 @@
   transition: all 0.2s ease-in-out;
 }
 
-.lang-btn:hover {
+.ReadTest-lang-btn:hover {
   background-color: #f2f2f2;
 }
 
-.lang-btn.active {
+.ReadTest-lang-btn.active {
   font-weight: bold;
   border: 2px solid #439395;
   color: #439395;

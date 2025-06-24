@@ -1,38 +1,37 @@
-.title {
+.ChallengePage-title {
   font-size: 24px;
   text-align: center;
   margin-bottom: 2rem;
   font-weight: bold;
 }
 
-.highlight {
+.ChallengePage-highlight {
   color: #14b8a6;
 }
 
-.page-container {
+.ChallengePage-container {
   padding: 2rem 1rem;
   max-width: 960px;
   margin: 0 auto;
 }
 
-.top-container {
+.ChallengePage-top-container {
   display: flex;
   justify-content: space-between;
   gap: 2rem;
   margin-bottom: 3rem;
 }
 
-.stats-box {
+.ChallengePage-stats-box {
   flex: 1;
   background: white;
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 1.5rem 1rem;
-  position: relative;
   text-align: center;
 }
 
-.stats-box h3 {
+.ChallengePage-stats-box h3 {
   text-align: left;
   font-size: 16px;
   font-weight: bold;
@@ -40,7 +39,7 @@
   padding-left: 0.5rem;
 }
 
-.grid-4x2 {
+.ChallengePage-grid-4x2 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.2rem;
@@ -48,21 +47,21 @@
   padding: 0 0.5rem;
 }
 
-.grid-4x2 .label {
+.ChallengePage-grid-4x2 .label {
   font-size: 13px;
   color: #666;
   margin-bottom: 0.2rem;
   text-align: center;
 }
 
-.grid-4x2 .number {
+.ChallengePage-grid-4x2 .number {
   font-size: 20px;
   font-weight: bold;
   color: #111;
   text-align: center;
 }
 
-.challenge-btn {
+.ChallengePage-btn {
   width: 100%;
   background: #66c7c2;
   color: white;
@@ -74,11 +73,11 @@
   transition: background 0.2s;
 }
 
-.challenge-btn:hover {
+.ChallengePage-btn:hover {
   background: #14b8a6;
 }
 
-.top5-box {
+.ChallengePage-top5-box {
   flex: 1;
   background: white;
   border: 1px solid #ddd;
@@ -86,19 +85,19 @@
   padding: 1.5rem 1rem;
 }
 
-.top5-header {
+.ChallengePage-top5-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.top5-box h3 {
+.ChallengePage-top5-box h3 {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 1rem;
 }
 
-.ranking-more-btn {
+.ChallengePage-ranking-more-btn {
   background: none;
   border: none;
   font-size: 20px;
@@ -108,18 +107,18 @@
   transition: transform 0.2s, color 0.2s;
 }
 
-.ranking-more-btn:hover {
+.ChallengePage-ranking-more-btn:hover {
   transform: scale(1.2);
   color: #0d9488;
 }
 
-.top5-tabs {
+.ChallengePage-top5-tabs {
   display: flex;
   justify-content: center;
   margin-bottom: 1rem;
 }
 
-.top5-tabs button {
+.ChallengePage-top5-tabs button {
   background: none;
   border: 1px solid #ccc;
   padding: 4px 12px;
@@ -131,18 +130,18 @@
   transition: all 0.2s;
 }
 
-.top5-tabs button.active {
+.ChallengePage-top5-tabs button.active {
   background-color: #14b8a6;
   color: white;
   border-color: #14b8a6;
 }
 
-.top5-box ol {
+.ChallengePage-top5-box ol {
   padding-left: 0;
   list-style: none;
 }
 
-.top5-box li {
+.ChallengePage-top5-box li {
   display: flex;
   justify-content: space-between;
   font-size: 14px;
@@ -162,11 +161,11 @@
   font-weight: bold;
 }
 
-.wrong-section {
+.ChallengePage-wrong-section {
   margin-top: 2rem;
 }
 
-.wrong-header-row {
+.ChallengePage-wrong-header-row {
   display: grid;
   grid-template-columns: 1fr 60px 90px;
   align-items: end;
@@ -174,18 +173,18 @@
   padding: 0 1rem;
 }
 
-.wrong-header-row h3 {
+.ChallengePage-wrong-header-row h3 {
   font-size: 18px;
   margin: 0;
 }
 
-.right-label {
+.ChallengePage-right-label {
   font-size: 13px;
   color: #888;
   text-align: center;
 }
 
-.wrong-item {
+.ChallengePage-wrong-item {
   display: grid;
   grid-template-columns: 1fr 60px 90px;
   align-items: center;
@@ -196,19 +195,19 @@
   background: #fff;
 }
 
-.wrong-item p {
+.ChallengePage-wrong-item p {
   font-size: 14px;
   margin: 0;
   color: #111;
 }
 
-.wrong-item span {
+.ChallengePage-wrong-item span {
   text-align: center;
   font-size: 13px;
   color: #333;
 }
 
-.wrong-item button {
+.ChallengePage-wrong-item button {
   background: #14b8a6;
   color: #fff;
   padding: 0.4rem 0.8rem;
@@ -219,6 +218,6 @@
   transition: background 0.2s;
 }
 
-.wrong-item button:hover {
+.ChallengePage-wrong-item button:hover {
   background: #0d9488;
 }
