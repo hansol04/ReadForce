@@ -550,7 +550,7 @@ public class AdminService {
 		news_quiz_attempt_id.setEmail(email);
 		news_quiz_attempt_id.setNews_quiz_no(news_quiz_no);
 		
-		news_quiz_attempt_repository.deleteByEmail(email);
+		news_quiz_attempt_repository.deleteById(news_quiz_attempt_id);
 		
 	}
 
