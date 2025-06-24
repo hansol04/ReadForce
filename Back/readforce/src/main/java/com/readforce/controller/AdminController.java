@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.readforce.dto.LiteratureDto.AddLiteratureQuizAttempt;
 import com.readforce.dto.LiteratureDto.GetLiteratureByAdmin;
 import com.readforce.dto.LiteratureDto.GetLiteratureParagraphByAdmin;
 import com.readforce.dto.LiteratureDto.GetLiteratureQuizByAdmin;
@@ -25,7 +26,6 @@ import com.readforce.dto.MemberDto.GetAttendance;
 import com.readforce.dto.MemberDto.MemberObjectByAdmin;
 import com.readforce.dto.MemberDto.ModifyByAdmin;
 import com.readforce.dto.MemberDto.SignUpByAdmin;
-import com.readforce.dto.NewsDto.AddLiteratureQuizAttempt;
 import com.readforce.dto.NewsDto.AddNewsQuizAttempt;
 import com.readforce.dto.NewsDto.GetLiteratureQuizAttemptListByEmail;
 import com.readforce.dto.NewsDto.GetNewsQuizAttemptByEmail;
