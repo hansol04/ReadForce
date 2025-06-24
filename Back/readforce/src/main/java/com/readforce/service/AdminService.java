@@ -1,5 +1,8 @@
 package com.readforce.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +38,7 @@ import com.readforce.entity.NewsQuiz;
 import com.readforce.entity.NewsQuizAttempt;
 import com.readforce.entity.Point;
 import com.readforce.enums.MessageCode;
+import com.readforce.exception.DuplicateException;
 import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.id.LiteratureParagraphId;
 import com.readforce.id.LiteratureQuizAttemptId;
@@ -163,6 +167,13 @@ public class AdminService {
 		member.setNickname(sign_up_by_admin.getNickname());
 		member.setBirthday(sign_up_by_admin.getBirthday());
 		member.setRole(sign_up_by_admin.getRole());
+		
+		
+		Point point = new Point();
+		point.setEmail(sign_up_by_admin.getEmail());
+		
+		// 포인트 테이블 생성
+		point_repository.save(point);		
 		
 		member_repository.save(member);
 		
@@ -647,11 +658,30 @@ public class AdminService {
 
 	// 출석 추가
 	@Transactional
-	public void addAttendance(String email) {
+	public void addAttendance(String email, LocalDate date) {
 
+		// 회원 조회
+		Member member = member_repository.findByEmail(email)
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND));
+		
+		// 날짜가 지정되지 않은 경우 현재 날짜 사용
+		LocalDateTime attendance_date_time = (date != null) ? date.atStartOfDay() : LocalDateTime.now();
+		
+		LocalDateTime start_of_day = attendance_date_time.toLocalDate().atStartOfDay();
+		LocalDateTime end_of_day = attendance_date_time.toLocalDate().atTime(LocalTime.MAX);
+		
+		// 해당 날짜에 이미 출석 기록이 있는지 확인
+		if(attendance_repository.existsByEmailAndCreatedDateBetween(email, start_of_day, end_of_day)) {
+			
+			throw new DuplicateException(MessageCode.ATTENDANCE_DATE_DUPLICATE);
+			
+		}
+		
 		// 엔티티 생성
 		Attendance attendance = new Attendance();
+		attendance.setMember(member);
 		attendance.setEmail(email);
+		attendance.setCreated_date(attendance_date_time);
 		
 		attendance_repository.save(attendance);
 

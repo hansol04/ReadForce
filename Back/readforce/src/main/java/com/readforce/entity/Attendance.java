@@ -2,7 +2,6 @@ package com.readforce.entity;
 
 import java.time.LocalDateTime;
 
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
@@ -39,7 +38,6 @@ public class Attendance {
 	@JoinColumn(name = "email", insertable = false, updatable = false)
 	private Member member;
 	
-	@CreatedDate
 	@Column(name = "created_date")
 	private LocalDateTime created_date;
 	
