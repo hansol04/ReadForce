@@ -51,10 +51,10 @@ const RankingPage = () => {
   const renderScore = (user) => user[selectedCategory.scoreKey] ?? 0;
 
   return (
-    <div className="ranking-page">
-      <h2 className="ranking-title">🏆 문해력 랭킹</h2>
+    <div className="RankingPage-container">
+      <h2 className="RankingPage-title">🏆 문해력 랭킹</h2>
 
-      <div className="category-buttons">
+      <div className="RankingPage-category-buttons">
         {categories.map((cat) => (
           <button
             key={cat.label}
@@ -67,18 +67,18 @@ const RankingPage = () => {
       </div>
 
       {isLoading ? (
-        <p className="loading-message">랭킹 정보를 불러오는 중입니다...</p>
+        <p className="RankingPage-loading">랭킹 정보를 불러오는 중입니다...</p>
       ) : error ? (
-        <p className="error-message">{error}</p>
+        <p className="RankingPage-error">{error}</p>
       ) : rankingData.length === 0 ? (
-        <p className="no-data-message">해당 카테고리의 랭킹 정보가 없습니다.</p>
+        <p className="RankingPage-no-data">해당 카테고리의 랭킹 정보가 없습니다.</p>
       ) : (
-        <div className="ranking-list">
+        <div className="RankingPage-list">
           {rankingData.map((user, idx) => (
-            <div key={idx} className="ranking-item">
-              <span className="rank">{idx + 1}위</span>
-              <span className="nickname">{user.nickname}</span>
-              <span className="score">{renderScore(user)}점</span>
+            <div key={idx} className="RankingPage-item">
+              <span className="RankingPage-rank">{idx + 1}위</span>
+              <span className="RankingPage-nickname">{user.nickname}</span>
+              <span className="RankingPage-score">{renderScore(user)}점</span>
             </div>
           ))}
         </div>

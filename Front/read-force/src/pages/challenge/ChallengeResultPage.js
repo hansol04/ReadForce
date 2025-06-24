@@ -28,12 +28,8 @@ const ChallengeResultPage = () => {
       return;
     }
 
-    const dto = {
-      classification,
-      point: finalScore,
-    };
+    const dto = { classification, point: finalScore };
 
-    
     if (classification === 'NEWS') {
       if (!language) {
         console.error("뉴스 도전에서 언어 정보가 필요합니다.");
@@ -70,10 +66,12 @@ const ChallengeResultPage = () => {
   }, [classification, language, type, finalScore]);
 
   return (
-    <div className="result-page">
-      <h2>도전 완료!</h2>
-      <p>총 점수: {finalScore} / {maxScore}</p>
-      <button onClick={() => navigate('/challenge')}>문해력 도전으로 돌아가기</button>
+    <div className="ChallengeResultPage-container">
+      <h2 className="ChallengeResultPage-title">도전 완료!</h2>
+      <p className="ChallengeResultPage-score">총 점수: {finalScore} / {maxScore}</p>
+      <button className="ChallengeResultPage-button" onClick={() => navigate('/challenge')}>
+        문해력 도전으로 돌아가기
+      </button>
     </div>
   );
 };

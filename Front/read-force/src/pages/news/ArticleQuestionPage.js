@@ -39,7 +39,6 @@ const ArticleQuestionPage = () => {
 
   const handleSubmit = () => {
     if (selected === null) return;
-
     navigate('/question-result', {
       state: {
         isCorrect: selected === quiz.correct_answer_index,
@@ -49,32 +48,36 @@ const ArticleQuestionPage = () => {
     });
   };
 
-  if (error) return <div className="page-container">{error}</div>;
-  if (!article || !quiz) return <div className="page-container">로딩 중...</div>;
+  if (error) return <div className="ArticleQuestion-container">{error}</div>;
+  if (!article || !quiz) return <div className="ArticleQuestion-container">로딩 중...</div>;
 
   return (
-    <div className="page-container">
-      <div className="article-box">
-        <h3>{article.title}</h3>
-        <p>{article.summary}</p>
-        <p>{article.content}</p>
+    <div className="ArticleQuestion-container">
+      <div className="ArticleQuestion-article">
+        <h3 className="ArticleQuestion-title">{article.title}</h3>
+        <p className="ArticleQuestion-summary">{article.summary}</p>
+        <p className="ArticleQuestion-content">{article.content}</p>
       </div>
 
-      <div className="quiz-box">
-        <h4>💡 문제</h4>
-        <p>{quiz.question_text}</p>
-        <div className="quiz-options">
+      <div className="ArticleQuestion-quiz">
+        <h4 className="ArticleQuestion-quiz-title">💡 문제</h4>
+        <p className="ArticleQuestion-quiz-question">{quiz.question_text}</p>
+        <div className="ArticleQuestion-options">
           {[quiz.choice1, quiz.choice2, quiz.choice3, quiz.choice4].map((opt, idx) => (
             <button
               key={idx}
-              className={`quiz-option ${selected === idx ? 'selected' : ''}`}
+              className={`ArticleQuestion-option ${selected === idx ? 'selected' : ''}`}
               onClick={() => setSelected(idx)}
             >
               {String.fromCharCode(65 + idx)}. {opt}
             </button>
           ))}
         </div>
-        <button disabled={selected === null} onClick={handleSubmit}>
+        <button
+          className="ArticleQuestion-submit"
+          disabled={selected === null}
+          onClick={handleSubmit}
+        >
           정답 제출
         </button>
       </div>

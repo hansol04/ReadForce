@@ -9,7 +9,7 @@ const ArticleResultPage = () => {
 
   const isCorrect = location.state?.isCorrect;
   const explanation = location.state?.explanation || '해설이 제공되지 않았습니다.';
-  const language = location.state?.language || '한국어'; 
+  const language = location.state?.language || '한국어';
   const resultMessage = isCorrect ? '정답입니다!' : '오답입니다.';
   const resultEmoji = isCorrect ? '🎉' : '❌';
   const resultSubText = isCorrect
@@ -25,30 +25,24 @@ const ArticleResultPage = () => {
       case '영어':
         return '/usa';
       default:
-        return '/korea'; 
+        return '/korea';
     }
   };
 
   return (
-    <div className="result-wrapper">
-      <div className="result-card">
+    <div className="ArticleResult-wrapper">
+      <div className="ArticleResult-card">
         <h2>{resultEmoji} {resultMessage}</h2>
-        <p className="result-subtext">{resultSubText}</p>
+        <p className="ArticleResult-subtext">{resultSubText}</p>
 
-        <div className="button-group">
-          <button onClick={() => setShowExplanation(!showExplanation)}>
-            해설보기
-          </button>
-          <button onClick={() => navigate(-1)}>
-            다시 도전하기
-          </button>
-          <button onClick={() => navigate(getBackPath())}>
-            닫기
-          </button>
+        <div className="ArticleResult-buttons">
+          <button onClick={() => setShowExplanation(!showExplanation)}>해설보기</button>
+          <button onClick={() => navigate(-1)}>다시 도전하기</button>
+          <button onClick={() => navigate(getBackPath())}>닫기</button>
         </div>
 
         {showExplanation && (
-          <div className="explanation-box">
+          <div className="ArticleResult-explanation">
             <h3>📝 해설</h3>
             <p>{explanation}</p>
           </div>

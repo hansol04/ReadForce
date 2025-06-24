@@ -19,17 +19,17 @@ const ChallengeStartModal = ({ onClose }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>도전 유형 선택</h2>
+    <div className="ChallengeStartModal-overlay">
+      <div className="ChallengeStartModal-content">
+        <h2 className="ChallengeStartModal-title">도전 유형 선택</h2>
 
-        <div className="category-selector">
+        <div className="ChallengeStartModal-category">
           <button className={category === 'NEWS' ? 'selected' : ''} onClick={() => setCategory('NEWS')}>뉴스</button>
           <button className={category === 'LITERATURE' ? 'selected' : ''} onClick={() => setCategory('LITERATURE')}>문학</button>
         </div>
 
         {category === 'NEWS' && (
-          <div className="option-group">
+          <div className="ChallengeStartModal-option-group">
             <p>언어 선택</p>
             <button className={language === 'KOREAN' ? 'selected' : ''} onClick={() => setLanguage('KOREAN')}>한국어</button>
             <button className={language === 'ENGLISH' ? 'selected' : ''} onClick={() => setLanguage('ENGLISH')}>English</button>
@@ -38,14 +38,14 @@ const ChallengeStartModal = ({ onClose }) => {
         )}
 
         {category === 'LITERATURE' && (
-          <div className="option-group">
+          <div className="ChallengeStartModal-option-group">
             <p>문학 종류 선택</p>
             <button className={literatureType === 'NOVEL' ? 'selected' : ''} onClick={() => setLiteratureType('NOVEL')}>소설</button>
             <button className={literatureType === 'FAIRYTALE' ? 'selected' : ''} onClick={() => setLiteratureType('FAIRYTALE')}>동화</button>
           </div>
         )}
 
-        <div className="modal-actions">
+        <div className="ChallengeStartModal-actions">
           <button onClick={onClose}>취소</button>
           <button onClick={handleStartClick}>시작하기</button>
         </div>

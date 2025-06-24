@@ -1,5 +1,5 @@
 /* 전체 레이아웃 */
-.filter-bar-layout {
+.UniversalFilterBar-layout {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -9,14 +9,14 @@
 }
 
 /* 왼쪽: 정렬 버튼 */
-.filter-left {
+.UniversalFilterBar-left {
   flex: 1;
   display: flex;
   justify-content: flex-start;
   gap: 10px;
 }
 
-.sort-button {
+.UniversalFilterBar-sort-button {
   background: none;
   border: none;
   font-size: 16px;
@@ -25,20 +25,20 @@
   padding: 6px 10px;
 }
 
-.sort-button.active {
+.UniversalFilterBar-sort-button.active {
   font-weight: bold;
   color: #333;
 }
 
 /* 가운데: 난이도 버튼 */
-.filter-center {
+.UniversalFilterBar-center {
   flex: 1;
   display: flex;
   justify-content: center;
   gap: 10px;
 }
 
-.level-button {
+.UniversalFilterBar-level-button {
   border: none;
   padding: 8px 14px;
   border-radius: 12px;
@@ -47,38 +47,38 @@
   transition: all 0.2s ease-in-out;
 }
 
-.level-button.beginner {
+.UniversalFilterBar-level-button.beginner {
   background-color: #d1eceb;
   color: #222;
 }
 
-.level-button.intermediate {
+.UniversalFilterBar-level-button.intermediate {
   background-color: #73bfb8;
   color: #fff;
 }
 
-.level-button.advanced {
+.UniversalFilterBar-level-button.advanced {
   background-color: #3e8e8c;
   color: #fff;
 }
 
-.level-button.selected {
-  filter: brightness(0.9); /* 밝기 90% → 살짝 어두워짐 */
+.UniversalFilterBar-level-button.selected {
+  filter: brightness(0.9);
 }
 
 /* 오른쪽: 카테고리 */
-.filter-right {
+.UniversalFilterBar-right {
   flex: 1;
   display: flex;
   justify-content: flex-end;
 }
 
-.custom-select {
+.UniversalFilterBar-select {
   width: 120px;
   font-size: 14px;
 }
 
-.custom-select .react-select__control {
+.UniversalFilterBar-select .react-select__control {
   border-radius: 12px;
   border: 1px solid #ccc;
   box-shadow: none;
@@ -86,62 +86,62 @@
   cursor: pointer;
 }
 
-.custom-select .react-select__control--is-focused {
+.UniversalFilterBar-select .react-select__control--is-focused {
   border-color: #aaa;
   box-shadow: none;
 }
 
-.custom-select .react-select__menu {
+.UniversalFilterBar-select .react-select__menu {
   border-radius: 12px;
   font-size: 14px;
   z-index: 10;
 }
 
-.custom-select .react-select__option--is-selected {
+.UniversalFilterBar-select .react-select__option--is-selected {
   background-color: #3e8e8c;
   color: white;
 }
 
-.custom-select .react-select__option--is-focused {
+.UniversalFilterBar-select .react-select__option--is-focused {
   background-color: #d1eceb;
   color: #222;
 }
 
 @media (max-width: 600px) {
-  .filter-bar-layout {
+  .UniversalFilterBar-layout {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
   }
 
-  .filter-left,
-  .filter-center,
-  .filter-right {
+  .UniversalFilterBar-left,
+  .UniversalFilterBar-center,
+  .UniversalFilterBar-right {
     flex: none;
     width: 100%;
     justify-content: center;
   }
 
-  .sort-button {
+  .UniversalFilterBar-sort-button {
     font-size: 14px;
     padding: 6px 8px;
   }
 
-  .level-button {
+  .UniversalFilterBar-level-button {
     font-size: 14px;
     padding: 6px 12px;
   }
 
-  .custom-select {
+  .UniversalFilterBar-select {
     width: 100%;
   }
 
-  .custom-select .react-select__control {
+  .UniversalFilterBar-select .react-select__control {
     min-height: 36px;
     font-size: 14px;
   }
 
-  .custom-select .react-select__menu {
+  .UniversalFilterBar-select .react-select__menu {
     font-size: 14px;
   }
 }
