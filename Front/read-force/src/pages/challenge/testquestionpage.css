@@ -150,8 +150,13 @@
   text-align: center;
   cursor: pointer;
   user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
+
+origin/develop
 .omr-choice {
   width: 28px;
   height: 28px;
