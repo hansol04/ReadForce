@@ -365,13 +365,13 @@ public class GeminiService {
 
 	// 문학 문제 생성
 	public LiteratureQuiz generateCreativeLiteratureQuiz(LiteratureParagraph literature_paragraph) {
-		
+		log.warn("2");
 		// 문학 문제 프롬프트 생성
 		String literature_quiz_prompt = buildLiteratureQuizPrompt(literature_paragraph.getContent(), literature_paragraph.getLevel(), literature_paragraph.getLiterature().getType());
-		
+		log.warn("3");
 		// Gemini API 요청
 		String gemini_response = callGeminiApi(literature_quiz_prompt);
-		
+		log.warn("4");
 		// 변환 후 반환
 		return parseLiteratureQuizResponse(gemini_response, literature_paragraph);
 		
@@ -446,7 +446,7 @@ public class GeminiService {
 	private String buildLiteratureQuizPrompt(String content, String level, String type) {
 
 		return """
-				아래 문학 작품 단락을 바탕으로 %s 난이도의 독해 퀴즈를 1개 만들어주세요.
+				아래 문학 작품 단락을 바탕으로 쉬운 난이도의 독해 퀴즈를 1개 만들어주세요.
                 기사나 보도 형식이 아닌 문학 작품으로서 접근해주세요. 다음 형식을 반드시 지켜주세요:
 
                 문제: <질문>

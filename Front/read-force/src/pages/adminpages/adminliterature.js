@@ -25,6 +25,31 @@ const AdminLiterature = () => {
         fetchLiterature();
     }, []);
 
+    // 문학 문제 생성
+    const handleGenerateQuiz = async () => {
+        if (!window.confirm("문학 문제를 생성하시겠습니까?\n(문제가 없는 문단에만 생성됩니다)")) return;
+
+        try {
+            const res = await fetchWithAuth("/admin/generate-creative-literature-quiz", {
+                method: "POST"
+            });
+            if (!res.ok) throw new Error("문학 문제 생성 실패");
+
+            alert("문학 문제가 생성되었습니다!");
+
+            // 문학 목록 갱신 (옵션)
+            const refresh = await fetchWithAuth("/admin/get-all-literature-list", {
+                method: "POST"
+            });
+            const newData = await refresh.json();
+            setLiteratureList(newData);
+
+        } catch (err) {
+            console.error(err);
+            alert("문학 문제 생성 중 오류 발생");
+        }
+    };
+
     // 문학 삭제 ( 문제, 문단 함께 )
     const handleDeleteLiterature = async (literatureNo) => {
         if (!window.confirm("정말 이 문학과 관련된 모든 데이터를 삭제하시겠습니까?")) return;
@@ -59,8 +84,12 @@ const AdminLiterature = () => {
                     >
                         문학 추가
                     </button>
-                    <button style={LITERATURE_BUTTONS_BUTTONS}>문학 문제 생성</button>
-
+                    <button
+                        style={LITERATURE_BUTTONS_BUTTONS}
+                        onClick={handleGenerateQuiz}
+                    >
+                        문학 문제 생성
+                    </button>
                 </div>
             </div>
             <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "16px" }}>
