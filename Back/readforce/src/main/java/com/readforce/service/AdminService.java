@@ -586,7 +586,7 @@ public class AdminService {
 		
 	}
 
-	// 문학 퀴즈 풀이 기록 추가
+	// 사용자가 풀은 문학 퀴즈 기록 추가
 	@Transactional
 	public void addLiteratureQuizAttempt(AddLiteratureQuizAttempt add_literature_quiz_attempt) {
 		
