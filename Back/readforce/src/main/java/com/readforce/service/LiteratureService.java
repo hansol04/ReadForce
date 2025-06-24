@@ -183,6 +183,7 @@ public class LiteratureService {
 		get_literature_quiz.setLiterature_paragraph_no(literature_quiz.getLiterature_paragraph_no());
 		get_literature_quiz.setLiterature_quiz_no(literature_quiz.getLiterature_quiz_no());
 		get_literature_quiz.setScore(literature_quiz.getScore());
+		get_literature_quiz.setContent(literature_quiz.getLiterature_paragraph().getContent());
 		
 		return get_literature_quiz;
 	}

@@ -64,6 +64,8 @@ public class LiteratureDto {
 
 		private Long literature_paragraph_no;
 		
+		private String content;
+		
 	}
 	
 	@Getter
