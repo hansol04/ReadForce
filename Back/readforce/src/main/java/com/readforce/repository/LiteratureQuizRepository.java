@@ -13,7 +13,7 @@ import com.readforce.entity.LiteratureQuiz;
 @Repository
 public interface LiteratureQuizRepository extends JpaRepository<LiteratureQuiz, Long>{
 
-	@Query(value = "SELECT * FROM literature_quiz WHERE literature_paragraph_no = :literature_paragraph_no AND literature_no = :literature_no", nativeQuery = true)
+	@Query("SELECT lq FROM LiteratureQuiz lq JOIN FETCH lq.literature_paragraph WHERE lq.literature_no = :literature_no AND lq.literature_paragraph_no = :literature_paragraph_no")
 	LiteratureQuiz findByLiteratureParagraphNoAndLiteratureNo(
 			@Param("literature_paragraph_no") Long literature_paragraph_no, 
 			@Param("literature_no") Long literature_no);

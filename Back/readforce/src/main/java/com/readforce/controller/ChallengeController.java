@@ -15,14 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.readforce.dto.LiteratureDto.GetChallengeLiteratureQuiz;
+import com.readforce.dto.NewsDto.GetChallengeNewsQuiz;
 import com.readforce.dto.PointDto.SaveChallengePoint;
-import com.readforce.entity.LiteratureQuiz;
-import com.readforce.entity.NewsQuiz;
+import com.readforce.enums.Classification;
 import com.readforce.enums.LiteratureRelate;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.NewsRelate;
 import com.readforce.service.PointService;
 import com.readforce.service.QuizService;
+import com.readforce.service.RateLimitingService;
 import com.readforce.validation.ValidEnum;
 
 import jakarta.validation.Valid;
@@ -37,34 +39,47 @@ public class ChallengeController {
 	
 	private final QuizService quiz_service;
 	private final PointService point_service;
+	private final RateLimitingService rate_limiting_service;
 
 	// 뉴스 도전 문제 가져오기(랜덤)
 	@GetMapping("/get-news-challenge-quiz")
-	public ResponseEntity<List<NewsQuiz>> getNewsChallengeQuiz(
+	public ResponseEntity<List<GetChallengeNewsQuiz>> getNewsChallengeQuiz(
 			@RequestParam("language")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_LANGUAGE_NOT_BLANK)
 			@ValidEnum(enumClass = NewsRelate.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
-			String language
+			String language,
+			@AuthenticationPrincipal UserDetails user_details			
 	){
 		
-		List<NewsQuiz> news_quiz_list = quiz_service.getChallengeQuizWithNewsQuiz(language);
+		String email = user_details.getUsername();
 		
-		return ResponseEntity.status(HttpStatus.OK).body(news_quiz_list);
+		// 일일 도전 횟수 제한 확인
+		rate_limiting_service.checkDailyChallengeLimit(email, Classification.NEWS.toString(), null, language);
+		
+		List<GetChallengeNewsQuiz> get_challenge_news_quiz_list = quiz_service.getChallengeQuizWithNewsQuiz(language);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(get_challenge_news_quiz_list);
 		
 	}
 	
 	// 문학 도전 문제 가져오기(랜덤)
 	@GetMapping("/get-literature-challenge-quiz")
-	public ResponseEntity<List<LiteratureQuiz>> getLiteratureChallengeQuiz(
+	public ResponseEntity<List<GetChallengeLiteratureQuiz>> getLiteratureChallengeQuiz(
 			@RequestParam("type")
 			@NotBlank(message = MessageCode.LITERATURE_TYPE_NOT_BLANK)
 			@ValidEnum(enumClass = LiteratureRelate.type.class, message = MessageCode.LITERATURE_TYPE_PATTERN_INVALID)
-			String type
+			String type,
+			@AuthenticationPrincipal UserDetails user_details
 	){
 		
-		List<LiteratureQuiz> literature_quiz_list = quiz_service.getChallengeQuizWithLiteratureQuiz(type);
+		String email = user_details.getUsername();
 		
-		return ResponseEntity.status(HttpStatus.OK).body(literature_quiz_list);
+		// 일일 도전 횟수 제한 확인
+		rate_limiting_service.checkDailyChallengeLimit(email, Classification.LITERATURE.toString(), type, null);
+		
+		List<GetChallengeLiteratureQuiz> get_challenge_literature_quiz_list = quiz_service.getChallengeQuizWithLiteratureQuiz(type);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(get_challenge_literature_quiz_list);
 			
 	}
 	

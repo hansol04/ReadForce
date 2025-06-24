@@ -181,8 +181,13 @@ public final class MessageCode {
 	public static final String JAPANESE_NEWS_POINT_MUST_BE_POSITIVE_NUMBER = "SP0028";
 	public static final String NOVEL_POINT_MUST_BE_POSITIVE_NUMBER = "SP0029";
 	public static final String FAIRYTALE_POINT_MUST_BE_POSITIVE_NUMBER = "SP0030";
-	
-
-	
+	public static final String LITERATURE_QUIZ_LINE_MISSING = "SP0031";
+	public static final String LITERATURE_QUIZ_OPTION_MISSING = "SP0032";
+	public static final String LITERATURE_QUIZ_ANSWER_MISSING = "SP0033";
+	public static final String KOREAN_NEWS_CHALLENGE_ALREADY_TAKEN_TODAY = "SP0034";
+	public static final String JAPANESE_NEWS_CHALLENGE_ALREADY_TAKEN_TODAY = "SP0035";
+	public static final String ENGLISH_NEWS_CHALLENGE_ALREADY_TAKEN_TODAY = "SP0036";
+	public static final String NOVEL_CHALLENGE_ALREADY_TAKEN_TODAY = "SP0037";
+	public static final String FAIRYTALE_CHALLENGE_ALREADY_TAKEN_TODAY = "SP0038";
 	
 }

@@ -45,7 +45,7 @@ public interface LiteratureQuizAttemptRepository extends JpaRepository<Literatur
 				   " FROM literature_quiz_attempt " +
 				   " WHERE is_correct = false " +
 				   " GROUP BY literature_quiz_no) AS t " +
-				   "JOIN " + 
+				   "LEFT JOIN " + 
 				   " (SELECT literature_quiz_no, COUNT(*) as total_count " +
 				   " FROM literature_quiz_attempt " +
 				   " GROUP BY literature_quiz_no) AS total ON t.literature_quiz_no = total.literature_quiz_no " +
