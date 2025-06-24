@@ -31,13 +31,14 @@ public final class MessageCode {
 	public static final String NEWS_QUIZ_NO_NOT_NULL = "NO0024";
 	public static final String SELECTED_OPTION_INDEX_NOT_NULL = "NO0025";
 	public static final String LITERATURE_QUIZ_NO_NOT_NULL = "NO0026";
-	public static final String CLASSIFICATION_NOT_NULL = "NO0027";
+	public static final String CLASSIFICATION_NOT_BLANK = "NO0027";
 	public static final String TYPE_AND_LANGUAGE_NOT_BLANK = "NO0028";
 	public static final String LITERATURE_TITLE_NOT_BLANK = "NO0029";
 	public static final String LITERATURE_PARAGRAPH_CONTENT_NOT_BLANK = "NO0030";
 	public static final String LITERATURE_PARAGRAPH_CATEGORY_NOT_BLANK = "NO0031";
 	public static final String LEVEL_NOT_BLANK = "NO0032";
 	public static final String ATTENDANCE_NO_NOT_NULL = "NO0033";
+	public static final String POINT_NOT_NULL = "NO0034";
 	
 
 	
@@ -108,6 +109,7 @@ public final class MessageCode {
 	public static final String DELETE_ATTENDANCE_SUCCESS = "SU0034";
 	public static final String ADD_POINT_SUCCESS = "SU0035";
 	public static final String DELETE_POINT_SUCCESS = "SU0036";
+	public static final String CHALLENGE_POINT_UPDATE_SUCCESS = "SU0037";
 	
 
 	// 실패

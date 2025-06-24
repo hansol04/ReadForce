@@ -23,8 +23,16 @@ import AdminPage from './pages/adminpages/adminpage';
 import QuizPage from './pages/quiz/QuizPage';
 import ReadingPage from './pages/quiz/ReadingPage';
 import ChallengePage from "./pages/challenge/challengepage";
+// import NewsList from './components/News/NewsList';
 import ArticleQuestionPage from './pages/news/ArticleQuestionPage';
 import ArticleResultPage from './pages/news/ArticleResultPage';
+import AdminNews from './pages/adminpages/adminnews';
+import AdminNewsDetail from './pages/adminpages/adminnewsdetail';
+import AdminNewsQuizList from './pages/adminpages/adminnewsquizlist';
+import AdminLiterature from './pages/adminpages/adminliterature';
+import AdminLiteratureDetail from './pages/adminpages/adminliteraturedetail';
+import AdminLiteratureAdd from './pages/adminpages/adminliteratureadd';
+import AdminAddParagraph from './pages/adminpages/adminaddparagraph';
 import TestQuestionPage from './pages/challenge/testquestionpage';
 import TestResultPage from './pages/challenge/testresultpage';
 import TestReviewPage from './pages/challenge/testreviewpage';
@@ -36,8 +44,8 @@ function App() {
         <Route element={<LayOut />}>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/findpassword" element={<FindPassword />} /> 
-          <Route path="/resetpassword" element={<ResetPassword />} /> 
+          <Route path="/findpassword" element={<FindPassword />} />
+          <Route path="/resetpassword" element={<ResetPassword />} />
           <Route path="/quiz" element={<QuizPage />} />
           <Route path="/reading" element={<ReadingPage />} />
           <Route path="/mypage" element={<MyPage />} />
@@ -45,7 +53,7 @@ function App() {
           <Route path="/japan" element={<JapanPage />} />
           <Route path="/usa" element={<UsaPage />} />
           <Route path="/signup/signupchoice" element={<SignupChoice />} />
-          <Route path="/signup" element={<SignupWithEmail />} />  
+          <Route path="/signup" element={<SignupWithEmail />} />
           <Route path="/signup/emailverifypage" element={<EmailVerifyPage />} />
           <Route path="/signup/signupcompletepage" element={<SignupCompletePage />} />
           <Route path="/challenge" element={<ChallengePage />} />
@@ -57,12 +65,20 @@ function App() {
           <Route path="/test-start" element={<ReadTest />} />
           <Route path="/adminpage" element={<AdminPage />} />
           <Route path="/question/:id" element={<ArticleQuestionPage />} />
-          <Route path="/question-result" element={<ArticleResultPage />} /> 
+          <Route path="/question-result" element={<ArticleResultPage />} />
+          <Route path="/adminpage/adminnews" element={<AdminNews />} />
+          <Route path="/adminpage/adminnews/:newsNo" element={<AdminNewsDetail />} />
+          <Route path="/adminpage/adminnews/adminnewsquizlist" element={<AdminNewsQuizList />} />
+          <Route path="/adminpage/adminliterature" element={<AdminLiterature />} />
+          <Route path="/adminpage/adminliterature/:literatureNo" element={<AdminLiteratureDetail />} />
+          <Route path="/adminpage/adminliterature/:literatureNo/add-paragraph" element={<AdminAddParagraph />} />
+          <Route path="/adminpage/adminliterature/adminliteratureadd" element={<AdminLiteratureAdd />} />
+          <Route path="/question-result" element={<ArticleResultPage />} />
           <Route path="/test-question" element={<TestQuestionPage />} />
           <Route path="/test-result" element={<TestResultPage />} />
           <Route path="/test-review" element={<TestReviewPage />} />
           <Route path="/ranking" element={<RankingPage />} />
-       </Route>
+        </Route>
       </Routes>
     </Router>
   );

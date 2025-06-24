@@ -4,15 +4,13 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.readforce.enums.Classification;
+import com.readforce.dto.PointDto.PointRanking;
 import com.readforce.enums.LiteratureRelate;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.NewsRelate;
@@ -32,25 +30,30 @@ public class RankingController {
 
 	private final RankingService ranking_service;
 	
-	// 랭킹 반환
-	@GetMapping("/get-ranking-by-classification-and-type-or-language")
-	public ResponseEntity<?> getRankingByClassificationAndTypeOrLanguage(
-			@RequestParam("classification")
-			@NotBlank(message = MessageCode.CLASSIFICATION_NOT_NULL)
-			@ValidEnum(enumClass = Classification.class, message = MessageCode.CLASSIFICATION_PATTERN_INVALID)
-			String classification,
+	// 뉴스 랭킹 반환
+	@GetMapping("/get-news-ranking")
+	public ResponseEntity<List<PointRanking>> getNewsRanking(
+			@RequestParam(value = "language", required = false)
+			@NotBlank(message = MessageCode.NEWS_ARTICLE_LANGUAGE_NOT_BLANK)
+			@ValidEnum(enumClass = NewsRelate.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
+			String language
+	){
+			
+		List<PointRanking> ranking_list = ranking_service.getNewsRanking(language);
+
+		return ResponseEntity.status(HttpStatus.OK).body(ranking_list);
+		
+	}
+	
+	// 문학 랭킹 반환
+	@GetMapping("/get-literature-ranking")
+	public ResponseEntity<List<PointRanking>> getLiteratureRanking(
 			@RequestParam(value = "type", required = false)
 			@ValidEnum(enumClass = LiteratureRelate.type.class, message = MessageCode.LITERATURE_TYPE_PATTERN_INVALID)
-			String type,
-			@RequestParam(value = "language", required = false)
-			@ValidEnum(enumClass = NewsRelate.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
-			String language,			
-			@AuthenticationPrincipal UserDetails user_details
+			String type
 	){
-		
-		log.warn("classification : " + classification + "type : " + type + "language : " + language);
-		
-		List<?> ranking_list = ranking_service.getRankingByClassificationAndTypeOrLanguage(classification, type, language);
+			
+		List<PointRanking> ranking_list = ranking_service.getLiteratureRanking(type);
 
 		return ResponseEntity.status(HttpStatus.OK).body(ranking_list);
 		
