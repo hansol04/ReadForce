@@ -19,7 +19,7 @@ public interface NewsQuizRepository extends JpaRepository<NewsQuiz, Long>{
 			@Param("news_no") Long news_no
 	);
 
-	@Query("SELECT nq.news_quiz_no FROM NewsQuiz nq JOIN nq.news n WHERE n.level = :level AND nq.language = :language")
+	@Query("SELECT nq.news_quiz_no FROM NewsQuiz nq JOIN nq.news n WHERE n.level = :level AND n.language = :language")
 	List<Long> findNewsQuizNoByLevelAndLanguage(
 			@Param("level") String level,
 			@Param("language") String language
