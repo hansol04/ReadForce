@@ -479,36 +479,61 @@ public class AdminService {
 		
 	}
 
-	// 사용자가 풀은 뉴스 문제 저장
+//	// 사용자가 풀은 뉴스 문제 저장
+//	@Transactional
+//	public void saveMemberSolvedNewsQuiz(AddNewsQuizAttempt add_news_quiz_attempt) {
+//		
+//		// 사용자가 정답을 입력했는지 확인
+//		NewsQuiz news_quiz = news_quiz_repository.findById(add_news_quiz_attempt.getNews_quiz_no())
+//				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.NEWS_QUIZ_NOT_FOUND));
+//		
+//		boolean is_correct = false;
+//		
+//		if(news_quiz.getCorrect_answer_index() == add_news_quiz_attempt.getSelected_option_index()) {
+//			
+//			is_correct = true;
+//			
+//		}
+//		
+//		// 복합키 생성
+//		NewsQuizAttemptId news_quiz_attempt_id = new NewsQuizAttemptId();
+//		news_quiz_attempt_id.setEmail(add_news_quiz_attempt.getEmail());
+//		news_quiz_attempt_id.setNews_quiz_no(add_news_quiz_attempt.getNews_quiz_no());
+//		
+//		// 엔티티 생성
+//		NewsQuizAttempt news_quiz_attempt = new NewsQuizAttempt();
+//		news_quiz_attempt.setNews_quiz_attempt_id(news_quiz_attempt_id);
+//		news_quiz_attempt.setIs_correct(is_correct);
+//		news_quiz_attempt.setSelected_option_index(add_news_quiz_attempt.getSelected_option_index());
+//		
+//		// 저장
+//		news_quiz_attempt_repository.save(news_quiz_attempt);
+//		
+//	}
+// 제가 만들ㄹㄷㅈ러ㅕㅈㄷ 이렇게 바꾸니까 됩니당
 	@Transactional
 	public void saveMemberSolvedNewsQuiz(AddNewsQuizAttempt add_news_quiz_attempt) {
-		
-		// 사용자가 정답을 입력했는지 확인
-		NewsQuiz news_quiz = news_quiz_repository.findById(add_news_quiz_attempt.getNews_quiz_no())
-				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.NEWS_QUIZ_NOT_FOUND));
-		
-		boolean is_correct = false;
-		
-		if(news_quiz.getCorrect_answer_index() == add_news_quiz_attempt.getSelected_option_index()) {
-			
-			is_correct = true;
-			
-		}
-		
-		// 복합키 생성
-		NewsQuizAttemptId news_quiz_attempt_id = new NewsQuizAttemptId();
-		news_quiz_attempt_id.setEmail(add_news_quiz_attempt.getEmail());
-		news_quiz_attempt_id.setNews_quiz_no(add_news_quiz_attempt.getNews_quiz_no());
-		
-		// 엔티티 생성
-		NewsQuizAttempt news_quiz_attempt = new NewsQuizAttempt();
-		news_quiz_attempt.setNews_quiz_attempt_id(news_quiz_attempt_id);
-		news_quiz_attempt.setIs_correct(is_correct);
-		news_quiz_attempt.setSelected_option_index(add_news_quiz_attempt.getSelected_option_index());
-		
-		// 저장
-		news_quiz_attempt_repository.save(news_quiz_attempt);
-		
+	    
+	    NewsQuiz quiz = news_quiz_repository.findById(add_news_quiz_attempt.getNews_quiz_no())
+	        .orElseThrow(() -> new ResourceNotFoundException(MessageCode.NEWS_QUIZ_NOT_FOUND));
+	    
+	    Member member = member_repository.findByEmail(add_news_quiz_attempt.getEmail())
+	        .orElseThrow(() -> new ResourceNotFoundException("해당 이메일의 사용자 없음"));
+
+	    boolean is_correct = (quiz.getCorrect_answer_index() == add_news_quiz_attempt.getSelected_option_index());
+
+	    NewsQuizAttemptId id = new NewsQuizAttemptId();
+	    id.setEmail(add_news_quiz_attempt.getEmail());
+	    id.setNews_quiz_no(add_news_quiz_attempt.getNews_quiz_no());
+
+	    NewsQuizAttempt attempt = new NewsQuizAttempt();
+	    attempt.setNews_quiz_attempt_id(id);
+	    attempt.setIs_correct(is_correct);
+	    attempt.setSelected_option_index(add_news_quiz_attempt.getSelected_option_index());
+	    attempt.setMember(member);     // ✅ 필수
+	    attempt.setNews_quiz(quiz);    // ✅ 필수
+
+	    news_quiz_attempt_repository.save(attempt);
 	}
 
 	// 뉴스 기사 문제 기록 삭제
@@ -598,7 +623,7 @@ public class AdminService {
 		// 엔티티 생성
 		LiteratureQuizAttempt literature_quiz_attempt = new LiteratureQuizAttempt();
 		literature_quiz_attempt.setLiterature_quiz_attempt_id(literature_quiz_attempt_id);
-		literature_quiz_attempt.setIs_correct(add_literature_quiz_attempt.getIs_correct());
+//		literature_quiz_attempt.setIs_correct(add_literature_quiz_attempt.getIs_correct());
 		literature_quiz_attempt.setSelected_option_index(add_literature_quiz_attempt.getSelected_option_index());
 		
 		// 추가

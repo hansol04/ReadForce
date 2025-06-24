@@ -251,7 +251,7 @@ public class NewsDto {
 		
 		private Long literature_quiz_no;
 
-		private Boolean is_correct;
+//		private Boolean is_correct;
 
 		private Integer selected_option_index;
 		

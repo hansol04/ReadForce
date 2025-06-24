@@ -12,64 +12,80 @@ const AdminUserInfo = () => {
     const [newsQuizAttempts, setNewsQuizAttempts] = useState([]);
     const [literatureQuizAttempts, setLiteratureQuizAttempts] = useState([]);
 
+    // 뉴스 퀴즈 풀이 기록 추가 모달
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [newQuizNo, setNewQuizNo] = useState("");
+    const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
+
+    // 문학 퀴즈 풀이 기록 추가 모달
+    const [showAddLiteratureModal, setShowAddLiteratureModal] = useState(false);
+    const [newLiteratureQuizNo, setNewLiteratureQuizNo] = useState("");
+    const [selectedLiteratureOptionIndex, setSelectedLiteratureOptionIndex] = useState(0);
+    const [isLiteratureCorrect, setIsLiteratureCorrect] = useState(true);
+
+    // 회원 정보 가져오기
+    const fetchUserInfo = async () => {
+        try {
+            const res = await fetchWithAuth(`/admin/get-member-info-object?email=${email}`);
+            if (!res.ok) throw new Error("회원 정보 조회 실패");
+
+            const data = await res.json();
+            setUser(data);
+        } catch (err) {
+            console.error(err);
+            alert("회원 정보를 불러오는 데 실패했습니다.");
+        }
+    };
+
+    // 출석 정보 가져오기
+    const fetchAttendanceList = async () => {
+        try {
+            const res = await fetchWithAuth(`/admin/get-member-attendance-list?email=${email}`);
+            if (!res.ok) throw new Error("출석 정보 조회 실패");
+            const data = await res.json();
+            setAttendanceList(data);
+        } catch (err) {
+            console.error(err);
+            alert("출석 정보를 불러오는 데 실패했습니다.");
+        }
+    };
+
+    // 포인트 정보 가져오기
+    const fetchPointInfo = async () => {
+        try {
+            const res = await fetchWithAuth(`/admin/get-member-point-object?email=${email}`);
+            if (!res.ok) throw new Error("포인트 정보 조회 실패");
+            const data = await res.json();
+            setPointInfo(data);
+        } catch (err) {
+            console.error(err);
+            alert("포인트 정보를 불러오는 데 실패했습니다.");
+        }
+    };
+
+    // 뉴스 퀴즈 풀이 기록 가져오기
+    const fetchNewsQuizAttempts = async () => {
+        try {
+            const res = await fetchWithAuth(`/admin/get-member-news-quiz-attempt-list?email=${email}`);
+            const data = await res.json();
+            setNewsQuizAttempts(data);
+        } catch (err) {
+            console.error("뉴스 퀴즈 응시 기록 오류:", err);
+        }
+    };
+
+    // 문학 퀴즈 풀이 기록 가져오기
+    const fetchLiteratureQuizAttempts = async () => {
+        try {
+            const res = await fetchWithAuth(`/admin/get-member-literature-quiz-attempt-list?email=${email}`);
+            const data = await res.json();
+            setLiteratureQuizAttempts(data);
+        } catch (err) {
+            console.error("문학 퀴즈 응시 기록 오류:", err);
+        }
+    };
+
     useEffect(() => {
-        const fetchUserInfo = async () => {
-            try {
-                const res = await fetchWithAuth(`/admin/get-member-info-object?email=${email}`);
-                if (!res.ok) throw new Error("회원 정보 조회 실패");
-
-                const data = await res.json();
-                setUser(data);
-            } catch (err) {
-                console.error(err);
-                alert("회원 정보를 불러오는 데 실패했습니다.");
-            }
-        };
-
-        const fetchAttendanceList = async () => {
-            try {
-                const res = await fetchWithAuth(`/admin/get-member-attendance-list?email=${email}`);
-                if (!res.ok) throw new Error("출석 정보 조회 실패");
-                const data = await res.json();
-                setAttendanceList(data);
-            } catch (err) {
-                console.error(err);
-                alert("출석 정보를 불러오는 데 실패했습니다.");
-            }
-        };
-
-        const fetchPointInfo = async () => {
-            try {
-                const res = await fetchWithAuth(`/admin/get-member-point-object?email=${email}`);
-                if (!res.ok) throw new Error("포인트 정보 조회 실패");
-                const data = await res.json();
-                setPointInfo(data);
-            } catch (err) {
-                console.error(err);
-                alert("포인트 정보를 불러오는 데 실패했습니다.");
-            }
-        };
-
-        const fetchNewsQuizAttempts = async () => {
-            try {
-                const res = await fetchWithAuth(`/admin/get-member-news-quiz-attempt-list?email=${email}`);
-                const data = await res.json();
-                setNewsQuizAttempts(data);
-            } catch (err) {
-                console.error("뉴스 퀴즈 응시 기록 오류:", err);
-            }
-        };
-
-        const fetchLiteratureQuizAttempts = async () => {
-            try {
-                const res = await fetchWithAuth(`/admin/get-member-literature-quiz-attempt-list?email=${email}`);
-                const data = await res.json();
-                setLiteratureQuizAttempts(data);
-            } catch (err) {
-                console.error("문학 퀴즈 응시 기록 오류:", err);
-            }
-        };
-
         fetchUserInfo();
         fetchAttendanceList();
         fetchPointInfo();
@@ -96,12 +112,88 @@ const AdminUserInfo = () => {
             console.error("삭제 실패", err);
             alert("삭제 중 오류 발생");
         }
+
+        await fetchNewsQuizAttempts();
+
     };
 
     // 문학 퀴즈 풀이 기록 삭제
     const handleLiteratureQuizDeleteAttempt = async (email, literatureQuizNo) => {
-        
-    }
+        const confirmed = window.confirm("정말 삭제하시겠습니까?");
+        if (!confirmed) return;
+
+        try {
+            const res = await fetchWithAuth(
+                `/admin/delete-literature-quiz-attempt?email=${email}&literature_quiz_no=${literatureQuizNo}`, // ✅ 수정됨
+                {
+                    method: 'DELETE',
+                }
+            );
+
+            const data = await res.json();
+            alert(data.message || "삭제 성공!");
+
+            // 삭제 성공 후 목록 갱신하려면 여기에 다시 fetchLiteratureQuizAttempts() 호출도 가능
+        } catch (err) {
+            console.error("삭제 실패", err);
+            alert("삭제 중 오류 발생");
+        }
+
+        await fetchLiteratureQuizAttempts(); // 아까 useEffect에서 만든 함수
+    };
+
+    // 뉴스 퀴즈 풀이 기록 추가
+    const handleAddNewsQuizAttempt = async () => {
+        try {
+            const payload = {
+                email,
+                news_quiz_no: Number(newQuizNo),
+                selected_option_index: selectedOptionIndex,
+            };
+
+            const res = await fetchWithAuth("/admin/add-news-quiz-attempt", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await res.json();
+            alert(data.message || "추가 완료!");
+
+            // 상태 초기화 및 닫기
+            setNewQuizNo("");
+            setSelectedOptionIndex(0);
+            setShowAddModal(false);
+            await fetchNewsQuizAttempts(); // 목록 갱신
+        } catch (err) {
+            console.error("추가 실패", err);
+            alert("추가 중 오류 발생");
+        }
+    };
+
+    // 문학 퀴즈 풀이 기록 추가
+    const handleAddLiteratureQuizAttempt = async () => {
+        try {
+            const response = await fetchWithAuth("/admin/add-literature-quiz-attempt", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email, // or 관리용 임시값
+                    literature_quiz_no: Number(newLiteratureQuizNo),
+                    selected_option_index: selectedLiteratureOptionIndex,
+                    is_correct: isLiteratureCorrect,
+                }),
+            });
+
+            if (!response.ok) throw new Error("응답 실패");
+            alert("문학 퀴즈 응시 기록이 추가되었습니다.");
+            setShowAddLiteratureModal(false);
+        } catch (error) {
+            alert("오류 발생: " + error.message);
+        }
+    };
 
     return (
         <div style={{ padding: "24px" }}>
@@ -148,7 +240,10 @@ const AdminUserInfo = () => {
                 <div style={BUTTON_LIST}>
                     <button
                         style={BUTTON_STYLE}
-                    >뉴스 퀴즈 풀이 기록 추가</button>
+                        onClick={() => setShowAddModal(true)}
+                    >
+                        뉴스 퀴즈 풀이 기록 추가
+                    </button>
                 </div>
             </div>
             {newsQuizAttempts.length === 0 ? (
@@ -193,7 +288,10 @@ const AdminUserInfo = () => {
                 <div style={BUTTON_LIST}>
                     <button
                         style={BUTTON_STYLE}
-                    >문학 퀴즈 풀이 기록 추가</button>
+                        onClick={() => setShowAddLiteratureModal(true)}
+                    >
+                        문학 퀴즈 풀이 기록 추가
+                    </button>
                 </div>
             </div>
             {literatureQuizAttempts.length === 0 ? (
@@ -218,15 +316,116 @@ const AdminUserInfo = () => {
                                 <td style={tdStyle}>{new Date(attempt.created_date).toLocaleString()}</td>
                                 <td style={tdStyle}>
                                     <button
-                                        onClick={() => handleLiteratureQuizDeleteAttempt(attempt.email, attempt.news_quiz_no)}
+                                        onClick={() => handleLiteratureQuizDeleteAttempt(attempt.email, attempt.literature_quiz_no)}
                                         style={{ color: "red", border: "none", background: "none", cursor: "pointer" }}
-                                    >삭제
+                                    >
+                                        삭제
                                     </button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+            )}
+            {showAddModal && (
+                <div style={modalOverlayStyle}>
+                    <div style={modalContentStyle}>
+                        <h3>뉴스 퀴즈 응시 기록 추가</h3>
+
+                        {/* 퀴즈 번호 입력 (줄바꿈) */}
+                        <div style={{ marginBottom: "12px" }}>
+                            <label>
+                                퀴즈 번호:
+                                <br />
+                                <input
+                                    type="number"
+                                    value={newQuizNo}
+                                    onChange={(e) => setNewQuizNo(e.target.value)}
+                                />
+                            </label>
+                        </div>
+
+                        {/* 선택 보기 번호 드롭다운 (줄바꿈) */}
+                        <div style={{ marginBottom: "12px" }}>
+                            <label>
+                                선택한 보기 번호:
+                                <br />
+                                <select
+                                    value={selectedOptionIndex}
+                                    onChange={(e) => setSelectedOptionIndex(Number(e.target.value))}
+                                >
+                                    <option value={0}>1번</option>
+                                    <option value={1}>2번</option>
+                                    <option value={2}>3번</option>
+                                    <option value={3}>4번</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div style={{ marginTop: "16px" }}>
+                            <button onClick={handleAddNewsQuizAttempt}>저장</button>
+                            <button onClick={() => setShowAddModal(false)} style={{ marginLeft: "8px" }}>취소</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {showAddLiteratureModal && (
+                <div style={modalOverlayStyle}>
+                    <div style={modalContentStyle}>
+                        <h3>문학 퀴즈 응시 기록 추가</h3>
+
+                        {/* 문학 퀴즈 번호 입력 */}
+                        <div style={{ marginBottom: "12px" }}>
+                            <label>
+                                문학 퀴즈 번호:
+                                <br />
+                                <input
+                                    type="number"
+                                    value={newLiteratureQuizNo}
+                                    onChange={(e) => setNewLiteratureQuizNo(e.target.value)}
+                                />
+                            </label>
+                        </div>
+
+                        {/* 선택한 보기 번호 */}
+                        <div style={{ marginBottom: "12px" }}>
+                            <label>
+                                선택한 보기 번호:
+                                <br />
+                                <select
+                                    value={selectedLiteratureOptionIndex}
+                                    onChange={(e) => setSelectedLiteratureOptionIndex(Number(e.target.value))}
+                                >
+                                    <option value={0}>1번</option>
+                                    <option value={1}>2번</option>
+                                    <option value={2}>3번</option>
+                                    <option value={3}>4번</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        {/* 정답 여부 */}
+                        {/* <div style={{ marginBottom: "12px" }}>
+                            <label>
+                                정답 여부:
+                                <br />
+                                <select
+                                    value={isLiteratureCorrect}
+                                    onChange={(e) => setIsLiteratureCorrect(e.target.value === "true")}
+                                >
+                                    <option value="true">정답</option>
+                                    <option value="false">오답</option>
+                                </select>
+                            </label>
+                        </div> */}
+
+                        {/* 버튼 영역 */}
+                        <div style={{ marginTop: "16px" }}>
+                            <button onClick={handleAddLiteratureQuizAttempt}>저장</button>
+                            <button onClick={() => setShowAddLiteratureModal(false)} style={{ marginLeft: "8px" }}>취소</button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
@@ -275,5 +474,23 @@ const BUTTON_STYLE = {
     borderRadius: "4px",
     cursor: "pointer"
 }
+
+const modalOverlayStyle = {
+    position: "fixed",
+    top: 0, left: 0, right: 0, bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000,
+};
+
+const modalContentStyle = {
+    backgroundColor: "#fff",
+    padding: "24px",
+    borderRadius: "8px",
+    minWidth: "300px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+};
 
 export default AdminUserInfo;
