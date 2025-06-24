@@ -1,15 +1,12 @@
-/* === 전체 레이아웃 === */
-.page-container.article-question-layout {
+.quiz-layout {
   display: flex;
   gap: 2rem;
   align-items: flex-start;
-  flex-wrap: nowrap;
 }
 
-/* === 문학 발췌문 박스 === */
-.article-box {
+.quiz-passage {
   flex: 1;
-  height: 500px;
+  max-height: 500px;
   overflow-y: auto;
   background-color: white;
   border: 1px solid #e0e0e0;
@@ -18,24 +15,23 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
-.article-title {
+.passage-title {
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 0.5rem;
 }
 
-.article-content {
+.passage-text {
   font-size: 15px;
   color: #333;
   line-height: 1.6;
   white-space: pre-line;
 }
 
-/* === 퀴즈 박스 === */
 .quiz-box {
   width: 40%;
-  height: 400px;
   min-width: 260px;
+  height: 500px;
   padding: 1.5rem;
   background-color: white;
   border: 1px solid #e0e0e0;
@@ -43,25 +39,24 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.quiz-title {
+.question-heading {
   font-size: 17px;
   font-weight: bold;
   margin-bottom: 0.75rem;
 }
 
-.quiz-question {
+.question-text {
   font-size: 15px;
   margin-bottom: 1rem;
+  font-weight: bold;
 }
 
-/* === 보기 버튼 === */
 .quiz-options {
   display: flex;
   flex-direction: column;
 }
 
 .quiz-option {
-  display: block;
   width: 100%;
   padding: 12px 14px;
   margin-bottom: 0.6rem;
@@ -79,25 +74,13 @@
   border-color: #0d9488;
 }
 
-/* === 선택 및 정답 시 스타일 === */
 .quiz-option.selected {
   background-color: #e0f7f4;
+  color : black;
   border-color: #0d9488;
   font-weight: bold;
 }
 
-.quiz-option.correct {
-  background-color: #c2f0e9;
-  border-color: #0d9488;
-  font-weight: bold;
-}
-
-.quiz-option.incorrect {
-  background-color: #f8d7da;
-  border-color: #dc3545;
-}
-
-/* === 제출 버튼 === */
 .quiz-button-container {
   margin-top: 1rem;
 }
@@ -124,23 +107,70 @@
   cursor: not-allowed;
 }
 
-/* === 결과 메시지 === */
-.quiz-result {
-  margin-top: 1rem;
-  font-size: 16px;
-  font-weight: bold;
-  color: #0d9488;
+.quiz-notfound-container {
+  background-color: #fff;
+  padding: 2rem 1.5rem;
+  margin-top: 5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
 }
 
-/* === 반응형 === */
+.quiz-notfound-container .warning {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #e53935;
+  margin-bottom: 0.5rem;
+}
+
+.quiz-notfound-container .description {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.quiz-notfound-container .go-back-button {
+  font-size: 0.95rem;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid #ccc;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.quiz-notfound-container .go-back-button:hover {
+  background-color: #e0e0e0;
+}
+
 @media (max-width: 768px) {
-  .page-container.article-question-layout {
+  .quiz-layout {
     flex-direction: column;
   }
 
-  .article-box,
+  .quiz-passage,
   .quiz-box {
-    max-width: 100%;
+    width: 100%;
+  }
+
+  .quiz-notfound-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .quiz-notfound-container .warning {
+    font-size: 1.1rem;
+  }
+
+  .quiz-notfound-container .description {
+    font-size: 0.95rem;
+  }
+
+  .quiz-notfound-container .go-back-button {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
   }
 }

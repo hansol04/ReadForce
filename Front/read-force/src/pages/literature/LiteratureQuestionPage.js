@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../api/axiosInstance';
-import { useParams } from 'react-router-dom';
-import './css/LiteratureQuestionPage.css'; // 필요 시 문학.css로 교체
+import { useParams, useNavigate } from 'react-router-dom';
+import './css/LiteratureQuestionPage.css';
 
 const LiteratureQuizPage = () => {
   const { quizId } = useParams();
+  const navigate = useNavigate();
+
   const [quiz, setQuiz] = useState(null);
   const [selected, setSelected] = useState(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     api.get('/literature/get-literature-quiz-object', {
@@ -17,13 +19,31 @@ const LiteratureQuizPage = () => {
       },
     })
       .then((res) => {
-        console.log('퀴즈 데이터 응답:', res.data);
-        setQuiz(res.data);
+        if (!res.data || !res.data.question_text) {
+          setNotFound(true);
+        } else {
+          setQuiz(res.data);
+        }
       })
-      .catch((err) => console.error("퀴즈 데이터 불러오기 실패", err));
+      .catch((err) => {
+        console.error("퀴즈 데이터 불러오기 실패", err);
+        setNotFound(true);
+      });
   }, [quizId]);
 
-  if (!quiz) return <div>로딩 중...</div>;
+  if (notFound) {
+    return (
+      <div className="page-container">
+        <div className="quiz-notfound-container">
+          <div className="warning">❗ 제공된 문제가 없습니다.</div>
+          <div className="description">다른 문제를 선택해 주세요.</div>
+          <button className="go-back-button" onClick={() => navigate(-1)}>🔙 돌아가기</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!quiz) return <div className="page-container">로딩 중...</div>;
 
   const options = [
     { text: quiz.choice1 },
@@ -33,31 +53,40 @@ const LiteratureQuizPage = () => {
   ];
 
   const handleSubmit = () => {
-    if (selected !== null) {
-      setIsSubmitted(true);
-    }
+    if (!selected) return;
+
+    const correctAnswerText = options[quiz.correct_answer_index - 1]?.text;
+    const isCorrect = selected === correctAnswerText;
+    const explanation = quiz.explanation || '해설이 제공되지 않았습니다.';
+    const language = '한국어';
+    const category = quiz.category?.toUpperCase() || 'NOVEL';
+
+    navigate('/literature-result', {
+      state: {
+        isCorrect,
+        explanation,
+        language,
+        category,
+      },
+    });
   };
 
-  const correctAnswerText = options[quiz.correct_answer_index - 1]?.text;
-  const isCorrect = selected === correctAnswerText;
-
   return (
-    <div className="page-container article-question-layout">
-      <div className="article-box">
-        <h3 className="article-title">📖 문학 발췌문</h3>
-        <p className="article-content">{quiz.content || '※ 발췌문 내용은 별도 처리 필요'}</p>
+    <div className="page-container quiz-layout">
+      <div className="quiz-passage">
+        <h3 className="passage-title">📖 {quiz.title || '문학 발췌문'}</h3>
+        <p className="passage-text">{quiz.content || '※ 발췌문 내용은 별도 처리 필요'}</p>
       </div>
 
       <div className="quiz-box">
-        <h4 className="quiz-title">💡 문제</h4>
-        <p className="quiz-question">{quiz.question_text}</p>
+        <h4 className="question-heading">💡 문제</h4>
+        <p className="question-text">{quiz.question_text.replace(/[<>]/g, '')}</p>
         <div className="quiz-options">
           {options.map((opt, idx) => (
             <button
               key={idx}
               className={`quiz-option ${selected === opt.text ? 'selected' : ''}`}
               onClick={() => setSelected(opt.text)}
-              disabled={isSubmitted}
             >
               {String.fromCharCode(65 + idx)}. {opt.text}
             </button>
@@ -65,16 +94,13 @@ const LiteratureQuizPage = () => {
         </div>
 
         <div className="quiz-button-container">
-          {!isSubmitted ? (
-            <button className="submit-button" disabled={!selected} onClick={handleSubmit}>
-              정답 제출
-            </button>
-          ) : (
-            <div className="quiz-result">
-              <p>{isCorrect ? '✅ 정답입니다!' : '❌ 오답입니다.'}</p>
-              <p className="explanation">해설: {quiz.explanation}</p>
-            </div>
-          )}
+          <button
+            className="submit-button"
+            disabled={!selected}
+            onClick={handleSubmit}
+          >
+            정답 제출
+          </button>
         </div>
       </div>
     </div>
