@@ -53,6 +53,24 @@ public class PointDto {
 		
 	}
 	
+	// 김기찬찬
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class IncrementPoint {
+
+	    @NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+	    @Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+	    private String email;
+
+	    @NotBlank(message = "카테고리를 선택하세요.")
+	    private String category;
+
+	    @NotNull(message = "변경할 점수를 입력하세요.")
+	    private Double delta;
+	}
+	
 	@Getter
 	@Setter
 	@NoArgsConstructor

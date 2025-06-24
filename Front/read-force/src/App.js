@@ -39,6 +39,7 @@ import AdminLiteratureDetail from './pages/adminpages/adminliteraturedetail';
 import AdminLiteratureAdd from './pages/adminpages/adminliteratureadd';
 import AdminAddParagraph from './pages/adminpages/adminaddparagraph';
 import AdminUserInfo from './pages/adminpages/adminuserinifo';
+import AdminUserAttendance from './pages/adminpages/adminuserattendance';
 
 import TestQuestionPage from './pages/challenge/testquestionpage';
 import TestResultPage from './pages/challenge/testresultpage';
@@ -92,6 +93,7 @@ function App() {
           <Route path="/adminpage/adminliterature/:literatureNo/add-paragraph" element={<AdminAddParagraph />} />
           <Route path="/adminpage/adminliterature/adminliteratureadd" element={<AdminLiteratureAdd />} />
           <Route path="/adminpage/adminuserinfo/:email" element={<AdminUserInfo />} />
+          <Route path="/adminpage/adminuserinfo/:email/attendance" element={<AdminUserAttendance />} />
 
           <Route path="/question-result" element={<ArticleResultPage />} />
           <Route path="/test-question" element={<TestQuestionPage />} />
@@ -99,12 +101,12 @@ function App() {
           <Route path="/test-review" element={<TestReviewPage />} />
 
           <Route path="/ranking" element={<RankingPage />} />
-          <Route path="/challenge/result" element={<ChallengeResultPage />} /> 
+          <Route path="/challenge/result" element={<ChallengeResultPage />} />
 
 
           <Route path="/literature/novel" element={<NovelPage />} />
           <Route path="/literature/fairytale" element={<FairyTalePage />} />
-         
+
         </Route>
       </Routes>
     </Router>

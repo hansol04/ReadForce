@@ -1,8 +1,10 @@
 package com.readforce.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -628,5 +630,17 @@ public class AdminController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(get_literature_quiz_attempt_list_by_email);
 		
+	}
+	
+	// 점수 수정 관련 - 김기찬
+	@PreAuthorize("hasRole('ADMIN')")
+	@PatchMapping("/increment-point")
+	public ResponseEntity<Map<String, String>> incrementPoint(
+	    @RequestBody @Valid PointDto.IncrementPoint dto
+	) {
+	    admin_service.incrementPoint(dto);
+	    return ResponseEntity.ok(Map.of(
+	        MessageCode.MESSAGE_CODE, MessageCode.UPDATE_POINT_SUCCESS
+	    ));
 	}
 }

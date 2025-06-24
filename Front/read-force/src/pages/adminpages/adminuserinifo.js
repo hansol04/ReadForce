@@ -7,8 +7,14 @@ const AdminUserInfo = () => {
     const navigate = useNavigate();
     const { email } = useParams();
     const [user, setUser] = useState(null);
-    const [attendanceList, setAttendanceList] = useState([]);
+
+    // 포인트 
     const [pointInfo, setPointInfo] = useState({});
+    const [showModal, setShowModal] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState("english_news");
+    const [pointDelta, setPointDelta] = useState(0);
+
+    // 퀴즈 풀이 기록 가져오기
     const [newsQuizAttempts, setNewsQuizAttempts] = useState([]);
     const [literatureQuizAttempts, setLiteratureQuizAttempts] = useState([]);
 
@@ -38,17 +44,17 @@ const AdminUserInfo = () => {
     };
 
     // 출석 정보 가져오기
-    const fetchAttendanceList = async () => {
-        try {
-            const res = await fetchWithAuth(`/admin/get-member-attendance-list?email=${email}`);
-            if (!res.ok) throw new Error("출석 정보 조회 실패");
-            const data = await res.json();
-            setAttendanceList(data);
-        } catch (err) {
-            console.error(err);
-            alert("출석 정보를 불러오는 데 실패했습니다.");
-        }
-    };
+    // const fetchAttendanceList = async () => {
+    //     try {
+    //         const res = await fetchWithAuth(`/admin/get-member-attendance-list?email=${email}`);
+    //         if (!res.ok) throw new Error("출석 정보 조회 실패");
+    //         const data = await res.json();
+    //         setAttendanceList(data);
+    //     } catch (err) {
+    //         console.error(err);
+    //         alert("출석 정보를 불러오는 데 실패했습니다.");
+    //     }
+    // };
 
     // 포인트 정보 가져오기
     const fetchPointInfo = async () => {
@@ -56,6 +62,8 @@ const AdminUserInfo = () => {
             const res = await fetchWithAuth(`/admin/get-member-point-object?email=${email}`);
             if (!res.ok) throw new Error("포인트 정보 조회 실패");
             const data = await res.json();
+                console.log("✅ 백엔드 응답 확인:", data);
+
             setPointInfo(data);
         } catch (err) {
             console.error(err);
@@ -87,13 +95,38 @@ const AdminUserInfo = () => {
 
     useEffect(() => {
         fetchUserInfo();
-        fetchAttendanceList();
+        // fetchAttendanceList();
         fetchPointInfo();
         fetchNewsQuizAttempts();
         fetchLiteratureQuizAttempts();
     }, [email]);
 
     if (!user) return <div>불러오는 중...</div>;
+
+    // 포인트 정보 수정
+    const handlePointUpdate = async () => {
+        try {
+            const res = await fetchWithAuth(`/admin/increment-point`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                    category: selectedCategory,
+                    delta: pointDelta
+                })
+            });
+            if (!res.ok) throw new Error("점수 수정 실패");
+
+            alert("수정 완료!");
+            setShowModal(false);
+            fetchPointInfo();
+        } catch (err) {
+            console.error(err);
+            alert("점수 수정 중 오류 발생");
+        }
+    };
 
     // 뉴스 퀴즈 풀이 기록 삭제
     const handleNewQuizDeleteAttempt = async (email, newsQuizNo) => {
@@ -183,13 +216,14 @@ const AdminUserInfo = () => {
                     email, // or 관리용 임시값
                     literature_quiz_no: Number(newLiteratureQuizNo),
                     selected_option_index: selectedLiteratureOptionIndex,
-                    is_correct: isLiteratureCorrect,
+                    // is_correct: isLiteratureCorrect,
                 }),
             });
 
             if (!response.ok) throw new Error("응답 실패");
             alert("문학 퀴즈 응시 기록이 추가되었습니다.");
             setShowAddLiteratureModal(false);
+            await fetchLiteratureQuizAttempts();
         } catch (error) {
             alert("오류 발생: " + error.message);
         }
@@ -204,10 +238,9 @@ const AdminUserInfo = () => {
             <p><strong>생일:</strong> {user.birthday}</p>
             <p><strong>상태:</strong> {user.status}</p>
             <p><strong>가입일:</strong> {new Date(user.create_date).toLocaleDateString()}</p>
+            <button style={ADMIN_BUTTONS} onClick={() => navigate(`/adminpage/adminuserinfo/${email}/attendance`)}>출석 기록 관리</button>
 
-            <hr style={{ margin: "24px 0" }} />
-
-            <h3>출석 내역</h3>
+            {/* <h3>출석 내역</h3>
             {attendanceList.length === 0 ? (
                 <p>출석 기록이 없습니다.</p>
             ) : (
@@ -218,12 +251,23 @@ const AdminUserInfo = () => {
                         </li>
                     ))}
                 </ul>
-            )}
+            )} */}
 
             <hr style={{ margin: "24px 0" }} />
 
-            <h3>포인트 정보</h3>
-            <p><strong>총 포인트:</strong> {pointInfo.total}</p>
+            <div style={TITLE_STYLE}>
+                <div>
+                    <h3>포인트 정보 - <strong>총 포인트:</strong> {pointInfo.total}</h3>
+                </div>
+                <div style={BUTTON_LIST}>
+                    <button
+                        style={BUTTON_STYLE}
+                        onClick={() => setShowModal(true)}
+                    >
+                        점수 수정
+                    </button>
+                </div>
+            </div>
             <p><strong>영어 뉴스:</strong> {pointInfo.english_news}</p>
             <p><strong>일본어 뉴스:</strong> {pointInfo.japanese_news}</p>
             <p><strong>국어 뉴스:</strong> {pointInfo.korean_news}</p>
@@ -381,8 +425,11 @@ const AdminUserInfo = () => {
                                 <br />
                                 <input
                                     type="number"
-                                    value={newLiteratureQuizNo}
-                                    onChange={(e) => setNewLiteratureQuizNo(e.target.value)}
+                                    value={newLiteratureQuizNo ?? ""}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        setNewLiteratureQuizNo(value === "" ? "" : Number(value));
+                                    }}
                                 />
                             </label>
                         </div>
@@ -404,25 +451,38 @@ const AdminUserInfo = () => {
                             </label>
                         </div>
 
-                        {/* 정답 여부 */}
-                        {/* <div style={{ marginBottom: "12px" }}>
-                            <label>
-                                정답 여부:
-                                <br />
-                                <select
-                                    value={isLiteratureCorrect}
-                                    onChange={(e) => setIsLiteratureCorrect(e.target.value === "true")}
-                                >
-                                    <option value="true">정답</option>
-                                    <option value="false">오답</option>
-                                </select>
-                            </label>
-                        </div> */}
-
                         {/* 버튼 영역 */}
                         <div style={{ marginTop: "16px" }}>
                             <button onClick={handleAddLiteratureQuizAttempt}>저장</button>
                             <button onClick={() => setShowAddLiteratureModal(false)} style={{ marginLeft: "8px" }}>취소</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {showModal && (
+                <div style={modalOverlayStyle}>
+                    <div style={modalContentStyle}>
+                        <h4>점수 수정</h4>
+
+                        <label>카테고리 선택</label>
+                        <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+                            <option value="english_news">영어 뉴스</option>
+                            <option value="japanese_news">일본어 뉴스</option>
+                            <option value="korean_news">국어 뉴스</option>
+                            <option value="fairytale">동화</option>
+                            <option value="novel">소설</option>
+                        </select>
+
+                        <label>변경할 점수 입력</label>
+                        <input
+                            type="number"
+                            value={pointDelta}
+                            onChange={(e) => setPointDelta(parseInt(e.target.value))}
+                        />
+
+                        <div style={{ marginTop: "16px" }}>
+                            <button onClick={handlePointUpdate}>적용</button>
+                            <button onClick={() => setShowModal(false)}>취소</button>
                         </div>
                     </div>
                 </div>
@@ -491,6 +551,16 @@ const modalContentStyle = {
     borderRadius: "8px",
     minWidth: "300px",
     boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+};
+
+const ADMIN_BUTTONS = {
+    marginBottom: "16px",
+    padding: "8px 16px",
+    backgroundColor: "#007BFF",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer"
 };
 
 export default AdminUserInfo;

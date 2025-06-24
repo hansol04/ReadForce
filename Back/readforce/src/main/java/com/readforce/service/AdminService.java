@@ -612,35 +612,68 @@ public class AdminService {
 	}
 
 	// 사용자가 풀은 문학 퀴즈 기록 추가
+//	@Transactional
+//	public void addLiteratureQuizAttempt(AddLiteratureQuizAttempt add_literature_quiz_attempt) {
+//		
+//		// 사용자가 정답을 입력했는지 확인
+//		LiteratureQuiz literature_quiz = literature_quiz_repository.findById(add_literature_quiz_attempt.getLiterature_quiz_no())
+//				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.NEWS_QUIZ_NOT_FOUND));
+//		
+//		boolean is_correct = false;
+//		
+//		if(literature_quiz.getCorrect_answer_index() == add_literature_quiz_attempt.getSelected_option_index()) {
+//			
+//			is_correct = true;
+//			
+//		}
+//		
+//		// 복합키 생성
+//		LiteratureQuizAttemptId literature_quiz_attempt_id = new LiteratureQuizAttemptId();
+//		literature_quiz_attempt_id.setEmail(add_literature_quiz_attempt.getEmail());
+//		literature_quiz_attempt_id.setLiterature_quiz_no(add_literature_quiz_attempt.getLiterature_quiz_no());
+//		
+//		// 엔티티 생성
+//		LiteratureQuizAttempt literature_quiz_attempt = new LiteratureQuizAttempt();
+//		literature_quiz_attempt.setLiterature_quiz_attempt_id(literature_quiz_attempt_id);
+//		literature_quiz_attempt.setIs_correct(is_correct);
+//		literature_quiz_attempt.setSelected_option_index(add_literature_quiz_attempt.getSelected_option_index());
+//		
+//		
+//		// 추가
+//		literature_quiz_attempt_repository.save(literature_quiz_attempt);
+//		
+//	}
 	@Transactional
-	public void addLiteratureQuizAttempt(AddLiteratureQuizAttempt add_literature_quiz_attempt) {
-		
-		// 사용자가 정답을 입력했는지 확인
-		LiteratureQuiz literature_quiz = literature_quiz_repository.findById(add_literature_quiz_attempt.getLiterature_quiz_no())
-				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.NEWS_QUIZ_NOT_FOUND));
-		
-		boolean is_correct = false;
-		
-		if(literature_quiz.getCorrect_answer_index() == add_literature_quiz_attempt.getSelected_option_index()) {
-			
-			is_correct = true;
-			
-		}
-		
-		// 복합키 생성
-		LiteratureQuizAttemptId literature_quiz_attempt_id = new LiteratureQuizAttemptId();
-		literature_quiz_attempt_id.setEmail(add_literature_quiz_attempt.getEmail());
-		literature_quiz_attempt_id.setLiterature_quiz_no(add_literature_quiz_attempt.getLiterature_quiz_no());
-		
-		// 엔티티 생성
-		LiteratureQuizAttempt literature_quiz_attempt = new LiteratureQuizAttempt();
-		literature_quiz_attempt.setLiterature_quiz_attempt_id(literature_quiz_attempt_id);
-		literature_quiz_attempt.setIs_correct(is_correct);
-		literature_quiz_attempt.setSelected_option_index(add_literature_quiz_attempt.getSelected_option_index());
-		
-		// 추가
-		literature_quiz_attempt_repository.save(literature_quiz_attempt);
-		
+	public void addLiteratureQuizAttempt(AddLiteratureQuizAttempt dto) {
+
+	    // 퀴즈 정보 조회
+	    LiteratureQuiz literatureQuiz = literature_quiz_repository.findById(dto.getLiterature_quiz_no())
+	            .orElseThrow(() -> new ResourceNotFoundException(MessageCode.NEWS_QUIZ_NOT_FOUND));
+
+	    // 회원 정보 조회
+	    Member member = member_repository.findByEmail(dto.getEmail())
+	            .orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND));
+
+	    // 정답 여부 판단
+	    boolean isCorrect = literatureQuiz.getCorrect_answer_index() == dto.getSelected_option_index();
+
+	    // 복합키 생성
+	    LiteratureQuizAttemptId attemptId = new LiteratureQuizAttemptId();
+	    attemptId.setEmail(dto.getEmail());
+	    attemptId.setLiterature_quiz_no(dto.getLiterature_quiz_no());
+
+	    // 엔티티 생성
+	    LiteratureQuizAttempt attempt = new LiteratureQuizAttempt();
+	    attempt.setLiterature_quiz_attempt_id(attemptId);
+	    attempt.setIs_correct(isCorrect);
+	    attempt.setSelected_option_index(dto.getSelected_option_index());
+
+	    // ✅ @MapsId 대응 연관관계 설정
+	    attempt.setMember(member);
+	    attempt.setLiterature_quiz(literatureQuiz);
+
+	    // 저장
+	    literature_quiz_attempt_repository.save(attempt);
 	}
 
 	// 문학 퀴즈 풀이 기록 삭제
@@ -664,7 +697,6 @@ public class AdminService {
 		// 엔티티 생성
 		Attendance attendance = new Attendance();
 		attendance.setEmail(email);
-		
 		attendance_repository.save(attendance);
 
 	}
@@ -850,7 +882,7 @@ public class AdminService {
 		get_point.setEmail(point.getEmail());
 		get_point.setTotal(point.getTotal());
 		get_point.setEnglish_news(point.getEnglish_news());
-		get_point.setJapanese_news(point.getEnglish_news());
+		get_point.setJapanese_news(point.getJapanese_news());
 		get_point.setKorean_news(point.getKorean_news());
 		get_point.setNovel(point.getNovel());
 		get_point.setFairytale(point.getFairytale());
@@ -890,7 +922,26 @@ public class AdminService {
 
 	}
 
-	
+	// 포인트 수정 - 김기찬
+	@Transactional
+	public void incrementPoint(PointDto.IncrementPoint dto) {
+	    Point point = point_repository.findByEmail(dto.getEmail())
+	        .orElseThrow(() -> new ResourceNotFoundException(MessageCode.POINT_NOT_FOUND));
+
+	    switch (dto.getCategory()) {
+	        case "korean_news" -> point.setKorean_news(point.getKorean_news() + dto.getDelta());
+	        case "english_news" -> point.setEnglish_news(point.getEnglish_news() + dto.getDelta());
+	        case "japanese_news" -> point.setJapanese_news(point.getJapanese_news() + dto.getDelta());
+	        case "novel" -> point.setNovel(point.getNovel() + dto.getDelta());
+	        case "fairytale" -> point.setFairytale(point.getFairytale() + dto.getDelta());
+	        default -> throw new IllegalArgumentException("지원하지 않는 카테고리입니다: " + dto.getCategory());
+	    }
+
+	    // 총 점수도 갱신
+	    double total = point.getKorean_news() + point.getEnglish_news()
+	              + point.getJapanese_news() + point.getNovel() + point.getFairytale();
+	    point.setTotal(total);
+	}
 
 
 	
