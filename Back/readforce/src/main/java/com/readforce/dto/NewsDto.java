@@ -58,12 +58,42 @@ public class NewsDto {
 		private Double score;
 
 		private Long news_no;
+
+	}	
+	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class GetChallengeNewsQuiz{
+
+		private Long news_quiz_no;
+
+		private String question_text;
+
+		private String choice1;
+
+		private String choice2;
+
+		private String choice3;
+
+		private String choice4;
+
+		private Integer correct_answer_index;
+
+		private String explanation;
+
+		private Double score;
+
+		private Long news_no;
 		
 		private String title;
 		
 		private String level;
+		
+		private String content;
 
-	}	
+	}
 	
 	@Getter
 	@Setter
