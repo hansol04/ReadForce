@@ -55,7 +55,7 @@ const Main = () => {
     debounceRef.current = setTimeout(async () => {
       try {
         const res = await api.get(
-          `/ranking/get-ranking-by-classification-and-type-or-language?classification=NEWS&type=&language=${selectedLanguage}`
+         `/ranking/get-news-ranking?language=${selectedLanguage}`
         );
         setTop5Data(res.data.slice(0, 5));
       } catch (err) {
@@ -137,7 +137,7 @@ const Main = () => {
             </table>
           </div>
 
-          <div className="stat-box today-stats">
+          {/* <div className="stat-box today-stats">
             <h3>오늘의 통계</h3>
             <div className="grid-2x2">
               <div><div className="number">3,288 명</div><div className="label">오늘의 응시자 수</div></div>
@@ -145,7 +145,7 @@ const Main = () => {
               <div><div className="number">15 %</div><div className="label">제출한 학습률</div></div>
               <div><div className="number">68</div><div className="label">틀린 문항 수</div></div>
             </div>
-          </div>
+          </div> */}
 
           <div className="stat-box wrong-articles">
             <h3>가장 많이 틀린 기사</h3>
