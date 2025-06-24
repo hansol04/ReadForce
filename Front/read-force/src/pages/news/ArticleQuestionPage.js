@@ -1,67 +1,82 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import api from '../../api/axiosInstance';
 import './css/ArticleQuestionPage.css';
-import { useNavigate, useLocation } from 'react-router-dom';
-
-const dummyArticle = {
-  id: 1,
-  title: '후 대통령, 트럼프 첫 통화...무슨 얘기 나눴나',
-  summary: 'CBS노컷뉴스 이한형 기자 | 2025-06-06 23:52',
-  content: `2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.2025년 6월 6일, 이재명 대통령은 미국의 도널드 트럼프 대통령과 첫 전화 통화를 진행했다. 이 통화는 약 20분간 이어졌으며, 주요 현안에 대한 논의가 있었다.`,
-  sourceUrl: '#',
-  question: '이재명 대통령과 도널드 트럼프 미국 대통령은 언제 처음으로 통화를 했나요? 이재명 대통령과 도널드 트럼프 미국 대통령은 언제 처음으로 통화를 했나요?',
-  options: ['2025년 6월 6일', '2025년 6월 7일', '2025년 6월 5일', '2025년 6월 8일'],
-  answer: '2025년 6월 6일',
-  explanation: '기사에 따르면, 이재명 대통령은 6월 6일 오후 10시부터 약 20분간 트럼프 대통령과 첫 통화를 가졌다고 명시되어 있습니다.',
-};
 
 const ArticleQuestionPage = () => {
+  const [quiz, setQuiz] = useState(null);
   const [selected, setSelected] = useState(null);
+  const [article, setArticle] = useState(null);
+  const [error, setError] = useState(null);
+
   const navigate = useNavigate();
   const location = useLocation();
+  const { id } = useParams();
 
-  const article = location.state?.article || dummyArticle;
-  const language = location.state?.language || '한국어';
-
-   const handleSubmit = () => {
-    if (selected) {
-      navigate('/question-result', {
-        state: {
-          isCorrect: selected === article.answer,
-          explanation: article.explanation,
-          language: language,
-        }
-      });
+  useEffect(() => {
+    const loadedArticle = location.state?.article;
+    if (!loadedArticle || !loadedArticle.news_no) {
+      setError("뉴스 또는 퀴즈 정보를 불러오지 못했습니다.");
+      return;
     }
+
+    setArticle(loadedArticle);
+
+    const fetchQuiz = async () => {
+      try {
+        const res = await api.get('/news/get-news-quiz-object', {
+          params: { news_no: loadedArticle.news_no },
+        });
+        setQuiz(res.data);
+      } catch (err) {
+        console.error('퀴즈 로딩 실패:', err);
+        setError("퀴즈 로딩 중 오류가 발생했습니다.");
+      }
+    };
+
+    fetchQuiz();
+  }, [location.state]);
+
+  const handleSubmit = () => {
+    if (selected === null) return;
+
+    navigate('/question-result', {
+      state: {
+        isCorrect: selected === quiz.correct_answer_index,
+        explanation: quiz.explanation,
+        language: article.language || '한국어',
+      },
+    });
   };
 
+  if (error) return <div className="page-container">{error}</div>;
+  if (!article || !quiz) return <div className="page-container">로딩 중...</div>;
+
   return (
-    <div className="page-container article-question-layout">
+    <div className="page-container">
       <div className="article-box">
-        <h3 className="article-title">{article.title}</h3>
-        <p className="article-summary">{article.summary}</p>
-        <p className="article-content">{article.content}</p>
+        <h3>{article.title}</h3>
+        <p>{article.summary}</p>
+        <p>{article.content}</p>
       </div>
 
       <div className="quiz-box">
-        <h4 className="quiz-title">💡 문제</h4>
-        <p className="quiz-question">{article.question}</p>
+        <h4>💡 문제</h4>
+        <p>{quiz.question_text}</p>
         <div className="quiz-options">
-          {article.options.map((opt, idx) => (
+          {[quiz.choice1, quiz.choice2, quiz.choice3, quiz.choice4].map((opt, idx) => (
             <button
               key={idx}
-              className={`quiz-option ${selected === opt ? 'selected' : ''}`}
-              onClick={() => setSelected(opt)}
+              className={`quiz-option ${selected === idx ? 'selected' : ''}`}
+              onClick={() => setSelected(idx)}
             >
               {String.fromCharCode(65 + idx)}. {opt}
             </button>
           ))}
         </div>
-
-        <div className="quiz-button-container">
-          <button className="submit-button" disabled={!selected} onClick={handleSubmit}>
-            정답 제출
-          </button>
-        </div>
+        <button disabled={selected === null} onClick={handleSubmit}>
+          정답 제출
+        </button>
       </div>
     </div>
   );

@@ -79,4 +79,29 @@ export const fetchNewsListByLanguageAndLevelAndCategory = async ({ language, lev
   }
 };
 
+export const fetchNewsQuizByNewsNo = async (news_no) => {
+  try {
+    const res = await api.get('/news/get-news-quiz-object', {
+      params: { news_no },
+    });
+    return res.data;
+  } catch (err) {
+    console.error('뉴스 퀴즈 불러오기 실패:', err);
+    return null;
+  }
+};
+export const saveNewsQuizResult = async ({ news_quiz_no, selected_option_index }) => {
+  try {
+    const res = await api.post('/news/save-member-solved-news-quiz', {
+      news_quiz_no,
+      selected_option_index,
+    });
+    return res.data;
+  } catch (err) {
+    console.error('뉴스 퀴즈 정답 저장 실패:', err);
+    return null;
+  }
+};
+origin/develop
+
 export const debouncedFetchNewsListByLanguageAndLevelAndCategory = debounce(fetchNewsListByLanguageAndLevelAndCategory, 300);

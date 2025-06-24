@@ -2,7 +2,9 @@ import React from 'react';
 import './css/UniversalFilterBar.css';
 import Select from 'react-select';
 
+
 const UniversalFilterBar = ({ level, setLevel, category, setCategory, order_by, setOrderBy, categoryOptions }) => {
+
   const levelClass = (lvl) => {
     const base =
       lvl === '초급'
@@ -20,9 +22,24 @@ const UniversalFilterBar = ({ level, setLevel, category, setCategory, order_by, 
     { value: 'ADVANCED', label: '고급' },
   ];
 
+
+  const categoryOptions = [
+    { value: '', label: '모두' },
+    { value: 'POLITICS', label: '정치' },
+    { value: 'ECONOMY', label: '경제' },
+    { value: 'SOCIETY', label: '사회' },
+    { value: 'CULTURE', label: '생활/문화' },
+    { value: 'SCIENCE', label: 'IT/과학' },
+    { value: 'ETC', label: '기타' },
+  ];
+
+  const selectedCategory = categoryOptions.find((o) => o.value === category) || categoryOptions[0];
+
+
   const handleLevelClick = (value) => {
     if (level === value) {
       setLevel(''); 
+
     } else {
       setLevel(value);
     }
@@ -65,7 +82,9 @@ const UniversalFilterBar = ({ level, setLevel, category, setCategory, order_by, 
           className="custom-select"
           classNamePrefix="react-select"
           options={categoryOptions}
+
           value={categoryOptions.find((o) => o.value === category) || categoryOptions[0]}
+
           onChange={(selected) => setCategory(selected.value)}
           isSearchable={false}
         />
