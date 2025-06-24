@@ -385,7 +385,7 @@ public class GeminiService {
 		// 지문
 		String question_line = extractQuestionLine(text)
 				.map(line -> line.replaceAll("(?i)(문제|問題|question|Q)[\\s:：\\-]*", "").trim())
-				.orElseThrow(() -> new GeminiException(MessageCode.NEWS_QUIZ_LINE_MISSING));
+				.orElseThrow(() -> new GeminiException(MessageCode.LITERATURE_QUIZ_LINE_MISSING));
 		
 		List<String> choice_list = new ArrayList<>();
 		
@@ -398,7 +398,7 @@ public class GeminiService {
 		}
 		if(choice_list.size() < 4) {
 			
-			throw new GeminiException(MessageCode.NEWS_QUIZ_OPTION_MISSING);
+			throw new GeminiException(MessageCode.LITERATURE_QUIZ_OPTION_MISSING);
 			
 		}
 		
@@ -406,7 +406,7 @@ public class GeminiService {
 		Matcher answer_matcher = Pattern.compile("(?i)(정답|Answer|正解)\\s*[:：]\\s*\\W*([A-Da-d1-4])").matcher(text);
 		if(!answer_matcher.find()) {
 			
-			throw new GeminiException(MessageCode.NEWS_QUIZ_ANSWER_MISSING);
+			throw new GeminiException(MessageCode.LITERATURE_QUIZ_ANSWER_MISSING);
 			
 		}
 		int correct_answer_index = "ABCD".indexOf(answer_matcher.group(2).toUpperCase());

@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.readforce.dto.NewsDto.GetNewsQuiz;
 import com.readforce.dto.PointDto.SaveChallengePoint;
 import com.readforce.entity.LiteratureQuiz;
-import com.readforce.entity.NewsQuiz;
 import com.readforce.enums.LiteratureRelate;
 import com.readforce.enums.MessageCode;
 import com.readforce.enums.NewsRelate;
@@ -40,14 +40,14 @@ public class ChallengeController {
 
 	// 뉴스 도전 문제 가져오기(랜덤)
 	@GetMapping("/get-news-challenge-quiz")
-	public ResponseEntity<List<NewsQuiz>> getNewsChallengeQuiz(
+	public ResponseEntity<List<GetNewsQuiz>> getNewsChallengeQuiz(
 			@RequestParam("language")
 			@NotBlank(message = MessageCode.NEWS_ARTICLE_LANGUAGE_NOT_BLANK)
 			@ValidEnum(enumClass = NewsRelate.Language.class, message = MessageCode.NEWS_ARTICLE_LANGUAGE_PATTERN_INVALID)
 			String language
 	){
 		
-		List<NewsQuiz> news_quiz_list = quiz_service.getChallengeQuizWithNewsQuiz(language);
+		List<GetNewsQuiz> news_quiz_list = quiz_service.getChallengeQuizWithNewsQuiz(language);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(news_quiz_list);
 		
