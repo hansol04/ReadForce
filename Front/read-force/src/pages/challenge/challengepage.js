@@ -1,13 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './challengepage.css';
+import api from '../../api/axiosInstance';
 
 const ChallengePage = () => {
   const navigate = useNavigate();
+  const [wrongQuestions, setWrongQuestions] = useState([]);
 
   const handleRankingClick = () => {
-    navigate('/ranking'); // 원하는 경로로 이동
+    navigate('/ranking');
   };
+
+  const handleSolveClick = (questionId) => {
+    navigate(`/question/${questionId}`);
+  };
+
+  useEffect(() => {
+    const fetchWrongQuestions = async () => {
+      try {
+        const res = await api.get('/quiz/get-most-incorrected-quiz'); // ✅ API 경로 수정됨
+        setWrongQuestions(res.data);
+      } catch (error) {
+        console.error('가장 많이 틀린 문제 불러오기 실패:', error);
+      }
+    };
+    fetchWrongQuestions();
+  }, []);
 
   return (
     <div className="page-container">
@@ -17,22 +35,10 @@ const ChallengePage = () => {
         <div className="stats-box">
           <h3>실시간 통계</h3>
           <div className="grid-4x2">
-            <div>
-              <div className="label">응시자 수</div>
-              <div className="number">20,180</div>
-            </div>
-            <div>
-              <div className="label">총 문제</div>
-              <div className="number">100</div>
-            </div>
-            <div>
-              <div className="label">푼 문제</div>
-              <div className="number">23</div>
-            </div>
-            <div>
-              <div className="label">정답률</div>
-              <div className="number">74%</div>
-            </div>
+            <div><div className="label">응시자 수</div><div className="number">20,180</div></div>
+            <div><div className="label">총 문제</div><div className="number">100</div></div>
+            <div><div className="label">푼 문제</div><div className="number">23</div></div>
+            <div><div className="label">정답률</div><div className="number">74%</div></div>
           </div>
           <button className="challenge-btn">문제 도전하기</button>
         </div>
@@ -59,23 +65,13 @@ const ChallengePage = () => {
           <div></div>
         </div>
 
-        <div className="wrong-item">
-          <p>AI의 혈관에도 피와 땀과 눈물이 흐른다 [AI오답노트]</p>
-          <span>19%</span>
-          <button>문제풀기</button>
-        </div>
-
-        <div className="wrong-item">
-          <p>하루 두 스푼씩 섭취했더니 염증 사라지고…</p>
-          <span>25%</span>
-          <button>문제풀기</button>
-        </div>
-
-        <div className="wrong-item">
-          <p>“이자 감당 못해 집까지 뺏겼다”…</p>
-          <span>38%</span>
-          <button>문제풀기</button>
-        </div>
+        {wrongQuestions.map((item) => (
+          <div className="wrong-item" key={item.id}>
+            <p>{item.title}</p>
+            <span>{Math.round(item.correctRate * 100)}%</span>
+            <button onClick={() => handleSolveClick(item.id)}>문제풀기</button>
+          </div>
+        ))}
       </div>
     </div>
   );
