@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.readforce.dto.LiteratureDto.AddLiteratureQuizAttempt;
 import com.readforce.dto.LiteratureDto.GetLiteratureByAdmin;
 import com.readforce.dto.LiteratureDto.GetLiteratureParagraphByAdmin;
 import com.readforce.dto.LiteratureDto.GetLiteratureQuizByAdmin;
@@ -16,7 +17,6 @@ import com.readforce.dto.MemberDto.GetAttendance;
 import com.readforce.dto.MemberDto.MemberObjectByAdmin;
 import com.readforce.dto.MemberDto.ModifyByAdmin;
 import com.readforce.dto.MemberDto.SignUpByAdmin;
-import com.readforce.dto.NewsDto.AddLiteratureQuizAttempt;
 import com.readforce.dto.NewsDto.AddNewsQuizAttempt;
 import com.readforce.dto.NewsDto.GetLiteratureQuizAttemptListByEmail;
 import com.readforce.dto.NewsDto.GetNewsQuizAttemptByEmail;
@@ -367,7 +367,7 @@ public class AdminService {
 		literature_paragraph_id.setLiterature_no(literature_paragraph_by_admin.getLiterature_no());
 		literature_paragraph_id.setLiterature_paragraph_no(last_literature_paragraph_no + 1);
 		
-		// 문학 엔티티 조회 - 김기찬이 추가.
+		// 문학 엔티티 조회
 		Literature literature = literature_repository.findById(literature_paragraph_by_admin.getLiterature_no())
 		        .orElseThrow(() -> new ResourceNotFoundException(MessageCode.LITERATURE_NOT_FOUND));
 		
@@ -378,41 +378,11 @@ public class AdminService {
 		literature_paragraph.setContent(literature_paragraph_by_admin.getContent());
 		literature_paragraph.setLevel(literature_paragraph_by_admin.getLevel());
 		
-		// 문학 연결 - 김기찬이 추가.
+		// 문학 연결
 	    literature_paragraph.setLiterature(literature);
 		
 		literature_paragraph_repository.save(literature_paragraph);
 	}
-//	// 문학 문단 추가 - 김기찬이 수정해보았씁니당.
-//	@Transactional
-//	public void addLiteratureParagraph(LiteratureParagraphByAdmin dto) {
-//
-//	    // 1. 마지막 문단 번호 조회
-//	    Long lastParagraphNo = literature_paragraph_repository.findLastLiteratureParagraphNoByLiteratureNo(dto.getLiterature_no());
-//	    if (lastParagraphNo == null) lastParagraphNo = 0L;
-//
-//	    // 2. 복합키 생성
-//	    LiteratureParagraphId id = new LiteratureParagraphId();
-//	    id.setLiterature_no(dto.getLiterature_no());
-//	    id.setLiterature_paragraph_no(lastParagraphNo + 1);
-//
-//	    // 3. 문학 엔티티 조회
-//	    Literature literature = literature_repository.findById(dto.getLiterature_no())
-//	        .orElseThrow(() -> new RuntimeException("해당 문학을 찾을 수 없습니다."));
-//
-//	    // 4. 문단 엔티티 생성
-//	    LiteratureParagraph paragraph = new LiteratureParagraph();
-//	    paragraph.setLiterature_paragraph_id(id);
-//	    paragraph.setCategory(dto.getCategory());
-//	    paragraph.setContent(dto.getContent());
-//	    paragraph.setLevel(dto.getLevel());
-//
-//	    // 5. 문학 연결
-//	    paragraph.setLiterature(literature);
-//
-//	    // 6. 저장
-//	    literature_paragraph_repository.save(paragraph);
-//	}
 
 	// 전체 문학 문단 리스트 가져오기(문학 문단 번호순)
 	@Transactional(readOnly = true)
@@ -525,6 +495,10 @@ public class AdminService {
 			
 		}
 		
+		// 회원 조회
+		Member member = member_repository.findByEmail(add_news_quiz_attempt.getEmail())
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND));
+		
 		// 복합키 생성
 		NewsQuizAttemptId news_quiz_attempt_id = new NewsQuizAttemptId();
 		news_quiz_attempt_id.setEmail(add_news_quiz_attempt.getEmail());
@@ -535,6 +509,8 @@ public class AdminService {
 		news_quiz_attempt.setNews_quiz_attempt_id(news_quiz_attempt_id);
 		news_quiz_attempt.setIs_correct(is_correct);
 		news_quiz_attempt.setSelected_option_index(add_news_quiz_attempt.getSelected_option_index());
+		news_quiz_attempt.setNews_quiz(news_quiz);
+		news_quiz_attempt.setMember(member);
 		
 		// 저장
 		news_quiz_attempt_repository.save(news_quiz_attempt);
@@ -550,7 +526,7 @@ public class AdminService {
 		news_quiz_attempt_id.setEmail(email);
 		news_quiz_attempt_id.setNews_quiz_no(news_quiz_no);
 		
-		news_quiz_attempt_repository.deleteByEmail(email);
+		news_quiz_attempt_repository.deleteById(news_quiz_attempt_id);
 		
 	}
 
@@ -616,9 +592,26 @@ public class AdminService {
 		
 	}
 
-	// 문학 퀴즈 풀이 기록 추가
+
+	// 사용자가 풀은 문학 문제 기록 추가
 	@Transactional
 	public void addLiteratureQuizAttempt(AddLiteratureQuizAttempt add_literature_quiz_attempt) {
+		
+		// 사용자가 정답을 입력했는지 확인
+		LiteratureQuiz literature_quiz = literature_quiz_repository.findById(add_literature_quiz_attempt.getLiterature_quiz_no())
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.LITERATURE_QUIZ_NOT_FOUND));
+		
+		boolean is_correct = false;
+		
+		if(literature_quiz.getCorrect_answer_index() == add_literature_quiz_attempt.getSelected_option_index()) {
+			
+			is_correct = true;
+			
+		}
+		
+		// 회원 조회
+		Member member = member_repository.findByEmail(add_literature_quiz_attempt.getEmail())
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND));
 		
 		// 복합키 생성
 		LiteratureQuizAttemptId literature_quiz_attempt_id = new LiteratureQuizAttemptId();
@@ -628,8 +621,10 @@ public class AdminService {
 		// 엔티티 생성
 		LiteratureQuizAttempt literature_quiz_attempt = new LiteratureQuizAttempt();
 		literature_quiz_attempt.setLiterature_quiz_attempt_id(literature_quiz_attempt_id);
-		literature_quiz_attempt.setIs_correct(add_literature_quiz_attempt.getIs_correct());
+		literature_quiz_attempt.setIs_correct(is_correct);
 		literature_quiz_attempt.setSelected_option_index(add_literature_quiz_attempt.getSelected_option_index());
+		literature_quiz_attempt.setMember(member);
+		literature_quiz_attempt.setLiterature_quiz(literature_quiz);
 		
 		// 추가
 		literature_quiz_attempt_repository.save(literature_quiz_attempt);

@@ -99,7 +99,7 @@ rate-limiting:
     max-requests: 100
     per-minute: 1
   email:
-    max-requests: 20
+    max-requests: 100
     per-minute: 1
   email-verification:
     max-requests: 3

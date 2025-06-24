@@ -13,7 +13,7 @@ import com.readforce.entity.LiteratureQuiz;
 @Repository
 public interface LiteratureQuizRepository extends JpaRepository<LiteratureQuiz, Long>{
 
-	@Query("SELECT lq FROM LiteratureQuiz lq JOIN FETCH lq.literature_paragraph WHERE lq.literature_no = :literature_no AND lq.literature_paragraph_no = :literature_paragraph_no")
+	@Query("SELECT lq FROM LiteratureQuiz lq JOIN FETCH lq.literature_paragraph lp JOIN FETCH lp.literature  WHERE lq.literature_no = :literature_no AND lq.literature_paragraph_no = :literature_paragraph_no")
 	LiteratureQuiz findByLiteratureParagraphNoAndLiteratureNo(
 			@Param("literature_paragraph_no") Long literature_paragraph_no, 
 			@Param("literature_no") Long literature_no);
@@ -33,6 +33,5 @@ public interface LiteratureQuizRepository extends JpaRepository<LiteratureQuiz, 
 
 	@Query(value = "SELECT * FROM literature_quiz ORDER BY literature_quiz_no DESC", nativeQuery = true)
 	List<LiteratureQuiz> findAllOrderByLiteratureQuizNoDesc();
-
 
 }

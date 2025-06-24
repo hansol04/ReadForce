@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom'; 
+import debounce from 'lodash/debounce';
+
 import UniversalList from '../../components/universal/UniversalList';
 import { fetchLiteratureParagraphList } from '../../api/literatureApi';
-import debounce from 'lodash/debounce';
 import { fairytaleCategoryOptions } from '../../components/LiteratureCategory';
 
 const reverseLevelMap = {
@@ -20,6 +22,12 @@ const FairyTalePage = () => {
   const [level, setLevel] = useState('');
   const [category, setCategory] = useState('');
   const [order_by, setOrderBy] = useState('latest');
+
+  const navigate = useNavigate(); 
+
+  const handleSolve = (item) => {
+    navigate(`/literature-quiz/${item.literature_paragraph_no}`);
+  };
 
   const fetchItems = useCallback(async (params) => {
     try {
@@ -68,7 +76,8 @@ const FairyTalePage = () => {
         order_by={order_by}
         setOrderBy={setOrderBy}
         categoryOptions={fairytaleCategoryOptions}
-        />
+        onSolve={handleSolve} 
+      />
     </div>
   );
 };

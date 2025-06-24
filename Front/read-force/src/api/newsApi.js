@@ -103,5 +103,4 @@ export const saveNewsQuizResult = async ({ news_quiz_no, selected_option_index }
   }
 };
 
-
 export const debouncedFetchNewsListByLanguageAndLevelAndCategory = debounce(fetchNewsListByLanguageAndLevelAndCategory, 300);

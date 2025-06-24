@@ -7,6 +7,7 @@ import com.readforce.enums.LiteratureRelate;
 import com.readforce.enums.MessageCode;
 import com.readforce.validation.ValidEnum;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -65,6 +66,8 @@ public class LiteratureDto {
 		private Long literature_paragraph_no;
 		
 		private String content;
+		
+		private String title;
 		
 	}
 	
@@ -223,6 +226,23 @@ public class LiteratureDto {
 		
 	}
 	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class AddLiteratureQuizAttempt{
+		
+		@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+		@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+		private String email;
+		
+		@NotNull(message = MessageCode.LITERATURE_QUIZ_NO_NOT_NULL)
+		private Long literature_quiz_no;
+
+		@NotNull(message = MessageCode.SELECTED_OPTION_INDEX_NOT_NULL)
+		private Integer selected_option_index;
+		
+	}
 	
 	
 
