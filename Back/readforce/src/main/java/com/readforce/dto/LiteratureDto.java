@@ -66,6 +66,8 @@ public class LiteratureDto {
 		
 		private String content;
 		
+		private String title;
+		
 	}
 	
 	@Getter
