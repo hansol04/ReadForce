@@ -10,9 +10,10 @@ import java.util.stream.Stream;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.readforce.dto.LiteratureDto.GetChallengeLiteratureQuiz;
 import com.readforce.dto.MemberDto.MemberAttemptedQuiz;
 import com.readforce.dto.MemberDto.MemberIncorrectQuiz;
-import com.readforce.dto.NewsDto.GetNewsQuiz;
+import com.readforce.dto.NewsDto.GetChallengeNewsQuiz;
 import com.readforce.dto.QuizDto.GetQuiz;
 import com.readforce.dto.QuizDto.IncorrectQuiz;
 import com.readforce.entity.LiteratureQuiz;
@@ -169,7 +170,7 @@ public class QuizService {
 
 	// 뉴스 도전 문제 가져오기
 	@Transactional(readOnly = true)
-	public List<GetNewsQuiz> getChallengeQuizWithNewsQuiz(String language) {
+	public List<GetChallengeNewsQuiz> getChallengeQuizWithNewsQuiz(String language) {
 		
 		// 뉴스 초급과 언어에 해당하는 뉴스 퀴즈 번호 7개 랜덤으로 가져오기
 		List<Long> beginner_news_quiz_no_list = getRandomQuizIdList(
@@ -201,35 +202,36 @@ public class QuizService {
 		List<NewsQuiz> combined_news_quiz_list = news_quiz_repository.findAllById(combined_news_quiz_no_list);
 		
 		// DTO에 넣기
-		List<GetNewsQuiz> get_news_quiz_list = new ArrayList<>();
+		List<GetChallengeNewsQuiz> get_challenge_news_quiz_list = new ArrayList<>();
 		
 		for(NewsQuiz news_quiz : combined_news_quiz_list) {
 
-			GetNewsQuiz get_news_quiz = new GetNewsQuiz();
-			get_news_quiz.setNews_quiz_no(news_quiz.getNews_quiz_no());
-			get_news_quiz.setQuestion_text(news_quiz.getQuestion_text());
-			get_news_quiz.setTitle(news_quiz.getNews().getTitle());
-			get_news_quiz.setChoice1(news_quiz.getChoice1());
-			get_news_quiz.setChoice2(news_quiz.getChoice2());
-			get_news_quiz.setChoice3(news_quiz.getChoice3());
-			get_news_quiz.setChoice4(news_quiz.getChoice4());
-			get_news_quiz.setCorrect_answer_index(news_quiz.getCorrect_answer_index());
-			get_news_quiz.setExplanation(news_quiz.getExplanation());
-			get_news_quiz.setLevel(news_quiz.getNews().getLevel());
-			get_news_quiz.setScore(news_quiz.getScore());
-			get_news_quiz.setNews_no(news_quiz.getNews_no());
+			GetChallengeNewsQuiz get_challenge_news_quiz = new GetChallengeNewsQuiz();
+			get_challenge_news_quiz.setNews_quiz_no(news_quiz.getNews_quiz_no());
+			get_challenge_news_quiz.setQuestion_text(news_quiz.getQuestion_text());
+			get_challenge_news_quiz.setTitle(news_quiz.getNews().getTitle());
+			get_challenge_news_quiz.setChoice1(news_quiz.getChoice1());
+			get_challenge_news_quiz.setChoice2(news_quiz.getChoice2());
+			get_challenge_news_quiz.setChoice3(news_quiz.getChoice3());
+			get_challenge_news_quiz.setChoice4(news_quiz.getChoice4());
+			get_challenge_news_quiz.setCorrect_answer_index(news_quiz.getCorrect_answer_index());
+			get_challenge_news_quiz.setExplanation(news_quiz.getExplanation());
+			get_challenge_news_quiz.setLevel(news_quiz.getNews().getLevel());
+			get_challenge_news_quiz.setScore(news_quiz.getScore());
+			get_challenge_news_quiz.setNews_no(news_quiz.getNews_no());
+			get_challenge_news_quiz.setContent(news_quiz.getNews().getContent());
 			
-			get_news_quiz_list.add(get_news_quiz);
+			get_challenge_news_quiz_list.add(get_challenge_news_quiz);
 
 		}
 
-		return get_news_quiz_list;
+		return get_challenge_news_quiz_list;
 
 	}
 
 	// 문학 도전 문제 가져오기
 	@Transactional(readOnly = true)
-	public List<LiteratureQuiz> getChallengeQuizWithLiteratureQuiz(String type) {
+	public List<GetChallengeLiteratureQuiz> getChallengeQuizWithLiteratureQuiz(String type) {
 		
 		// 문학 초급과 타입에 해당하는 문학 퀴즈 번호 7개 랜덤으로 가져오기
 		List<Long> beginner_literature_quiz_no_list = getRandomQuizIdList(
@@ -260,7 +262,31 @@ public class QuizService {
 		// 합친 문학 퀴즈 번호에 해당하는 문학 퀴즈 가져오기
 		List<LiteratureQuiz> combined_literature_quiz_list = literature_quiz_repository.findAllById(combined_literature_quiz_no_list);
 		
-		return combined_literature_quiz_list;
+		// DTO에 넣기
+		List<GetChallengeLiteratureQuiz> get_challenge_literature_quiz_list = new ArrayList<>();
+		
+		for(LiteratureQuiz literature_quiz : combined_literature_quiz_list) {
+			
+			GetChallengeLiteratureQuiz get_challenge_literature_quiz = new GetChallengeLiteratureQuiz();
+			get_challenge_literature_quiz.getChoice1();
+			get_challenge_literature_quiz.getChoice2();
+			get_challenge_literature_quiz.getChoice3();
+			get_challenge_literature_quiz.getChoice4();
+			get_challenge_literature_quiz.getCorrect_answer_index();
+			get_challenge_literature_quiz.getExplanation();
+			get_challenge_literature_quiz.getLevel();
+			get_challenge_literature_quiz.getLiterature_no();
+			get_challenge_literature_quiz.getLiterature_paragraph_no();
+			get_challenge_literature_quiz.getLiterature_quiz_no();
+			get_challenge_literature_quiz.getQuestion_text();
+			get_challenge_literature_quiz.getScore();
+			get_challenge_literature_quiz.getTitle();
+			
+			get_challenge_literature_quiz_list.add(get_challenge_literature_quiz);
+			
+		}
+		
+		return get_challenge_literature_quiz_list;
 
 	}
 
