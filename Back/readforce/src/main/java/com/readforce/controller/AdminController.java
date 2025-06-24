@@ -33,7 +33,10 @@ import com.readforce.dto.NewsDto.NewsByAdmin;
 import com.readforce.dto.NewsDto.NewsQuizByAdmin;
 import com.readforce.dto.PointDto;
 import com.readforce.dto.PointDto.GetPoint;
+import com.readforce.entity.Member;
 import com.readforce.enums.MessageCode;
+import com.readforce.exception.ResourceNotFoundException;
+import com.readforce.repository.MemberRepository;
 import com.readforce.service.AdminService;
 import com.readforce.service.LiteratureService;
 import com.readforce.service.NewsService;
@@ -53,6 +56,7 @@ public class AdminController {
 	private final NewsService news_service;
 	private final LiteratureService literature_service;
 	private final AdminService admin_service;
+	private final MemberRepository member_repository; // 기찬스추가
 
 	// 회원 -------------------------------------------------------------------------
 	// 전체 회원 목록 조회(최신순)
@@ -114,6 +118,22 @@ public class AdminController {
 				MessageCode.MESSAGE_CODE, MessageCode.DELETE_MEMBER_SUCCESS
 		));
 		
+	}
+	
+	// 유저 정보 불러오기 - 기찬
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/get-user-info")
+	public ResponseEntity<MemberObjectByAdmin> getUserInfoByEmail(@RequestParam("email") String email) {
+	    Member member = member_repository.findByEmail(email)
+	        .orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND));
+
+	    MemberObjectByAdmin dto = new MemberObjectByAdmin();
+	    dto.setEmail(member.getEmail());
+	    dto.setNickname(member.getNickname());
+	    dto.setBirthday(member.getBirthday());
+	    dto.setStatus(member.getStatus());
+	    dto.setCreate_date(member.getCreate_date());
+	    return ResponseEntity.ok(dto);
 	}
 	
 	// 뉴스 관리 ---------------------------------------------------------------------

@@ -3,6 +3,7 @@ package com.readforce.controller;
 import java.util.List;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/literature")
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class LiteratureController {
 	
 	private final LiteratureService literature_service;
@@ -105,7 +107,9 @@ public class LiteratureController {
 			@ValidEnum(enumClass = NewsRelate.OrderBy.class, message = MessageCode.NEWS_ARTICLE_ORDER_BY_INVALID)
 			String order_by
 	){
-		
+
+		log.warn("type : " + type + " levle : " +  level + " category : " + category + " order_by : " + order_by);
+
 		// 문학 문단 리스트 가져오기
 		List<GetLiteratureParagraph> literature_paragraph_list = literature_service.getLiteratureParagraphListByTypeAndLevelAndCategory(type, level, category, order_by);
 		

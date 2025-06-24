@@ -26,17 +26,23 @@ import ChallengePage from "./pages/challenge/challengepage";
 // import NewsList from './components/News/NewsList';
 import ArticleQuestionPage from './pages/news/ArticleQuestionPage';
 import ArticleResultPage from './pages/news/ArticleResultPage';
+
 import AdminNews from './pages/adminpages/adminnews';
 import AdminNewsDetail from './pages/adminpages/adminnewsdetail';
-import AdminNewsQuizList from './pages/adminpages/adminnewsquizlist';
+// import AdminNewsQuizList from './pages/adminpages/adminnewsquizlist';
 import AdminLiterature from './pages/adminpages/adminliterature';
 import AdminLiteratureDetail from './pages/adminpages/adminliteraturedetail';
 import AdminLiteratureAdd from './pages/adminpages/adminliteratureadd';
 import AdminAddParagraph from './pages/adminpages/adminaddparagraph';
+import AdminUserInfo from './pages/adminpages/adminuserinifo';
+
 import TestQuestionPage from './pages/challenge/testquestionpage';
 import TestResultPage from './pages/challenge/testresultpage';
 import TestReviewPage from './pages/challenge/testreviewpage';
+import NovelPage from './pages/literature/NovelPage';
+import FairyTalePage from './pages/literature/FairyTalePage';
 import RankingPage from './pages/challenge/RankingPage';
+
 function App() {
   return (
     <Router>
@@ -66,17 +72,22 @@ function App() {
           <Route path="/adminpage" element={<AdminPage />} />
           <Route path="/question/:id" element={<ArticleQuestionPage />} />
           <Route path="/question-result" element={<ArticleResultPage />} />
+
           <Route path="/adminpage/adminnews" element={<AdminNews />} />
           <Route path="/adminpage/adminnews/:newsNo" element={<AdminNewsDetail />} />
-          <Route path="/adminpage/adminnews/adminnewsquizlist" element={<AdminNewsQuizList />} />
+          {/* <Route path="/adminpage/adminnews/adminnewsquizlist" element={<AdminNewsQuizList />} /> */}
           <Route path="/adminpage/adminliterature" element={<AdminLiterature />} />
           <Route path="/adminpage/adminliterature/:literatureNo" element={<AdminLiteratureDetail />} />
           <Route path="/adminpage/adminliterature/:literatureNo/add-paragraph" element={<AdminAddParagraph />} />
           <Route path="/adminpage/adminliterature/adminliteratureadd" element={<AdminLiteratureAdd />} />
+          <Route path="/adminpage/adminuserinfo/:email" element={<AdminUserInfo />} />
+
           <Route path="/question-result" element={<ArticleResultPage />} />
           <Route path="/test-question" element={<TestQuestionPage />} />
           <Route path="/test-result" element={<TestResultPage />} />
           <Route path="/test-review" element={<TestReviewPage />} />
+          <Route path="/literature/novel" element={<NovelPage />} />
+          <Route path="/literature/fairytale" element={<FairyTalePage />} />
           <Route path="/ranking" element={<RankingPage />} />
         </Route>
       </Routes>

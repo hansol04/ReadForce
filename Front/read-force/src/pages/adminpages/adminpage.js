@@ -99,7 +99,17 @@ const AdminPage = () => {
                     {users.map((user) => (
                         <tr key={user.email}>
                             <td style={tdStyle}>{user.nickname}</td>
-                            <td style={tdStyle}>{user.email}</td>
+                            <td
+                                style={{
+                                    cursor: "pointer",
+                                    color: "blue",
+                                    border: "1px solid #ddd",
+                                    padding: "8px",
+                                }}
+                                onClick={() => navigate(`/adminpage/adminuserinfo/${user.email}`)}
+                            >
+                                {user.email}
+                            </td>
                             <td style={tdStyle}>{user.birthday || "-"}</td>
                             <td style={tdStyle}>{new Date(user.create_date).toLocaleDateString()}</td>
                             <td style={tdStyle}>{user.last_modified_date ? new Date(user.last_modified_date).toLocaleDateString() : "-"}</td>

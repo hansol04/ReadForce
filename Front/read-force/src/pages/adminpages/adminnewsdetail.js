@@ -63,11 +63,6 @@ const AdminNewsDetail = () => {
                 <ul>
                     {quizList.map(q => (
                         <li key={q.news_quiz_no} style={{ marginBottom: "12px" }}>
-                            <button
-                                onClick={() => handleDeleteQuiz(q.news_quiz_no)}
-                                style={{ color: "red", border: "none", background: "none", cursor: "pointer" }}
-                            >삭제
-                            </button>
                             <div><strong>Q.</strong> {q.question_text}</div>
                             <ol>
                                 <li>{q.choice1}</li>
@@ -78,6 +73,18 @@ const AdminNewsDetail = () => {
                             <div><strong>정답:</strong> {q.correct_answer_index + 1}번</div>
                             <div><strong>해설:</strong> {q.explanation}</div>
                             <div><strong>배점:</strong> {q.score}</div>
+                            <div style={{ display: "flex", justifyContent: "space-between", position: "relative" }}>
+                                <div>
+                                    <strong>퀴즈 생성일:</strong> {new Date(q.created_date).toLocaleDateString()}
+                                </div>
+                                <div>
+                                    <button
+                                        onClick={() => handleDeleteQuiz(q.news_quiz_no)}
+                                        style={{ color: "red", border: "none", background: "none", cursor: "pointer" }}
+                                    >삭제
+                                    </button>
+                                </div>
+                            </div>
                         </li>
                     ))}
                 </ul>
