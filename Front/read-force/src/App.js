@@ -39,6 +39,7 @@ import TestReviewPage from './pages/challenge/testreviewpage';
 import NovelPage from './pages/literature/NovelPage';
 import FairyTalePage from './pages/literature/FairyTalePage';
 import RankingPage from './pages/challenge/RankingPage';
+import LiteratureQuizPage from './pages/literature/LiteratureQuestionPage'
 
 function App() {
   return (
@@ -83,6 +84,7 @@ function App() {
           <Route path="/literature/novel" element={<NovelPage />} />
           <Route path="/literature/fairytale" element={<FairyTalePage />} />
           <Route path="/ranking" element={<RankingPage />} />
+          <Route path="/literature-quiz/:quizId" element={<LiteratureQuizPage />} />
         </Route>
       </Routes>
     </Router>

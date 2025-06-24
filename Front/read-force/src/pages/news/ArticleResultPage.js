@@ -7,7 +7,6 @@ const ArticleResultPage = () => {
   const location = useLocation();
   const [showExplanation, setShowExplanation] = useState(false);
 
-  // location.state에서 데이터 받아오기 (예: isCorrect, explanation)
   const isCorrect = location.state?.isCorrect;
   const explanation = location.state?.explanation || '해설이 제공되지 않았습니다.';
 
