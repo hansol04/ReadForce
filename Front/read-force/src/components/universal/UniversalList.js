@@ -1,18 +1,8 @@
 import React from 'react';
-
 import { useNavigate } from 'react-router-dom';
 import UniversalFilterBar from './UniversalFilterBar';
 import UniversalCard from './UniversalCard';
 import './css/UniversalList.css';
-
-const literatureCategoryMap = {
-  '추리': 'MYSTERY',
-  '역사': 'HISTORY',
-  '고전': 'CLASSIC',
-  '근대': 'MODERN',
-  '동화': 'CHILDREN',
-  '기타': 'ETC',
-};
 
 const UniversalList = ({
   items = [],
@@ -52,30 +42,30 @@ const UniversalList = ({
   );
 
   return (
-    <div className="news-quiz-container">
-    <UniversalFilterBar 
-      level={level}
-      setLevel={setLevel}
-      order_by={order_by}
-      setOrderBy={setOrderBy}
-      category={category}
-      setCategory={setCategory}
-      categoryOptions={categoryOptions}
-    />
+    <div className="UniversalList-container">
+      <UniversalFilterBar 
+        level={level}
+        setLevel={setLevel}
+        order_by={order_by}
+        setOrderBy={setOrderBy}
+        category={category}
+        setCategory={setCategory}
+        categoryOptions={categoryOptions}
+      />
 
-      <div className="news-list">
-      {paginated.map((item, index) => {
-        return (
+      <div className="UniversalList-list">
+        {paginated.length > 0 ? paginated.map((item, index) => (
           <UniversalCard
             key={item.id ?? item.new_passage_no ?? item.news_no ?? `unique-${index}`}
             data={item}
             onSolve={onSolve}
           />
-        );
-      })}
+        )) : (
+          <div className="UniversalList-no-articles">게시물이 없습니다.</div>
+        )}
       </div>
 
-      <div className="pagination">
+      <div className="UniversalList-pagination">
         <button onClick={() => setCurrentPage(startPage - 1)} disabled={startPage === 1}>«</button>
         {visiblePages.map((pageNum) => (
           <button

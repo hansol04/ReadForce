@@ -1,63 +1,65 @@
-.article-question-layout {
+.ArticleQuestion-container {
   display: flex;
   gap: 2rem;
   align-items: flex-start;
   flex-wrap: nowrap;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.article-box {
+.ArticleQuestion-article {
   flex: 1;
-  height: 500px; /* ✅ 원하는 고정 높이 (조절 가능) */
-  overflow-y: auto; /* ✅ 넘치면 스크롤 */
-  background-color: white;     
-  border: 1px solid #e0e0e0; 
+  height: 500px;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #e0e0e0;
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0,0,0,0.05);
 }
 
-.article-title {
+.ArticleQuestion-title {
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 0.5rem;
 }
 
-.article-meta {
-  font-size: 13px;
-  color: #666;
-  margin-bottom: 1rem;
-}
-
-.article-content {
+.ArticleQuestion-summary,
+.ArticleQuestion-content {
   font-size: 15px;
   color: #333;
   line-height: 1.6;
   white-space: pre-line;
 }
 
-.quiz-box {
+.ArticleQuestion-quiz {
   width: 40%;
-  height: 400px;
   min-width: 260px;
+  height: 400px;
   padding: 1.5rem;
-  background-color: white;     
-  border: 1px solid #e0e0e0; 
+  background-color: white;
+  border: 1px solid #e0e0e0;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
-.quiz-title {
+.ArticleQuestion-quiz-title {
   font-size: 17px;
   font-weight: bold;
   margin-bottom: 0.75rem;
 }
 
-.quiz-question {
+.ArticleQuestion-quiz-question {
   font-size: 15px;
   margin-bottom: 1rem;
 }
 
-.quiz-option {
+.ArticleQuestion-options {
+  margin-bottom: 1rem;
+}
+
+.ArticleQuestion-option {
   display: block;
   width: 100%;
   padding: 12px 14px;
@@ -71,30 +73,18 @@
   font-size: 14px;
 }
 
-.quiz-option:hover {
+.ArticleQuestion-option:hover {
   background-color: #e6f4f1;
   border-color: #0d9488;
 }
 
-.quiz-option.correct {
+.ArticleQuestion-option.selected {
   background-color: #c2f0e9;
   border-color: #0d9488;
   font-weight: bold;
 }
 
-.quiz-answer {
-  margin-top: 1rem;
-  font-size: 14px;
-  color: #333;
-}
-
-.quiz-explanation {
-  margin-top: 0.5rem;
-  font-size: 13px;
-  color: #555;
-}
-
-.submit-button {
+.ArticleQuestion-submit {
   padding: 12px 16px;
   background-color: #0d9488;
   color: white;
@@ -107,23 +97,22 @@
   transition: background-color 0.2s;
 }
 
-.submit-button:hover {
+.ArticleQuestion-submit:hover {
   background-color: #0f766e;
 }
 
-.submit-button:disabled {
+.ArticleQuestion-submit:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
 
 @media (max-width: 768px) {
-  .article-question-layout { /* 기존 .article-question-container → 수정 */
+  .ArticleQuestion-container {
     flex-direction: column;
   }
 
-  .article-box,
-  .quiz-box {
-    max-width: 100%;
+  .ArticleQuestion-article,
+  .ArticleQuestion-quiz {
+    width: 100%;
   }
 }
-

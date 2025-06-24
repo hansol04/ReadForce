@@ -39,19 +39,20 @@ const TestResultPage = () => {
   };
 
   const level = getLiteracyLevel(questions, answers);
+
   const goToReview = () => {
     navigate('/test-review', { state: { questions, answers } });
   };
 
   return (
-    <div className="test-result-wrapper">
-      <div className="test-result-card">
+    <div className="TestResult-wrapper">
+      <div className="TestResult-card">
         <h2>
-          🎉 당신의 문해력은 <span className="highlight">{level}</span>입니다!
+          🎉 당신의 문해력은 <span className="TestResult-highlight">{level}</span>입니다!
         </h2>
         <p>{total}문제 중 {score}문제를 맞았습니다.</p>
         <p>상위 {100 - percent}%에 해당합니다.</p>
-        <div className="test-result-actions">
+        <div className="TestResult-actions">
           <button onClick={goToReview}>해설 보기</button>
         </div>
       </div>

@@ -6,17 +6,6 @@
   color: #333;
 }
 
-.mypage-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.mypage-header h2 {
-  font-size: 28px;
-  font-weight: bold;
-  color: #14b8a6;
-}
-
 .top-section {
   display: flex;
   justify-content: space-between;
@@ -32,20 +21,6 @@
   gap: 20px;
   flex: 1;
   min-width: 300px;
-}
-
-.right-top {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 16px;
-  flex: 1;
-  min-width: 300px;
-}
-
-.line-chart-container {
-  width: 100%;
-  max-width: 300px;
 }
 
 .profile-img {
@@ -65,19 +40,17 @@
   margin-top: 5px;
 }
 
-.lang-select {
-  display: flex;
-  gap: 8px;
+.settings-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-left: 4px;
 }
 
-.lang-select button {
-  background-color: #f0faff;
-  border: 1px solid #14b8a6;
-  color: #14b8a6;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
+.settings-button:hover {
+  transform: scale(1.2);
 }
 
 .mypage-main {
@@ -88,7 +61,6 @@
   margin-bottom: 40px;
 }
 
-.stats-section,
 .calendar-section {
   flex: 1;
   min-width: 300px;
@@ -98,17 +70,83 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.stats-section h4,
 .calendar-section h4 {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 12px;
+  text-align: center;
 }
 
 .calendar-summary {
-  margin-top: 16px;
+  margin: 16px 0;
   font-size: 14px;
-  line-height: 1.6;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.summary-title {
+  flex: 1;
+  font-weight: 600;
+  color: #555;
+}
+
+.summary-value {
+  flex: 1;
+  font-size: 16px;
+  font-weight: bold;
+  color: #4ABDAC;
+}
+
+.react-calendar {
+  border: none;
+  width: 100%;
+  font-family: inherit;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.react-calendar__tile {
+  cursor: default !important;
+  pointer-events: none;
+}
+
+.react-calendar__tile--now {
+  background: #e8f4f8 !important;
+  border-radius: 8px;
+}
+
+.attended-day abbr {
+  color: #4ABDAC !important;
+  font-weight: 700 !important;
+}
+
+.react-calendar__navigation {
+  background-color: white !important;
+}
+
+.react-calendar__navigation button {
+  color: black !important;
+  font-weight: 600;
+  background-color: white !important;
+}
+
+.react-calendar__month-view__weekdays__weekday:nth-child(1) {
+  color: red;
+}
+
+.react-calendar__tile abbr {
+  color: inherit;
+}
+
+.saturday abbr {
+  color: black;
 }
 
 .history-section,
@@ -142,120 +180,7 @@
   font-size: 14px;
 }
 
-/* ---------------캘린더------------------ */
-.calendar-section h4 {
-  text-align: center;
-  margin-top: auto;
-}
-
-.react-calendar {
-  border: none;
-  width: 100%;
-  font-family: inherit;
-  background-color: #fff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  border-radius: 10px;
-  padding: 10px;
-}
-
-.react-calendar__tile {
-  cursor: default !important;
-  pointer-events: none;
-
-}
-
-.react-calendar__tile--active {
-  background: none !important;
-  color: inherit !important;
-  font-weight: inherit !important;
-  box-shadow: none !important;
-  outline: none !important;
-}
-
-.react-calendar__tile:hover {
-  background: none !important;
-  color: inherit !important;
-  font-weight: inherit !important;
-  box-shadow: none !important;
-  outline: none !important;
-}
-
-.react-calendar__tile--now {
-  background: #e8f4f8 !important;
-  border-radius: 8px;
-}
-
-.attended-day abbr {
-  color: #4ABDAC !important;
-  font-weight: 700 !important;
-}
-
-.react-calendar__navigation {
-  background-color: white !important;
-}
-
-.react-calendar__navigation button {
-  color: black !important;
-  font-weight: 600;
-  background-color: white !important;
-}
-
-/* 일요일만 빨간색 */
-.react-calendar__month-view__weekdays__weekday:nth-child(1) {
-  color: red;
-}
-
-/* 모든 날짜 숫자(타일)는 기본색으로 유지 */
-.react-calendar__tile abbr {
-  color: inherit;
-}
-
-/* 토요일 날짜 숫자 */
-.saturday abbr {
-  color: black;
-}
-
-.calendar-summary {
-  margin-top: 16px;
-  margin-bottom: 16px;
-  font-size: 14px;
-}
-
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  text-align: center;
-  margin-bottom: 4px;
-}
-
-.summary-title {
-  flex: 1;
-  font-weight: 600;
-  color: #555;
-}
-
-.summary-value {
-  flex: 1;
-  font-size: 16px;
-  font-weight: bold;
-  color: #4ABDAC;
-}
-
-/*---------------------------------------------*/
-
-.settings-button {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: transform 0.2s;
-  margin-left: 4px;
-}
-
-.settings-button:hover {
-  transform: scale(1.2);
-}
-
+/* 반응형 */
 @media (max-width: 600px) {
   .mypage-container {
     padding: 24px 16px;
@@ -267,22 +192,11 @@
     gap: 24px;
   }
 
-  .left-top,
-  .right-top {
-    align-items: flex-start;
+  .left-top {
     width: 100%;
+    align-items: flex-start;
   }
 
-  .line-chart-container {
-    max-width: 100%;
-  }
-
-  .lang-select {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-  }
-
-  .stats-section,
   .calendar-section {
     min-width: 100%;
     padding: 16px;

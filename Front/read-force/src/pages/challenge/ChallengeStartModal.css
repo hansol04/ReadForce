@@ -1,6 +1,4 @@
-/* ChallengeStartModal.css */
-
-.modal-overlay {
+.ChallengeStartModal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0, 0, 0, 0.5);
@@ -11,7 +9,7 @@
   backdrop-filter: blur(5px);
 }
 
-.modal-content {
+.ChallengeStartModal-content {
   background: #fff;
   padding: 2.5rem 2rem;
   border-radius: 16px;
@@ -34,7 +32,7 @@
   }
 }
 
-h2 {
+.ChallengeStartModal-title {
   font-weight: 700;
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
@@ -42,13 +40,13 @@ h2 {
   letter-spacing: 0.03em;
 }
 
-.category-selector,
-.option-group {
+.ChallengeStartModal-category,
+.ChallengeStartModal-option-group {
   margin-bottom: 1.4rem;
 }
 
-.category-selector button,
-.option-group button {
+.ChallengeStartModal-category button,
+.ChallengeStartModal-option-group button {
   margin: 0.4rem 0.35rem;
   padding: 0.75rem 1.5rem;
   border: 2.5px solid #0d9488;
@@ -62,29 +60,29 @@ h2 {
   box-shadow: 0 0 5px transparent;
 }
 
-.category-selector button:hover,
-.option-group button:hover {
+.ChallengeStartModal-category button:hover,
+.ChallengeStartModal-option-group button:hover {
   background-color: #0d9488;
   color: #fff;
   box-shadow: 0 0 15px #0d9488cc;
 }
 
-.category-selector button.selected,
-.option-group button.selected {
+.ChallengeStartModal-category button.selected,
+.ChallengeStartModal-option-group button.selected {
   background-color: #0d9488;
   color: white;
   border-color: #0d9488;
   box-shadow: 0 0 18px #0d9488dd;
 }
 
-.modal-actions {
+.ChallengeStartModal-actions {
   margin-top: 2.5rem;
   display: flex;
   justify-content: space-between;
   gap: 1.2rem;
 }
 
-.modal-actions button {
+.ChallengeStartModal-actions button {
   flex: 1;
   padding: 0.9rem 0;
   border-radius: 14px;
@@ -97,23 +95,23 @@ h2 {
   box-shadow: 0 5px 10px rgba(0,0,0,0.1);
 }
 
-.modal-actions button:first-child {
+.ChallengeStartModal-actions button:first-child {
   background: #f3f4f6;
   color: #4b5563;
   box-shadow: none;
   border: 1.5px solid #cbd5e1;
 }
 
-.modal-actions button:first-child:hover {
+.ChallengeStartModal-actions button:first-child:hover {
   background: #e5e7eb;
 }
 
-.modal-actions button:last-child {
+.ChallengeStartModal-actions button:last-child {
   background: #0d9488;
   color: white;
   box-shadow: 0 0 20px #0d9488dd;
 }
 
-.modal-actions button:last-child:hover {
+.ChallengeStartModal-actions button:last-child:hover {
   background: #0b7a74;
 }
