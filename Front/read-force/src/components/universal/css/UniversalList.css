@@ -1,9 +1,30 @@
-.pagination {
+/* 기본 컨테이너 */
+.UniversalList-container {
+  width: 100%;
+}
+
+/* 리스트 (1열 기본, 반응형 대응만 존재) */
+.UniversalList-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+/* 게시물 없음 메시지 */
+.UniversalList-no-articles {
+  text-align: center;
+  margin: 40px 0;
+  font-size: 18px;
+  color: #999;
+}
+
+/* 페이지네이션 */
+.UniversalList-pagination {
   margin-top: 20px;
   text-align: center;
 }
 
-.pagination button {
+.UniversalList-pagination button {
   margin: 0 5px;
   padding: 8px 12px;
   border: none;
@@ -12,42 +33,37 @@
   border-radius: 4px;
 }
 
-.pagination .active {
+.UniversalList-pagination .active {
   background-color: #439395;
   color: white;
   font-weight: bold;
 }
 
-.pagination button:disabled {
+.UniversalList-pagination button:disabled {
   opacity: 0.4;
 }
 
-.no-articles {
-  text-align: center;
-  margin: 40px 0;
-  font-size: 18px;
-  color: #999;
-}
-
+/* 반응형: 중간 사이즈는 2열 */
 @media (max-width: 1024px) {
-  .news-list {
+  .UniversalList-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
+/* 반응형: 모바일은 1열 */
 @media (max-width: 600px) {
-  .news-list {
+  .UniversalList-list {
     grid-template-columns: 1fr;
     padding: 0 1rem;
   }
 
-  .pagination button {
+  .UniversalList-pagination button {
     padding: 6px 10px;
     margin: 0 3px;
     font-size: 14px;
   }
 
-  .no-articles {
+  .UniversalList-no-articles {
     font-size: 16px;
   }
 }

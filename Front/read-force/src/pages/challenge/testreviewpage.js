@@ -16,7 +16,7 @@ const TestReviewPage = () => {
   };
 
   return (
-    <div className="review-page-wrapper">
+    <div className="TestReview-wrapper">
       <h2>📘 해설 보기</h2>
       {questions.map((q, idx) => {
         const userAnswer = answers[idx];
@@ -25,40 +25,40 @@ const TestReviewPage = () => {
         const level = q.article.level || '정보 없음';
 
         return (
-          <div key={idx} className="review-question-card">
+          <div key={idx} className="TestReview-card">
             <h3>문제 {idx + 1} ({level})</h3>
-            <p className="question-text">{q.quiz.question_text}</p>
+            <p className="TestReview-question">{q.quiz.question_text}</p>
 
             {[q.quiz.choice1, q.quiz.choice2, q.quiz.choice3, q.quiz.choice4].map((choice, i) => {
               const isCorrectChoice = i === correctAnswer;
               const isUserWrongChoice = i === userAnswer && !isCorrectChoice;
 
               const className = [
-                'choice-line',
-                isCorrectChoice ? 'correct-answer' : '',
-                isUserWrongChoice ? 'user-answer wrong' : '',
+                'TestReview-choice',
+                isCorrectChoice ? 'correct' : '',
+                isUserWrongChoice ? 'user-wrong' : '',
               ].join(' ').trim();
 
               return (
                 <div key={i} className={className}>
-                  <span className="choice-label">{String.fromCharCode(65 + i)}.</span>
+                  <span className="TestReview-label">{String.fromCharCode(65 + i)}.</span>
                   {choice}
-                  {isCorrectChoice && <span className="tag">정답</span>}
-                  {isUserWrongChoice && <span className="tag wrong">내 선택</span>}
+                  {isCorrectChoice && <span className="TestReview-tag">정답</span>}
+                  {isUserWrongChoice && <span className="TestReview-tag wrong">내 선택</span>}
                 </div>
               );
             })}
 
-            <div className="explanation">
+            <div className="TestReview-explanation">
               <strong>해설:</strong> {q.quiz.explanation || '해설이 없습니다.'}
             </div>
 
-            <button className="article-toggle-button" onClick={() => toggleArticle(idx)}>
+            <button className="TestReview-toggle-btn" onClick={() => toggleArticle(idx)}>
               {visibleArticles[idx] ? '지문 숨기기' : '지문 보기'}
             </button>
 
             {visibleArticles[idx] && (
-              <div className="article-preview">
+              <div className="TestReview-article">
                 <h4>{q.article.title}</h4>
                 <p>{q.article.content}</p>
               </div>
@@ -67,7 +67,7 @@ const TestReviewPage = () => {
         );
       })}
 
-      <div className="review-actions">
+      <div className="TestReview-actions">
         <button onClick={() => navigate('/')}>메인으로 돌아가기</button>
       </div>
     </div>

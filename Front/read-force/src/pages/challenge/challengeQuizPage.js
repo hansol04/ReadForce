@@ -19,7 +19,6 @@ const ChallengeQuizPage = () => {
   const [timeLeft, setTimeLeft] = useState(30 * 60);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const timerRef = useRef(null);
 
   const getKoreanLevel = (level) => {
@@ -62,9 +61,7 @@ const ChallengeQuizPage = () => {
 
     const token = localStorage.getItem('token');
 
-    fetch(url, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    fetch(url, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => res.ok ? res.json() : Promise.reject('문제 불러오기 실패'))
       .then(data => {
         const formatted = data.map(q => ({
@@ -154,27 +151,27 @@ const ChallengeQuizPage = () => {
   if (quizzes.length === 0) return <p>문제가 없습니다.</p>;
 
   return (
-    <div className="challenge-layout">
-      <div className="challenge-article">
-        <h3 className="quiz-title">{currentQuiz.title}</h3>
+    <div className="ChallengeQuizPage-layout">
+      <div className="ChallengeQuizPage-article">
+        <h3 className="ChallengeQuizPage-title">{currentQuiz.title}</h3>
         {currentQuiz.level && (
-          <div className="quiz-level">난이도: {getKoreanLevel(currentQuiz.level)}</div>
+          <div className="ChallengeQuizPage-level">난이도: {getKoreanLevel(currentQuiz.level)}</div>
         )}
         <div>{currentQuiz.content}</div>
       </div>
 
-      <div className="challenge-quiz-box">
-        <div className="challenge-header">
+      <div className="ChallengeQuizPage-quiz-box">
+        <div className="ChallengeQuizPage-header">
           <strong>문제 {currentIndex + 1}</strong>
-          <span className="timer">남은 시간: {formatTime(timeLeft)}</span>
+          <span className="ChallengeQuizPage-timer">남은 시간: {formatTime(timeLeft)}</span>
         </div>
 
-        <div className="challenge-question">{currentQuiz.questionText}</div>
+        <div className="ChallengeQuizPage-question">{currentQuiz.questionText}</div>
         {currentQuiz.choices.map((choice, i) => (
           choice && (
             <button
               key={i}
-              className={`challenge-option ${selectedAnswer === i ? 'selected' : ''}`}
+              className={`ChallengeQuizPage-option ${selectedAnswer === i ? 'selected' : ''}`}
               onClick={() => handleSelect(i)}
               disabled={isSubmitting}
             >
@@ -183,15 +180,13 @@ const ChallengeQuizPage = () => {
           )
         ))}
 
-        {isLastQuestion ? (
-          <button className="challenge-submit" onClick={handleSubmit} disabled={isSubmitting}>
-            제출하기
-          </button>
-        ) : (
-          <button className="challenge-submit" onClick={handleNext} disabled={isSubmitting}>
-            다음 문제
-          </button>
-        )}
+        <button
+          className="ChallengeQuizPage-submit"
+          onClick={isLastQuestion ? handleSubmit : handleNext}
+          disabled={isSubmitting}
+        >
+          {isLastQuestion ? '제출하기' : '다음 문제'}
+        </button>
       </div>
     </div>
   );
