@@ -43,26 +43,13 @@ const AdminUserInfo = () => {
         }
     };
 
-    // 출석 정보 가져오기
-    // const fetchAttendanceList = async () => {
-    //     try {
-    //         const res = await fetchWithAuth(`/admin/get-member-attendance-list?email=${email}`);
-    //         if (!res.ok) throw new Error("출석 정보 조회 실패");
-    //         const data = await res.json();
-    //         setAttendanceList(data);
-    //     } catch (err) {
-    //         console.error(err);
-    //         alert("출석 정보를 불러오는 데 실패했습니다.");
-    //     }
-    // };
-
     // 포인트 정보 가져오기
     const fetchPointInfo = async () => {
         try {
             const res = await fetchWithAuth(`/admin/get-member-point-object?email=${email}`);
             if (!res.ok) throw new Error("포인트 정보 조회 실패");
             const data = await res.json();
-                console.log("✅ 백엔드 응답 확인:", data);
+            console.log("✅ 백엔드 응답 확인:", data);
 
             setPointInfo(data);
         } catch (err) {
@@ -290,9 +277,7 @@ const AdminUserInfo = () => {
                     </button>
                 </div>
             </div>
-            {newsQuizAttempts.length === 0 ? (
-                <p>기록이 없습니다.</p>
-            ) : (
+            {Array.isArray(newsQuizAttempts) && newsQuizAttempts.length > 0 ? (
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
                     <thead>
                         <tr>
@@ -314,13 +299,16 @@ const AdminUserInfo = () => {
                                     <button
                                         onClick={() => handleNewQuizDeleteAttempt(attempt.email, attempt.news_quiz_no)}
                                         style={{ color: "red", border: "none", background: "none", cursor: "pointer" }}
-                                    >삭제
+                                    >
+                                        삭제
                                     </button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+            ) : (
+                <p>기록이 없습니다.</p>
             )}
 
             <hr style={{ margin: "24px 0" }} />
@@ -338,9 +326,7 @@ const AdminUserInfo = () => {
                     </button>
                 </div>
             </div>
-            {literatureQuizAttempts.length === 0 ? (
-                <p>기록이 없습니다.</p>
-            ) : (
+            {Array.isArray(literatureQuizAttempts) && literatureQuizAttempts.length > 0 ? (
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
                     <thead>
                         <tr>
@@ -370,6 +356,8 @@ const AdminUserInfo = () => {
                         ))}
                     </tbody>
                 </table>
+            ) : (
+                <p>기록이 없습니다.</p>
             )}
             {showAddModal && (
                 <div style={modalOverlayStyle}>
