@@ -54,9 +54,7 @@ const Main = () => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       try {
-        const res = await api.get(
-          `/ranking/get-ranking-by-classification-and-type-or-language?classification=NEWS&type=&language=${selectedLanguage}`
-        );
+        const res = await api.get(`/ranking/get-news-ranking?language=${selectedLanguage}`);
         setTop5Data(res.data.slice(0, 5));
       } catch (err) {
         console.error("Top5 fetch error", err);
@@ -92,19 +90,29 @@ const Main = () => {
             </div>
           </div>
 
-          <button className="slide-arrow left" onClick={() =>
-            setSlideIndex((prev) => (prev - 1 + slides.length) % slides.length)
-          }>⮜</button>
+          <button
+            className="slide-arrow left"
+            onClick={() =>
+              setSlideIndex((prev) => (prev - 1 + slides.length) % slides.length)
+            }
+          >
+            ⮜
+          </button>
 
-          <button className="slide-arrow right" onClick={() =>
-            setSlideIndex((prev) => (prev + 1) % slides.length)
-          }>⮞</button>
+          <button
+            className="slide-arrow right"
+            onClick={() =>
+              setSlideIndex((prev) => (prev + 1) % slides.length)
+            }
+          >
+            ⮞
+          </button>
 
           <div className="slide-ui">
             <button onClick={() => setIsPaused((prev) => !prev)}>
               {isPaused ? "▶" : "⏸"}
             </button>
-            <span>{String(slideIndex + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}</span>
+            <span>{String(slideIndex + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</span>
           </div>
         </div>
       </section>
@@ -114,52 +122,55 @@ const Main = () => {
           <div className="stat-box top5">
             <h3>🏆 <span className="bold">주간 Top 5</span></h3>
             <div className="tabs">
-              {['KOREAN', 'JAPANESE', 'ENGLISH'].map((lang) => (
+              {["KOREAN", "JAPANESE", "ENGLISH"].map((lang) => (
                 <button
                   key={lang}
                   className={selectedLanguage === lang ? "active" : ""}
                   onClick={() => setSelectedLanguage(lang)}
                 >
-                  {lang === 'KOREAN' ? '한국' : lang === 'JAPANESE' ? '일본' : '미국'}
+                  {lang === "KOREAN" ? "한국" : lang === "JAPANESE" ? "일본" : "미국"}
                 </button>
               ))}
             </div>
             <table className="top5-table">
               <tbody>
-                {top5Data.map((user, idx) => (
-                  <tr key={user.nickname}>
-                    <td>{idx + 1}</td>
-                    <td>{user.nickname}</td>
-                    <td>{user[`${selectedLanguage.toLowerCase()}_news`] ?? 0}</td>
-                  </tr>
-                ))}
+                {top5Data.map((user, idx) => {
+                  const rankClass = idx === 0 ? "gold" : idx === 1 ? "silver" : idx === 2 ? "bronze" : "";
+                  const scoreKey = `${selectedLanguage.toLowerCase()}_news`;
+                  return (
+                    <tr key={user.nickname}>
+                      <td className={`rank-number ${rankClass}`}>{idx + 1}</td>
+                      <td>{user.nickname}</td>
+                      <td className={`point ${rankClass}`}>{user[scoreKey] ?? 0}p</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
-          </div>
-
-          <div className="stat-box today-stats">
-            <h3>오늘의 통계</h3>
-            <div className="grid-2x2">
-              <div><div className="number">3,288 명</div><div className="label">오늘의 응시자 수</div></div>
-              <div><div className="number">72 %</div><div className="label">응답 정답률</div></div>
-              <div><div className="number">15 %</div><div className="label">제출한 학습률</div></div>
-              <div><div className="number">68</div><div className="label">틀린 문항 수</div></div>
-            </div>
           </div>
 
           <div className="stat-box wrong-articles">
             <h3>가장 많이 틀린 기사</h3>
             <div className="article">
               <div className="flag">🇯🇵</div>
-              <div><div className="title">福島：花の癒し力</div><div className="author">Ueno Yamamoto<br /><span className="sub">NHK World</span></div></div>
+              <div>
+                <div className="title">福島：花の癒し力</div>
+                <div className="author">Ueno Yamamoto<br /><span className="sub">NHK World</span></div>
+              </div>
             </div>
             <div className="article">
               <div className="flag">🇺🇸</div>
-              <div><div className="title">How 'big, beautiful' bill led to big ugly breakup for Trump and Musk</div><div className="author">Anthony Zurcher<br /><span className="sub">North America Correspondent</span></div></div>
+              <div>
+                <div className="title">How 'big, beautiful' bill led to big ugly breakup for Trump and Musk</div>
+                <div className="author">Anthony Zurcher<br /><span className="sub">North America Correspondent</span></div>
+              </div>
             </div>
             <div className="article">
               <div className="flag">🇰🇷</div>
-              <div><div className="title">성남·경기도 라인 ‘7인회’ 대통령실 속속 합류</div><div className="author">송경모 기자<br /><span className="sub">국민일보</span></div></div>
+              <div>
+                <div className="title">성남·경기도 라인 ‘7인회’ 대통령실 속속 합류</div>
+                <div className="author">송경모 기자<br /><span className="sub">국민일보</span></div>
+              </div>
             </div>
           </div>
         </div>

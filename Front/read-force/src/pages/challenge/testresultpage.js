@@ -17,16 +17,12 @@ const TestResultPage = () => {
       const isCorrect = answers[idx] === q.quiz.correct_answer_index;
       const level = (q.article.level || '').toLowerCase();
 
-      console.log(`문제 ${idx + 1} - Level: ${level}, 정답 여부: ${isCorrect}`);
-
       if (isCorrect) {
         if (level === 'beginner') correct.beginner++;
         else if (level === 'intermediate') correct.intermediate++;
         else if (level === 'advanced') correct.advanced++;
       }
     });
-
-    console.log('정답 수 통계:', correct);
 
     const { beginner, intermediate, advanced } = correct;
 
@@ -43,8 +39,6 @@ const TestResultPage = () => {
   };
 
   const level = getLiteracyLevel(questions, answers);
-  console.log('최종 문해력 등급:', level);
-
   const goToReview = () => {
     navigate('/test-review', { state: { questions, answers } });
   };
