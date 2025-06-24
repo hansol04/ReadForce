@@ -32,7 +32,7 @@ const UniversalCard = React.memo(({ data, onSolve }) => {
 
   useEffect(() => {
   console.log("받은 데이터 확인:", data);
-}, []);
+}, [data]);
 
 
 
@@ -54,12 +54,7 @@ const UniversalCard = React.memo(({ data, onSolve }) => {
         <div>
           <p className="news-category"># {koreanCategory}</p>
         </div>
-
-
-        <button onClick={() => onSolve && onSolve(data)} className="news-button">
-
-          문제 풀기
-        </button>
+        <button onClick={() => onSolve && onSolve(data)} className="news-button">문제 풀기</button>
       </div>
     </div>
   );
