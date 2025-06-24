@@ -1,0 +1,139 @@
+.news-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px 24px; 
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 200px; 
+}
+
+.news-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.news-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.news-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  max-height: calc(1.5em * 3);
+  color: #555;
+  font-size: 15px;
+  margin: 8px 0 0 0;
+  max-width: calc(100% - 160px); 
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.news-meta {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 8px;
+}
+
+.news-button {
+  padding: 10px 15px;
+  background-color: #a2a2a2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  align-self: flex-end;
+  text-decoration: none;
+}
+
+.news-button:hover {
+  background-color: #666;
+}
+
+.news-badge {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 12px;
+  margin-left: auto;
+  margin-bottom: 8px;
+  margin-top: 4px;
+}
+
+.news-badge.초급 {
+  background-color: #d1eceb;
+  color: #222;
+}
+
+.news-badge.중급 {
+  background-color: #73bfb8;
+  color: #fff;
+}
+
+.news-badge.고급 {
+  background-color: #3e8e8c;
+  color: #fff;
+}
+
+.news-category {
+  font-size: 15px;
+  color: #666;
+  margin: 4px 0 0 0;
+}
+
+.news-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+.news-date {
+  font-size: 13px;
+  color: #aaa;
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  .news-card {
+    padding: 16px;
+    height: auto; /* 고정 높이 제거 */
+  }
+
+  .news-title {
+    font-size: 16px;
+  }
+
+  .news-content {
+    font-size: 14px;
+    max-height: calc(1.5em * 4); /* 4줄까지 보이게 */
+    max-width: 100%; /* 너비 제한 해제 */
+  }
+
+  .news-button {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .news-badge {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .news-category {
+    font-size: 13px;
+  }
+
+  .news-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

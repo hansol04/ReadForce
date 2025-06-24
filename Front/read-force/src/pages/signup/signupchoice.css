@@ -1,0 +1,113 @@
+.signup-page {
+  max-width: 340px;
+  margin: 2rem auto;
+  padding: 1.5rem 1.2rem;
+  border-radius: 16px;
+  background-color: #fff;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.04);
+}
+
+.signup-page .signup-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.signup-page .signup-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.signup-page .signup-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background-color: #fafafa;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.signup-page .signup-card:hover {
+  background-color: #f0f0f0;
+}
+
+.signup-page .signup-card img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.signup-page .signup-card span {
+  flex: 1;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.signup-page .signup-card .arrow {
+  font-size: 18px;
+  color: #888;
+  flex: 0;
+}
+
+.signup-page .kakao {
+  background-color: #fee500;
+}
+.signup-page .kakao:hover {
+  background-color: #f9db00;
+}
+
+.signup-page .naver {
+  background-color: #03c75a;
+  color: #fff;
+}
+.signup-page .naver:hover {
+  background-color: #02b553;
+}
+
+.signup-page .google {
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+.signup-page .google:hover {
+  background-color: #f7f7f7;
+}
+
+.signup-page .email {
+  background-color: #eee;
+}
+.signup-page .email:hover {
+  background-color: #ddd;
+}
+
+@media (max-width: 480px) {
+  .signup-page {
+    padding: 1.2rem 1rem;
+    margin: 1rem auto;
+  }
+
+  .signup-title {
+    font-size: 18px;
+  }
+
+  .signup-card {
+    font-size: 14px;
+    padding: 0.7rem 0.9rem;
+  }
+
+  .signup-card img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .signup-card .arrow {
+    font-size: 16px;
+  }
+}
