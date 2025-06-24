@@ -22,14 +22,19 @@ const RankingPage = () => {
       setError(null);
 
       const { classification, type, language } = selectedCategory;
-      const params = new URLSearchParams();
+      let url = '';
+      let params = {};
 
-      params.append('classification', classification);
-      params.append('type', classification === 'LITERATURE' ? type : '');
-      params.append('language', classification === 'NEWS' ? language : '');
+      if (classification === 'LITERATURE') {
+        url = '/ranking/get-literature-ranking';
+        params = { type };
+      } else if (classification === 'NEWS') {
+        url = '/ranking/get-news-ranking';
+        params = { language };
+      }
 
       try {
-        const res = await api.get(`/ranking/get-ranking-by-classification-and-type-or-language?${params.toString()}`);
+        const res = await api.get(url, { params });
         setRankingData(res.data);
       } catch (err) {
         console.error('❌ 랭킹 API 에러:', err);
