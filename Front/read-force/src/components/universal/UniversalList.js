@@ -1,4 +1,7 @@
 import React from 'react';
+
+import { useNavigate } from 'react-router-dom';
+ origin/develop
 import UniversalFilterBar from './UniversalFilterBar';
 import UniversalCard from './UniversalCard';
 import './css/UniversalList.css';
@@ -65,7 +68,13 @@ const UniversalList = ({
           <p className="no-articles">조건에 맞는 기사가 없습니다.</p>
         ) : (
           paginated.map((item, index) => (
-            <UniversalCard key={item.id ?? item.new_passage_no ?? `unique-${index}`} data={item} />
+
+            <UniversalCard
+              key={item.news_no ?? `unique-${index}`}
+              data={item}
+              onSolve={handleSolve}
+            />
+
           ))
         )}
       </div>
