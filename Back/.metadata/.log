@@ -8723,7 +8723,19 @@ java.lang.InterruptedException
 	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
 	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
 	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
-!SESSION 2025-06-24 10:18:27.408 -----------------------------------------------
+
+!ENTRY org.eclipse.lsp4e 2 0 2025-06-24 10:39:34.686
+!MESSAGE Javadoc unavailable. Failed to obtain it.
+!STACK 0
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:65)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+!SESSION 2025-06-24 11:29:32.867 -----------------------------------------------
 eclipse.buildId=4.20.1.202310260003
 java.version=17.0.8.1
 java.vendor=Eclipse Adoptium
@@ -8731,12 +8743,12 @@ BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
 Framework arguments:  -product org.springframework.boot.ide.branding.sts4
 Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.springframework.boot.ide.branding.sts4
 
-!ENTRY org.eclipse.emf.ecore 2 0 2025-06-24 10:18:28.202
+!ENTRY org.eclipse.emf.ecore 2 0 2025-06-24 11:29:34.029
 !MESSAGE Both 'org.eclipse.jst.j2ee.core' and 'org.eclipse.jst.j2ee.core' register a package for 'application.xmi'
 
-!ENTRY org.eclipse.jface 2 0 2025-06-24 10:18:30.571
+!ENTRY org.eclipse.jface 2 0 2025-06-24 11:29:36.415
 !MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2025-06-24 10:18:30.571
+!SUBENTRY 1 org.eclipse.jface 2 0 2025-06-24 11:29:36.415
 !MESSAGE A conflict occurred for CTRL+SHIFT+T:
 Binding(CTRL+SHIFT+T,
 	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
@@ -8755,7 +8767,7 @@ Binding(CTRL+SHIFT+T,
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.contexts.window,,,system)
 
-!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-24 10:18:33.570
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-24 11:29:39.287
 !MESSAGE Command list starting LS: org.springframework.tooling.boot.ls
 START:
 C:\DEV\sts-4.20.1.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.8.v20230831-1047\jre\bin\javaw.exe
@@ -8768,33 +8780,33 @@ C:\DEV\sts-4.20.1.RELEASE\plugins\org.springframework.tooling.boot.ls_1.50.0.202
 -XX:TieredStopAtLevel=1
 -Xlog:jni+resolve=off
 -Dspring.config.location=file:C:\DEV\sts-4.20.1.RELEASE\plugins\org.springframework.tooling.boot.ls_1.50.0.202310252332\servers\spring-boot-language-server\BOOT-INF\classes\application.properties
--XX:ErrorFile=C:/Users/tj/CWT/ReadForce/Back/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1750727913570
+-XX:ErrorFile=C:/Users/tj/CWT/ReadForce/Back/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1750732179287
 org.springframework.ide.vscode.boot.app.BootLanguageServerBootApp
 --languageserver.hover-timeout=225
 END
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 10:18:33.571
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 11:29:39.288
 !MESSAGE DelegatingStreamConnectionProvider - Starting Boot LS
 
-!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-24 10:18:33.576
-!MESSAGE Started org.springframework.tooling.boot.ls LS process 10716
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-24 11:29:39.292
+!MESSAGE Started org.springframework.tooling.boot.ls LS process 18764
 
-!ENTRY org.eclipse.egit.ui 2 0 2025-06-24 10:18:34.271
+!ENTRY org.eclipse.egit.ui 2 0 2025-06-24 11:29:39.942
 !MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
 user global configuration and to define the default location to store repositories: 'C:\Users\tj'. If this is
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 10:18:34.339
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 11:29:39.989
 !MESSAGE Boot project ADDED: readforce
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 10:18:34.340
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 11:29:39.990
 !MESSAGE Starting Boot LS...
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 10:18:34.343
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 11:29:39.992
 !MESSAGE Started Boot LS process
-!SESSION 2025-06-24 11:25:07.096 -----------------------------------------------
+!SESSION 2025-06-24 11:31:48.620 -----------------------------------------------
 eclipse.buildId=4.20.1.202310260003
 java.version=17.0.8.1
 java.vendor=Eclipse Adoptium
@@ -8802,12 +8814,12 @@ BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
 Framework arguments:  -product org.springframework.boot.ide.branding.sts4
 Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.springframework.boot.ide.branding.sts4
 
-!ENTRY org.eclipse.emf.ecore 2 0 2025-06-24 11:25:07.864
+!ENTRY org.eclipse.emf.ecore 2 0 2025-06-24 11:31:49.719
 !MESSAGE Both 'org.eclipse.jst.j2ee.core' and 'org.eclipse.jst.j2ee.core' register a package for 'application.xmi'
 
-!ENTRY org.eclipse.jface 2 0 2025-06-24 11:25:09.956
+!ENTRY org.eclipse.jface 2 0 2025-06-24 11:31:52.435
 !MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2025-06-24 11:25:09.956
+!SUBENTRY 1 org.eclipse.jface 2 0 2025-06-24 11:31:52.435
 !MESSAGE A conflict occurred for CTRL+SHIFT+T:
 Binding(CTRL+SHIFT+T,
 	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
@@ -8826,7 +8838,7 @@ Binding(CTRL+SHIFT+T,
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.contexts.window,,,system)
 
-!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-24 11:25:12.681
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-24 11:31:55.515
 !MESSAGE Command list starting LS: org.springframework.tooling.boot.ls
 START:
 C:\DEV\sts-4.20.1.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.8.v20230831-1047\jre\bin\javaw.exe
@@ -8839,29 +8851,29 @@ C:\DEV\sts-4.20.1.RELEASE\plugins\org.springframework.tooling.boot.ls_1.50.0.202
 -XX:TieredStopAtLevel=1
 -Xlog:jni+resolve=off
 -Dspring.config.location=file:C:\DEV\sts-4.20.1.RELEASE\plugins\org.springframework.tooling.boot.ls_1.50.0.202310252332\servers\spring-boot-language-server\BOOT-INF\classes\application.properties
--XX:ErrorFile=C:/Users/tj/CWT/ReadForce/Back/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1750731912681
+-XX:ErrorFile=C:/Users/tj/CWT/ReadForce/Back/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1750732315514
 org.springframework.ide.vscode.boot.app.BootLanguageServerBootApp
 --languageserver.hover-timeout=225
 END
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 11:25:12.682
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 11:31:55.515
 !MESSAGE DelegatingStreamConnectionProvider - Starting Boot LS
 
-!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-24 11:25:12.686
-!MESSAGE Started org.springframework.tooling.boot.ls LS process 3504
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2025-06-24 11:31:55.521
+!MESSAGE Started org.springframework.tooling.boot.ls LS process 21452
 
-!ENTRY org.eclipse.egit.ui 2 0 2025-06-24 11:25:13.689
+!ENTRY org.eclipse.egit.ui 2 0 2025-06-24 11:31:56.200
 !MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
 user global configuration and to define the default location to store repositories: 'C:\Users\tj'. If this is
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 11:25:13.746
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 11:31:56.275
 !MESSAGE Boot project ADDED: readforce
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 11:25:13.747
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 11:31:56.276
 !MESSAGE Starting Boot LS...
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 11:25:13.748
+!ENTRY org.springframework.tooling.boot.ls 1 0 2025-06-24 11:31:56.278
 !MESSAGE Started Boot LS process

@@ -3,16 +3,25 @@ import UniversalFilterBar from './UniversalFilterBar';
 import UniversalCard from './UniversalCard';
 import './css/UniversalList.css';
 
+const literatureCategoryMap = {
+  '추리': 'MYSTERY',
+  '역사': 'HISTORY',
+  '고전': 'CLASSIC',
+  '근대': 'MODERN',
+  '동화': 'CHILDREN',
+  '기타': 'ETC',
+};
+
 const UniversalList = ({
   items = [],
   level, setLevel,
   category, setCategory,
-  order_by, setOrderBy
+  order_by, setOrderBy,
+  categoryOptions = [] 
 }) => {
-
   const filteredItems = items.filter((item) => {
     const matchLevel = level ? item.level === level : true;
-    const matchCategory = category ? item.category === category.toUpperCase() : true;
+    const matchCategory = category ? item.category === category : true;
     return matchLevel && matchCategory;
   });
 
@@ -41,14 +50,15 @@ const UniversalList = ({
 
   return (
     <div className="news-quiz-container">
-      <UniversalFilterBar
-        level={level}
-        setLevel={setLevel}
-        category={category}
-        setCategory={setCategory}
-        order_by={order_by}
-        setOrderBy={setOrderBy}
-      />
+    <UniversalFilterBar 
+      level={level}
+      setLevel={setLevel}
+      order_by={order_by}
+      setOrderBy={setOrderBy}
+      category={category}
+      setCategory={setCategory}
+      categoryOptions={categoryOptions}
+    />
 
       <div className="news-list">
         {paginated.length === 0 ? (
