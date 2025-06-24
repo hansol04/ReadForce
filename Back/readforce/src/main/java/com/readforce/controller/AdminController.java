@@ -459,10 +459,14 @@ public class AdminController {
 			@RequestParam("email")
 			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
 			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
-			String email
+			String email,
+			@RequestParam("date")
+			@NotNull(message = "date")
+			LocalDate date
+			
 	){
 		
-		admin_service.addAttendance(email);
+		admin_service.addAttendance(email, date);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
 				MessageCode.MESSAGE_CODE, MessageCode.ADD_ATTENDANCE_SUCCESS
