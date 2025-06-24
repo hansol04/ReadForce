@@ -23,7 +23,7 @@ const UniversalList = ({
 }) => {
   const navigate = useNavigate();
 
- const handleSolve = (item) => {
+  const handleSolve = (item) => {
   navigate(`/question/${item.news_no}`, {
     state: { article: item },
   });
