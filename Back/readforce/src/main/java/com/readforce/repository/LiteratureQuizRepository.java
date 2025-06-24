@@ -18,9 +18,10 @@ public interface LiteratureQuizRepository extends JpaRepository<LiteratureQuiz, 
 			@Param("literature_paragraph_no") Long literature_paragraph_no, 
 			@Param("literature_no") Long literature_no);
 
-	@Query("SELECT lq.literature_quiz_no FROM LiteratureQuiz lq JOIN lq.literature_paragraph lp WHERE lp.level = :level")
-	List<Long> findLiteratureQuizNoByLevel(
-			@Param("level") String level
+	@Query("SELECT lq.literature_quiz_no FROM LiteratureQuiz lq JOIN lq.literature_paragraph lp JOIN lp.literature l WHERE lp.level = :level AND l.type = :type")
+	List<Long> findLiteratureQuizNoByLevelAndType(
+			@Param("level") String level,
+			@Param("type") String type
 	);
 
 	@Modifying

@@ -43,5 +43,9 @@ public interface PointRepository extends JpaRepository<Point, String>{
 	@Query(value = "SELECT * FROM point ORDER BY created_date DESC", nativeQuery = true)
 	List<Point> findAllOrderByCreatedDateDesc();
 
+	@Modifying
+	@Query("UPDATE Point p SET p.korean_news = 0.0, p.english_news = 0.0, p.japanese_news = 0.0, p.novel = 0.0, p.fairytale = 0.0, p.total = 0.0")
+	void resetAllPoint();
+
 
 }

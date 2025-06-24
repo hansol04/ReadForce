@@ -38,6 +38,7 @@ public interface NewsQuizAttemptRepository extends JpaRepository<NewsQuizAttempt
 	@Query(value = "SELECT " +
 				   " t.news_quiz_no, " +
 				   " nq.question_text, " +
+				   " t.incorrect_count, " +
 				   " total.total_count " +
 				   "FROM " +
 				   " (SELECT news_quiz_no, COUNT(*) as incorrect_count " + 
