@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.readforce.dto.LiteratureDto.AddLiteratureQuizAttempt;
 import com.readforce.dto.LiteratureDto.GetLiteratureByAdmin;
 import com.readforce.dto.LiteratureDto.GetLiteratureParagraphByAdmin;
 import com.readforce.dto.LiteratureDto.GetLiteratureQuizByAdmin;
@@ -16,7 +17,6 @@ import com.readforce.dto.MemberDto.GetAttendance;
 import com.readforce.dto.MemberDto.MemberObjectByAdmin;
 import com.readforce.dto.MemberDto.ModifyByAdmin;
 import com.readforce.dto.MemberDto.SignUpByAdmin;
-import com.readforce.dto.NewsDto.AddLiteratureQuizAttempt;
 import com.readforce.dto.NewsDto.AddNewsQuizAttempt;
 import com.readforce.dto.NewsDto.GetLiteratureQuizAttemptListByEmail;
 import com.readforce.dto.NewsDto.GetNewsQuizAttemptByEmail;
@@ -367,7 +367,7 @@ public class AdminService {
 		literature_paragraph_id.setLiterature_no(literature_paragraph_by_admin.getLiterature_no());
 		literature_paragraph_id.setLiterature_paragraph_no(last_literature_paragraph_no + 1);
 		
-		// 문학 엔티티 조회 - 김기찬이 추가.
+		// 문학 엔티티 조회
 		Literature literature = literature_repository.findById(literature_paragraph_by_admin.getLiterature_no())
 		        .orElseThrow(() -> new ResourceNotFoundException(MessageCode.LITERATURE_NOT_FOUND));
 		
@@ -378,7 +378,7 @@ public class AdminService {
 		literature_paragraph.setContent(literature_paragraph_by_admin.getContent());
 		literature_paragraph.setLevel(literature_paragraph_by_admin.getLevel());
 		
-		// 문학 연결 - 김기찬이 추가.
+		// 문학 연결
 	    literature_paragraph.setLiterature(literature);
 		
 		literature_paragraph_repository.save(literature_paragraph);
@@ -611,9 +611,21 @@ public class AdminService {
 		
 	}
 
-	// 문학 퀴즈 풀이 기록 추가
+	// 사용자가 풀은 문학 퀴즈 기록 추가
 	@Transactional
 	public void addLiteratureQuizAttempt(AddLiteratureQuizAttempt add_literature_quiz_attempt) {
+		
+		// 사용자가 정답을 입력했는지 확인
+		LiteratureQuiz literature_quiz = literature_quiz_repository.findById(add_literature_quiz_attempt.getLiterature_quiz_no())
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.NEWS_QUIZ_NOT_FOUND));
+		
+		boolean is_correct = false;
+		
+		if(literature_quiz.getCorrect_answer_index() == add_literature_quiz_attempt.getSelected_option_index()) {
+			
+			is_correct = true;
+			
+		}
 		
 		// 복합키 생성
 		LiteratureQuizAttemptId literature_quiz_attempt_id = new LiteratureQuizAttemptId();
@@ -623,7 +635,7 @@ public class AdminService {
 		// 엔티티 생성
 		LiteratureQuizAttempt literature_quiz_attempt = new LiteratureQuizAttempt();
 		literature_quiz_attempt.setLiterature_quiz_attempt_id(literature_quiz_attempt_id);
-//		literature_quiz_attempt.setIs_correct(add_literature_quiz_attempt.getIs_correct());
+		literature_quiz_attempt.setIs_correct(is_correct);
 		literature_quiz_attempt.setSelected_option_index(add_literature_quiz_attempt.getSelected_option_index());
 		
 		// 추가
