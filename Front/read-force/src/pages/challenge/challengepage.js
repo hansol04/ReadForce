@@ -58,19 +58,25 @@ const ChallengePage = () => {
         </div>
 
         <div className="wrong-item">
-          <p>AI의 헤름에도 피와 똥과 눈물이 흐르다 [AI오답노트]</p>
+
+          <p>AI의 혈관에도 피와 땀과 눈물이 흐른다 [AI오답노트]</p>
+
           <span>19%</span>
           <button>문제풀기</button>
         </div>
 
         <div className="wrong-item">
-          <p>하루 두 스프랙시 설치했더니 여름 사리고…</p>
+
+          <p>하루 두 스푼씩 섭취했더니 염증 사라지고…</p>
+
           <span>25%</span>
           <button>문제풀기</button>
         </div>
 
         <div className="wrong-item">
-          <p>“이자 감답 못해 집까지 빼께들어…”</p>
+
+          <p>“이자 감당 못해 집까지 뺏겼다”…</p>
+
           <span>38%</span>
           <button>문제풀기</button>
         </div>

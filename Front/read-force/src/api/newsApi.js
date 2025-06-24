@@ -78,6 +78,7 @@ export const fetchNewsListByLanguageAndLevelAndCategory = async ({ language, lev
     return [];
   }
 };
+
 export const fetchNewsQuizByNewsNo = async (news_no) => {
   try {
     const res = await api.get('/news/get-news-quiz-object', {
@@ -101,5 +102,6 @@ export const saveNewsQuizResult = async ({ news_quiz_no, selected_option_index }
     return null;
   }
 };
+origin/develop
 
 export const debouncedFetchNewsListByLanguageAndLevelAndCategory = debounce(fetchNewsListByLanguageAndLevelAndCategory, 300);

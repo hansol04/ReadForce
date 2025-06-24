@@ -19,11 +19,18 @@ import Authcallback from './pages/login/authcallback';
 import ProfileEditPage from './pages/myinfo/ProfileEditPage';
 import ChangePasswordPage from './pages/myinfo/ChangePasswordPage';
 import ReadTest from './pages/challenge/readtest';
+
 import ChallengeStartModal from './pages/challenge/ChallengeStartModal';
 import ChallengePage from "./pages/challenge/challengepage";
 
 import AdminPage from './pages/adminpages/adminpage';
 import ChallengeQuizPage from './pages/challenge/challengeQuizPage';
+
+
+
+import QuizPage from './pages/quiz/QuizPage';
+import ReadingPage from './pages/quiz/ReadingPage';
+
 
 import ArticleQuestionPage from './pages/news/ArticleQuestionPage';
 import ArticleResultPage from './pages/news/ArticleResultPage';
@@ -37,8 +44,15 @@ import AdminAddParagraph from './pages/adminpages/adminaddparagraph';
 import TestQuestionPage from './pages/challenge/testquestionpage';
 import TestResultPage from './pages/challenge/testresultpage';
 import TestReviewPage from './pages/challenge/testreviewpage';
+
 import RankingPage from './pages/challenge/RankingPage';
 import ChallengeResultPage from './pages/challenge/ChallengeResultPage';
+
+import NovelPage from './pages/literature/NovelPage';
+import FairyTalePage from './pages/literature/FairyTalePage';
+
+
+
 function App() {
   return (
     <Router>
@@ -49,7 +63,9 @@ function App() {
           <Route path="/findpassword" element={<FindPassword />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
 
-          
+          <Route path="/quiz" element={<QuizPage />} />
+          <Route path="/reading" element={<ReadingPage />} />
+
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/korea" element={<KoreaPage />} />
           <Route path="/japan" element={<JapanPage />} />
@@ -66,7 +82,10 @@ function App() {
           <Route path="/change-password" element={<ChangePasswordPage />} />
           <Route path="/test-start" element={<ReadTest />} />
           <Route path="/adminpage" element={<AdminPage />} />
+
           <Route path="/challenge/quiz" element={<ChallengeQuizPage />} />
+
+
           <Route path="/question/:id" element={<ArticleQuestionPage />} />
           <Route path="/question-result" element={<ArticleResultPage />} />
           <Route path="/adminpage/adminnews" element={<AdminNews />} />
@@ -80,9 +99,14 @@ function App() {
           <Route path="/test-question" element={<TestQuestionPage />} />
           <Route path="/test-result" element={<TestResultPage />} />
           <Route path="/test-review" element={<TestReviewPage />} />
+
           <Route path="/ranking" element={<RankingPage />} />
           <Route path="/challenge/result" element={<ChallengeResultPage />} /> 
 
+
+          <Route path="/literature/novel" element={<NovelPage />} />
+          <Route path="/literature/fairytale" element={<FairyTalePage />} />
+         
         </Route>
       </Routes>
     </Router>

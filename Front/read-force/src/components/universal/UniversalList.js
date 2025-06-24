@@ -1,47 +1,34 @@
 import React from 'react';
+
 import { useNavigate } from 'react-router-dom';
+ origin/develop
 import UniversalFilterBar from './UniversalFilterBar';
 import UniversalCard from './UniversalCard';
 import './css/UniversalList.css';
 
-// 📌 함수 선언 먼저
-const categorizeArticle = (text) => {
-  if (!text) return 'ETC';
-  if (text.includes('정치')) return 'POLITICS';
-  if (text.includes('경제')) return 'ECONOMY';
-  if (text.includes('사회')) return 'SOCIETY';
-  if (text.includes('문화')) return 'CULTURE';
-  if (text.includes('과학') || text.includes('IT')) return 'SCIENCE';
-  return 'ETC';
+const literatureCategoryMap = {
+  '추리': 'MYSTERY',
+  '역사': 'HISTORY',
+  '고전': 'CLASSIC',
+  '근대': 'MODERN',
+  '동화': 'CHILDREN',
+  '기타': 'ETC',
 };
 
 const UniversalList = ({
   items = [],
   level, setLevel,
   category, setCategory,
-  order_by, setOrderBy
+  order_by, setOrderBy,
+  categoryOptions = [] 
 }) => {
-  const navigate = useNavigate();
-
-  const handleSolve = (article) => {
-    navigate(`/question/${article.news_no}`, {
-      state: { article },
-    });
-  };
-
-  // ✅ 함수 아래에서 사용
-  const enriched = items.map(article => ({
-    ...article,
-    category: categorizeArticle((article.title || '') + ' ' + (article.content || '')),
-  }));
-
-  const filtered = enriched.filter(a => {
-    const levelMatch = level === '' || a.level === level;
-    const categoryMatch = category === '' || a.category === category;
-    return levelMatch && categoryMatch;
+  const filteredItems = items.filter((item) => {
+    const matchLevel = level ? item.level === level : true;
+    const matchCategory = category ? item.category === category : true;
+    return matchLevel && matchCategory;
   });
 
-  const sorted = [...filtered].sort((a, b) =>
+  const sorted = [...filteredItems].sort((a, b) =>
     order_by === 'latest'
       ? new Date(b.publishedAt) - new Date(a.publishedAt)
       : new Date(a.publishedAt) - new Date(b.publishedAt)
@@ -66,25 +53,28 @@ const UniversalList = ({
 
   return (
     <div className="news-quiz-container">
-      <UniversalFilterBar
-        level={level}
-        setLevel={setLevel}
-        category={category}
-        setCategory={setCategory}
-        order_by={order_by}
-        setOrderBy={setOrderBy}
-      />
+    <UniversalFilterBar 
+      level={level}
+      setLevel={setLevel}
+      order_by={order_by}
+      setOrderBy={setOrderBy}
+      category={category}
+      setCategory={setCategory}
+      categoryOptions={categoryOptions}
+    />
 
       <div className="news-list">
         {paginated.length === 0 ? (
           <p className="no-articles">조건에 맞는 기사가 없습니다.</p>
         ) : (
           paginated.map((item, index) => (
+
             <UniversalCard
               key={item.news_no ?? `unique-${index}`}
               data={item}
               onSolve={handleSolve}
             />
+
           ))
         )}
       </div>

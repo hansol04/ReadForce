@@ -5,13 +5,12 @@ import {
   fetchNewsListByLanguageAndLevel,
   fetchNewsListByLanguageAndLevelAndCategory
 } from '../../api/newsApi';
+import NewsCategory from '../../components/NewsCategory';
 
 const UsaPage = () => {
   const [newsItems, setNewsItems] = useState([]);
 
-
   const [language] = useState('ENGLISH'); 
-
   const [level, setLevel] = useState('');
   const [category, setCategory] = useState('');
   const [order_by, setOrderBy] = useState('DESC');
@@ -40,16 +39,17 @@ const UsaPage = () => {
 
   return (
     <div className="page-container">
-      <UniversalList
-        items={newsItems}
-        language={language}
-        level={level}
-        setLevel={setLevel}
-        category={category}
-        setCategory={setCategory}
-        order_by={order_by}
-        setOrderBy={setOrderBy}
-      />
+   <UniversalList
+    items={newsItems}
+    language={language}
+    level={level}
+    setLevel={setLevel}
+    category={category}
+    setCategory={setCategory}
+    order_by={order_by}
+    setOrderBy={setOrderBy}
+    categoryOptions={NewsCategory}
+  />
     </div>
   );
 };

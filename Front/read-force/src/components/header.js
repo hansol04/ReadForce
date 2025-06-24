@@ -13,7 +13,7 @@ const Header = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const isLoggedIn = !!localStorage.getItem("token");
-  const provider = localStorage.getItem("provider"); // ✅ 추가
+  const provider = localStorage.getItem("provider"); 
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -90,8 +90,8 @@ const Header = () => {
               <div className="nav-item">문학 작품</div>
               {hoveredMenu === 'literature' && (
                 <div className="mega-menu">
-                  <Link to="/classic">소설</Link>
-                  <Link to="/fairy">동화</Link>
+                  <Link to="/literature/novel">소설</Link>
+                  <Link to="/literature/fairytale">동화</Link>
                 </div>
               )}
             </div>
@@ -165,8 +165,8 @@ const Header = () => {
 
         <div className="mobile-menu-section">
           <div className="mobile-menu-title">문학 작품</div>
-          <Link to="/classic">소설</Link>
-          <Link to="/fairy">동화</Link>
+          <Link to="/literature/novel">소설</Link>
+          <Link to="/literature/fairytale">동화</Link>
         </div>
 
         <div className="mobile-menu-section">
