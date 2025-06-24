@@ -11,14 +11,14 @@ const ChallengePage = () => {
     navigate('/ranking');
   };
 
-  const handleSolveClick = (questionId) => {
-    navigate(`/question/${questionId}`);
+  const handleSolveClick = (quizNo) => {
+    navigate(`/question/${quizNo}`);
   };
 
   useEffect(() => {
     const fetchWrongQuestions = async () => {
       try {
-        const res = await api.get('/quiz/get-most-incorrected-quiz'); // ✅ API 경로 수정됨
+        const res = await api.get('/quiz/get-most-incorrected-quiz');
         setWrongQuestions(res.data);
       } catch (error) {
         console.error('가장 많이 틀린 문제 불러오기 실패:', error);
@@ -65,13 +65,19 @@ const ChallengePage = () => {
           <div></div>
         </div>
 
-        {wrongQuestions.map((item) => (
-          <div className="wrong-item" key={item.id}>
-            <p>{item.title}</p>
-            <span>{Math.round(item.correctRate * 100)}%</span>
-            <button onClick={() => handleSolveClick(item.id)}>문제풀기</button>
-          </div>
-        ))}
+        {wrongQuestions.map((item, index) => {
+          const total = Number(item.total_count);
+          const incorrect = Number(item.incorrect_count);
+          const correctRate = total > 0 ? Math.round((1 - incorrect / total) * 100) : 0;
+
+          return (
+            <div className="wrong-item" key={item.quiz_no ?? `wrong-${index}`}>
+              <p>{item.question_text}</p>
+              <span>{correctRate}%</span>
+              <button onClick={() => handleSolveClick(item.quiz_no)}>문제풀기</button>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
