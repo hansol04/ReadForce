@@ -403,7 +403,7 @@ public class GeminiService {
 		}
 		
 		// 정답
-		Matcher answer_matcher = Pattern.compile("(?i)(정답|Answer|正解):\\s*\\[?([A-D])\\]?", Pattern.CASE_INSENSITIVE).matcher(text);
+		Matcher answer_matcher = Pattern.compile("(?i)(정답|Answer|正解)\\s*[:：]\\s*\\W*([A-Da-d1-4])").matcher(text);
 		if(!answer_matcher.find()) {
 			
 			throw new GeminiException(MessageCode.NEWS_QUIZ_ANSWER_MISSING);
