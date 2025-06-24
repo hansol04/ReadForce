@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ChallengeStartModal from './ChallengeStartModal'; // 모달 컴포넌트 경로 확인
 import './challengepage.css';
 import api from '../../api/axiosInstance';
 
@@ -62,7 +63,9 @@ const ChallengePage = () => {
 
   return (
     <div className="page-container">
-      <h2 className="title">“ 오늘 <span className="highlight">812명</span>이 도전했어요! ”</h2>
+      <h2 className="title">
+        “ 오늘 <span className="highlight">812명</span>이 도전했어요! ”
+      </h2>
 
       <div className="top-container">
         <div className="stats-box">
@@ -127,6 +130,8 @@ const ChallengePage = () => {
           );
         })}
       </div>
+
+      {showModal && <ChallengeStartModal onClose={() => setShowModal(false)} />}
     </div>
   );
 };

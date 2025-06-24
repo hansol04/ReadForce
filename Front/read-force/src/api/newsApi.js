@@ -1,82 +1,105 @@
-import api from './axiosInstance';
-import debounce from 'lodash/debounce';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-// ENUM 변환 매핑
-const levelMap = {
-  '초급': 'BEGINNER',
-  '중급': 'INTERMEDIATE',
-  '고급': 'ADVANCED',
-};
+import UniversalFilterBar from './UniversalFilterBar';
+import UniversalCard from './UniversalCard';
+import './css/UniversalList.css';
 
-const categoryMap = {
-  '정치': 'POLITICS',
-  '경제': 'ECONOMY',
-  '사회': 'SOCIETY',
-  '생활/문화': 'CULTURE',
-  'IT/과학': 'SCIENCE',
+const literatureCategoryMap = {
+  '추리': 'MYSTERY',
+  '역사': 'HISTORY',
+  '고전': 'CLASSIC',
+  '근대': 'MODERN',
+  '동화': 'CHILDREN',
   '기타': 'ETC',
 };
 
-const orderByMap = {
-  'latest': 'DESC',
-  'oldest': 'ASC',
-  'DESC': 'DESC',
-  'ASC': 'ASC',
+const UniversalList = ({
+  items = [],
+  level, setLevel,
+  category, setCategory,
+  order_by, setOrderBy,
+  categoryOptions = []
+}) => {
+  const navigate = useNavigate();
+
+  const handleSolve = (item) => {
+  navigate(`/question/${item.news_no}`, {
+    state: { article: item },
+  });
 };
 
-// 1. 언어만 있을 때
-export const fetchNewsListByLanguage = async ({ language, order_by }) => {
-  try {
-    const res = await api.get('/news/get-news-list-by-language', {
-      params: {
-        language,
-        order_by: orderByMap[order_by],
-      },
-    });
-    return res.data;
-  } catch (err) {
-    console.error('뉴스 전체 목록 불러오기 실패:', err);
-    return [];
-  }
+
+  const filteredItems = items.filter((item) => {
+    const matchLevel = level ? item.level === level : true;
+    const matchCategory = category ? item.category === category : true;
+    return matchLevel && matchCategory;
+  });
+
+  const sorted = [...filteredItems].sort((a, b) =>
+    order_by === 'latest'
+      ? new Date(b.publishedAt) - new Date(a.publishedAt)
+      : new Date(a.publishedAt) - new Date(b.publishedAt)
+  );
+
+  const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(sorted.length / itemsPerPage);
+  const pageGroupSize = 5;
+  const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
+  const startPage = currentGroup * pageGroupSize + 1;
+  const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
+  const visiblePages = Array.from(
+    { length: endPage - startPage + 1 },
+    (_, i) => startPage + i
+  );
+
+  const paginated = sorted.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  return (
+    <div className="news-quiz-container">
+      <UniversalFilterBar 
+        level={level}
+        setLevel={setLevel}
+        order_by={order_by}
+        setOrderBy={setOrderBy}
+        category={category}
+        setCategory={setCategory}
+        categoryOptions={categoryOptions}
+      />
+
+      <div className="news-list">
+        {paginated.length === 0 ? (
+          <p className="no-articles">조건에 맞는 기사가 없습니다.</p>
+        ) : (
+          paginated.map((item, index) => (
+            <UniversalCard
+              key={item.news_no ?? `unique-${index}`}
+              data={item}
+              onSolve={handleSolve}
+            />
+          ))
+        )}
+      </div>
+
+      <div className="pagination">
+        <button onClick={() => setCurrentPage(startPage - 1)} disabled={startPage === 1}>«</button>
+        {visiblePages.map((pageNum) => (
+          <button
+            key={pageNum}
+            onClick={() => setCurrentPage(pageNum)}
+            className={currentPage === pageNum ? "active" : ""}
+          >
+            {pageNum}
+          </button>
+        ))}
+        <button onClick={() => setCurrentPage(endPage + 1)} disabled={endPage === totalPages}>»</button>
+      </div>
+    </div>
+  );
 };
 
-export const debouncedFetchNewsListByLanguage = debounce(fetchNewsListByLanguage, 300);
-
-// 2. 언어 + 난이도
-export const fetchNewsListByLanguageAndLevel = async ({ language, level, order_by }) => {
-  try {
-    const res = await api.get('/news/get-news-list-by-language-and-level', {
-      params: {
-        language,
-        level: levelMap[level] || level,
-        order_by: orderByMap[order_by],
-      },
-    });
-    return res.data;
-  } catch (err) {
-    console.error('뉴스 난이도 목록 불러오기 실패:', err);
-    return [];
-  }
-};
-
-export const debouncedFetchNewsListByLanguageAndLevel = debounce(fetchNewsListByLanguageAndLevel, 300);
-
-// 3. 언어 + 난이도 + 카테고리
-export const fetchNewsListByLanguageAndLevelAndCategory = async ({ language, level, category, order_by }) => {
-  try {
-    const res = await api.get('/news/get-news-list-by-language-and-level-and-category', {
-      params: {
-        language,
-        level: levelMap[level] || level,
-        category: categoryMap[category] || category,
-        order_by: orderByMap[order_by],
-      },
-    });
-    return res.data;
-  } catch (err) {
-    console.error('뉴스 카테고리 목록 불러오기 실패:', err);
-    return [];
-  }
-};
-
-export const debouncedFetchNewsListByLanguageAndLevelAndCategory = debounce(fetchNewsListByLanguageAndLevelAndCategory, 300);
+export default UniversalList;

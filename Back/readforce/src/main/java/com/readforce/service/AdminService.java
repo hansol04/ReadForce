@@ -806,6 +806,83 @@ public class AdminService {
 		
 	}
 
+	// 회원 정보 불러오기
+	@Transactional(readOnly = true)
+	public MemberObjectByAdmin getMemberInfoObject(String email) {
+
+		Member member = member_repository.findByEmail(email)
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND));
+
+		MemberObjectByAdmin member_object_by_admin = new MemberObjectByAdmin();
+		
+		member_object_by_admin.setEmail(member.getEmail());
+		member_object_by_admin.setBirthday(member.getBirthday());
+		member_object_by_admin.setNickname(member.getNickname());
+		member_object_by_admin.setProfile_image_url(member.getProfile_image_url());
+		member_object_by_admin.setRole(member.getRole());
+		member_object_by_admin.setSocial_provider(member.getSocial_provider());
+		member_object_by_admin.setSocial_provider_id(member.getSocial_provider_id());
+		member_object_by_admin.setStatus(member.getStatus());
+		member_object_by_admin.setCreate_date(member.getCreate_date());
+		member_object_by_admin.setLast_modified_date(member.getLast_modified_date());
+		member_object_by_admin.setWithdraw_date(member.getWithdraw_date());
+		
+		return member_object_by_admin;
+
+	}
+
+	// 회원 포인트 불러오기
+	@Transactional(readOnly = true)
+	public GetPoint getMemberPointObject(String email) {
+
+		Point point = point_repository.findByEmail(email)
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.POINT_NOT_FOUND));
+		
+		GetPoint get_point = new GetPoint();
+		
+		get_point.setEmail(point.getEmail());
+		get_point.setTotal(point.getTotal());
+		get_point.setEnglish_news(point.getEnglish_news());
+		get_point.setJapanese_news(point.getEnglish_news());
+		get_point.setKorean_news(point.getKorean_news());
+		get_point.setNovel(point.getNovel());
+		get_point.setFairytale(point.getFairytale());
+		get_point.setCreated_date(point.getCreated_date());
+		get_point.setLast_modified_date(point.getLast_modified_date());
+		
+		return get_point;
+
+	}
+
+	// 회원 출석 불러오기
+	@Transactional(readOnly = true)
+	public List<GetAttendance> getMemberAttendanceList(String email) {
+		
+		List<Attendance> attendance_list = attendance_repository.findByEmail(email);
+		
+		if(attendance_list.isEmpty()) {
+			
+			throw new ResourceNotFoundException(MessageCode.ATTENDANCE_DATE_NOT_FOUND);
+			
+		}
+		
+		List<GetAttendance> get_attendnce_list = new ArrayList<>();
+		
+		for(Attendance attendance : attendance_list) {
+			
+			GetAttendance get_attendance = new GetAttendance();
+			get_attendance.setAttendance_no(attendance.getAttendance_no());
+			get_attendance.setEmail(attendance.getEmail());
+			get_attendance.setCreated_date(attendance.getCreated_date());
+			
+			get_attendnce_list.add(get_attendance);
+
+		}
+
+		return get_attendnce_list;
+
+	}
+
 	
 
 
