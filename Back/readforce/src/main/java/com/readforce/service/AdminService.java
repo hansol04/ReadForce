@@ -383,36 +383,6 @@ public class AdminService {
 		
 		literature_paragraph_repository.save(literature_paragraph);
 	}
-//	// 문학 문단 추가 - 김기찬이 수정해보았씁니당.
-//	@Transactional
-//	public void addLiteratureParagraph(LiteratureParagraphByAdmin dto) {
-//
-//	    // 1. 마지막 문단 번호 조회
-//	    Long lastParagraphNo = literature_paragraph_repository.findLastLiteratureParagraphNoByLiteratureNo(dto.getLiterature_no());
-//	    if (lastParagraphNo == null) lastParagraphNo = 0L;
-//
-//	    // 2. 복합키 생성
-//	    LiteratureParagraphId id = new LiteratureParagraphId();
-//	    id.setLiterature_no(dto.getLiterature_no());
-//	    id.setLiterature_paragraph_no(lastParagraphNo + 1);
-//
-//	    // 3. 문학 엔티티 조회
-//	    Literature literature = literature_repository.findById(dto.getLiterature_no())
-//	        .orElseThrow(() -> new RuntimeException("해당 문학을 찾을 수 없습니다."));
-//
-//	    // 4. 문단 엔티티 생성
-//	    LiteratureParagraph paragraph = new LiteratureParagraph();
-//	    paragraph.setLiterature_paragraph_id(id);
-//	    paragraph.setCategory(dto.getCategory());
-//	    paragraph.setContent(dto.getContent());
-//	    paragraph.setLevel(dto.getLevel());
-//
-//	    // 5. 문학 연결
-//	    paragraph.setLiterature(literature);
-//
-//	    // 6. 저장
-//	    literature_paragraph_repository.save(paragraph);
-//	}
 
 	// 전체 문학 문단 리스트 가져오기(문학 문단 번호순)
 	@Transactional(readOnly = true)
