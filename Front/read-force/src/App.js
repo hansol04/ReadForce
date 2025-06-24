@@ -28,10 +28,6 @@ import ChallengeQuizPage from './pages/challenge/challengeQuizPage';
 
 
 
-import QuizPage from './pages/quiz/QuizPage';
-import ReadingPage from './pages/quiz/ReadingPage';
-
-
 import ArticleQuestionPage from './pages/news/ArticleQuestionPage';
 import ArticleResultPage from './pages/news/ArticleResultPage';
 import AdminNews from './pages/adminpages/adminnews';
@@ -62,10 +58,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/findpassword" element={<FindPassword />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
-
-          <Route path="/quiz" element={<QuizPage />} />
-          <Route path="/reading" element={<ReadingPage />} />
-
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/korea" element={<KoreaPage />} />
           <Route path="/japan" element={<JapanPage />} />
