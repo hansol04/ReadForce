@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useNavigate } from 'react-router-dom';
- origin/develop
+//  origin/develop
 import UniversalFilterBar from './UniversalFilterBar';
 import UniversalCard from './UniversalCard';
 import './css/UniversalList.css';
@@ -20,7 +20,8 @@ const UniversalList = ({
   level, setLevel,
   category, setCategory,
   order_by, setOrderBy,
-  categoryOptions = [] 
+  categoryOptions = [] ,
+  handleSolve
 }) => {
   const filteredItems = items.filter((item) => {
     const matchLevel = level ? item.level === level : true;

@@ -3,27 +3,27 @@ import './css/UniversalFilterBar.css';
 import Select from 'react-select';
 
 
-const UniversalFilterBar = ({ level, setLevel, category, setCategory, order_by, setOrderBy, categoryOptions }) => {
+const UniversalFilterBar = ({ level, setLevel, category, setCategory, order_by, setOrderBy }) => {
 
   const levelClass = (lvl) => {
     const base =
       lvl === '초급'
         ? 'level-button beginner'
         : lvl === '중급'
-        ? 'level-button intermediate'
-        : 'level-button advanced';
+          ? 'level-button intermediate'
+          : 'level-button advanced';
     return `${base} ${level === lvl ? 'selected' : ''}`;
   };
 
   const levelOptions = [
-    { value: '', label: '전체' },  
+    { value: '', label: '전체' },
     { value: 'BEGINNER', label: '초급' },
     { value: 'INTERMEDIATE', label: '중급' },
     { value: 'ADVANCED', label: '고급' },
   ];
 
 
-  const categoryOptions = [
+  const defaultCategoryOptions = [
     { value: '', label: '모두' },
     { value: 'POLITICS', label: '정치' },
     { value: 'ECONOMY', label: '경제' },
@@ -33,12 +33,12 @@ const UniversalFilterBar = ({ level, setLevel, category, setCategory, order_by, 
     { value: 'ETC', label: '기타' },
   ];
 
-  const selectedCategory = categoryOptions.find((o) => o.value === category) || categoryOptions[0];
+  const selectedCategory = defaultCategoryOptions.find((o) => o.value === category) || defaultCategoryOptions[0];
 
 
   const handleLevelClick = (value) => {
     if (level === value) {
-      setLevel(''); 
+      setLevel('');
 
     } else {
       setLevel(value);
@@ -67,10 +67,9 @@ const UniversalFilterBar = ({ level, setLevel, category, setCategory, order_by, 
           <button
             key={opt.value}
             onClick={() => handleLevelClick(opt.value)}
-            className={`level-button ${
-              opt.value === 'BEGINNER' ? 'beginner' :
-              opt.value === 'INTERMEDIATE' ? 'intermediate' : 'advanced'
-            } ${level === opt.value ? 'selected' : ''}`}
+            className={`level-button ${opt.value === 'BEGINNER' ? 'beginner' :
+                opt.value === 'INTERMEDIATE' ? 'intermediate' : 'advanced'
+              } ${level === opt.value ? 'selected' : ''}`}
           >
             {opt.label}
           </button>
@@ -81,10 +80,8 @@ const UniversalFilterBar = ({ level, setLevel, category, setCategory, order_by, 
         <Select
           className="custom-select"
           classNamePrefix="react-select"
-          options={categoryOptions}
-
-          value={categoryOptions.find((o) => o.value === category) || categoryOptions[0]}
-
+          options={defaultCategoryOptions}
+          value={defaultCategoryOptions.find((o) => o.value === category) || defaultCategoryOptions[0]}
           onChange={(selected) => setCategory(selected.value)}
           isSearchable={false}
         />
