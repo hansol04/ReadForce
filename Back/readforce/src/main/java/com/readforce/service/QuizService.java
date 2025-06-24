@@ -268,19 +268,19 @@ public class QuizService {
 		for(LiteratureQuiz literature_quiz : combined_literature_quiz_list) {
 			
 			GetChallengeLiteratureQuiz get_challenge_literature_quiz = new GetChallengeLiteratureQuiz();
-			get_challenge_literature_quiz.getChoice1();
-			get_challenge_literature_quiz.getChoice2();
-			get_challenge_literature_quiz.getChoice3();
-			get_challenge_literature_quiz.getChoice4();
-			get_challenge_literature_quiz.getCorrect_answer_index();
-			get_challenge_literature_quiz.getExplanation();
-			get_challenge_literature_quiz.getLevel();
-			get_challenge_literature_quiz.getLiterature_no();
-			get_challenge_literature_quiz.getLiterature_paragraph_no();
-			get_challenge_literature_quiz.getLiterature_quiz_no();
-			get_challenge_literature_quiz.getQuestion_text();
-			get_challenge_literature_quiz.getScore();
-			get_challenge_literature_quiz.getTitle();
+			get_challenge_literature_quiz.setChoice1(literature_quiz.getChoice1());
+			get_challenge_literature_quiz.setChoice2(literature_quiz.getChoice2());
+			get_challenge_literature_quiz.setChoice3(literature_quiz.getChoice3());
+			get_challenge_literature_quiz.setChoice4(literature_quiz.getChoice4());
+			get_challenge_literature_quiz.setCorrect_answer_index(literature_quiz.getCorrect_answer_index());
+			get_challenge_literature_quiz.setExplanation(literature_quiz.getExplanation());
+			get_challenge_literature_quiz.setLevel(literature_quiz.getLiterature_paragraph().getLevel());
+			get_challenge_literature_quiz.setLiterature_no(literature_quiz.getLiterature_no());
+			get_challenge_literature_quiz.setLiterature_paragraph_no(literature_quiz.getLiterature_paragraph_no());
+			get_challenge_literature_quiz.setLiterature_quiz_no(literature_quiz.getLiterature_quiz_no());
+			get_challenge_literature_quiz.setQuestion_text(literature_quiz.getQuestion_text());
+			get_challenge_literature_quiz.setScore(literature_quiz.getScore());
+			get_challenge_literature_quiz.setTitle(literature_quiz.getLiterature_paragraph().getLiterature().getTitle());
 			
 			get_challenge_literature_quiz_list.add(get_challenge_literature_quiz);
 			
