@@ -2,9 +2,10 @@ package com.readforce.dto;
 
 import java.time.LocalDateTime;
 
-import com.readforce.entity.NewsQuiz;
 import com.readforce.enums.MessageCode;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -193,14 +194,14 @@ public class NewsDto {
 	@AllArgsConstructor
 	public static class AddNewsQuizAttempt{
 		
+		@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+		@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
 		private String email;
 		
+		@NotNull(message = MessageCode.NEWS_QUIZ_NO_NOT_NULL)
 		private Long news_quiz_no;
-
-		private NewsQuiz news_quiz;
-
-		private Boolean is_correct;
-
+		
+		@NotNull(message = MessageCode.SELECTED_OPTION_INDEX_NOT_NULL)
 		private Integer selected_option_index;
 
 	}
@@ -240,27 +241,6 @@ public class NewsDto {
 		private LocalDateTime created_date;
 		
 	}
-	
-	@Getter
-	@Setter
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class AddLiteratureQuizAttempt{
-		
-		private String email;
-		
-		private Long literature_quiz_no;
-
-		private Boolean is_correct;
-
-		private Integer selected_option_index;
-		
-	}
-	
-	
-
-	
-
 	
 	public record NewsResult(String title, String content) {}
 	
