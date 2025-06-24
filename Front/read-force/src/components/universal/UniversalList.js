@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
+import { useNavigate } from 'react-router-dom';
 import UniversalFilterBar from './UniversalFilterBar';
 import UniversalCard from './UniversalCard';
 import './css/UniversalList.css';
@@ -19,17 +19,9 @@ const UniversalList = ({
   level, setLevel,
   category, setCategory,
   order_by, setOrderBy,
-  categoryOptions = []
+  categoryOptions = [],
+  onSolve
 }) => {
-  const navigate = useNavigate();
-
-  const handleSolve = (item) => {
-  navigate(`/question/${item.news_no}`, {
-    state: { article: item },
-  });
-};
-
-
   const filteredItems = items.filter((item) => {
     const matchLevel = level ? item.level === level : true;
     const matchCategory = category ? item.category === category : true;
@@ -43,7 +35,7 @@ const UniversalList = ({
   );
 
   const itemsPerPage = 5;
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = React.useState(1);
   const totalPages = Math.ceil(sorted.length / itemsPerPage);
   const pageGroupSize = 5;
   const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
@@ -61,28 +53,26 @@ const UniversalList = ({
 
   return (
     <div className="news-quiz-container">
-      <UniversalFilterBar 
-        level={level}
-        setLevel={setLevel}
-        order_by={order_by}
-        setOrderBy={setOrderBy}
-        category={category}
-        setCategory={setCategory}
-        categoryOptions={categoryOptions}
-      />
+    <UniversalFilterBar 
+      level={level}
+      setLevel={setLevel}
+      order_by={order_by}
+      setOrderBy={setOrderBy}
+      category={category}
+      setCategory={setCategory}
+      categoryOptions={categoryOptions}
+    />
 
       <div className="news-list">
-        {paginated.length === 0 ? (
-          <p className="no-articles">조건에 맞는 기사가 없습니다.</p>
-        ) : (
-          paginated.map((item, index) => (
-            <UniversalCard
-              key={item.news_no ?? `unique-${index}`}
-              data={item}
-              onSolve={handleSolve}
-            />
-          ))
-        )}
+      {paginated.map((item, index) => {
+        return (
+          <UniversalCard
+            key={item.id ?? item.new_passage_no ?? item.news_no ?? `unique-${index}`}
+            data={item}
+            onSolve={onSolve}
+          />
+        );
+      })}
       </div>
 
       <div className="pagination">
