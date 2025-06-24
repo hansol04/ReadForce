@@ -1,33 +1,28 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ChallengeStartModal from './ChallengeStartModal'; // 모달 컴포넌트 경로 확인
+import ChallengeStartModal from './ChallengeStartModal';
 import './challengepage.css';
 import api from '../../api/axiosInstance';
 
 const ChallengePage = () => {
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
   const [wrongQuestions, setWrongQuestions] = useState([]);
   const [top5Data, setTop5Data] = useState([]);
+  const [selectedLanguage, setSelectedLanguage] = useState('KOREAN');
   const debounceRef = useRef(null);
 
-  const [selectedCategory, setSelectedCategory] = useState({
-    label: '뉴스(한국어)',
-    type: 'NEWS',
-    language: 'KOREAN',
-    contentKey: 'korean_news',
-  });
+  const handleRankingClick = () => {
+    navigate('/ranking');
+  };
 
-  const categories = [
-    { label: '뉴스(한국어)', type: 'NEWS', language: 'KOREAN', contentKey: 'korean_news' },
-    { label: '뉴스(일본어)', type: 'NEWS', language: 'JAPANESE', contentKey: 'japanese_news' },
-    { label: '뉴스(영어)', type: 'NEWS', language: 'ENGLISH', contentKey: 'english_news' },
-    { label: '소설', type: 'LITERATURE', subType: 'NOVEL', contentKey: 'novel' },
-    { label: '동화', type: 'LITERATURE', subType: 'FAIRYTALE', contentKey: 'fairytale' },
-  ];
+  const handleStartChallenge = () => {
+    setShowModal(true);
+  };
 
-  const handleRankingClick = () => navigate('/ranking');
-  const handleSolveClick = (quizNo) => navigate(`/question/${quizNo}`);
-  const handleChallengeClick = () => navigate('/challenge-start');
+  const handleSolveClick = (quizNo) => {
+    navigate(`/question/${quizNo}`);
+  };
 
   useEffect(() => {
     const fetchWrongQuestions = async () => {
@@ -45,21 +40,15 @@ const ChallengePage = () => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       try {
-        let res;
-        if (selectedCategory.type === 'NEWS') {
-          res = await api.get(`/ranking/get-news-ranking?language=${selectedCategory.language}`);
-        } else {
-          res = await api.get(`/ranking/get-literature-ranking?type=${selectedCategory.subType}`);
-        }
+        const res = await api.get(`/ranking/get-news-ranking?language=${selectedLanguage}`);
         setTop5Data(res.data.slice(0, 5));
       } catch (err) {
-        console.error('TOP 5 랭킹 불러오기 실패:', err);
+        console.error('TOP 5 뉴스 랭킹 불러오기 실패:', err);
         setTop5Data([]);
       }
     }, 500);
-
     return () => clearTimeout(debounceRef.current);
-  }, [selectedCategory]);
+  }, [selectedLanguage]);
 
   return (
     <div className="page-container">
@@ -73,26 +62,28 @@ const ChallengePage = () => {
           <div className="grid-4x2">
             <div><div className="label">응시자 수</div><div className="number">20,180</div></div>
             <div><div className="label">총 문제</div><div className="number">100</div></div>
-            <div><div className="label">푼 문제</div><div className="number">23</div></div>
+            <div><div className="label">푸는 문제</div><div className="number">23</div></div>
             <div><div className="label">정답률</div><div className="number">74%</div></div>
           </div>
-          <button className="challenge-btn" onClick={handleChallengeClick}>문제 도전하기</button>
+          <button className="challenge-btn" onClick={handleStartChallenge}>
+            문제 도전하기
+          </button>
         </div>
 
         <div className="top5-box">
           <div className="top5-header">
-            <h3>주간 TOP 5</h3>
+            <h3>뉴스 주간 TOP 5</h3>
             <button className="ranking-more-btn" onClick={handleRankingClick}>＋</button>
           </div>
 
           <div className="top5-tabs">
-            {categories.map((cat) => (
+            {['KOREAN', 'JAPANESE', 'ENGLISH'].map((lang) => (
               <button
-                key={cat.label}
-                className={selectedCategory.label === cat.label ? 'active' : ''}
-                onClick={() => setSelectedCategory(cat)}
+                key={lang}
+                className={selectedLanguage === lang ? 'active' : ''}
+                onClick={() => setSelectedLanguage(lang)}
               >
-                {cat.label}
+                {lang === 'KOREAN' ? '한국' : lang === 'JAPANESE' ? '일본' : '미국'}
               </button>
             ))}
           </div>
@@ -104,14 +95,13 @@ const ChallengePage = () => {
                   {index + 1}
                 </span>
                 {user.nickname}
-                <span className="point">{user[selectedCategory.contentKey] ?? 0}p</span>
+                <span className="point">{user[`${selectedLanguage.toLowerCase()}_news`] ?? 0}p</span>
               </li>
             ))}
           </ol>
         </div>
       </div>
 
-      {/* 가장 많이 틀린 문제 */}
       <div className="wrong-section">
         <div className="wrong-header-row">
           <h3>가장 많이 틀린 문제</h3>
