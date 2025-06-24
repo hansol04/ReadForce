@@ -67,6 +67,25 @@ const AdminNews = () => {
         }
     };
 
+    // 문제 생성
+    const handleGenerateNewsQuiz = async () => {
+        if (!window.confirm("뉴스 퀴즈를 생성하시겠습니까?\n(뉴스에 해당 문제 없는 경우만 생성됩니다)")) return;
+
+        try {
+            const res = await fetchWithAuth("/admin/generate-creative-news-quiz", {
+                method: "POST"
+            });
+
+            if (!res.ok) throw new Error("뉴스 퀴즈 생성 실패");
+
+            const data = await res.json();
+            alert("뉴스 퀴즈 생성 완료: " + data.messageCode);
+        } catch (err) {
+            console.error(err);
+            alert("뉴스 퀴즈 생성에 실패했습니다.");
+        }
+    };
+
     return (
         <div style={{ padding: "24px" }}>
             <button onClick={() => navigate("/adminpage")} style={backbtn}>뒤로가기</button>
@@ -76,12 +95,7 @@ const AdminNews = () => {
                 </div>
                 <div style={ADMIN_BUTTONS_LIST}>
                     <button style={ADMIN_BUTTONS} onClick={handleGenerateNews}>뉴스 생성</button>
-                    <button
-                        style={ADMIN_BUTTONS}
-                        onClick={() => navigate("/adminpage/adminnews/adminnewsquizlist")}
-                    >
-                        뉴스 퀴즈 목록
-                    </button>
+                    <button style={ADMIN_BUTTONS} onClick={handleGenerateNewsQuiz}>뉴스 퀴즈 생성</button>
                 </div>
             </div>
             <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "16px" }}>

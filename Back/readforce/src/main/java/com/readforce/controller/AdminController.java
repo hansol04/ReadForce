@@ -1,8 +1,10 @@
 package com.readforce.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,7 +35,10 @@ import com.readforce.dto.NewsDto.NewsByAdmin;
 import com.readforce.dto.NewsDto.NewsQuizByAdmin;
 import com.readforce.dto.PointDto;
 import com.readforce.dto.PointDto.GetPoint;
+import com.readforce.entity.Member;
 import com.readforce.enums.MessageCode;
+import com.readforce.exception.ResourceNotFoundException;
+import com.readforce.repository.MemberRepository;
 import com.readforce.service.AdminService;
 import com.readforce.service.LiteratureService;
 import com.readforce.service.NewsService;
@@ -53,6 +58,7 @@ public class AdminController {
 	private final NewsService news_service;
 	private final LiteratureService literature_service;
 	private final AdminService admin_service;
+	private final MemberRepository member_repository; // 기찬스추가
 
 	// 회원 -------------------------------------------------------------------------
 	// 전체 회원 목록 조회(최신순)
@@ -114,6 +120,22 @@ public class AdminController {
 				MessageCode.MESSAGE_CODE, MessageCode.DELETE_MEMBER_SUCCESS
 		));
 		
+	}
+	
+	// 유저 정보 불러오기 - 기찬
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/get-user-info")
+	public ResponseEntity<MemberObjectByAdmin> getUserInfoByEmail(@RequestParam("email") String email) {
+	    Member member = member_repository.findByEmail(email)
+	        .orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND));
+
+	    MemberObjectByAdmin dto = new MemberObjectByAdmin();
+	    dto.setEmail(member.getEmail());
+	    dto.setNickname(member.getNickname());
+	    dto.setBirthday(member.getBirthday());
+	    dto.setStatus(member.getStatus());
+	    dto.setCreate_date(member.getCreate_date());
+	    return ResponseEntity.ok(dto);
 	}
 	
 	// 뉴스 관리 ---------------------------------------------------------------------
@@ -437,10 +459,14 @@ public class AdminController {
 			@RequestParam("email")
 			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
 			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
-			String email
+			String email,
+			@RequestParam("date")
+			@NotNull(message = "date")
+			LocalDate date
+			
 	){
 		
-		admin_service.addAttendance(email);
+		admin_service.addAttendance(email, date);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
 				MessageCode.MESSAGE_CODE, MessageCode.ADD_ATTENDANCE_SUCCESS
@@ -608,5 +634,17 @@ public class AdminController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(get_literature_quiz_attempt_list_by_email);
 		
+	}
+	
+	// 점수 수정 관련 - 김기찬
+	@PreAuthorize("hasRole('ADMIN')")
+	@PatchMapping("/increment-point")
+	public ResponseEntity<Map<String, String>> incrementPoint(
+	    @RequestBody @Valid PointDto.IncrementPoint dto
+	) {
+	    admin_service.incrementPoint(dto);
+	    return ResponseEntity.ok(Map.of(
+	        MessageCode.MESSAGE_CODE, MessageCode.UPDATE_POINT_SUCCESS
+	    ));
 	}
 }

@@ -83,6 +83,24 @@ const AdminLiteratureDetail = () => {
         }
     };
 
+    // 퀴즈 삭제
+    const handleDeleteQuiz = async (quizNo) => {
+        if (!window.confirm("정말 이 퀴즈를 삭제하시겠습니까?")) return;
+
+        try {
+            const res = await fetchWithAuth(`/admin/delete-literature-quiz?literature_quiz_no=${quizNo}`, {
+                method: "DELETE"
+            });
+            if (!res.ok) throw new Error("퀴즈 삭제 실패");
+
+            alert("퀴즈가 삭제되었습니다.");
+            setQuizzes(prev => prev.filter(q => q.literature_quiz_no !== quizNo));
+        } catch (err) {
+            console.error(err);
+            alert("퀴즈 삭제 중 오류 발생");
+        }
+    };
+
     return (
         <div style={{ padding: "24px" }}>
             <button onClick={() => navigate("/adminpage/adminliterature")} style={backbtn}>뒤로가기</button>
@@ -146,7 +164,22 @@ const AdminLiteratureDetail = () => {
             <h3 style={{ marginTop: "24px" }}>퀴즈</h3>
             <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
                 {quizzes.map(q => (
-                    <li key={q.literature_quiz_no} style={{ marginBottom: "20px", padding: "12px", border: "1px solid #ccc", borderRadius: "8px" }}>
+                    <li key={q.literature_quiz_no} style={{ marginBottom: "20px", padding: "12px", border: "1px solid #ccc", borderRadius: "8px", position: "relative" }}>
+                        <button
+                            onClick={() => handleDeleteQuiz(q.literature_quiz_no)}
+                            style={{
+                                position: "absolute",
+                                top: "8px",
+                                right: "8px",
+                                backgroundColor: "white",
+                                color: "red",
+                                border: "none",
+                                fontSize: "12px",
+                                cursor: "pointer"
+                            }}
+                        >
+                            삭제
+                        </button>
                         <p><strong>문제:</strong> {q.question_text}</p>
                         <ol type="A">
                             <li>{q.choice1}</li>

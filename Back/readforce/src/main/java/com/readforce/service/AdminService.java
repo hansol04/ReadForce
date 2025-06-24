@@ -490,7 +490,38 @@ public class AdminService {
 		
 	}
 
-	// 사용자가 풀은 뉴스 문제 저장
+//	// 사용자가 풀은 뉴스 문제 저장
+//	@Transactional
+//	public void saveMemberSolvedNewsQuiz(AddNewsQuizAttempt add_news_quiz_attempt) {
+//		
+//		// 사용자가 정답을 입력했는지 확인
+//		NewsQuiz news_quiz = news_quiz_repository.findById(add_news_quiz_attempt.getNews_quiz_no())
+//				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.NEWS_QUIZ_NOT_FOUND));
+//		
+//		boolean is_correct = false;
+//		
+//		if(news_quiz.getCorrect_answer_index() == add_news_quiz_attempt.getSelected_option_index()) {
+//			
+//			is_correct = true;
+//			
+//		}
+//		
+//		// 복합키 생성
+//		NewsQuizAttemptId news_quiz_attempt_id = new NewsQuizAttemptId();
+//		news_quiz_attempt_id.setEmail(add_news_quiz_attempt.getEmail());
+//		news_quiz_attempt_id.setNews_quiz_no(add_news_quiz_attempt.getNews_quiz_no());
+//		
+//		// 엔티티 생성
+//		NewsQuizAttempt news_quiz_attempt = new NewsQuizAttempt();
+//		news_quiz_attempt.setNews_quiz_attempt_id(news_quiz_attempt_id);
+//		news_quiz_attempt.setIs_correct(is_correct);
+//		news_quiz_attempt.setSelected_option_index(add_news_quiz_attempt.getSelected_option_index());
+//		
+//		// 저장
+//		news_quiz_attempt_repository.save(news_quiz_attempt);
+//		
+//	}
+// 제가 만들ㄹㄷㅈ러ㅕㅈㄷ 이렇게 바꾸니까 됩니당
 	@Transactional
 	public void saveMemberSolvedNewsQuiz(AddNewsQuizAttempt add_news_quiz_attempt) {
 		
@@ -868,7 +899,7 @@ public class AdminService {
 		get_point.setEmail(point.getEmail());
 		get_point.setTotal(point.getTotal());
 		get_point.setEnglish_news(point.getEnglish_news());
-		get_point.setJapanese_news(point.getEnglish_news());
+		get_point.setJapanese_news(point.getJapanese_news());
 		get_point.setKorean_news(point.getKorean_news());
 		get_point.setNovel(point.getNovel());
 		get_point.setFairytale(point.getFairytale());
@@ -908,7 +939,26 @@ public class AdminService {
 
 	}
 
-	
+	// 포인트 수정 - 김기찬
+	@Transactional
+	public void incrementPoint(PointDto.IncrementPoint dto) {
+	    Point point = point_repository.findByEmail(dto.getEmail())
+	        .orElseThrow(() -> new ResourceNotFoundException(MessageCode.POINT_NOT_FOUND));
+
+	    switch (dto.getCategory()) {
+	        case "korean_news" -> point.setKorean_news(point.getKorean_news() + dto.getDelta());
+	        case "english_news" -> point.setEnglish_news(point.getEnglish_news() + dto.getDelta());
+	        case "japanese_news" -> point.setJapanese_news(point.getJapanese_news() + dto.getDelta());
+	        case "novel" -> point.setNovel(point.getNovel() + dto.getDelta());
+	        case "fairytale" -> point.setFairytale(point.getFairytale() + dto.getDelta());
+	        default -> throw new IllegalArgumentException("지원하지 않는 카테고리입니다: " + dto.getCategory());
+	    }
+
+	    // 총 점수도 갱신
+	    double total = point.getKorean_news() + point.getEnglish_news()
+	              + point.getJapanese_news() + point.getNovel() + point.getFairytale();
+	    point.setTotal(total);
+	}
 
 
 	
