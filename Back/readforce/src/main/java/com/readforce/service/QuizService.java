@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.readforce.dto.MemberDto.MemberAttemptedQuiz;
 import com.readforce.dto.MemberDto.MemberIncorrectQuiz;
+import com.readforce.dto.NewsDto.GetNewsQuiz;
 import com.readforce.dto.QuizDto.GetQuiz;
 import com.readforce.dto.QuizDto.IncorrectQuiz;
 import com.readforce.entity.LiteratureQuiz;
@@ -168,7 +169,7 @@ public class QuizService {
 
 	// 뉴스 도전 문제 가져오기
 	@Transactional(readOnly = true)
-	public List<NewsQuiz> getChallengeQuizWithNewsQuiz(String language) {
+	public List<GetNewsQuiz> getChallengeQuizWithNewsQuiz(String language) {
 		
 		// 뉴스 초급과 언어에 해당하는 뉴스 퀴즈 번호 7개 랜덤으로 가져오기
 		List<Long> beginner_news_quiz_no_list = getRandomQuizIdList(
@@ -199,7 +200,30 @@ public class QuizService {
 		// 합친 뉴스 퀴즈 번호에 해당하는 뉴스 퀴즈 가져오기
 		List<NewsQuiz> combined_news_quiz_list = news_quiz_repository.findAllById(combined_news_quiz_no_list);
 		
-		return combined_news_quiz_list;
+		// DTO에 넣기
+		List<GetNewsQuiz> get_news_quiz_list = new ArrayList<>();
+		
+		for(NewsQuiz news_quiz : combined_news_quiz_list) {
+
+			GetNewsQuiz get_news_quiz = new GetNewsQuiz();
+			get_news_quiz.setNews_quiz_no(news_quiz.getNews_quiz_no());
+			get_news_quiz.setQuestion_text(news_quiz.getQuestion_text());
+			get_news_quiz.setTitle(news_quiz.getNews().getTitle());
+			get_news_quiz.setChoice1(news_quiz.getChoice1());
+			get_news_quiz.setChoice2(news_quiz.getChoice2());
+			get_news_quiz.setChoice3(news_quiz.getChoice3());
+			get_news_quiz.setChoice4(news_quiz.getChoice4());
+			get_news_quiz.setCorrect_answer_index(news_quiz.getCorrect_answer_index());
+			get_news_quiz.setExplanation(news_quiz.getExplanation());
+			get_news_quiz.setLevel(news_quiz.getNews().getLevel());
+			get_news_quiz.setScore(news_quiz.getScore());
+			get_news_quiz.setNews_no(news_quiz.getNews_no());
+			
+			get_news_quiz_list.add(get_news_quiz);
+
+		}
+
+		return get_news_quiz_list;
 
 	}
 

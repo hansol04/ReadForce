@@ -7,6 +7,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import com.readforce.enums.Classification;
+import com.readforce.enums.NewsRelate;
 import com.readforce.enums.Prefix;
 
 import lombok.RequiredArgsConstructor;
@@ -70,6 +72,24 @@ public class RateLimitingService {
 		
 	}
 	
+	// 일일 도전과제 응시 횟수 제한
+	public void checkDailyChallengeLimit(String email, String classification, String type, String language) {
+		
+		// 뉴스
+		if(classification.equals(Classification.NEWS.toString())) {
+			
+			String key = Prefix.CHALLENGE_LIMIT.getName() + email + ":" + classification + ":" + language;
+			
+			ValueOperations<String, String> operations = redis_template.opsForValue();
+			
+			// 영어
+			if(language.equals(NewsRelate.Language.ENGLISH)) {
+				
+			}
+			
+		}
+		
+	}
 	
 	
 }

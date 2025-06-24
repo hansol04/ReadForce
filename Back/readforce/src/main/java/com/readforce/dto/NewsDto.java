@@ -58,6 +58,10 @@ public class NewsDto {
 		private Double score;
 
 		private Long news_no;
+		
+		private String title;
+		
+		private String level;
 
 	}	
 	
