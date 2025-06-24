@@ -353,24 +353,7 @@ public class AdminController {
 		
 	}
 	
-	// 뉴스 퀴즈 풀이 기록 관리 ------------------------------------------
-	// 이메일에 해당하는 뉴스 퀴즈 풀이 기록 가져오기(최신순)
-	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/get-news-quiz-attempt-list-by-email")
-	public ResponseEntity<List<GetNewsQuizAttemptByEmail>> getNewsQuizAttempListtByEmail(
-			@RequestParam("email")
-			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
-			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
-			String email
-	){
-		
-		List<GetNewsQuizAttemptByEmail> get_new_quiz_attempt_by_email_list = admin_service.getNewsQuizAttempListtByEmail(email);
-		
-		return ResponseEntity.status(HttpStatus.OK).body(get_new_quiz_attempt_by_email_list);
-		
-	}
-	
-	
+	// 뉴스 퀴즈 풀이 기록 관리 -----------------------------------------
 	// 뉴스 퀴즈 풀이 기록 추가
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/add-news-quiz-attempt")
@@ -412,24 +395,7 @@ public class AdminController {
 	
 	
 	// 문학 퀴즈 풀이 기록 관리 ------------------------------------------------
-	// 이메일에 해당하는 문학 퀴즈 풀이 기록 가져오기(최신순)
-	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/get-literature-quiz-attempt-list-by-email")
-	public ResponseEntity<List<GetLiteratureQuizAttemptListByEmail>> getLiteratureQuizAttemptListByEmail(
-			@RequestParam("email")
-			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
-			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
-			String email
-	){
-		
-		List<GetLiteratureQuizAttemptListByEmail> get_literature_quiz_attempt_list_by_email = 
-				admin_service.getLiteratureQuizAttemptListByEmail(email);
-		
-		return ResponseEntity.status(HttpStatus.OK).body(get_literature_quiz_attempt_list_by_email);
-		
-	}
-	
-	// 문학 퀴즈 풀이 기록 추가
+    // 문학 퀴즈 풀이 기록 추가
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/add-literature-quiz-attempt")
 	public ResponseEntity<Map<String, String>> addLiteratureQuizAttempt(
@@ -582,6 +548,85 @@ public class AdminController {
 		
 	}
 	
+	// 회원 관련 정보 불러오기
+	// 회원 정보 불러오기
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/get-member-info-object")
+	public ResponseEntity<MemberObjectByAdmin> getMemberInfoObject(
+			@RequestParam("email")
+			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+			String email
+	){
+		
+		MemberObjectByAdmin member_object_by_admin = admin_service.getMemberInfoObject(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(member_object_by_admin);
+		
+	}
 	
+	// 회원 출석 불러오기
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/get-member-attendance-list")
+	public ResponseEntity<List<GetAttendance>> getMemberAttendanceList(
+			@RequestParam("email")
+			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+			String email
+	){
+		
+		List<GetAttendance> get_attendance_list = admin_service.getMemberAttendanceList(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(get_attendance_list);
+		
+	}
 	
+	// 회원 점수 불러오기
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/get-member-point-object")
+	public ResponseEntity<GetPoint> getMemberPointObject(
+			@RequestParam("email")
+			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+			String email
+	){
+		
+		GetPoint get_point = admin_service.getMemberPointObject(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(get_point);
+		
+	}
+	
+	// 회원 뉴스 문제 기록 불러오기(최신순)
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/get-member-news-quiz-attempt-list")
+	public ResponseEntity<List<GetNewsQuizAttemptByEmail>> getMemberNewsQuizAttemptList(
+			@RequestParam("email")
+			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+			String email
+	){
+		
+		List<GetNewsQuizAttemptByEmail> get_new_quiz_attempt_by_email_list = admin_service.getNewsQuizAttempListtByEmail(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(get_new_quiz_attempt_by_email_list);
+		
+	}
+	
+	// 회원 문학 문제 기록 불러오기(최신순)
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/get-member-literature-quiz-attempt-list")
+	public ResponseEntity<List<GetLiteratureQuizAttemptListByEmail>> getMemberLiteratureQuizAttemptList(
+			@RequestParam("email")
+			@NotBlank(message = MessageCode.EMAIL_NOT_BLANK)
+			@Email(message = MessageCode.EMAIL_PATTERN_INVALID)
+			String email
+	){
+		
+		List<GetLiteratureQuizAttemptListByEmail> get_literature_quiz_attempt_list_by_email = 
+				admin_service.getLiteratureQuizAttemptListByEmail(email);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(get_literature_quiz_attempt_list_by_email);
+		
+	}
 }

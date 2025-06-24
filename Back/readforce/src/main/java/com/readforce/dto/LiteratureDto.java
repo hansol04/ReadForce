@@ -62,7 +62,43 @@ public class LiteratureDto {
 
 		private Long literature_no;
 
-		private Long literature_paragraph_no;	
+		private Long literature_paragraph_no;
+		
+	}
+	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class GetChallengeLiteratureQuiz{
+		
+		private Long literature_quiz_no;
+
+		private String question_text;
+
+		private String choice1;
+
+		private String choice2;
+
+		private String choice3;
+
+		private String choice4;
+
+		private Integer correct_answer_index;
+
+		private String explanation;
+
+		private Double score;
+
+		private Long literature_no;
+
+		private Long literature_paragraph_no;
+		
+		private String title;
+		
+		private String level;
+		
+		private String content;
 		
 	}
 	

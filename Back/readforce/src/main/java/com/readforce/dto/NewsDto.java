@@ -65,6 +65,40 @@ public class NewsDto {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
+	public static class GetChallengeNewsQuiz{
+
+		private Long news_quiz_no;
+
+		private String question_text;
+
+		private String choice1;
+
+		private String choice2;
+
+		private String choice3;
+
+		private String choice4;
+
+		private Integer correct_answer_index;
+
+		private String explanation;
+
+		private Double score;
+
+		private Long news_no;
+		
+		private String title;
+		
+		private String level;
+		
+		private String content;
+
+	}
+	
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class SaveMemberSolvedNewsQuiz{
 		
 		@NotNull(message = MessageCode.NEWS_QUIZ_NO_NOT_NULL)
