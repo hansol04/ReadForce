@@ -53,7 +53,7 @@ const AdminPage = () => {
     const handleDelete = async (email) => {
         if (!window.confirm("정말로 이 회원을 삭제하시겠습니까?")) return;
         try {
-            const res = await fetchWithAuth(`/admin/delete-member?email=${email}`, {
+            const res = await fetchWithAuth(`/admin/delete-member-by-email?email=${email}`, {
                 method: "DELETE"
             });
             if (!res.ok) throw new Error("삭제 실패");
