@@ -11,6 +11,7 @@ import com.readforce.dto.NewsDto.GetNews;
 import com.readforce.dto.NewsDto.GetNewsQuiz;
 import com.readforce.dto.NewsDto.ProficiencyTestItem;
 import com.readforce.dto.NewsDto.SaveMemberSolvedNewsQuiz;
+import com.readforce.entity.Member;
 import com.readforce.entity.News;
 import com.readforce.entity.NewsQuiz;
 import com.readforce.entity.NewsQuizAttempt;
@@ -19,9 +20,11 @@ import com.readforce.enums.MessageCode;
 import com.readforce.enums.NewsRelate;
 import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.id.NewsQuizAttemptId;
+import com.readforce.repository.MemberRepository;
 import com.readforce.repository.NewsQuizAttemptRepository;
 import com.readforce.repository.NewsQuizRepository;
 import com.readforce.repository.NewsRepository;
+import com.readforce.enums.Status;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +38,7 @@ public class NewsService {
 	private final NewsQuizRepository news_quiz_repository;
 	private final GeminiService gemini_service;
 	private final NewsQuizAttemptRepository news_quiz_attempt_repository;
+	private final MemberRepository member_repository;
 
 	// News -> GetNews 변환
 	private GetNews transformEntity(News news) {
@@ -341,34 +345,69 @@ public class NewsService {
 	}
 
 	// 사용자가 푼 뉴스 문제 저장
+//	@Transactional
+//	public void saveMemberSolvedNewsQuiz(SaveMemberSolvedNewsQuiz save_member_solved_news_quiz, String email) {
+//		
+//		// 사용자가 정답을 입력했는지 확인
+//		NewsQuiz news_quiz = news_quiz_repository.findById(save_member_solved_news_quiz.getNews_quiz_no())
+//				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.NEWS_QUIZ_NOT_FOUND));
+//		
+//		boolean is_correct = false;
+//		
+//		if(news_quiz.getCorrect_answer_index() == save_member_solved_news_quiz.getSelected_option_index()) {
+//			
+//			is_correct = true;
+//			
+//		}
+//		
+//		// 복합키 생성
+//		NewsQuizAttemptId news_quiz_attempt_id = new NewsQuizAttemptId();
+//		news_quiz_attempt_id.setEmail(email);
+//		news_quiz_attempt_id.setNews_quiz_no(save_member_solved_news_quiz.getNews_quiz_no());
+//		
+//		// Member 엔티티 조회
+//		Member member = member_repository.findByEmailAndStatus(email, Status.ACTIVE)
+//			    .orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND));
+//
+//		
+//		// 사용자가 푼 뉴스 문제 엔티티 생성
+//		NewsQuizAttempt news_quiz_attempt = new NewsQuizAttempt();
+//		news_quiz_attempt.setNews_quiz_attempt_id(news_quiz_attempt_id);
+//	    news_quiz_attempt.setMember(member); // 김기찬이 추가
+//		news_quiz_attempt.setIs_correct(is_correct);
+//		news_quiz_attempt.setSelected_option_index(save_member_solved_news_quiz.getSelected_option_index());
+//		
+//		news_quiz_attempt_repository.save(news_quiz_attempt);
+//		
+//	}
+	// 사용자가 푼 뉴스 문제 저장
 	@Transactional
-	public void saveMemberSolvedNewsQuiz(SaveMemberSolvedNewsQuiz save_member_solved_news_quiz, String email) {
+	public void saveMemberSolvedNewsQuiz(SaveMemberSolvedNewsQuiz dto, String email) {
 		
-		// 사용자가 정답을 입력했는지 확인
-		NewsQuiz news_quiz = news_quiz_repository.findById(save_member_solved_news_quiz.getNews_quiz_no())
+		// 퀴즈 정보 조회
+		NewsQuiz news_quiz = news_quiz_repository.findById(dto.getNews_quiz_no())
 				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.NEWS_QUIZ_NOT_FOUND));
-		
-		boolean is_correct = false;
-		
-		if(news_quiz.getCorrect_answer_index() == save_member_solved_news_quiz.getSelected_option_index()) {
-			
-			is_correct = true;
-			
-		}
-		
+
+		boolean is_correct = news_quiz.getCorrect_answer_index() == dto.getSelected_option_index();
+
 		// 복합키 생성
-		NewsQuizAttemptId news_quiz_attempt_id = new NewsQuizAttemptId();
-		news_quiz_attempt_id.setEmail(email);
-		news_quiz_attempt_id.setNews_quiz_no(save_member_solved_news_quiz.getNews_quiz_no());
-		
-		// 사용자가 푼 뉴스 문제 엔티티 생성
-		NewsQuizAttempt news_quiz_attempt = new NewsQuizAttempt();
-		news_quiz_attempt.setNews_quiz_attempt_id(news_quiz_attempt_id);
-		news_quiz_attempt.setIs_correct(is_correct);
-		news_quiz_attempt.setSelected_option_index(save_member_solved_news_quiz.getSelected_option_index());
-		
-		news_quiz_attempt_repository.save(news_quiz_attempt);
-		
+		NewsQuizAttemptId id = new NewsQuizAttemptId();
+		id.setEmail(email);
+		id.setNews_quiz_no(dto.getNews_quiz_no());
+
+		// Member 조회
+		Member member = member_repository.findByEmailAndStatus(email, Status.ACTIVE)
+				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND));
+
+		// 저장할 엔티티 구성
+		NewsQuizAttempt attempt = new NewsQuizAttempt();
+		attempt.setNews_quiz_attempt_id(id);
+		attempt.setMember(member); // 필요
+		attempt.setNews_quiz(news_quiz); // 필요
+		attempt.setIs_correct(is_correct);
+		attempt.setSelected_option_index(dto.getSelected_option_index());
+
+		news_quiz_attempt_repository.save(attempt);
 	}
 
 	// 사용자가 풀은 뉴스 기사 문제 삭제
