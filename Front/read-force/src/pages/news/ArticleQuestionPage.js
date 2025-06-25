@@ -7,6 +7,7 @@ const ArticleQuestionPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+
   const [quiz, setQuiz] = useState(null);
   const [article, setArticle] = useState(null);
   const [selected, setSelected] = useState(null);
@@ -28,19 +29,16 @@ const ArticleQuestionPage = () => {
 
     setArticle(loadedArticle);
 
-    console.log("🔍 요청할 news_no:", loadedArticle.news_no);  // 디버그용 로그
-
     api.get('/news/get-news-quiz-object', {
       params: { news_no: loadedArticle.news_no }
     })
-    .then(res => {
-      console.log("✅ 퀴즈 로딩 성공:", res.data);
-      setQuiz(res.data);
-    })
-    .catch(err => {
-      console.error("❌ 퀴즈 로딩 실패:", err);
-      setError("퀴즈 로딩 중 오류 발생");
-    });
+      .then(res => {
+        setQuiz(res.data);
+      })
+      .catch(err => {
+        console.error("❌ 퀴즈 로딩 실패:", err);
+        setError("퀴즈 로딩 중 오류 발생");
+      });
   }, [id, location.state]);
 
   const handleSubmit = () => {
@@ -65,20 +63,26 @@ const ArticleQuestionPage = () => {
         <p className="ArticleQuestion-content">{article.content}</p>
       </div>
       <div className="ArticleQuestion-quiz">
-        <h4>💡 문제</h4>
-        <p>{quiz.question_text}</p>
+        <h4 className="ArticleQuestion-quiz-title">💡 문제</h4>
+        <p className="ArticleQuestion-quiz-question">{quiz.question_text}</p>
         <div className="ArticleQuestion-options">
           {[quiz.choice1, quiz.choice2, quiz.choice3, quiz.choice4].map((opt, idx) => (
             <button
               key={idx}
-              className={selected === idx ? 'selected' : ''}
+              className={`ArticleQuestion-option ${selected === idx ? 'selected' : ''}`}
               onClick={() => setSelected(idx)}
             >
               {String.fromCharCode(65 + idx)}. {opt}
             </button>
           ))}
         </div>
-        <button disabled={selected === null} onClick={handleSubmit}>정답 제출</button>
+        <button
+          className="ArticleQuestion-submit"
+          disabled={selected === null}
+          onClick={handleSubmit}
+        >
+          정답 제출
+        </button>
       </div>
     </div>
   );
