@@ -47,6 +47,7 @@ public class AttendanceService {
 			Attendance attendance = new Attendance();
 			attendance.setMember(member);
 			attendance.setEmail(email);
+			attendance.setCreated_date(LocalDateTime.now());
 			
 			attendance_repository.save(attendance);
 			

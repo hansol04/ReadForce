@@ -198,6 +198,8 @@ public class LiteratureService {
 		// 문학 문단에 해당하는 문제가 없는 문학 문단 리스트 조회
 		List<LiteratureParagraph> no_quiz_literature_paragraph_list = literature_paragraph_repository.findLiteratureParagraphListWithoutLiteratureQuiz();
 		
+		log.warn("1");
+		
 		int count = 0;
 		
 		for(LiteratureParagraph literature_paragraph : no_quiz_literature_paragraph_list) {

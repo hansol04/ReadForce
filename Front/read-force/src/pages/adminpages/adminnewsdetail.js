@@ -29,9 +29,26 @@ const AdminNewsDetail = () => {
 
     if (!news) return <div>잘못된 접근입니다.</div>;
 
+    // 문제 삭제
+    const handleDeleteQuiz = async (quizNo) => {
+        if (!window.confirm("정말 삭제하시겠습니까?")) return;
+
+        try {
+            const res = await fetchWithAuth(`/admin/delete-news-quiz?news_quiz_no=${quizNo}`, {
+                method: 'DELETE'
+            });
+
+            if (!res.ok) throw new Error("삭제 실패");
+            setQuizList(prev => prev.filter(q => q.news_quiz_no !== quizNo));
+        } catch (err) {
+            console.error(err);
+            alert("뉴스 퀴즈 삭제에 실패했습니다.");
+        }
+    };
+
     return (
         <div style={{ padding: "24px" }}>
-            <button onClick={() => navigate("/adminpage/adminnews")}style={backbtn}>뒤로가기</button>
+            <button onClick={() => navigate("/adminpage/adminnews")} style={backbtn}>뒤로가기</button>
             <h2>{news.title}</h2>
             <p><strong>작성일:</strong> {new Date(news.created_date).toLocaleDateString()}</p>
             <p><strong>카테고리:</strong> {news.category}</p>
@@ -56,6 +73,18 @@ const AdminNewsDetail = () => {
                             <div><strong>정답:</strong> {q.correct_answer_index + 1}번</div>
                             <div><strong>해설:</strong> {q.explanation}</div>
                             <div><strong>배점:</strong> {q.score}</div>
+                            <div style={{ display: "flex", justifyContent: "space-between", position: "relative" }}>
+                                <div>
+                                    <strong>퀴즈 생성일:</strong> {new Date(q.created_date).toLocaleDateString()}
+                                </div>
+                                <div>
+                                    <button
+                                        onClick={() => handleDeleteQuiz(q.news_quiz_no)}
+                                        style={{ color: "red", border: "none", background: "none", cursor: "pointer" }}
+                                    >삭제
+                                    </button>
+                                </div>
+                            </div>
                         </li>
                     ))}
                 </ul>

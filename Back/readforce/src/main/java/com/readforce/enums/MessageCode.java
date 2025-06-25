@@ -189,5 +189,6 @@ public final class MessageCode {
 	public static final String ENGLISH_NEWS_CHALLENGE_ALREADY_TAKEN_TODAY = "SP0036";
 	public static final String NOVEL_CHALLENGE_ALREADY_TAKEN_TODAY = "SP0037";
 	public static final String FAIRYTALE_CHALLENGE_ALREADY_TAKEN_TODAY = "SP0038";
+	public static final String ATTENDANCE_DATE_DUPLICATE = "SP0039";
 	
 }
