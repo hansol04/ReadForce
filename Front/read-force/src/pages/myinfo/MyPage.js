@@ -9,11 +9,12 @@ import { useNavigate } from 'react-router-dom';
 const MyPage = () => {
   const [nickname, setNickname] = useState('');
   const isLoggedIn = !!localStorage.getItem("token");
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
   const [attendanceDates, setAttendanceDates] = useState([]);
   const [profileImageUrl, setProfileImageUrl] = useState(null);
   const [wrongQuestions, setWrongQuestions] = useState([]);
   const [summary, setSummary] = useState({ total: 0, monthlyRate: 0, streak: 0 });
+  const [recentSolved, setRecentSolved] = useState([]);
 
   const navigate = useNavigate();
 
@@ -85,8 +86,24 @@ const MyPage = () => {
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
-          setWrongQuestions(data); // 전체 객체 저장
+          setWrongQuestions(data);
         }
+      })
+      .catch(err => {
+        console.error("틀린 문제 불러오기 실패:", err);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetchWithAuth('/member/get-member-solved-quiz-list-10')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setRecentSolved(data);
+        }
+      })
+      .catch(err => {
+        console.error("최근 푼 문제 불러오기 실패:", err);
       });
   }, []);
 
@@ -94,23 +111,17 @@ const MyPage = () => {
     navigate(`/question/${quiz.quiz_no}`, { state: { article: { news_no: quiz.quiz_no } } });
   };
 
-  const recentHistory = [
-    { date: '2025.05.15', level: '중급', result: '2 / 3' },
-    { date: '2025.05.15', level: '고급', result: '1 / 3' },
-    { date: '2025.05.14', level: '중급', result: '2 / 3' },
-  ];
-
   return (
     <div className="mypage-container">
       <div className="top-section">
         <div className="left-top">
           <img src={profileImageUrl} alt="프로필" className="profile-img" />
-          <div>
-            <h3>{nickname} 님</h3>
-            <span className="badge">중급</span>
+          <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
+            <div><h3>{nickname} 님</h3></div>
+            <div><span className="badge">중급</span></div>
           </div>
-          <button className='settings-button' onClick={() => setShowModal(true)}>⚙️</button>
-          {showModal && <EditProfileModal onClose={() => setShowModal(false)} />}
+          {/* <button className='settings-button' onClick={() => setShowModal(true)}>⚙️</button>
+          {showModal && <EditProfileModal onClose={() => setShowModal(false)} />} */}
         </div>
       </div>
 
@@ -152,9 +163,15 @@ const MyPage = () => {
       <div className="history-section">
         <h4>최근 문제 풀이 기록</h4>
         <ul>
-          {recentHistory.map((item, i) => (
-            <li key={i}>{item.date} / {item.level} / {item.result}</li>
-          ))}
+          {recentSolved.length === 0 ? (
+            <li>풀이 기록이 없습니다.</li>
+          ) : (
+            recentSolved.map((item, i) => (
+              <li key={i}>
+                {item.attempt_date?.slice(0, 10)} / {item.level} / {item.correct_count} / {item.total_count}
+              </li>
+            ))
+          )}
         </ul>
       </div>
 
@@ -166,7 +183,8 @@ const MyPage = () => {
           ) : (
             wrongQuestions.map((quiz, i) => (
               <li key={i}>
-                {quiz.question_text} <button onClick={() => handleRetry(quiz)}>다시풀기</button>
+                {quiz.question_text}
+                <button onClick={() => handleRetry(quiz)}>다시풀기</button>
               </li>
             ))
           )}

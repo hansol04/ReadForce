@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import api from '../../api/axiosInstance';
 import './css/ArticleQuestionPage.css';
+import fetchWithAuth from '../../utils/fetchWithAuth';
 
 const ArticleQuestionPage = () => {
   const { id } = useParams();
@@ -33,25 +34,55 @@ const ArticleQuestionPage = () => {
     api.get('/news/get-news-quiz-object', {
       params: { news_no: loadedArticle.news_no }
     })
-    .then(res => {
-      console.log("✅ 퀴즈 로딩 성공:", res.data);
-      setQuiz(res.data);
-    })
-    .catch(err => {
-      console.error("❌ 퀴즈 로딩 실패:", err);
-      setError("퀴즈 로딩 중 오류 발생");
-    });
+      .then(res => {
+        console.log("✅ 퀴즈 로딩 성공:", res.data);
+        setQuiz(res.data);
+      })
+      .catch(err => {
+        console.error("❌ 퀴즈 로딩 실패:", err);
+        setError("퀴즈 로딩 중 오류 발생");
+      });
   }, [id, location.state]);
 
-  const handleSubmit = () => {
+  // const handleSubmit = () => {
+  //   if (selected === null) return;
+  //   navigate('/question-result', {
+  //     state: {
+  //       isCorrect: selected === quiz.correct_answer_index,
+  //       explanation: quiz.explanation,
+  //       language: article.language || '한국어',
+  //     },
+  //   });
+  // };
+  const handleSubmit = async () => {
     if (selected === null) return;
-    navigate('/question-result', {
-      state: {
-        isCorrect: selected === quiz.correct_answer_index,
-        explanation: quiz.explanation,
-        language: article.language || '한국어',
-      },
-    });
+
+    try {
+      const res = await fetchWithAuth('/news/save-member-solved-news-quiz', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          news_quiz_no: quiz.news_quiz_no,
+          selected_option_index: selected,
+        }),
+      });
+
+      if (!res.ok) throw new Error('서버 응답 오류');
+
+      // 저장 성공 시 결과 페이지로 이동
+      navigate('/question-result', {
+        state: {
+          isCorrect: selected === quiz.correct_answer_index,
+          explanation: quiz.explanation,
+          language: article.language || '한국어',
+        },
+      });
+    } catch (err) {
+      console.error('퀴즈 저장 실패:', err);
+      alert('퀴즈 결과 저장 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
   };
 
   if (error) return <div className="ArticleQuestion-container">{error}</div>;
