@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import Main from "./pages/main";
 import MyPage from './pages/myinfo/MyPage';
@@ -53,6 +54,42 @@ import LiteratureQuizPage from './pages/literature/LiteratureQuestionPage'
 import LiteratureResultPage from './pages/literature/LiteratureResultPage';
 
 function App() {
+  // 앱 전역 refresh-token 적용 작업중
+  // useEffect(() => {
+  //   const refreshToken = localStorage.getItem('refresh_token');
+  //   if (!refreshToken) {
+  //     console.log("❌ 리프레시 토큰 없음. 리프레시 주기 시작 안함");
+  //     return
+  //   };
+
+  //   console.log("🔁 리프레시 주기 시작됨");
+
+  //   const interval = setInterval(async () => {
+  //     try {
+  //       const res = await fetch('/auth/reissue-refresh-token', {
+  //         method: 'POST',
+  //         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  //         body: `refresh_token=${encodeURIComponent(refreshToken)}`,
+  //       });
+
+  //       if (res.ok) {
+  //         const data = await res.json();
+  //         localStorage.setItem('token', data.ACCESS_TOKEN);
+  //         localStorage.setItem('refresh_token', data.REFRESH_TOKEN);
+  //         console.log('🔁 토큰 갱신 완료');
+  //       } else {
+  //         console.warn('❌ 리프레시 실패. 로그아웃 처리');
+  //         localStorage.clear();
+  //         window.location.href = '/login';
+  //       }
+  //     } catch (err) {
+  //       console.error('리프레시 요청 에러:', err);
+  //     }
+  //   }, 1000 * 60 * 4); // 4분마다 실행
+
+  //   return () => clearInterval(interval); // cleanup
+  // }, []);
+
   return (
     <Router>
       <Routes>

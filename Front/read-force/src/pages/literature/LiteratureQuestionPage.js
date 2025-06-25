@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../api/axiosInstance';
+// import api from '../../api/axiosInstance';
 import fetchWithAuth from '../../utils/fetchWithAuth';
 import { useParams, useNavigate } from 'react-router-dom';
 import './css/LiteratureQuestionPage.css';
@@ -12,24 +12,48 @@ const LiteratureQuizPage = () => {
   const [selected, setSelected] = useState(null);
   const [notFound, setNotFound] = useState(false);
 
+  // useEffect(() => {
+  //   api.get('/literature/get-literature-quiz-object', {
+  //     params: {
+  //       literature_paragraph_no: quizId,
+  //       literature_no: 3,
+  //     },
+  //   })
+  //     .then((res) => {
+  //       if (!res.data || !res.data.question_text) {
+  //         setNotFound(true);
+  //       } else {
+  //         setQuiz(res.data);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error("퀴즈 데이터 불러오기 실패", err);
+  //       setNotFound(true);
+  //     });
+  // }, [quizId]);
+
+  // refresh-token 적용
   useEffect(() => {
-    api.get('/literature/get-literature-quiz-object', {
-      params: {
-        literature_paragraph_no: quizId,
-        literature_no: 3,
-      },
-    })
-      .then((res) => {
-        if (!res.data || !res.data.question_text) {
+    const fetchQuiz = async () => {
+      try {
+        const response = await fetchWithAuth(
+          `/literature/get-literature-quiz-object?literature_paragraph_no=${quizId}&literature_no=3`
+        );
+
+        const data = await response.json();
+
+        if (!data || !data.question_text) {
           setNotFound(true);
         } else {
-          setQuiz(res.data);
+          setQuiz(data);
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("퀴즈 데이터 불러오기 실패", err);
         setNotFound(true);
-      });
+      }
+    };
+
+    fetchQuiz();
   }, [quizId]);
 
   if (notFound) {
