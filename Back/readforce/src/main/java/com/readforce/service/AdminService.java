@@ -152,7 +152,19 @@ public class AdminService {
 	// 회원 삭제
 	@Transactional
 	public void deleteMemberByEmail(String email) {
+	    // 1. 뉴스 퀴즈 풀이 기록 삭제
+		news_quiz_attempt_repository.deleteByEmail(email);
+
+	    // 2. 문학 퀴즈 풀이 기록 삭제
+		literature_quiz_attempt_repository.deleteByEmail(email);
+
+	    // 3. 출석 기록 삭제
+		attendance_repository.deletebyEmail(email);
 		
+		// 4. 포인트 기록 삭제
+		point_repository.deleteByEmail(email);
+		
+		// 5. 계정 삭
 		member_repository.deleteByEmail(email);
 		
 	}
