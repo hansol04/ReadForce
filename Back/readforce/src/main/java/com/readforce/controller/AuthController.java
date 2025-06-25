@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,7 +54,7 @@ public class AuthController {
     	
     	// 저장된 리프레쉬 토큰이 없는 경우(이미 사용되었거나 탈취 가능성 고려)
     	if(stored_refresh_token == null) {
-    		
+    		log.info("요청받은 리프레시 토큰: {}", refresh_token);
     		// 보안 위협으로 간주하고 해당 유저의 모든 리프레쉬 토큰을 삭제하여 강제 로그아웃 처리
     		auth_service.deleteRefreshToken(username);
     		log.warn("보안 경고 : 유효하지 않은 리프레쉬 토큰 사용 시도. 사용자 {}", username);
