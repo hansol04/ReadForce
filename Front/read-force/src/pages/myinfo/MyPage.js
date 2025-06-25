@@ -116,7 +116,7 @@ const MyPage = () => {
       <div className="top-section">
         <div className="left-top">
           <img src={profileImageUrl} alt="프로필" className="profile-img" />
-          <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <div><h3>{nickname} 님</h3></div>
             <div><span className="badge">중급</span></div>
           </div>
@@ -140,23 +140,25 @@ const MyPage = () => {
               <div className="summary-value">{summary.streak}일</div>
             </div>
           </div>
-          <Calendar
-            calendarType="gregory"
-            next2Label={null}
-            prev2Label={null}
-            minDetail="month"
-            maxDetail="month"
-            tileClassName={({ date, view }) => {
-              if (view === 'month') {
-                const isAttendance = attendanceDates.some(att => att.toDateString() === date.toDateString());
-                const day = date.getDay();
-                if (isAttendance) return 'attended-day';
-                if (day === 0) return 'sunday';
-                if (day === 6) return 'saturday';
-              }
-              return null;
-            }}
-          />
+          <div className="calendar-wrapper">
+            <Calendar
+              calendarType="gregory"
+              next2Label={null}
+              prev2Label={null}
+              minDetail="month"
+              maxDetail="month"
+              tileClassName={({ date, view }) => {
+                if (view === 'month') {
+                  const isAttendance = attendanceDates.some(att => att.toDateString() === date.toDateString());
+                  const day = date.getDay();
+                  if (isAttendance) return 'attended-day';
+                  if (day === 0) return 'sunday';
+                  if (day === 6) return 'saturday';
+                }
+                return null;
+              }}
+            />
+          </div>
         </div>
       </div>
 
@@ -168,7 +170,7 @@ const MyPage = () => {
           ) : (
             recentSolved.map((item, i) => (
               <li key={i}>
-                {item.attempt_date?.slice(0, 10)} / {item.level} / {item.correct_count} / {item.total_count}
+                {item.created_date?.slice(0, 10)} / {item.classification} / {item.question_text}
               </li>
             ))
           )}
