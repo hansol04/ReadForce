@@ -57,7 +57,8 @@ const AdminPage = () => {
                 method: "DELETE"
             });
             if (!res.ok) throw new Error("삭제 실패");
-            // 테이블에서 삭제
+
+            alert("회원이 삭제되었습니다.");
             setUsers((prev) => prev.filter((user) => user.email !== email));
         } catch (err) {
             console.error(err);
