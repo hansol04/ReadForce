@@ -15,6 +15,7 @@ const MyPage = () => {
   const [wrongQuestions, setWrongQuestions] = useState([]);
   const [summary, setSummary] = useState({ total: 0, monthlyRate: 0, streak: 0 });
   const [recentSolved, setRecentSolved] = useState([]);
+  const [correctRate, setCorrectRate] = useState(0);
 
   const navigate = useNavigate();
 
@@ -111,13 +112,36 @@ const MyPage = () => {
     navigate(`/question/${quiz.quiz_no}`, { state: { article: { news_no: quiz.quiz_no } } });
   };
 
+  useEffect(() => {
+    fetchWithAuth('/quiz/get-correct-rate')
+      .then(res => res.json())
+      .then(data => {
+        if (typeof data === 'number') {
+          setCorrectRate(data);
+        }
+      })
+      .catch(err => {
+        console.error('정답률 불러오기 실패:', err);
+      });
+  }, []);
+
+  const getBadgeLabel = (rate) => {
+    if (rate >= 100) return '초고수';
+    if (rate >= 75) return '고급';
+    if (rate >= 50) return '중급';
+    if (rate >= 25) return '초심자';
+    return '입문자';
+  };
+
+  const badgeLabel = getBadgeLabel(correctRate);
+
   return (
     <div className="mypage-container">
       <div className="top-section">
         <div className="left-top">
           <img src={profileImageUrl} alt="프로필" className="profile-img" />
           <h3 className="nickname">{nickname} 님</h3>
-          <span className="badge">중급</span>
+          <span className="badge">{badgeLabel}</span>
         </div>
         <div className="calendar-section">
           <h4>출석 현황</h4>
