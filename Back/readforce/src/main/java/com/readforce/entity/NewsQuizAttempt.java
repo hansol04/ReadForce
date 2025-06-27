@@ -47,7 +47,7 @@ public class NewsQuizAttempt {
 	private Integer selected_option_index;
 	
 	@CreatedDate
-	@Column(name = "created_date")
+	@Column(name = "created_date", updatable = false)
 	private LocalDateTime created_date;
 		
 }

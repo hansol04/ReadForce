@@ -64,6 +64,7 @@ public class SecurityConfig {
 					            "/email/verify-verification-code-sign-up",
 					            "/email/send-password-reset-link",
 					            "/auth/get-tokens",
+					            "/auth/reissue-refresh-token",
 								"/news/get-news-passage-list",
 								"/news/get-news-quiz-object",
 								"/ranking/get-news-ranking",

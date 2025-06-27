@@ -14,12 +14,14 @@ import com.readforce.dto.LiteratureDto.SaveMemberSolvedLiteratureQuiz;
 import com.readforce.entity.LiteratureParagraph;
 import com.readforce.entity.LiteratureQuiz;
 import com.readforce.entity.LiteratureQuizAttempt;
+import com.readforce.entity.Member;
 import com.readforce.enums.MessageCode;
 import com.readforce.exception.ResourceNotFoundException;
 import com.readforce.id.LiteratureQuizAttemptId;
 import com.readforce.repository.LiteratureParagraphRepository;
 import com.readforce.repository.LiteratureQuizAttemptRepository;
 import com.readforce.repository.LiteratureQuizRepository;
+import com.readforce.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,7 @@ public class LiteratureService {
 	private final LiteratureQuizRepository literature_quiz_repository;
 	private final LiteratureQuizAttemptRepository literature_quiz_attempt_repository;
 	private final GeminiService gemini_service;
+	private final MemberRepository member_repository;
 	
 	// LiteratureParagraph -> GetLiteratureParagraph 변환
 	private GetLiteratureParagraph transformEntity(LiteratureParagraph literature_paragraph) {
@@ -229,34 +232,63 @@ public class LiteratureService {
 	}
 	
 	// 사용자가 푼 문학 문제 저장
+//	@Transactional
+//	public void saveMemberSolvedLiteratureQuiz(SaveMemberSolvedLiteratureQuiz save_member_solved_literature_quiz, String email) {
+//		
+//		// 사용자가 정답을 입력했는지 확인
+//		LiteratureQuiz literature_quiz = literature_quiz_repository.findById(save_member_solved_literature_quiz.getLiterature_quiz_no())
+//				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.LITERATURE_QUIZ_NOT_FOUND));
+//		
+//		boolean is_correct = false;
+//		
+//		if(save_member_solved_literature_quiz.getSelected_option_index() == literature_quiz.getCorrect_answer_index()) {
+//			
+//			is_correct = true;
+//			
+//		}
+//		
+//		// 복합키 생성
+//		LiteratureQuizAttemptId literature_quiz_attempt_id = new LiteratureQuizAttemptId();
+//		literature_quiz_attempt_id.setEmail(email);
+//		literature_quiz_attempt_id.setLiterature_quiz_no(literature_quiz.getLiterature_quiz_no());
+//		
+//		// 사용자가 푼 문학 문제 엔티티 생성
+//		LiteratureQuizAttempt literature_quiz_attempt = new LiteratureQuizAttempt();
+//		literature_quiz_attempt.setLiterature_quiz_attempt_id(literature_quiz_attempt_id);
+//		literature_quiz_attempt.setIs_correct(is_correct);
+//		literature_quiz_attempt.setSelected_option_index(save_member_solved_literature_quiz.getSelected_option_index());
+//		
+//		literature_quiz_attempt_repository.save(literature_quiz_attempt);
+//		
+//	}
 	@Transactional
-	public void saveMemberSolvedLiteratureQuiz(SaveMemberSolvedLiteratureQuiz save_member_solved_literature_quiz, String email) {
-		
-		// 사용자가 정답을 입력했는지 확인
-		LiteratureQuiz literature_quiz = literature_quiz_repository.findById(save_member_solved_literature_quiz.getLiterature_quiz_no())
-				.orElseThrow(() -> new ResourceNotFoundException(MessageCode.LITERATURE_QUIZ_NOT_FOUND));
-		
-		boolean is_correct = false;
-		
-		if(save_member_solved_literature_quiz.getSelected_option_index() == literature_quiz.getCorrect_answer_index()) {
-			
-			is_correct = true;
-			
-		}
-		
+	public void saveMemberSolvedLiteratureQuiz(SaveMemberSolvedLiteratureQuiz dto, String email) {
+
+	    // 퀴즈 조회
+	    LiteratureQuiz quiz = literature_quiz_repository.findById(dto.getLiterature_quiz_no())
+	            .orElseThrow(() -> new ResourceNotFoundException(MessageCode.LITERATURE_QUIZ_NOT_FOUND));
+
+	    // 정답 여부 판별
+	    boolean isCorrect = dto.getSelected_option_index() == quiz.getCorrect_answer_index();
+
+	    // member 조회
+	    Member member = member_repository.findById(email)
+	            .orElseThrow(() -> new ResourceNotFoundException(MessageCode.MEMBER_NOT_FOUND));
+
 		// 복합키 생성
 		LiteratureQuizAttemptId literature_quiz_attempt_id = new LiteratureQuizAttemptId();
 		literature_quiz_attempt_id.setEmail(email);
-		literature_quiz_attempt_id.setLiterature_quiz_no(literature_quiz.getLiterature_quiz_no());
-		
-		// 사용자가 푼 문학 문제 엔티티 생성
-		LiteratureQuizAttempt literature_quiz_attempt = new LiteratureQuizAttempt();
-		literature_quiz_attempt.setLiterature_quiz_attempt_id(literature_quiz_attempt_id);
-		literature_quiz_attempt.setIs_correct(is_correct);
-		literature_quiz_attempt.setSelected_option_index(save_member_solved_literature_quiz.getSelected_option_index());
-		
-		literature_quiz_attempt_repository.save(literature_quiz_attempt);
-		
+		literature_quiz_attempt_id.setLiterature_quiz_no(quiz.getLiterature_quiz_no());
+
+	    // 엔티티 생성 및 필드 설정
+	    LiteratureQuizAttempt attempt = new LiteratureQuizAttempt();
+	    attempt.setLiterature_quiz_attempt_id(literature_quiz_attempt_id);
+	    attempt.setMember(member); // 필수
+	    attempt.setLiterature_quiz(quiz); // 필수
+	    attempt.setIs_correct(isCorrect);
+	    attempt.setSelected_option_index(dto.getSelected_option_index());
+
+	    literature_quiz_attempt_repository.save(attempt);
 	}
 
 	// 사용자가 풀은 문학 문제 삭제하기

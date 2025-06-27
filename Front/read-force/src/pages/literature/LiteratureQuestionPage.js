@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../api/axiosInstance';
+// import api from '../../api/axiosInstance';
+import fetchWithAuth from '../../utils/fetchWithAuth';
 import { useParams, useNavigate } from 'react-router-dom';
 import './css/LiteratureQuestionPage.css';
 
@@ -11,24 +12,48 @@ const LiteratureQuizPage = () => {
   const [selected, setSelected] = useState(null);
   const [notFound, setNotFound] = useState(false);
 
+  // useEffect(() => {
+  //   api.get('/literature/get-literature-quiz-object', {
+  //     params: {
+  //       literature_paragraph_no: quizId,
+  //       literature_no: 3,
+  //     },
+  //   })
+  //     .then((res) => {
+  //       if (!res.data || !res.data.question_text) {
+  //         setNotFound(true);
+  //       } else {
+  //         setQuiz(res.data);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error("퀴즈 데이터 불러오기 실패", err);
+  //       setNotFound(true);
+  //     });
+  // }, [quizId]);
+
+  // refresh-token 적용
   useEffect(() => {
-    api.get('/literature/get-literature-quiz-object', {
-      params: {
-        literature_paragraph_no: quizId,
-        literature_no: 3,
-      },
-    })
-      .then((res) => {
-        if (!res.data || !res.data.question_text) {
+    const fetchQuiz = async () => {
+      try {
+        const response = await fetchWithAuth(
+          `/literature/get-literature-quiz-object?literature_paragraph_no=${quizId}&literature_no=3`
+        );
+
+        const data = await response.json();
+
+        if (!data || !data.question_text) {
           setNotFound(true);
         } else {
-          setQuiz(res.data);
+          setQuiz(data);
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("퀴즈 데이터 불러오기 실패", err);
         setNotFound(true);
-      });
+      }
+    };
+
+    fetchQuiz();
   }, [quizId]);
 
   if (notFound) {
@@ -52,7 +77,25 @@ const LiteratureQuizPage = () => {
     { text: quiz.choice4 },
   ];
 
-  const handleSubmit = () => {
+  // const handleSubmit = () => {
+  //   if (!selected) return;
+
+  //   const correctAnswerText = options[quiz.correct_answer_index - 1]?.text;
+  //   const isCorrect = selected === correctAnswerText;
+  //   const explanation = quiz.explanation || '해설이 제공되지 않았습니다.';
+  //   const language = '한국어';
+  //   const category = quiz.category?.toUpperCase() || 'NOVEL';
+
+  //   navigate('/literature-result', {
+  //     state: {
+  //       isCorrect,
+  //       explanation,
+  //       language,
+  //       category,
+  //     },
+  //   });
+  // };
+  const handleSubmit = async () => {
     if (!selected) return;
 
     const correctAnswerText = options[quiz.correct_answer_index - 1]?.text;
@@ -61,14 +104,34 @@ const LiteratureQuizPage = () => {
     const language = '한국어';
     const category = quiz.category?.toUpperCase() || 'NOVEL';
 
-    navigate('/literature-result', {
-      state: {
-        isCorrect,
-        explanation,
-        language,
-        category,
-      },
-    });
+    try {
+      // 정답 인덱스 계산 (1~4 중 선택된 번호)
+      const selectedIndex = options.findIndex(opt => opt.text === selected) + 1;
+
+      await fetchWithAuth('/literature/save-member-solved-literature-quiz', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          literature_quiz_no: quiz.literature_quiz_no,
+          selected_option_index: selectedIndex,
+        }),
+      });
+
+      // 저장 성공 후 결과 페이지로 이동
+      navigate('/literature-result', {
+        state: {
+          isCorrect,
+          explanation,
+          language,
+          category,
+        },
+      });
+    } catch (error) {
+      console.error('문학 퀴즈 저장 실패:', error);
+      alert('문제 저장에 실패했습니다. 다시 시도해주세요.');
+    }
   };
 
   return (
