@@ -1,12 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 
 import Main from "./pages/main";
 import MyPage from './pages/myinfo/MyPage';
 import LayOut from "./components/layout";
-import KoreaPage from './pages/news/KoreaPage';
-import JapanPage from './pages/news/JapanPage';
-import UsaPage from './pages/news/UsaPage';
+import ArticlePage from './pages/article/ArticlePage';
 import SignupWithEmail from "./pages/signup/signupwithemail";
 import SignupChoice from "./pages/signup/signupchoice";
 import EmailVerifyPage from "./pages/signup/emailverifypage";
@@ -20,12 +18,12 @@ import Authcallback from './pages/login/authcallback';
 import ProfileEditPage from './pages/myinfo/ProfileEditPage';
 import ChangePasswordPage from './pages/myinfo/ChangePasswordPage';
 import ReadTest from './pages/challenge/readtest';
-import ChallengeStartModal from './pages/challenge/ChallengeStartModal';
+// import ChallengeStartModal from './pages/challenge/ChallengeStartModal';
 import ChallengePage from "./pages/challenge/challengepage";
 import AdminPage from './pages/adminpages/adminpage';
 import ChallengeQuizPage from './pages/challenge/challengeQuizPage';
-import ArticleQuestionPage from './pages/news/ArticleQuestionPage';
-import ArticleResultPage from './pages/news/ArticleResultPage';
+import ArticleQuestionPage from './pages/article/ArticleQuestionPage';
+import ArticleResultPage from './pages/article/ArticleResultPage';
 import AdminNews from './pages/adminpages/adminnews';
 import AdminNewsDetail from './pages/adminpages/adminnewsdetail';
 // import AdminNewsQuizList from './pages/adminpages/adminnewsquizlist';
@@ -94,9 +92,7 @@ function App() {
           <Route path="/findpassword" element={<FindPassword />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/korea" element={<KoreaPage />} />
-          <Route path="/japan" element={<JapanPage />} />
-          <Route path="/usa" element={<UsaPage />} />
+          <Route path="/article" element={<ArticlePage />} />
           <Route path="/signup/signupchoice" element={<SignupChoice />} />
           <Route path="/signup" element={<SignupWithEmail />} />
           <Route path="/signup/emailverifypage" element={<EmailVerifyPage />} />

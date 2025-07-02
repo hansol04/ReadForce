@@ -10,9 +10,16 @@ import debounce from 'lodash/debounce';
 import NewsCategory from '../../components/NewsCategory';
 
 const reverseLevelMap = {
-  '초급': 'BEGINNER',
-  '중급': 'INTERMEDIATE',
-  '고급': 'ADVANCED',
+  '1': 'LEVEL_1',
+  '2': 'LEVEL_2',
+  '3': 'LEVEL_3',
+  '4': 'LEVEL_4',
+  '5': 'LEVEL_5',
+  '6': 'LEVEL_6',
+  '7': 'LEVEL_7',
+  '8': 'LEVEL_8',
+  '9': 'LEVEL_9',
+  '10': 'LEVEL_10',
 };
 
 const reverseCategoryMap = {
@@ -24,7 +31,7 @@ const reverseCategoryMap = {
   '기타': 'ETC',
 };
 
-const KoreaPage = () => {
+const ArticlePage = () => {
   const navigate = useNavigate();
   const [newsItems, setNewsItems] = useState([]);
   const [language] = useState('KOREAN');
@@ -87,4 +94,4 @@ const KoreaPage = () => {
   );
 };
 
-export default KoreaPage;
+export default ArticlePage;

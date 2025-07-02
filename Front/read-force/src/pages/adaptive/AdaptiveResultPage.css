@@ -1,167 +1,73 @@
-.adaptive-quiz-wrapper {
+.adaptive-result-wrapper {
   display: flex;
-  gap: 2rem;
   justify-content: center;
-  align-items: flex-start;
-  margin-top: 2rem;
-  flex-wrap: wrap;
+  padding-top: 3rem;
 }
 
-/* 왼쪽: 지문 박스 */
-.adaptive-passage-box {
-  flex: 1;
-  min-width: 300px;
-  max-height: 500px;
-  overflow-y: auto;
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-}
-
-.adaptive-passage-title {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.adaptive-passage-text {
-  font-size: 15px;
-  color: #333;
-  line-height: 1.6;
-  white-space: pre-line;
-}
-
-/* 오른쪽: 문제 박스 */
-.adaptive-quiz-box {
-  width: 40%;
-  min-width: 260px;
-  height: 500px;
-  padding: 1.5rem;
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.adaptive-question-heading {
-  font-size: 17px;
-  font-weight: bold;
-  margin-bottom: 0.75rem;
-}
-
-.adaptive-question-text {
-  font-size: 15px;
-  margin-bottom: 1rem;
-  font-weight: bold;
-}
-
-.adaptive-quiz-options {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.adaptive-option-button {
+.adaptive-result-card {
   width: 100%;
-  padding: 12px 14px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: white;
-  cursor: pointer;
-  text-align: left;
-  transition: background-color 0.2s, border-color 0.2s;
-  font-size: 14px;
-}
-
-.adaptive-option-button:hover {
-  background-color: #e6f4f1;
-  border-color: #0d9488;
-}
-
-.adaptive-option-button.selected {
-  background-color: #e0f7f4;
-  border-color: #0d9488;
-  font-weight: bold;
-}
-
-/* 제출 버튼 */
-.adaptive-submit-button {
-  margin-top: 1rem;
-  padding: 12px 16px;
-  background-color: #0d9488;
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.2s;
-}
-
-.adaptive-submit-button:hover {
-  background-color: #0f766e;
-}
-
-.adaptive-submit-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-/* 문제 없음 화면 */
-.adaptive-notfound-container {
-  background-color: #fff;
-  padding: 2rem 1.5rem;
-  margin-top: 5rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  max-width: 480px;
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
   text-align: center;
 }
 
-.adaptive-notfound-container .warning {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #e53935;
-  margin-bottom: 0.5rem;
+.lottie-animation-center {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
 }
 
-.adaptive-notfound-container .description {
-  font-size: 1rem;
-  color: #333;
+.adaptive-result-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.adaptive-result-subtext {
+  font-size: 16px;
+  margin-bottom: 1.5rem;
+  color: #444;
+}
+
+.adaptive-result-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
   margin-bottom: 1.5rem;
 }
 
-.adaptive-notfound-container .go-back-button {
-  font-size: 0.95rem;
-  padding: 0.6rem 1.2rem;
-  border: 1px solid #ccc;
-  background-color: #f5f5f5;
+.adaptive-result-button {
+  padding: 10px 16px;
   border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.2s;
+  border: none;
 }
 
-.adaptive-notfound-container .go-back-button:hover {
+.adaptive-result-button.green {
+  background-color: #7AC1C3;
+  color: white;
+}
+
+.adaptive-result-button.yellow {
+  background-color: #7AC1C3;
+  color: black;
+}
+
+.adaptive-result-button.gray {
   background-color: #e0e0e0;
+  color: #333;
 }
 
-/* 반응형 */
-@media (max-width: 768px) {
-  .adaptive-quiz-wrapper {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .adaptive-passage-box,
-  .adaptive-quiz-box {
-    width: 100%;
-  }
+.adaptive-result-explanation {
+  text-align: left;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  font-size: 14px;
 }

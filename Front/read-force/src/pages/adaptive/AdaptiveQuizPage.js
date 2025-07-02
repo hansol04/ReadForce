@@ -7,7 +7,7 @@ const AdaptiveQuizPage = () => {
   const navigate = useNavigate();
   const [quiz, setQuiz] = useState(null);
   const [selected, setSelected] = useState(null);
-  const [notFound, setNotFound] = useState(false);
+  const [notFound] = useState(false);
 
   useEffect(() => {
     const fetchQuiz = async () => {
@@ -72,9 +72,9 @@ const AdaptiveQuizPage = () => {
   };
 
   return (
-    <div className="adaptive-quiz-wrapper">
-      <div className="adaptive-passage-box">
-        <h3 className="adaptive-passage-title">🤖 적응력 문제</h3>
+    <div className="quiz-layout">
+      <div className="quiz-passage">
+        <h3 className="passage-title">🤖 적응력 문제</h3>
         <p className="passage-text">{quiz.passage || '※ 추가 지문 없음'}</p>
       </div>
 

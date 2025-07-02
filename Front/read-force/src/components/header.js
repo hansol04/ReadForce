@@ -65,7 +65,7 @@ const Header = () => {
 
       <div className="header-center">
         <nav className="nav">
-          <Link to="/korea" className="nav-item">기사</Link>
+          <Link to="/article" className="nav-item">기사</Link>
           <Link to="/literature/novel" className="nav-item">소설</Link>
           <Link to="/literature/fairytale" className="nav-item">동화</Link>
           <Link to="/challenge" className="nav-item">문해력 도전</Link>
