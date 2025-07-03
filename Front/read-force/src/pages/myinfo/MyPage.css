@@ -1,0 +1,255 @@
+.mypage-container {
+  padding: 40px 20px;
+  margin: 0 auto;
+  max-width: 800px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #333;
+}
+
+.top-section {
+  display: flex;
+  justify-content: space-between;
+  /* align-items: flex-start; */
+  /* flex-wrap: wrap; */
+  gap: 20px;
+  padding: 20px;
+  margin-bottom: 40px;
+}
+
+.left-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* 중앙 정렬 */
+  justify-content: center;
+  padding: 20px;
+}
+
+.left-top,
+.calendar-section {
+  flex: 1;
+  min-width: 300px;
+  background-color: #f9f9f9;
+  padding: 20px;
+  align-items: center;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.profile-img {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.nickname {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.badge {
+  background-color: #14b8a6;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  /* display: inline-block; */
+  /* margin-top: 5px; */
+  text-align: center;
+
+}
+
+.settings-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-left: 4px;
+}
+
+.settings-button:hover {
+  transform: scale(1.2);
+}
+
+.mypage-main {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+
+
+.calendar-section h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.calendar-summary {
+  margin: 16px 0;
+  font-size: 14px;
+}
+
+/* .calendar-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+} */
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.summary-title {
+  flex: 1;
+  font-weight: 600;
+  color: #555;
+}
+
+.summary-value {
+  flex: 1;
+  font-size: 16px;
+  font-weight: bold;
+  color: #4ABDAC;
+}
+
+.react-calendar {
+  border: none;
+  width: 100%;
+  font-family: inherit;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.react-calendar__tile {
+  cursor: default !important;
+  pointer-events: none;
+}
+
+.react-calendar__tile--now {
+  background: #e8f4f8 !important;
+  border-radius: 8px;
+}
+
+.attended-day abbr {
+  color: #4ABDAC !important;
+  font-weight: 700 !important;
+}
+
+.react-calendar__navigation {
+  background-color: white !important;
+}
+
+.react-calendar__navigation button {
+  color: black !important;
+  font-weight: 600;
+  background-color: white !important;
+}
+
+.react-calendar__month-view__weekdays__weekday:nth-child(1) {
+  color: red;
+}
+
+.react-calendar__tile abbr {
+  color: inherit;
+}
+
+.saturday abbr {
+  color: black;
+}
+
+.history-section,
+.wrong-section {
+  margin-bottom: 40px;
+}
+
+.history-section h4,
+.wrong-section h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.history-section ul,
+.wrong-section ul {
+  list-style: none;
+  padding: 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.wrong-section button {
+  margin-left: 10px;
+  padding: 5px 12px;
+  background-color: #14b8a6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* 반응형 */
+@media (max-width: 600px) {
+  .mypage-container {
+    padding: 24px 16px;
+  }
+
+  .top-section,
+  .mypage-main {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .left-top {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .calendar-section {
+    min-width: 100%;
+    padding: 16px;
+  }
+
+  .summary-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .summary-title,
+  .summary-value {
+    flex: none;
+    text-align: left;
+  }
+
+  .history-section ul,
+  .wrong-section ul {
+    font-size: 14px;
+  }
+
+  .wrong-section button {
+    margin-top: 6px;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .settings-button {
+    margin-top: 8px;
+  }
+}

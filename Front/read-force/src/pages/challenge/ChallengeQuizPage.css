@@ -1,0 +1,110 @@
+.ChallengeQuizPage-layout {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.ChallengeQuizPage-article {
+  flex: 1.5;
+  height: 600px;
+  overflow-y: auto;
+  background: #fff;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.ChallengeQuizPage-article h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.ChallengeQuizPage-article p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #374151;
+  white-space: pre-wrap;
+}
+
+.ChallengeQuizPage-quiz-box {
+  flex: 1;
+  background: #fff;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ChallengeQuizPage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.ChallengeQuizPage-question {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.ChallengeQuizPage-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: #f8fafc;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.ChallengeQuizPage-option:hover {
+  background: #e2e8f0;
+}
+
+.ChallengeQuizPage-option.selected {
+  background: #0d9488;
+  color: white;
+  font-weight: bold;
+  border-color: #0f766e;
+}
+
+.ChallengeQuizPage-submit {
+  margin-top: 1rem;
+  background: #0d9488;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.ChallengeQuizPage-submit:hover {
+  background: #0f766e;
+}
+
+.ChallengeQuizPage-timer {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.ChallengeQuizPage-level {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}

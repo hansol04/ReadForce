@@ -1,0 +1,106 @@
+.RankingPage-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.RankingPage-title {
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 2em;
+  text-align: center;
+}
+
+.RankingPage-category-buttons {
+  margin-bottom: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.RankingPage-category-buttons button {
+  background-color: #e0e0e0;
+  color: #555;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s, color 0.3s, transform 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.RankingPage-category-buttons button:hover {
+  background-color: #d0d0d0;
+  transform: translateY(-2px);
+}
+
+.RankingPage-category-buttons button.active {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.RankingPage-list {
+  width: 100%;
+}
+
+.RankingPage-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  margin-bottom: 10px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+}
+
+.RankingPage-item:hover {
+  transform: translateX(5px);
+}
+
+.RankingPage-rank {
+  font-weight: bold;
+  color: #007bff;
+  min-width: 50px;
+}
+
+.RankingPage-nickname {
+  flex-grow: 1;
+  text-align: left;
+  margin-left: 15px;
+  font-size: 1.1em;
+  color: #333;
+}
+
+.RankingPage-score {
+  font-weight: bold;
+  color: #28a745;
+  min-width: 70px;
+  text-align: right;
+}
+
+.RankingPage-loading,
+.RankingPage-error,
+.RankingPage-no-data {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1.1em;
+  color: #666;
+}
+
+.RankingPage-error {
+  color: #dc3545;
+  font-weight: bold;
+}

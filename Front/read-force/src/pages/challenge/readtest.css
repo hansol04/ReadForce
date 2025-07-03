@@ -1,0 +1,71 @@
+.ReadTest-wrapper {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.ReadTest-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #444;
+  margin-bottom: 2rem;
+}
+
+.ReadTest-card {
+  background-color: #d3ece8;
+  padding: 2rem;
+  border-radius: 15px;
+  max-width: 720px;
+  margin: 0 auto 2rem auto;
+  color: #333;
+  line-height: 1.7;
+}
+
+.ReadTest-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.ReadTest-btn {
+  background-color: #439395;
+  color: #fff;
+  padding: 0.9rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.ReadTest-btn:hover {
+  background-color: #367c7e;
+}
+
+.ReadTest-language-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 2rem;
+}
+
+.ReadTest-lang-btn {
+  padding: 0.6rem 1.4rem;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.ReadTest-lang-btn:hover {
+  background-color: #f2f2f2;
+}
+
+.ReadTest-lang-btn.active {
+  font-weight: bold;
+  border: 2px solid #439395;
+  color: #439395;
+  background-color: #e4f3f2;
+}

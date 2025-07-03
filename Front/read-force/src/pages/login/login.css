@@ -1,0 +1,134 @@
+.login-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: #fff;
+}
+
+.login-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.4rem;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.login-links {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 13px;
+  color: #555;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.login-links span:hover {
+  text-decoration: underline;
+}
+
+.social-login {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 1rem 0;
+}
+
+.social-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: #eee;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: filter 0.2s ease;
+}
+
+.social-btn img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.social-btn:hover {
+  filter: brightness(90%);
+}
+
+.social-btn:focus {
+  outline: 2px solid #aaa;
+}
+
+.login-btn {
+  margin-top: 1rem;
+  background-color: #319690;
+  color: white;
+  font-size: 16px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-btn:hover {
+  background-color: #267973;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+  margin-top: -0.5rem;
+}
+
+@media screen and (max-width: 480px) {
+  .login-form {
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  .social-login {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .social-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .social-btn img {
+    width: 20px;
+    height: 20px;
+  }
+}
